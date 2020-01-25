@@ -1,10 +1,12 @@
 defmodule AccountingSystemWeb.Router do
   use AccountingSystemWeb, :router
+  # import Phoenix.LiveView.Router
 
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_flash
+    plug Phoenix.LiveView.Flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
   end
@@ -17,6 +19,7 @@ defmodule AccountingSystemWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    live "/example", ExampleLive
   end
 
   # Other scopes may use custom stacks.

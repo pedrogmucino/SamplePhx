@@ -22,6 +22,7 @@ defmodule AccountingSystemWeb do
       use Phoenix.Controller, namespace: AccountingSystemWeb
       import Plug.Conn
       import AccountingSystemWeb.Gettext
+      import Phoenix.LiveView.Controller
       alias AccountingSystemWeb.Router.Helpers, as: Routes
     end
   end
@@ -40,6 +41,7 @@ defmodule AccountingSystemWeb do
 
       import AccountingSystemWeb.ErrorHelpers
       import AccountingSystemWeb.Gettext
+      import Phoenix.LiveView.Helpers
       alias AccountingSystemWeb.Router.Helpers, as: Routes
     end
   end
@@ -49,6 +51,7 @@ defmodule AccountingSystemWeb do
       use Phoenix.Router
       import Plug.Conn
       import Phoenix.Controller
+      import Phoenix.LiveView.Router
     end
   end
 

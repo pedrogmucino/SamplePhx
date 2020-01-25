@@ -24,7 +24,8 @@ config :helsinki_web, AccountingSystemWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "gG2dHVcUUM7Z3w+nsr7cqFm0opDUvngkoM52npJiwzCFnCmkFPbVhIzwZO8y1sdO",
   render_errors: [view: AccountingSystemWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: AccountingSystemWeb.PubSub, adapter: Phoenix.PubSub.PG2]
+  pubsub: [name: AccountingSystemWeb.PubSub, adapter: Phoenix.PubSub.PG2],
+  live_view: [signing_salt: "Nhu3iCgaoEoZ+Kk65hB6bwfsCBrNTxEy"]
 
 # Configures Elixir's Logger
 config :logger, :console,
