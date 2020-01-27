@@ -37,7 +37,7 @@ defmodule AccountingSystemWeb.AccountController do
     render(conn, "edit.html", account: account, changeset: changeset)
   end
 
-  def update(conn, %{"id" => id, "account" => account_params}) do
+  def update(conn, %{"id" => id, "account_schema" => account_params}) do
     account = AccountHandler.get_account!(id)
 
     case AccountHandler.update_account(account, account_params) do

@@ -3,10 +3,12 @@
 <table>
   <thead>
     <tr>
+      <th>Id</th>
       <th>Code</th>
       <th>Status</th>
       <th>Type</th>
       <th>Name</th>
+      <th>Level</th>
       <th>Is departamental</th>
       <th>Parent account</th>
       <th>Root account</th>
@@ -25,10 +27,12 @@
   <tbody>
 <%= for account <- @accounts do %>
     <tr>
+      <td><%= account.id %></td>
       <td><%= account.code %></td>
       <td><%= account.status %></td>
       <td><%= account.type %></td>
       <td><%= account.name %></td>
+      <td><%= account.level %></td>
       <td><%= account.is_departamental %></td>
       <td><%= account.parent_account %></td>
       <td><%= account.root_account %></td>

@@ -23,6 +23,11 @@
   </li>
 
   <li>
+    <strong>Level:</strong>
+    <%= @account.level %>
+  </li>
+
+  <li>
     <strong>Is departamental:</strong>
     <%= @account.is_departamental %>
   </li>
