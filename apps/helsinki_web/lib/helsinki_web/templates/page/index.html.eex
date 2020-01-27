@@ -20,6 +20,10 @@
   </article>
   <article class="column">
     <h2>Help</h2>
+
+    <button class="px-4 py-2 bg-blue-900 text-white">
+      Hola
+    </button>
     <ul>
       <li>
         <a href="https://elixirforum.com/c/phoenix-forum">Forum</a>
