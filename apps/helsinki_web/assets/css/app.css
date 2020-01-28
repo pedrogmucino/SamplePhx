@@ -10,7 +10,28 @@
 
 /* Put your custom utilities here */
 
-
-  .tooltip:hover .tooltip-text {
+.tooltip:hover .tooltip-text {
     @apply visible;
-  }
+}
+.transition-menu { 
+    transition: 0.5s;
+    -moz-transition: 0.5s;
+}
+.transition-menu-label{
+    font-size: .0001px;
+    position: absolute;
+    margin-left: -3rem;
+    opacity: 0;
+    transition: 0.2s;
+    visibility: hidden;
+    -moz-transition: 0.2s;
+}
+.transition-menu:hover {
+    @apply w-48;
+}
+.transition-menu:hover a svg{
+    @apply mr-1 ml-2;
+}
+.transition-menu:hover label{
+    @apply text-base relative opacity-100 ml-3 visible;
+}
