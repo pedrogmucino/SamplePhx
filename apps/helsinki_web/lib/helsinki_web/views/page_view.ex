@@ -10,7 +10,7 @@ defmodule AccountingSystemWeb.PageLiveView do
     Phoenix.View.render(AccountingSystemWeb.PageView, "index.html", assigns)
   end
 
-  def mount(_params, socket) do
+  def mount(_params, _session, socket) do
     {:ok, socket}
   end
 

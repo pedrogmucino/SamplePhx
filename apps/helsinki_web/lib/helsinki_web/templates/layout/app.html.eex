@@ -10,6 +10,7 @@
   <body class="bg-blue-100">
 
       <%= render @view_module, @view_template, assigns %>
+      <%= csrf_meta_tag() %>
     <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </body>
 </html>
