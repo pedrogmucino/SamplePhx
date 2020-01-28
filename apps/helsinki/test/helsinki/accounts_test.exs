@@ -6,9 +6,9 @@ defmodule AccountingSystem.AccountsTest do
   describe "accounts" do
     alias AccountingSystem.Accounts.Account
 
-    @valid_attrs %{apply_third_party_to: "some apply_third_party_to", apply_to: 42, character: true, code: "some code", group_code: 42, is_departamental: true, name: "some name", parent_account: 42, payment_method: true, root_account: 42, status: "some status", third_party_op: true, third_party_prosecutor: 42, type: "some type", uuid_voucher: "some uuid_voucher"}
-    @update_attrs %{apply_third_party_to: "some updated apply_third_party_to", apply_to: 43, character: false, code: "some updated code", group_code: 43, is_departamental: false, name: "some updated name", parent_account: 43, payment_method: false, root_account: 43, status: "some updated status", third_party_op: false, third_party_prosecutor: 43, type: "some updated type", uuid_voucher: "some updated uuid_voucher"}
-    @invalid_attrs %{apply_third_party_to: nil, apply_to: nil, character: nil, code: nil, group_code: nil, is_departamental: nil, name: nil, parent_account: nil, payment_method: nil, root_account: nil, status: nil, third_party_op: nil, third_party_prosecutor: nil, type: nil, uuid_voucher: nil}
+    @valid_attrs %{apply_third_party_to: "some apply_third_party_to", apply_to: 42, character: true, code: "some code", group_code: 42, is_departamental: true, name: "some name", parent_account: 42, payment_method: true, root_account: 42, status: "some status", third_party_op: true, third_party_prosecutor: 42, type: "some type", uuid_voucher: "some uuid_voucher", level: 1}
+    @update_attrs %{apply_third_party_to: "some updated apply_third_party_to", apply_to: 43, character: false, code: "some updated code", group_code: 43, is_departamental: false, name: "some updated name", parent_account: 43, payment_method: false, root_account: 43, status: "some updated status", third_party_op: false, third_party_prosecutor: 43, type: "some updated type", uuid_voucher: "some updated uuid_voucher",level: 1}
+    @invalid_attrs %{apply_third_party_to: nil, apply_to: nil, character: nil, code: nil, group_code: nil, is_departamental: nil, name: nil, parent_account: nil, payment_method: nil, root_account: nil, status: nil, third_party_op: nil, third_party_prosecutor: nil, type: nil, uuid_voucher: nil, level: nil}
 
     def account_fixture(attrs \\ %{}) do
       {:ok, account} =

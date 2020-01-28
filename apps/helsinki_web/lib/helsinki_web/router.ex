@@ -20,6 +20,7 @@ defmodule AccountingSystemWeb.Router do
 
     get "/", PageController, :index
     resources "/accounts", AccountController
+    resources "/structures", StructureController
     live "/example", ExampleLive
   end
 
