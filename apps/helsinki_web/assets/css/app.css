@@ -9,3 +9,8 @@
 @tailwind utilities;
 
 /* Put your custom utilities here */
+
+
+  .tooltip:hover .tooltip-text {
+    @apply visible;
+  }
