@@ -24,7 +24,7 @@ defmodule AccountingSystemWeb.HeaderComponent do
           <div class="block my-3">
             <a class="rounded hover:border-gray-200 text-blue-500 hover:bg-gray-200 py-1 inline-flex items-center w-full" href="#">
               <%= Phoenix.HTML.raw(item.icon ) %>
-              <label class="ml-2 mr-auto font-bold transition-menu-label"><%= item.name %></label>
+              <label class="cursor-pointer ml-2 mr-auto font-bold transition-menu-label"><%= item.name %></label>
             </a>
           </div>
         <% end %>
