@@ -4,19 +4,19 @@ defmodule AccountingSystemWeb.SubMenuComponent do
 
   def render(assigns) do
     ~L"""
-      <div class="bg-white w-64 my-3">
-        <ul class="list-reset">
-          <li >
-            <a href="#" class="block p-4 text-grey-darker font-bold border-purple hover:bg-grey-lighter border-r-4">Crear Cuenta</a>
+      <div class="bg-white w-48">
+        <ul>
+          <li class="cursor-pointer hover:bg-gray-200 hover:border-blue-500 border-r-4">
+            <a href="#" class="block py-2 mr-auto font-bold text-blue-500 ml-2" >Crear Cuenta</a>
           </li>
-          <li >
-            <a href="#" class="block p-4 text-grey-darker font-bold border-grey-lighter hover:border-purple-light hover:bg-grey-lighter border-r-4">Consultar Cuenta</a>
+          <li class="cursor-pointer hover:bg-gray-200 hover:border-blue-500 border-r-4">
+            <a href="#" class="block py-2 mr-auto font-bold text-blue-500 ml-2" >Consultar Cuenta</a>
           </li>
-          <li >
-            <a href="#" class="block p-4 text-grey-darker font-bold border-grey-lighter hover:border-purple-light hover:bg-grey-lighter border-r-4">Todas las Cuentas</a>
+          <li class="cursor-pointer hover:bg-gray-200 hover:border-blue-500 border-r-4">
+            <a href="#" class="block py-2 mr-auto font-bold text-blue-500 ml-2" >Todas las Cuentas</a>
           </li>
-          <li >
-            <a href="#" class="block p-4 text-grey-darker font-bold border-grey-lighter hover:border-purple-light hover:bg-grey-lighter border-r-4">Servicios</a>
+          <li class="cursor-pointer hover:bg-gray-200 hover:border-blue-500 border-r-4">
+            <a href="#" class="block py-2 mr-auto font-bold text-blue-500 ml-2" >Servicios</a>
           </li>
         </ul>
       </div>
