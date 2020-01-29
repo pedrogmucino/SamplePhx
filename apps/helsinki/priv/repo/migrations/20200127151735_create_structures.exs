@@ -3,9 +3,9 @@ defmodule AccountingSystem.Repo.Migrations.CreateStructures do
 
   def change do
     create table(:structures) do
-      add :length, :integer
-      add :order, :integer
-      add :max, :integer
+      add :size, :integer
+      add :level, :integer
+      add :max_current_size, :integer
 
       timestamps()
     end

@@ -7,6 +7,8 @@ defmodule AccountingSystem.AccountHandler do
   alias AccountingSystem.Repo
 
   alias AccountingSystem.AccountSchema
+  alias AccountingSystem.AccountCodeSchema
+  alias AccountingSystem.CodeFormatter
 
   @doc """
   Returns the list of accounts.
@@ -37,6 +39,33 @@ defmodule AccountingSystem.AccountHandler do
   """
   def get_account!(id), do: Repo.get!(AccountSchema, id)
 
+  def get_account_code!(id), do: Repo.get!(AccountCodeSchema, id)
+
+  def get_principal_account!(), do: Repo.all(from acc in AccountCodeSchema, where: acc.level == 0, order_by: [desc: acc.id], limit: 1)
+
+
+  def get_codes!(id) do
+    iid = String.to_integer(id)
+    from(acc in "accounts", where: acc.id == ^iid, select: [:code, :level, :root_account])
+      |> Repo.all()
+  end
+
+  def get_last_child(id) do
+    #Obtiene el ultimo hijo + 1
+    from(c in "accounts", where: c.parent_account == ^id, select: [:code], order_by: [desc: :code], limit: 1)
+      |> Repo.all
+  end
+
+
+  def get_next_code([%{code: codigo}]) do
+    codigo
+      |> CodeFormatter.add_in_position(0)
+  end
+
+  def get_config() do
+    from(all in "structures", select: [:size, :level], order_by: [asc: :level])
+      |> Repo.all
+  end
   @doc """
   Creates a account.
 
@@ -100,5 +129,9 @@ defmodule AccountingSystem.AccountHandler do
   """
   def change_account(%AccountSchema{} = account) do
     AccountSchema.changeset(account, %{})
+  end
+
+  def change_account_code(%AccountCodeSchema{} = account) do
+    AccountCodeSchema.changeset(account, %{})
   end
 end
