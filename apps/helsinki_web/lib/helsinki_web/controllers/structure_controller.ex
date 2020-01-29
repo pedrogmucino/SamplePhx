@@ -37,7 +37,7 @@ defmodule AccountingSystemWeb.StructureController do
     render(conn, "edit.html", structure: structure, changeset: changeset)
   end
 
-  def update(conn, %{"id" => id, "structure_schema" => structure_params}) do
+  def update(conn, %{"id" => id, "structure" => structure_params}) do
     structure = StructureHandler.get_structure!(id)
 
     case StructureHandler.update_structure(structure, structure_params) do

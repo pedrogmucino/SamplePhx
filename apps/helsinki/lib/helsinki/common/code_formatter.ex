@@ -3,10 +3,6 @@ defmodule AccountingSystem.CodeFormatter do
   alias AccountingSystem.AccountHandler
   alias AccountingSystem.GetLastIncrementValueQuery, as: AccountLastIncrement
 
-  def string_to_list(code) do
-    String.split(code, "-")
-  end
-
   def get_child_values(code_schema) do
     %AccountingSystem.AccountCodeSchema{}
       |> Map.put(:parent_account, Map.get(code_schema, :id))
@@ -31,31 +27,6 @@ defmodule AccountingSystem.CodeFormatter do
     |> Map.put(:parent_account, -1)
     |> Map.put(:root_account, AccountLastIncrement.last_inc_val + 1)
   end
-  def first_configuration do
-    AccountHandler.get_config()
-    |> get_config_as_list
-    |> list_to_string
-    |> add_in_position(0)
-  end
-
-  def get_config_as_list(list) do
-    for x <- list do
-      String.duplicate("0", Map.get(x, :size))
-    end
-  end
-
-  def list_to_string(code) do
-    add_line(code)
-  end
-
-  def plus_one(strCode) do
-    len = String.length(strCode)
-    strCode
-      |>String.to_integer
-      |>Kernel.+(1)
-      |>Integer.to_string
-      |>addZero(len)
-  end
 
   def add_in_position(string, position) do
     string
@@ -68,6 +39,34 @@ defmodule AccountingSystem.CodeFormatter do
 
   defp add_line([head | tail]) do
     head <> add_line("-", tail)
+  end
+
+  defp add_line([]), do: ""
+
+  defp first_configuration do
+    AccountHandler.get_config()
+    |> get_config_as_list
+    |> list_to_string
+    |> add_in_position(0)
+  end
+
+  defp get_config_as_list(list) do
+    for x <- list do
+      String.duplicate("0", Map.get(x, :size))
+    end
+  end
+
+  defp list_to_string(code) do
+    add_line(code)
+  end
+
+  defp plus_one(strCode) do
+    len = String.length(strCode)
+    strCode
+      |>String.to_integer
+      |>Kernel.+(1)
+      |>Integer.to_string
+      |>addZero(len)
   end
 
   defp giveme_a_son(codeschema) do
@@ -99,6 +98,10 @@ defmodule AccountingSystem.CodeFormatter do
 
   defp insert_value(string, list, position) do
     List.replace_at(string_to_list(list), position, string)
+  end
+
+  defp string_to_list(code) do
+    String.split(code, "-")
   end
 
 end

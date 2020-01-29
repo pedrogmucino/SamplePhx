@@ -1,68 +1,68 @@
 defmodule AccountingSystem.StructuresTest do
   use AccountingSystem.DataCase
 
-  alias AccountingSystem.Structures
+  alias AccountingSystem.StructureHandler
 
   describe "structures" do
-    alias AccountingSystem.Structures.Structure
+    alias AccountingSystem.StructureSchema
 
-    @valid_attrs %{length: 42, max: 42, order: 42}
-    @update_attrs %{length: 43, max: 43, order: 43}
-    @invalid_attrs %{length: nil, max: nil, order: nil}
+    @valid_attrs %{size: 42, max_current_size: 42, level: 42}
+    @update_attrs %{size: 43, max_current_size: 43, level: 43}
+    @invalid_attrs %{size: nil, max_current_size: nil, level: nil}
 
     def structure_fixture(attrs \\ %{}) do
       {:ok, structure} =
         attrs
         |> Enum.into(@valid_attrs)
-        |> Structures.create_structure()
+        |> StructureHandler.create_structure()
 
       structure
     end
 
     test "list_structures/0 returns all structures" do
       structure = structure_fixture()
-      assert Structures.list_structures() == [structure]
+      assert StructureHandler.list_structures() == [structure]
     end
 
     test "get_structure!/1 returns the structure with given id" do
       structure = structure_fixture()
-      assert Structures.get_structure!(structure.id) == structure
+      assert StructureHandler.get_structure!(structure.id) == structure
     end
 
     test "create_structure/1 with valid data creates a structure" do
-      assert {:ok, %Structure{} = structure} = Structures.create_structure(@valid_attrs)
-      assert structure.length == 42
-      assert structure.max == 42
-      assert structure.order == 42
+      assert {:ok, %StructureSchema{} = structure} = StructureHandler.create_structure(@valid_attrs)
+      assert structure.size == 42
+      assert structure.level == 42
+      assert structure.max_current_size == 42
     end
 
     test "create_structure/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Structures.create_structure(@invalid_attrs)
+      assert {:error, %Ecto.Changeset{}} = StructureHandler.create_structure(@invalid_attrs)
     end
 
     test "update_structure/2 with valid data updates the structure" do
       structure = structure_fixture()
-      assert {:ok, %Structure{} = structure} = Structures.update_structure(structure, @update_attrs)
-      assert structure.length == 43
-      assert structure.max == 43
-      assert structure.order == 43
+      assert {:ok, %StructureSchema{} = structure} = StructureHandler.update_structure(structure, @update_attrs)
+      assert structure.size == 43
+      assert structure.level == 43
+      assert structure.max_current_size == 43
     end
 
     test "update_structure/2 with invalid data returns error changeset" do
       structure = structure_fixture()
-      assert {:error, %Ecto.Changeset{}} = Structures.update_structure(structure, @invalid_attrs)
-      assert structure == Structures.get_structure!(structure.id)
+      assert {:error, %Ecto.Changeset{}} = StructureHandler.update_structure(structure, @invalid_attrs)
+      assert structure == StructureHandler.get_structure!(structure.id)
     end
 
     test "delete_structure/1 deletes the structure" do
       structure = structure_fixture()
-      assert {:ok, %Structure{}} = Structures.delete_structure(structure)
-      assert_raise Ecto.NoResultsError, fn -> Structures.get_structure!(structure.id) end
+      assert {:ok, %StructureSchema{}} = StructureHandler.delete_structure(structure)
+      assert_raise Ecto.NoResultsError, fn -> StructureHandler.get_structure!(structure.id) end
     end
 
     test "change_structure/1 returns a structure changeset" do
       structure = structure_fixture()
-      assert %Ecto.Changeset{} = Structures.change_structure(structure)
+      assert %Ecto.Changeset{} = StructureHandler.change_structure(structure)
     end
   end
 end
