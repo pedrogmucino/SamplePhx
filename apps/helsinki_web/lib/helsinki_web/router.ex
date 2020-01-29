@@ -18,7 +18,7 @@ defmodule AccountingSystemWeb.Router do
   scope "/", AccountingSystemWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
+    get "/", HeaderMenuController, :header_menu
     resources "/accounts", AccountController
     resources "/structures", StructureController
     live "/example", ExampleLive
