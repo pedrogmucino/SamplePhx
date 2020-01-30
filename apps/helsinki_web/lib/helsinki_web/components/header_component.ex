@@ -90,7 +90,7 @@ defmodule AccountingSystemWeb.HeaderComponent do
           </g>
       </svg>
     """},
-    %{name: "Reportes", link: "/report", icon: """
+    %{name: "Reportes", link: "/reports", icon: """
     <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="home" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"
       class="h-8 w-8 ml-2 mr-auto">
         <g>
