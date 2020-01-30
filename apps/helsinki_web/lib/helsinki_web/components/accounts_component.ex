@@ -4,10 +4,10 @@ defmodule AccountingSystemWeb.AccountsComponent do
 
   def render(assigns) do
     ~L"""
-      <div class="bg-white h-hoch-90 w-64 mt-16 block">
+      <div class="bg-white h-hoch-90 w-64 mt-16 ml-16 block">
         <div class="inline-flex w-full py-3 bg-blue-800">
           <div class="relative w-full px-2">
-            <input class="h-8 w-full rounded">
+            <input class="h-8 w-full rounded border" placeholder="Buscar Cuenta" >
             <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="search" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
               class="absolute right-0 top-0 h-5 w-5 mr-4 mt-1">
               <g>
@@ -24,7 +24,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
 
         <div class="w-full items-center inline-flex mt-3">
             <button class="ml-3 py-2 px-3 bg-blue-100 items-center inline-flex rounded">
-              <label class="text-blue-900 mr-2 font-bold">Nueva</label>
+              <label class="cursor-pointer text-blue-900 mr-2 font-bold">Nueva Cuenta</label>
               <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="home" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
               class="h-6 w-6 ml-2">
                 <g>

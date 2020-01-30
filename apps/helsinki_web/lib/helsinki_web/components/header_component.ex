@@ -4,7 +4,7 @@ defmodule AccountingSystemWeb.HeaderComponent do
 
   def render(assigns) do
     ~L"""
-    <div class="fixed w-full py-2 bg-blue-900 top-0 left-0 z-10">
+    <div class="fixed w-full py-2 bg-blue-900 top-0 left-0 z-20">
       <div class="flex">
         <img src="https://santiago.mx/assets/images/logo-white.png" class="w-56 ml-6">
 
@@ -18,7 +18,7 @@ defmodule AccountingSystemWeb.HeaderComponent do
       </div>
     </div>
 
-    <div class="fixed top-0 left-0 h-screen px-2 bg-white block z-0 shadow-lg transition-menu w-16">
+    <div class="fixed top-0 left-0 h-screen px-2 bg-white block z-10 shadow-lg transition-menu w-16">
         <div class="block h-24"></div>
         <%= for item <- @menu do %>
           <div class="block my-3">
