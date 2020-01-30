@@ -4,7 +4,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
 
   def render(assigns) do
     ~L"""
-      <div class="bg-white h-hector w-64 mt-16 block">
+      <div class="bg-white h-hoch-90 w-64 mt-16 block">
         <div class="inline-flex w-full py-3 bg-blue-800">
           <div class="relative w-full px-2">
             <input class="h-8 w-full rounded">

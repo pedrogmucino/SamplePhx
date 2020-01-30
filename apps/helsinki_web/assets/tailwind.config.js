@@ -2,7 +2,7 @@ module.exports = {
     theme: {
       extend: {
         height: {
-            'hector': '90vh'
+            'hoch-90': '90vh'
         }
       }
     }
