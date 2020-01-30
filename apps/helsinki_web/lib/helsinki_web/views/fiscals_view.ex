@@ -14,10 +14,5 @@ defmodule AccountingSystemWeb.FiscalsLiveView do
     {:ok, socket}
   end
 
-  def handle_event("open_submenu", value, socket) do
-    IO.inspect(value["atom"], label: "valor que recibi ===> ")
-    {:noreply, socket}
-  end
-
 end
 
