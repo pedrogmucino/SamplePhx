@@ -3,6 +3,7 @@ defmodule AccountingSystemWeb.StructureController do
 
   alias AccountingSystem.StructureHandler
   alias AccountingSystem.StructureSchema
+  alias AccountingSystem.GetLastStructureQuery, as: QueryStruct
 
   def index(conn, _params) do
     structures = StructureHandler.list_structures()
@@ -10,7 +11,8 @@ defmodule AccountingSystemWeb.StructureController do
   end
 
   def new(conn, _params) do
-    changeset = StructureHandler.change_structure(%StructureSchema{})
+    exist = List.first(QueryStruct.last_structure())
+    changeset = StructureHandler.change_structure(StructureHandler.new_structure(exist))
     render(conn, "new.html", changeset: changeset)
   end
 
@@ -37,8 +39,11 @@ defmodule AccountingSystemWeb.StructureController do
     render(conn, "edit.html", structure: structure, changeset: changeset)
   end
 
-  def update(conn, %{"id" => id, "structure" => structure_params}) do
+  def update(conn, %{"id" => id, "structure_schema" => structure_params}) do
     structure = StructureHandler.get_structure!(id)
+    StructureHandler.update_code_size(structure, structure_params)
+    IO.inspect(structure, label: "STRUCTUREEE::::>>>>>>")
+    IO.inspect(structure_params, label: "STRUCTUREEE PARAMSSSS::::>>>>>>")
 
     case StructureHandler.update_structure(structure, structure_params) do
       {:ok, structure} ->
@@ -60,3 +65,4 @@ defmodule AccountingSystemWeb.StructureController do
     |> redirect(to: Routes.structure_path(conn, :index))
   end
 end
+

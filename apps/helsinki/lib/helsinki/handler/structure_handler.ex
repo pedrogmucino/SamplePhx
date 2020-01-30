@@ -7,7 +7,49 @@ defmodule AccountingSystem.StructureHandler do
   alias AccountingSystem.Repo
 
   alias AccountingSystem.StructureSchema
+  alias AccountingSystem.GetSetAccountsCodes, as: AccountsGetSet
+  alias AccountingSystem.CodeFormatter
 
+
+  def new_structure(nil) do
+    %StructureSchema{}
+      |> Map.put(:level, 1)
+      |> Map.put(:max_current_size, 1)
+  end
+
+  def new_structure(structure) do
+    %StructureSchema{}
+      |> Map.put(:level, Map.get(structure, :level) + 1)
+      |> Map.put(:max_current_size, 1)
+  end
+
+  def update_code_size(%{size: size, level: level}, %{"size" => new_size}) do
+    eval = String.to_integer(new_size) - size
+    do_the_update_please(eval, level)
+  end
+
+  defp do_the_update_please(a, level) when a == 0 do
+    IO.inspect(AccountsGetSet.get_code_and_id, label: "RESUUUUUUUUUUUUUULT")
+  end
+
+  defp do_the_update_please(a, level) when a < 0 do
+    IO.inspect("Maior a UNO CHAAAAAAAAA")
+  end
+
+  defp do_the_update_please(length, level) when length > 0 do  #Si el cambio fue a Codigo mas grande (cuantos 0 agregas, donde agregas osea en que nivel)
+    AccountsGetSet.get_code_and_id
+      |> Enum.each(fn data -> change_db_code(data, level, length) end)
+  end
+
+  defp change_db_code(%{code: code, id: id}, level, length) do
+    code
+      |> CodeFormatter.string_to_list
+      |> List.replace_at(level - 1, CodeFormatter.string_to_list(code)
+        |> Enum.at(level - 1)
+        |> CodeFormatter.add_zeros_at_left(length))
+      |> CodeFormatter.list_to_string
+      |> AccountsGetSet.set_new_code(id)
+  end
   @doc """
   Returns the list of structures.
 

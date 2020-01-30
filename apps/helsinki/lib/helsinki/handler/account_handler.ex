@@ -41,9 +41,9 @@ defmodule AccountingSystem.AccountHandler do
 
   def get_account_code!(id), do: Repo.get!(AccountCodeSchema, id)
 
-  def get_principal_account!(), do: Repo.all(from acc in AccountCodeSchema, where: acc.level == 0, order_by: [desc: acc.id], limit: 1)
-
-
+  def get_principal_account!() do
+    Repo.all(from acc in AccountCodeSchema, where: acc.level == 0, order_by: [desc: acc.id], limit: 1)
+  end
   def get_codes!(id) do
     iid = String.to_integer(id)
     from(acc in "accounts", where: acc.id == ^iid, select: [:code, :level, :root_account])
@@ -56,7 +56,6 @@ defmodule AccountingSystem.AccountHandler do
       |> Repo.all
   end
 
-
   def get_next_code([%{code: codigo}]) do
     codigo
       |> CodeFormatter.add_in_position(0)
@@ -66,6 +65,9 @@ defmodule AccountingSystem.AccountHandler do
     from(all in "structures", select: [:size, :level], order_by: [asc: :level])
       |> Repo.all
   end
+
+
+
   @doc """
   Creates a account.
 

@@ -56,7 +56,7 @@ defmodule AccountingSystem.CodeFormatter do
     end
   end
 
-  defp list_to_string(code) do
+  def list_to_string(code) do
     add_line(code)
   end
 
@@ -100,8 +100,11 @@ defmodule AccountingSystem.CodeFormatter do
     List.replace_at(string_to_list(list), position, string)
   end
 
-  defp string_to_list(code) do
+  def string_to_list(code) do
     String.split(code, "-")
   end
 
+  def add_zeros_at_left(code_string, length) do
+    String.duplicate("0", length) <> code_string
+  end
 end
