@@ -1,4 +1,4 @@
-defmodule AccountingSystemWeb.ActiveComponent do
+defmodule AccountingSystemWeb.FiscalsComponent do
   use Phoenix.LiveComponent
   use Phoenix.HTML
 
@@ -8,7 +8,7 @@ defmodule AccountingSystemWeb.ActiveComponent do
 
   def render(assigns) do
     ~L"""
-      <div class="m-16"> Active </div>
+      <div class="m-16"> Fiscals </div>
     """
   end
 

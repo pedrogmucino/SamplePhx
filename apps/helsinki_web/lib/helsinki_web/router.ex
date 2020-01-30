@@ -19,7 +19,8 @@ defmodule AccountingSystemWeb.Router do
     pipe_through :browser
 
     get "/account", AccountController, :index_fake
-    get "/active", ActiveController, :index
+    get "/actives", ActivesController, :index
+    get "/fiscals", FiscalsController, :index
     # get "/submenu", SubMenuController, :sub_menu
     resources "/accounts", AccountController
     resources "/structures", StructureController

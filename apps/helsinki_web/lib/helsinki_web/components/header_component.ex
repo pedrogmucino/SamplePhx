@@ -68,7 +68,7 @@ defmodule AccountingSystemWeb.HeaderComponent do
       </g>
     </svg>
     """},
-    %{name: "Activos", link: "/active", icon: """
+    %{name: "Activos", link: "/actives", icon: """
     <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="home" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
     class="h-8 w-8 ml-2 mr-auto">
       <g>
@@ -81,7 +81,7 @@ defmodule AccountingSystemWeb.HeaderComponent do
       </g>
     </svg>
     """},
-    %{name: "Fiscales", link: "/fiscal", icon: """
+    %{name: "Fiscales", link: "/fiscals", icon: """
     <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="home" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"
       class="h-8 w-8 ml-2 mr-auto">
         <g>
