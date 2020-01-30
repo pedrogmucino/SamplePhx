@@ -1,4 +1,4 @@
-defmodule AccountingSystemWeb.SubMenuComponent do
+defmodule AccountingSystemWeb.AccountsComponent do
   use Phoenix.LiveComponent
   use Phoenix.HTML
 

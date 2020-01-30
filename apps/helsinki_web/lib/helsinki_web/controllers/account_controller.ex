@@ -3,7 +3,11 @@ defmodule AccountingSystemWeb.AccountController do
 
   alias AccountingSystem.AccountHandler
   alias AccountingSystem.AccountSchema
+  alias Phoenix.LiveView
 
+  def index_fake(conn, _params) do
+    LiveView.Controller.live_render(conn, AccountingSystemWeb.AccountLiveView, session: %{})
+  end
   def index(conn, _params) do
     accounts = AccountHandler.list_accounts()
     render(conn, "index.html", accounts: accounts)

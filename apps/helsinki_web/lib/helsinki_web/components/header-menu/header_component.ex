@@ -22,16 +22,13 @@ defmodule AccountingSystemWeb.HeaderComponent do
         <div class="block h-24"></div>
         <%= for item <- @menu do %>
           <div class="block my-3">
-            <bottom phx-click="open_submenu" phx-value-atom="<%= item.atom %>" class="rounded hover:border-gray-200 text-blue-500 hover:bg-gray-200 py-1 inline-flex items-center w-full" href="#">
+            <a href="<%= item.link %>" class="rounded hover:border-gray-200 text-blue-500 hover:bg-gray-200 py-1 inline-flex items-center w-full" href="#">
               <%= Phoenix.HTML.raw(item.icon ) %>
               <label class="cursor-pointer ml-2 mr-auto font-bold transition-menu-label"><%= item.name %></label>
-            </bottom>
+            </a>
           </div>
         <% end %>
 
-    </div>
-    <div class="ml-20">
-      <%= live_component(@socket, AccountingSystemWeb.SubMenuComponent, id: "submenu") %>
     </div>
     """
   end
@@ -45,7 +42,7 @@ defmodule AccountingSystemWeb.HeaderComponent do
 
   defp get_menu(), do:
   [
-    %{name: "Inicio", atom: :inicio, icon: """
+    %{name: "Inicio", link: "/home", icon: """
       <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="home" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"
       class="h-8 w-8 ml-2 mr-auto">
         <g>
@@ -58,7 +55,7 @@ defmodule AccountingSystemWeb.HeaderComponent do
         </g>
       </svg>
     """},
-    %{name: "Cuentas", atom: :cuentas, icon: """
+    %{name: "Cuentas", link: "/account", icon: """
     <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="home" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"
     class="h-8 w-8 ml-2 mr-auto">
       <g>
@@ -71,7 +68,7 @@ defmodule AccountingSystemWeb.HeaderComponent do
       </g>
     </svg>
     """},
-    %{name: "Activos", atom: :activos, icon: """
+    %{name: "Activos", link: "/active", icon: """
     <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="home" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
     class="h-8 w-8 ml-2 mr-auto">
       <g>
@@ -84,7 +81,7 @@ defmodule AccountingSystemWeb.HeaderComponent do
       </g>
     </svg>
     """},
-    %{name: "Fiscales", atom: :fiscales, icon: """
+    %{name: "Fiscales", link: "/fiscal", icon: """
     <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="home" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"
       class="h-8 w-8 ml-2 mr-auto">
         <g>
@@ -93,7 +90,7 @@ defmodule AccountingSystemWeb.HeaderComponent do
           </g>
       </svg>
     """},
-    %{name: "Reportes", atom: :reportes, icon: """
+    %{name: "Reportes", link: "/report", icon: """
     <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="home" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"
       class="h-8 w-8 ml-2 mr-auto">
         <g>
