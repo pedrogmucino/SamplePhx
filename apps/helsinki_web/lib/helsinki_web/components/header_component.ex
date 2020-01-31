@@ -22,7 +22,7 @@ defmodule AccountingSystemWeb.HeaderComponent do
         <div class="block h-24"></div>
         <%= for item <- @menu do %>
           <div class="block my-3">
-            <a href="<%= item.link %>" class="rounded hover:border-gray-200 text-blue-500 hover:bg-gray-200 py-1 inline-flex items-center w-full" href="#">
+            <a href="<%= item.link %>" class="rounded hover:border-gray-200 text-blue-500 hover:bg-gray-200 py-1 inline-flex items-center w-full">
               <%= Phoenix.HTML.raw(item.icon ) %>
               <label class="cursor-pointer ml-2 mr-auto font-bold transition-menu-label"><%= item.name %></label>
             </a>

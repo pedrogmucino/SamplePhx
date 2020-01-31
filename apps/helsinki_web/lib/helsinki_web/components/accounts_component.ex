@@ -34,6 +34,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
 
       <%= for item <- @accounts do %>
       <div class="w-full px-2 block">
+      <a href="/subaccounts?q=<%= item.name %>" >
         <div class="cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
           <h2 class="text-gray-700 text-xl"><%= item.name %></h2>
           <label class="cursor-pointer text-gray-600 font-bold text-sm"><%= item.account %></label>
@@ -45,12 +46,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
       <% end %>
 
       </div>
-      <%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, id: "subaccounts") %>
-      <%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, id: "subaccounts1") %>
-      <%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, id: "subaccounts2") %>
-      <%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, id: "subaccounts3") %>
-      <%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, id: "subaccounts4") %>
-      <%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, id: "subaccounts5") %>
+
 
     """
   end
@@ -68,63 +64,81 @@ defmodule AccountingSystemWeb.AccountsComponent do
         name: "Cajas",
         account: "1-001-0010-0010",
         account_type: "Activo",
-        color_account_type: "green"
+        color_account_type: "green",
+        childs_number: 5
       },
       %{
         name: "Bancos",
         account: "2-001-0010-0010",
         account_type: "Activo",
-        color_account_type: "green"
+        color_account_type: "green",
+        childs_number: 5
       },
       %{
         name: "Almacén",
         account: "3-001-0010-0010",
         account_type: "Activo",
-        color_account_type: "green"
+        color_account_type: "green",
+        childs_number: 5
       },
       %{
         name: "Clientes",
         account: "4-001-0010-0010",
         account_type: "Activo",
-        color_account_type: "green"
+        color_account_type: "green",
+        childs_number: 5
       },
       %{
         name: "Provedores",
         account: "1-001-0010-0010",
         account_type: "Pasivo",
-        color_account_type: "red"
+        color_account_type: "red",
+        childs_number: 5
       },
       %{
         name: "Documentos por pagar",
         account: "2-001-0010-0010",
         account_type: "Pasivo",
-        color_account_type: "red"
+        color_account_type: "red",
+        childs_number: 5
       },
       %{
         name: "Acreedores",
         account: "3-001-0010-0010",
         account_type: "Pasivo",
-        color_account_type: "red"
+        color_account_type: "red",
+        childs_number: 5
       },
       %{
         name: "Impuestos por pagar",
         account: "4-001-0010-0010",
         account_type: "Pasivo",
-        color_account_type: "red"
+        color_account_type: "red",
+        childs_number: 5
       },
       %{
         name: "Capital Contable",
         account: "3-001-0010-0010",
         account_type: "Capital",
-        color_account_type: "blue"
+        color_account_type: "blue",
+        childs_number: 5
       },
       %{
         name: "Patrimonio Contable",
         account: "4-001-0010-0010",
         account_type: "Capital",
-        color_account_type: "blue"
+        color_account_type: "blue",
+        childs_number: 5
       }
     ]
 
 
 end
+
+
+# <%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, id: "subaccounts") %>
+#       <%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, id: "subaccounts1") %>
+#       <%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, id: "subaccounts2") %>
+#       <%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, id: "subaccounts3") %>
+#       <%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, id: "subaccounts4") %>
+#       <%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, id: "subaccounts5") %>

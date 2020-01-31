@@ -9,8 +9,8 @@ defmodule AccountingSystemWeb.SubAccountsLiveView do
     Phoenix.View.render(AccountingSystemWeb.SubAccountsView, "index.html", assigns)
   end
 
-  def mount(_params, _session, socket) do
-    {:ok, socket}
+  def mount(_params, session, socket) do
+    {:ok, assign(socket, query: session["query"])}
   end
 
 end

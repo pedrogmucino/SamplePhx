@@ -1,1 +1,7 @@
-<%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, id: "sub_accounts") %>
+<%# For Demo start %>
+<%= live_component(@socket, AccountingSystemWeb.HeaderComponent, id: "header") %> 
+
+<%= live_component(@socket, AccountingSystemWeb.AccountsComponent, id: "accounts") %>
+
+<%# For Demo end %>
+<%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, subcuenta: @query, id: "sub_accounts") %>

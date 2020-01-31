@@ -6,6 +6,11 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
     {:ok, socket}
   end
 
+  def update(attrs, socket) do
+    IO.inspect(attrs, label: "valor en update ----")
+    {:ok, socket}
+  end
+
   def render(assigns) do
     ~L"""
     <div class="bg-white h-hoch-90 w-80 float-left ml-1 mt-16 block">
