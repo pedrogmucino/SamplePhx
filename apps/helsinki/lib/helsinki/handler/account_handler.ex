@@ -145,6 +145,9 @@ defmodule AccountingSystem.AccountHandler do
 
   """
   def update_account(%AccountSchema{} = account, attrs) do
+    attrs
+    |> update_structure
+
     account
     |> AccountSchema.changeset(attrs)
     |> Repo.update()
