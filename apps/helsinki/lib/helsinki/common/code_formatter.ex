@@ -106,7 +106,7 @@ defmodule AccountingSystem.CodeFormatter do
 
   defp add_line("-", []), do: ""
 
-  defp addZero(str, len) do
+  def addZero(str, len) do
     size = String.length(str)
     String.duplicate("0",len - size) <> str
   end
@@ -121,5 +121,10 @@ defmodule AccountingSystem.CodeFormatter do
 
   def add_zeros_at_left(code_string, length) do
     String.duplicate("0", length) <> code_string
+  end
+
+  def update_string(string, size) do
+    zeros = addZero("", size)
+    "#{string}-#{zeros}"
   end
 end
