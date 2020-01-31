@@ -55,12 +55,12 @@ defmodule AccountingSystemWeb.AccountsComponent do
       </div>
 
       </div>
-      <%= live_component(@socket, AccountingSystemWeb.ActivesComponent, id: "actives") %>
-      <%= live_component(@socket, AccountingSystemWeb.ActivesComponent, id: "actives1") %>
-      <%= live_component(@socket, AccountingSystemWeb.ActivesComponent, id: "actives2") %>
-      <%= live_component(@socket, AccountingSystemWeb.ActivesComponent, id: "actives3") %>
-      <%= live_component(@socket, AccountingSystemWeb.ActivesComponent, id: "actives4") %>
-      <%= live_component(@socket, AccountingSystemWeb.ActivesComponent, id: "actives5") %>
+      <%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, id: "subaccounts") %>
+      <%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, id: "subaccounts1") %>
+      <%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, id: "subaccounts2") %>
+      <%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, id: "subaccounts3") %>
+      <%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, id: "subaccounts4") %>
+      <%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, id: "subaccounts5") %>
 
     """
   end
