@@ -10,7 +10,9 @@ defmodule AccountingSystem.AccountHandler do
     AccountSchema,
     AccountCodeSchema,
     CodeFormatter,
-    GetAccountList
+    GetAccountList,
+    GetStructureByLevel,
+    StructureSchema
   }
 
   @doc """
@@ -85,9 +87,49 @@ defmodule AccountingSystem.AccountHandler do
 
   """
   def create_account(attrs \\ %{}) do
+    attrs
+    |> update_structure
+
     %AccountSchema{}
     |> AccountSchema.changeset(attrs)
     |> Repo.insert()
+  end
+
+  defp update_structure(attrs) do
+    attrs
+    |> get_level
+    |> GetStructureByLevel.new
+    |> Repo.one!
+    |> update_max_current_size(attrs)
+  end
+
+  defp get_level(attrs) do
+    Map.get(attrs, "level")
+  end
+
+  defp update_max_current_size(%StructureSchema{} = structure, attrs) do
+    level_size =
+    attrs
+    |> get_level_size
+
+    str_max =
+    Map.get(structure, :max_current_size)
+
+    if level_size > str_max do
+        StructureSchema.changeset(structure, %{"max_current_size" => level_size})
+        |> Repo.update
+    end
+
+  end
+
+  defp get_level_size(attrs) do
+    attrs
+    |> Map.get("code")
+    |> String.split("-")
+    |> Enum.at(Map.get(attrs, "level") |> String.to_integer)
+    |> String.to_integer
+    |> Integer.to_string
+    |> String.length
   end
 
   @doc """
