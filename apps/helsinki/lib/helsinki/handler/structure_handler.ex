@@ -32,17 +32,35 @@ defmodule AccountingSystem.StructureHandler do
     do_the_update_please(eval, level)
   end
 
-  defp do_the_update_please(a, level) when a == 0 do
+  defp do_the_update_please(length, level) when length == 0 do
     IO.inspect(AccountsGetSet.get_code_and_id, label: "RESUUUUUUUUUUUUUULT")
   end
 
-  defp do_the_update_please(a, level) when a < 0 do
-    IO.inspect("Maior a UNO CHAAAAAAAAA")
+  defp do_the_update_please(length, level) when length < 0 do   #Si el cambio fue a Codigo mas CHICO (Quitar ceros)
+    case check_if_you_can_delet_zeros(level, length * -1) do
+      {:ok} ->
+        AccountsGetSet.get_code_and_id
+          |> Enum.each(fn data -> reduce_db_code(data, level, length * -1) end)
+      {:error} ->
+        {:error}
+      end
   end
 
-  defp do_the_update_please(length, level) when length > 0 do  #Si el cambio fue a Codigo mas grande (cuantos 0 agregas, donde agregas osea en que nivel)
+  defp do_the_update_please(length, level) when length > 0 do  #Si el cambio fue a Codigo mas grande (cuantos '0' agregas, donde agregas osea en que nivel)
     AccountsGetSet.get_code_and_id
       |> Enum.each(fn data -> change_db_code(data, level, length) end)
+  end
+
+  defp check_if_you_can_delet_zeros(level, length) do
+    level_size = AccountingSystem.GetSizeOf.size_of(level) |> Repo.all |> List.first |> Map.get(:size)
+    max_current = AccountingSystem.GetMaxOf.get_max_level(level) |> Repo.all |> List.first |> Map.get(:max_current_size)
+    case (level_size - max_current) >= length do
+      true ->
+        {:ok}
+      false ->
+        {:error}
+    end
+
   end
 
   defp change_db_code(%{code: code, id: id}, level, length) do
@@ -51,6 +69,16 @@ defmodule AccountingSystem.StructureHandler do
       |> List.replace_at(level - 1, CodeFormatter.string_to_list(code)
         |> Enum.at(level - 1)
         |> CodeFormatter.add_zeros_at_left(length))
+      |> CodeFormatter.list_to_string
+      |> AccountsGetSet.set_new_code(id)
+  end
+
+  defp reduce_db_code(%{code: code, id: id}, level, length) do #Length = Cuantos ceros a la izquierda voy a quitar
+    code
+      |> CodeFormatter.string_to_list
+      |> List.replace_at(level - 1, CodeFormatter.string_to_list(code)
+        |> Enum.at(level - 1)
+        |> CodeFormatter.try_quit_zeros(length))
       |> CodeFormatter.list_to_string
       |> AccountsGetSet.set_new_code(id)
   end

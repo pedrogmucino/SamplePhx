@@ -2,6 +2,7 @@ defmodule AccountingSystem.CodeFormatter do
 
   alias AccountingSystem.AccountHandler
   alias AccountingSystem.GetLastIncrementValueQuery, as: AccountLastIncrement
+  alias AccountingSystem.Repo
 
   def get_child_values(code_schema) do
     %AccountingSystem.AccountCodeSchema{}
@@ -67,6 +68,20 @@ defmodule AccountingSystem.CodeFormatter do
       |>Kernel.+(1)
       |>Integer.to_string
       |>addZero(len)
+  end
+
+  def try_quit_zeros(string, length) do
+    string
+      |> String.to_integer
+      |> Integer.to_string
+      |> addZero(String.length(string) - length)
+  end
+
+  def get_max_size(level) do
+    AccountingSystem.GetMaxOf.get_max_level(level)
+      |> Repo.all
+      |> List.first
+      |> Map.get(:max_current_size)
   end
 
   defp giveme_a_son(codeschema) do
