@@ -32,27 +32,17 @@ defmodule AccountingSystemWeb.AccountsComponent do
         </button>
       </div>
 
+      <%= for item <- @accounts do %>
       <div class="w-full px-2 block">
-
-        <div class="w-full block bg-gray-200 p-3 mt-2 rounded relative">
-          <h2 class="text-gray-700 text-xl">Cajas</h2>
-          <label class="text-gray-600 font-bold text-sm">1-001-0010-0010</label>
-          <div class="absolute bg-green-200 px-3 text-sm font-bold top-0 right-0 rounded-full text-green-700 mt-2 mr-2">
-            Activo
+        <div class="cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
+          <h2 class="text-gray-700 text-xl"><%= item.name %></h2>
+          <label class="cursor-pointer text-gray-600 font-bold text-sm"><%= item.account %></label>
+          <div class="absolute bg-<%= item.color_account_type %>-200 px-3 text-sm font-bold top-0 right-0 rounded-full text-<%= item.color_account_type %>-700 mt-2 mr-2">
+            <%= item.account_type %>
           </div>
         </div>
-
-        <div class="w-full block bg-gray-200 p-3 mt-2 rounded relative">
-          <h2 class="text-gray-700 text-xl">Cajas</h2>
-          <label class="text-gray-600 font-bold text-sm">1-001-0010-0010</label>
-          <div class="absolute bg-green-200 px-3 text-sm font-bold top-0 right-0 rounded-full text-green-700 mt-2 mr-2">
-            Activo
-          </div>
-        </div>
-
-
-
       </div>
+      <% end %>
 
       </div>
       <%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, id: "subaccounts") %>
@@ -65,13 +55,76 @@ defmodule AccountingSystemWeb.AccountsComponent do
     """
   end
   def mount(socket) do
-    {:ok, socket}
+    {:ok, assign(socket, accounts: get_accounts())}
   end
 
   def update(_attrs, socket) do
       {:ok, socket}
   end
 
+  defp get_accounts(), do:
+    [
+      %{
+        name: "Cajas",
+        account: "1-001-0010-0010",
+        account_type: "Activo",
+        color_account_type: "green"
+      },
+      %{
+        name: "Bancos",
+        account: "2-001-0010-0010",
+        account_type: "Activo",
+        color_account_type: "green"
+      },
+      %{
+        name: "Almacén",
+        account: "3-001-0010-0010",
+        account_type: "Activo",
+        color_account_type: "green"
+      },
+      %{
+        name: "Clientes",
+        account: "4-001-0010-0010",
+        account_type: "Activo",
+        color_account_type: "green"
+      },
+      %{
+        name: "Provedores",
+        account: "1-001-0010-0010",
+        account_type: "Pasivo",
+        color_account_type: "red"
+      },
+      %{
+        name: "Documentos por pagar",
+        account: "2-001-0010-0010",
+        account_type: "Pasivo",
+        color_account_type: "red"
+      },
+      %{
+        name: "Acreedores",
+        account: "3-001-0010-0010",
+        account_type: "Pasivo",
+        color_account_type: "red"
+      },
+      %{
+        name: "Impuestos por pagar",
+        account: "4-001-0010-0010",
+        account_type: "Pasivo",
+        color_account_type: "red"
+      },
+      %{
+        name: "Capital Contable",
+        account: "3-001-0010-0010",
+        account_type: "Capital",
+        color_account_type: "blue"
+      },
+      %{
+        name: "Patrimonio Contable",
+        account: "4-001-0010-0010",
+        account_type: "Capital",
+        color_account_type: "blue"
+      }
+    ]
 
 
 end
