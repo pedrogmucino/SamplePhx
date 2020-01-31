@@ -41,18 +41,21 @@ defmodule AccountingSystemWeb.StructureController do
 
   def update(conn, %{"id" => id, "structure_schema" => structure_params}) do
     structure = StructureHandler.get_structure!(id)
-    StructureHandler.update_code_size(structure, structure_params)
-    IO.inspect(structure, label: "STRUCTUREEE::::>>>>>>")
-    IO.inspect(structure_params, label: "STRUCTUREEE PARAMSSSS::::>>>>>>")
-
-    case StructureHandler.update_structure(structure, structure_params) do
-      {:ok, structure} ->
+    case StructureHandler.update_code_size(structure, structure_params) do
+      {:error} ->
         conn
-        |> put_flash(:info, "Structure updated successfully.")
+        |> put_flash(:error, "Structure can't update because size can't be less than max current size")
         |> redirect(to: Routes.structure_path(conn, :show, structure))
+      _ ->
+        case StructureHandler.update_structure(structure, structure_params) do
+          {:ok, structure} ->
+            conn
+            |> put_flash(:info, "Structure updated successfully.")
+            |> redirect(to: Routes.structure_path(conn, :show, structure))
 
-      {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", structure: structure, changeset: changeset)
+          {:error, %Ecto.Changeset{} = changeset} ->
+            render(conn, "edit.html", structure: structure, changeset: changeset)
+        end
     end
   end
 
