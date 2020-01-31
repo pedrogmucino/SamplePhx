@@ -6,9 +6,12 @@ defmodule AccountingSystem.AccountHandler do
   import Ecto.Query, warn: false
   alias AccountingSystem.Repo
 
-  alias AccountingSystem.AccountSchema
-  alias AccountingSystem.AccountCodeSchema
-  alias AccountingSystem.CodeFormatter
+  alias AccountingSystem.{
+    AccountSchema,
+    AccountCodeSchema,
+    CodeFormatter,
+    GetAccountList
+  }
 
   @doc """
   Returns the list of accounts.
@@ -20,7 +23,8 @@ defmodule AccountingSystem.AccountHandler do
 
   """
   def list_accounts do
-    Repo.all(AccountSchema)
+    GetAccountList.new
+    |> Repo.all
   end
 
   @doc """

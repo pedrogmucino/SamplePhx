@@ -6,9 +6,13 @@ defmodule AccountingSystem.StructureHandler do
   import Ecto.Query, warn: false
   alias AccountingSystem.Repo
 
-  alias AccountingSystem.StructureSchema
+  alias AccountingSystem.{
+    StructureSchema,
+    GetStructureList,
+    CodeFormatter
+  }
   alias AccountingSystem.GetSetAccountsCodes, as: AccountsGetSet
-  alias AccountingSystem.CodeFormatter
+  # alias AccountingSystem.CodeFormatter
 
 
   def new_structure(nil) do
@@ -60,7 +64,8 @@ defmodule AccountingSystem.StructureHandler do
 
   """
   def list_structures do
-    Repo.all(StructureSchema)
+    GetStructureList.new
+    |> Repo.all
   end
 
   @doc """
