@@ -3,20 +3,22 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
   use Phoenix.HTML
 
   def mount(socket) do
-    {:ok, socket}
+    {:ok, assign(socket, subaccounts: get_subaccounts())}
   end
 
   def update(attrs, socket) do
-    IO.inspect(attrs, label: "valor en update ----")
-    {:ok, socket}
+    #{:ok, socket}
+    {:ok, assign(socket, :parent_account, attrs.parent_account)}
   end
 
   def render(assigns) do
     ~L"""
+
+
     <div class="bg-white h-hoch-90 w-80 float-left ml-1 mt-16 block">
       <div class=" w-full pt-6 bg-gray-200">
         <div class="block text-white px-3 text-center">
-          <h1 class="text-2xl font-medium text-gray-800">Activo</h1>
+          <h1 class="text-2xl font-medium text-gray-800"> <%= @parent_account %> </h1>
           <label class="block text-gray-700 text-sm font-bold">1-1002-1010-1000</label>
           <label class="block text-gray-700">Nivel: <b>2</b></label>
           <label class="block text-gray-700">Tipo: <b>Detalle</b></label>
@@ -66,18 +68,122 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
       </div>
 
 
+      <%= for item <- @subaccounts do %>
+      <%= if item.parent_name == @parent_account do %>
       <div class="w-full p-2 block">
         <div class="w-full block bg-gray-200 p-3 rounded relative">
-          <h2 class="text-gray-700 text-xl">Cajas</h2>
+          <h2 class="text-gray-700 text-xl"> <%= item.name %> </h2>
           <label class="text-gray-600 font-bold text-sm">1-001-0010-0010</label>
           <div class="absolute bg-green-200 px-3 text-sm font-bold top-0 right-0 rounded-full text-green-700 mt-2 mr-2">
-            Activo
+            <%= item.account_type %>
           </div>
         </div>
       </div>
-
+      <% end %>
+      <% end %>
     </div>
+
     """
   end
+
+  defp get_subaccounts(), do:
+    [
+      %{
+        parent_name: "Cajas",
+        name: "Caja Principal",
+        account: "1-001-0010-0010",
+        account_type: "Activo",
+        color_account_type: "green",
+        childs_number: 5
+      },
+      %{
+        parent_name: "Cajas",
+        name: "Caja Rápida",
+        account: "2-001-0010-0010",
+        account_type: "Activo",
+        color_account_type: "green",
+        childs_number: 5
+      },
+      %{
+        parent_name: "Almacén",
+        name: "Almacén 1",
+        account: "3-001-0010-0010",
+        account_type: "Activo",
+        color_account_type: "green",
+        childs_number: 5
+      },
+      %{
+        parent_name: "Bancos",
+        name: "BBVA",
+        account: "4-001-0010-0010",
+        account_type: "Activo",
+        color_account_type: "green",
+        childs_number: 5
+      },
+      %{
+        parent_name: "Bancos",
+        name: "Banco x",
+        account: "1-001-0010-0010",
+        account_type: "Pasivo",
+        color_account_type: "red",
+        childs_number: 5
+      },
+      %{
+        parent_name: "Clientes",
+        name: "Cliente Frecuente 1",
+        account: "2-001-0010-0010",
+        account_type: "Pasivo",
+        color_account_type: "red",
+        childs_number: 5
+      },
+      %{
+        parent_name: "Proveedores",
+        name: "Proveedor x",
+        account: "3-001-0010-0010",
+        account_type: "Pasivo",
+        color_account_type: "red",
+        childs_number: 5
+      },
+      %{
+        parent_name: "Documentos por pagar",
+        name: "Impuestos por pagar",
+        account: "4-001-0010-0010",
+        account_type: "Pasivo",
+        color_account_type: "red",
+        childs_number: 5
+      },
+      %{
+        parent_name: "Acreedores",
+        name: "Acreedor 2",
+        account: "3-001-0010-0010",
+        account_type: "Capital",
+        color_account_type: "blue",
+        childs_number: 5
+      },
+      %{
+        parent_name: "Impuestos por pagar",
+        name: "SAT",
+        account: "4-001-0010-0010",
+        account_type: "Capital",
+        color_account_type: "blue",
+        childs_number: 5
+      },
+      %{
+        parent_name: "Capital Contable",
+        name: "Ganancias x",
+        account: "3-001-0010-0010",
+        account_type: "Capital",
+        color_account_type: "blue",
+        childs_number: 5
+      },
+      %{
+        parent_name: "Patrimonio Contable",
+        name: "Ahorros x",
+        account: "4-001-0010-0010",
+        account_type: "Capital",
+        color_account_type: "blue",
+        childs_number: 5
+      }
+    ]
 
 end

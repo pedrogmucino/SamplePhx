@@ -89,7 +89,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
         childs_number: 5
       },
       %{
-        name: "Provedores",
+        name: "Proveedores",
         account: "1-001-0010-0010",
         account_type: "Pasivo",
         color_account_type: "red",
@@ -134,11 +134,3 @@ defmodule AccountingSystemWeb.AccountsComponent do
 
 
 end
-
-
-# <%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, id: "subaccounts") %>
-#       <%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, id: "subaccounts1") %>
-#       <%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, id: "subaccounts2") %>
-#       <%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, id: "subaccounts3") %>
-#       <%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, id: "subaccounts4") %>
-#       <%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, id: "subaccounts5") %>
