@@ -18,13 +18,13 @@ defmodule AccountingSystem.StructureHandler do
   def new_structure(nil) do
     %StructureSchema{}
       |> Map.put(:level, 1)
-      |> Map.put(:max_current_size, 1)
+      |> Map.put(:max_current_size, 0)
   end
 
   def new_structure(structure) do
     %StructureSchema{}
       |> Map.put(:level, Map.get(structure, :level) + 1)
-      |> Map.put(:max_current_size, 1)
+      |> Map.put(:max_current_size, 0)
   end
 
   def update_code_size(%{size: size, level: level}, %{"size" => new_size}) do
@@ -32,9 +32,7 @@ defmodule AccountingSystem.StructureHandler do
     do_the_update_please(eval, level)
   end
 
-  defp do_the_update_please(length, level) when length == 0 do
-    IO.inspect(AccountsGetSet.get_code_and_id, label: "RESUUUUUUUUUUUUUULT")
-  end
+  defp do_the_update_please(length, _) when length == 0, do: ""
 
   defp do_the_update_please(length, level) when length < 0 do   #Si el cambio fue a Codigo mas CHICO (Quitar ceros)
     case check_if_you_can_delet_zeros(level, length * -1) do
@@ -125,9 +123,20 @@ defmodule AccountingSystem.StructureHandler do
 
   """
   def create_structure(attrs \\ %{}) do
+    add_structure_to_codes(attrs)
     %StructureSchema{}
     |> StructureSchema.changeset(attrs)
     |> Repo.insert()
+  end
+
+  defp add_structure_to_codes(%{"size" => size}) do
+    AccountingSystem.GetSetAccountsCodes.get_code_and_id()
+      |> Enum.each(fn x -> update_code(x, size) end)
+  end
+
+  defp update_code(%{code: code, id: id}, size) do
+    CodeFormatter.update_string(code, String.to_integer(size))
+      |> AccountingSystem.GetSetAccountsCodes.set_new_code(id)
   end
 
   @doc """
