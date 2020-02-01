@@ -12,7 +12,8 @@ defmodule AccountingSystem.AccountHandler do
     CodeFormatter,
     GetAccountList,
     GetStructureByLevel,
-    StructureSchema
+    StructureSchema,
+    GetLastAccount
   }
 
   @doc """
@@ -167,6 +168,51 @@ defmodule AccountingSystem.AccountHandler do
   """
   def delete_account(%AccountSchema{} = account) do
     Repo.delete(account)
+    update_structure_on_delete(account)
+  end
+
+  defp update_structure_on_delete(%AccountSchema{} = account) do
+    try do
+      account.level
+      |> GetLastAccount.new
+      |> Repo.one!
+      |> Map.get(:code)
+      |> get_max_size_on_delete(account)
+
+    rescue
+      Ecto.NoResultsError ->
+        update_structure_decrease(true, 0, %{"code" => account.code, "level" => Integer.to_string(account.level)})
+    end
+  end
+
+  defp get_max_size_on_delete(code, %AccountSchema{} = account) do
+    %{"code" => code, "level" => Integer.to_string(account.level)}
+    |> get_level_size
+    |> get_level_size_on_delete(%{"code" => account.code, "level" => Integer.to_string(account.level)})
+
+  end
+
+  defp get_level_size_on_delete(max_size, attrs) do
+    account_size =
+    get_level_size(attrs)
+    update_structure_decrease(account_size > max_size, max_size, attrs)
+  end
+
+  defp update_structure_decrease(true, max_size, attrs) do
+    attrs
+    |> get_level
+    |> GetStructureByLevel.new
+    |> Repo.one!
+    |> update_structure_decrease_execute(max_size)
+  end
+
+  defp update_structure_decrease(false, _max_size, attrs) do
+    {:ok, attrs}
+  end
+
+  defp update_structure_decrease_execute(%StructureSchema{} = structure, max_size) do
+    StructureSchema.changeset(structure, %{"max_current_size" => max_size})
+    |> Repo.update
   end
 
   @doc """
