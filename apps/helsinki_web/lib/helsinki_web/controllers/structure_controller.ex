@@ -2,7 +2,6 @@ defmodule AccountingSystemWeb.StructureController do
   use AccountingSystemWeb, :controller
 
   alias AccountingSystem.StructureHandler
-  alias AccountingSystem.StructureSchema
   alias AccountingSystem.GetLastStructureQuery, as: QueryStruct
 
   def index(conn, _params) do
@@ -61,11 +60,16 @@ defmodule AccountingSystemWeb.StructureController do
 
   def delete(conn, %{"id" => id}) do
     structure = StructureHandler.get_structure!(id)
-    {:ok, _structure} = StructureHandler.delete_structure(structure)
-
-    conn
-    |> put_flash(:info, "Structure deleted successfully.")
-    |> redirect(to: Routes.structure_path(conn, :index))
+    case StructureHandler.delete_structure(structure) do
+      {:ok} ->
+        conn
+          |> put_flash(:info, "Structure deleted successfully.")
+          |> redirect(to: Routes.structure_path(conn, :index))
+      {:error} ->
+      conn
+        |> put_flash(:error, "Structure Can't be deleted")
+        |> redirect(to: Routes.structure_path(conn, :index))
+    end
   end
 end
 

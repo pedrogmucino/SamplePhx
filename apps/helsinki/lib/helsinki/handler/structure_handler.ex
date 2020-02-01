@@ -17,7 +17,7 @@ defmodule AccountingSystem.StructureHandler do
 
   def new_structure(nil) do
     %StructureSchema{}
-      |> Map.put(:level, 1)
+      |> Map.put(:level, 0)
       |> Map.put(:max_current_size, 0)
   end
 
@@ -170,7 +170,44 @@ defmodule AccountingSystem.StructureHandler do
 
   """
   def delete_structure(%StructureSchema{} = structure) do
+    case delet_self_and_childs(structure) do
+      :ok ->
+        {:ok}
+      {:error} ->
+        {:error}
+    end
+  end
+
+  def delet_self_and_childs(%{max_current_size: max_current_size}) when max_current_size > 0 do
+    {:error}
+  end
+
+  def delet_self_and_childs(%{level: level, max_current_size: max_current_size}) when max_current_size == 0 do
+    max = AccountingSystem.GetChildVoid.get_max(level) |> Repo.all |> List.first
+    AccountingSystem.GetChildVoid.get_all(level, max)
+      |> Repo.all
+      |> Enum.each(fn x ->
+        x
+          |> Map.get(:id)
+          |> get_structure!
+          |> delet_dis
+      end)
+  end
+
+  def delet_dis(structure) do
+    quit_zeros(structure)
     Repo.delete(structure)
+  end
+
+  defp quit_zeros(%{level: level}) do
+    AccountsGetSet.get_code_and_id
+      |> Enum.each(fn x -> destroy_zeros(x, level) end)
+  end
+
+  defp destroy_zeros(%{code: code, id: id}, level) do
+    code
+      |> CodeFormatter.quit_zeros_from(level)
+      |> AccountsGetSet.set_new_code(id)
   end
 
   @doc """

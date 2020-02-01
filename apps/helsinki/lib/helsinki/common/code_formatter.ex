@@ -127,4 +127,11 @@ defmodule AccountingSystem.CodeFormatter do
     zeros = addZero("", size)
     "#{string}-#{zeros}"
   end
+
+  def quit_zeros_from(code, level) do
+    code
+      |> string_to_list
+      |> List.delete_at(level)
+      |> list_to_string()
+  end
 end
