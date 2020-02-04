@@ -115,4 +115,12 @@ defmodule AccountingSystem.CodeFormatter do
       |> List.delete_at(level)
       |> list_to_string()
   end
+
+  def concat_names(account_params) do
+    account_params
+      |> Map.get_and_update("name", fn name -> {name, name <> Map.get(account_params, "name2")} end)
+      |> extract_map_from_get_and_update
+  end
+
+  defp extract_map_from_get_and_update({_, map}), do: map
 end

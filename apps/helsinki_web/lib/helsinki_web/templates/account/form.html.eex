@@ -18,8 +18,8 @@
   <%= error_tag f, :type %>
 
   <%= label f, :name %>
-  <%= text_input f, :name2 %>
   <%= text_input f, :name %>
+  <%= text_input f, :name2 %>
   <%= error_tag f, :name %>
 
   <%= label f, :description %>

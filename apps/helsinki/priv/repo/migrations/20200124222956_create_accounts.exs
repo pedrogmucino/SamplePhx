@@ -7,7 +7,6 @@ defmodule AccountingSystem.Repo.Migrations.CreateAccounts do
       add :status, :string, size: 1
       add :type, :string, size: 1
       add :name, :string, size: 64
-      add :description, :string, size: 128
       add :level, :integer
       add :is_departamental, :boolean, default: false, null: false
       add :parent_account, :integer
