@@ -19,7 +19,12 @@
 
   <%= label f, :name %>
   <%= text_input f, :name %>
+  <%= text_input f, :name2 %>
   <%= error_tag f, :name %>
+
+  <%= label f, :description %>
+  <%= text_input f, :description %>
+  <%= error_tag f, :description %>
 
   <%= label f, :level %>
   <%= number_input f, :level %>

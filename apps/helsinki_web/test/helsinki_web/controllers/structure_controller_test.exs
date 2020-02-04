@@ -1,14 +1,14 @@
 defmodule AccountingSystemWeb.StructureControllerTest do
   use AccountingSystemWeb.ConnCase
 
-  alias AccountingSystem.Structures
+  alias AccountingSystem.StructureHandler
 
-  @create_attrs %{length: 42, max: 42, order: 42}
-  @update_attrs %{length: 43, max: 43, order: 43}
-  @invalid_attrs %{length: nil, max: nil, order: nil}
+  @create_attrs %{size: 42, max_current_size: 42, level: 42}
+  @update_attrs %{size: 43, max_current_size: 43, level: 43}
+  @invalid_attrs %{size: nil, max_current_size: nil, level: nil}
 
   def fixture(:structure) do
-    {:ok, structure} = Structures.create_structure(@create_attrs)
+    {:ok, structure} = StructureHandler.create_structure(@create_attrs)
     structure
   end
 
@@ -28,7 +28,7 @@ defmodule AccountingSystemWeb.StructureControllerTest do
 
   describe "create structure" do
     test "redirects to show when data is valid", %{conn: conn} do
-      conn = post(conn, Routes.structure_path(conn, :create), structure: @create_attrs)
+      conn = post(conn, Routes.structure_path(conn, :create), structure_schema: @create_attrs)
 
       assert %{id: id} = redirected_params(conn)
       assert redirected_to(conn) == Routes.structure_path(conn, :show, id)
@@ -38,7 +38,7 @@ defmodule AccountingSystemWeb.StructureControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, Routes.structure_path(conn, :create), structure: @invalid_attrs)
+      conn = post(conn, Routes.structure_path(conn, :create), structure_schema: @invalid_attrs)
       assert html_response(conn, 200) =~ "New Structure"
     end
   end

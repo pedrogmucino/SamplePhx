@@ -7,18 +7,18 @@
   </li>
 
   <li>
-    <strong>Length:</strong>
-    <%= @structure.length %>
+    <strong>size:</strong>
+    <%= @structure.size %>
   </li>
 
   <li>
-    <strong>Order:</strong>
-    <%= @structure.order %>
+    <strong>level:</strong>
+    <%= @structure.level %>
   </li>
 
   <li>
-    <strong>Max:</strong>
-    <%= @structure.max %>
+    <strong>Max_current_size:</strong>
+    <%= @structure.max_current_size %>
   </li>
 
 </ul>

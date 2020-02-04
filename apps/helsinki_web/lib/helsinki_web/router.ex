@@ -29,6 +29,7 @@ defmodule AccountingSystemWeb.Router do
     # get "/submenu", SubMenuController, :sub_menu
     resources "/accounts", AccountController
     resources "/structures", StructureController
+    get "/accounts/:id/new", AccountController, :new
     live "/example", ExampleLive
   end
 

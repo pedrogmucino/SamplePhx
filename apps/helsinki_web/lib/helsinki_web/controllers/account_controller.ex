@@ -4,6 +4,8 @@ defmodule AccountingSystemWeb.AccountController do
   alias AccountingSystem.AccountHandler
   alias AccountingSystem.AccountSchema
   alias Phoenix.LiveView
+  alias AccountingSystem.CodeFormatter
+  alias AccountingSystem.SchemaFormatter
 
   def index_fake(conn, _params) do
     LiveView.Controller.live_render(conn, AccountingSystemWeb.AccountLiveView, session: %{})
@@ -13,13 +15,23 @@ defmodule AccountingSystemWeb.AccountController do
     render(conn, "index.html", accounts: accounts)
   end
 
-  def new(conn, _params) do
-    changeset = AccountHandler.change_account(%AccountSchema{})
+  def new(conn, %{"id" => id}) do
+    account = AccountHandler.get_account_code!(id)
+    #A Account se le debe cambiar todo el formato para que se cree la cuenta hijo
+    child = SchemaFormatter.get_child_values(account)
+    changeset = AccountHandler.change_account_code(child)
     render(conn, "new.html", changeset: changeset)
   end
 
-  def create(conn, %{"account_schema" => account_params}) do
-    case AccountHandler.create_account(account_params) do
+  def new(conn, _params) do
+    account = List.first(AccountHandler.get_principal_account!())
+    child = SchemaFormatter.get_root_account(account)
+    changeset = AccountHandler.change_account_code(child)
+    render(conn, "new.html", changeset: changeset)
+  end
+
+  def create(conn, %{"account_code_schema" => account_params}) do
+    case AccountHandler.create_account(CodeFormatter.concat_names(account_params)) do
       {:ok, account} ->
         conn
         |> put_flash(:info, "Account created successfully.")

@@ -3,9 +3,9 @@ defmodule AccountingSystem.StructureSchema do
   import Ecto.Changeset
 
   schema "structures" do
-    field :length, :integer
-    field :max, :integer
-    field :order, :integer
+    field :size, :integer
+    field :level, :integer
+    field :max_current_size, :integer
 
     timestamps()
   end
@@ -13,7 +13,7 @@ defmodule AccountingSystem.StructureSchema do
   @doc false
   def changeset(structure, attrs) do
     structure
-    |> cast(attrs, [:length, :order, :max])
-    |> validate_required([:length, :order, :max])
+    |> cast(attrs, [:size, :level, :max_current_size])
+    |> validate_required([:size, :level, :max_current_size])
   end
 end

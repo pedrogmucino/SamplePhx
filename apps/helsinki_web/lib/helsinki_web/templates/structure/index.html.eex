@@ -4,9 +4,9 @@
   <thead>
     <tr>
       <th>Id</th>
-      <th>Length</th>
-      <th>Order</th>
-      <th>Max</th>
+      <th>Size</th>
+      <th>Level</th>
+      <th>Max Current size</th>
 
       <th></th>
     </tr>
@@ -15,9 +15,9 @@
 <%= for structure <- @structures do %>
     <tr>
       <td><%= structure.id %></td>
-      <td><%= structure.length %></td>
-      <td><%= structure.order %></td>
-      <td><%= structure.max %></td>
+      <td><%= structure.size %></td>
+      <td><%= structure.level %></td>
+      <td><%= structure.max_current_size %></td>
 
       <td>
         <span><%= link "Show", to: Routes.structure_path(@conn, :show, structure) %></span>
