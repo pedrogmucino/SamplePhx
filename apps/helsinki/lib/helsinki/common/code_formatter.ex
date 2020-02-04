@@ -4,31 +4,6 @@ defmodule AccountingSystem.CodeFormatter do
   alias AccountingSystem.GetLastIncrementValueQuery, as: AccountLastIncrement
   alias AccountingSystem.Repo
 
-  def get_child_values(code_schema) do
-    %AccountingSystem.AccountCodeSchema{}
-      |> Map.put(:parent_account, Map.get(code_schema, :id))
-      |> Map.put(:code, giveme_a_son(code_schema))
-      |> Map.put(:level, Map.get(code_schema, :level) + 1)
-      |> Map.put(:root_account, Map.get(code_schema, :root_account))
-    #Ste men saca el valor del hijo mayor y genera el codigo del siguiente hijo
-  end
-
-  def get_root_account(nil) do
-    %AccountingSystem.AccountCodeSchema{}
-    |> Map.put(:code, first_configuration())
-    |> Map.put(:level, 0)
-    |> Map.put(:parent_account, -1)
-    |> Map.put(:root_account, AccountLastIncrement.last_inc_val + 1)
-  end
-
-  def get_root_account(schema) do
-    %AccountingSystem.AccountCodeSchema{}
-    |> Map.put(:code, add_in_position(Map.get(schema, :code), 0))
-    |> Map.put(:level, 0)
-    |> Map.put(:parent_account, -1)
-    |> Map.put(:root_account, AccountLastIncrement.last_inc_val + 1)
-  end
-
   def add_in_position(string, position) do
     string
       |>string_to_list
@@ -44,7 +19,7 @@ defmodule AccountingSystem.CodeFormatter do
 
   defp add_line([]), do: ""
 
-  defp first_configuration do
+  def first_configuration do
     AccountHandler.get_config()
     |> get_config_as_list
     |> list_to_string
@@ -84,11 +59,17 @@ defmodule AccountingSystem.CodeFormatter do
       |> Map.get(:max_current_size)
   end
 
-  defp giveme_a_son(codeschema) do
+  def giveme_a_son(codeschema) do
     level = Map.get(codeschema, :level) + 1
     AccountHandler.get_last_child(Map.get(codeschema, :id))
       |> get_code_from_query(codeschema)
       |> add_in_position(level)
+  end
+
+  def get_parent_description(id) do
+    AccountingSystem.GetFromParent.the_name(id)
+      |>Repo.all
+      |>List.first
   end
 
   defp get_code_from_query([%{code: codigo}], _codeschema) do

@@ -7,6 +7,7 @@ defmodule AccountingSystem.AccountSchema do
     field :apply_to, :integer
     field :character, :boolean, default: false
     field :code, :string
+    field :description, :string
     field :group_code, :integer
     field :is_departamental, :boolean, default: false
     field :level, :integer
@@ -26,8 +27,8 @@ defmodule AccountingSystem.AccountSchema do
   @doc false
   def changeset(account, attrs) do
     account
-    |> cast(attrs, [:code, :status, :type, :name, :level, :is_departamental, :parent_account, :root_account, :character, :group_code, :uuid_voucher, :payment_method, :apply_to, :third_party_prosecutor, :third_party_op, :apply_third_party_to])
-    |> validate_required([:code, :status, :type, :name, :is_departamental, :parent_account, :root_account, :character, :group_code, :uuid_voucher, :payment_method, :apply_to, :third_party_prosecutor, :third_party_op, :apply_third_party_to])
+    |> cast(attrs, [:code, :status, :type, :name, :description, :level, :is_departamental, :parent_account, :root_account, :character, :group_code, :uuid_voucher, :payment_method, :apply_to, :third_party_prosecutor, :third_party_op, :apply_third_party_to])
+    |> validate_required([:code, :status, :type, :name, :description, :is_departamental, :parent_account, :root_account, :character, :group_code, :uuid_voucher, :payment_method, :apply_to, :third_party_prosecutor, :third_party_op, :apply_third_party_to])
   end
 end
 

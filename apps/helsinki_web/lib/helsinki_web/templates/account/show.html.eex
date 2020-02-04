@@ -23,6 +23,11 @@
   </li>
 
   <li>
+    <strong>Description:</strong>
+    <%= @account.description %>
+  </li>
+
+  <li>
     <strong>Level:</strong>
     <%= @account.level %>
   </li>
