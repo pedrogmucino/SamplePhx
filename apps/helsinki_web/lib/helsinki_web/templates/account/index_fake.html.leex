@@ -1,4 +1,8 @@
 <%= live_component(@socket, AccountingSystemWeb.HeaderComponent, id: "header") %> 
 <div class="inline-flex">
 <%= live_component(@socket, AccountingSystemWeb.AccountsComponent, id: "accounts") %>
+
+<%= if @child? do %>
+<%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, parent_account: @child_id, id: @child_id) %>
+<% end %>
 </div>

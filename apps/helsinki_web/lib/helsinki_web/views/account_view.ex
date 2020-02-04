@@ -10,7 +10,11 @@ defmodule AccountingSystemWeb.AccountLiveView do
   end
 
   def mount(_params, _session, socket) do
-    {:ok, socket}
+    {:ok, assign(socket, child?: false)}
+  end
+
+  def handle_event("open_child", params, socket) do
+    {:noreply, assign(socket, child?: true, child_id: params["name"])}
   end
 
 end

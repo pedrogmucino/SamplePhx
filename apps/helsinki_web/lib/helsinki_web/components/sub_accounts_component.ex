@@ -8,17 +8,18 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
 
   def update(attrs, socket) do
     #{:ok, socket}
-    {:ok, assign(socket, :parent_account, attrs.parent_account)}
+    {:ok, assign(socket, parent_account: attrs.parent_account, id: attrs.id, child?: false)}
   end
 
   def render(assigns) do
     ~L"""
-
-
-    <div class="bg-white h-hoch-90 w-80 float-left ml-1 mt-16 block">
+    <div id="sub_account-<%= @id %>" class="bg-white h-hoch-90 w-80 float-left ml-1 mt-16 block">
       <div class=" w-full pt-6 bg-gray-200">
         <div class="block text-white px-3 text-center">
-          <h1 class="text-2xl font-medium text-gray-800"> <%= @parent_account %> </h1>
+          <h1 class="text-2xl font-medium text-gray-800"> <%= @parent_account %>
+
+
+          </h1>
           <label class="block text-gray-700 text-sm font-bold">1-1002-1010-1000</label>
           <label class="block text-gray-700">Nivel: <b>2</b></label>
           <label class="block text-gray-700">Tipo: <b>Acumulativo</b></label>
@@ -69,21 +70,30 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
 
 
       <%= for item <- @subaccounts do %>
-      <%= if item.parent_name == @parent_account do %>
-      <div class="w-full p-2 block">
-        <div class="w-full block bg-gray-200 p-3 rounded relative">
-          <h2 class="text-gray-700 text-xl"> <%= item.name %> </h2>
-          <label class="text-gray-600 font-bold text-sm">1-001-0010-0010</label>
-          <div class="absolute bg-<%= item.color_sub_account_type %>-200 px-3 text-sm font-bold top-0 right-0 rounded-full text-<%= item.color_sub_account_type %>-700 mt-2 mr-2">
-            <%= item.account_type %>
+        <%= if item.parent_name == @parent_account do %>
+        <div class="w-full p-2 block" phx-click="select_child" phx-value-name="<%= item.name %>" phx-value-id="<%= @id %>" phx-target="#sub_account-<%= @id %>">
+          <div class="w-full block bg-gray-200 p-3 rounded relative">
+            <h2 class="text-gray-700 text-xl"> <%= item.name %> </h2>
+            <label class="text-gray-600 font-bold text-sm">1-001-0010-0010</label>
+            <div class="absolute bg-<%= item.color_sub_account_type %>-200 px-3 text-sm font-bold top-0 right-0 rounded-full text-<%= item.color_sub_account_type %>-700 mt-2 mr-2">
+              <%= item.account_type %>
+            </div>
           </div>
         </div>
-      </div>
-      <% end %>
+        <% end %>
       <% end %>
     </div>
 
+    <%= if @child? do %>
+      <%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, parent_account: @child_id, id: @child_id) %>
+    <% end %>
+
     """
+  end
+
+  def handle_event("select_child", params, socket) do
+    IO.inspect(params, label: "params receive --->  ")
+    {:noreply, assign(socket, child?: true, child_id: params["name"])}
   end
 
   defp get_subaccounts_1(), do:
@@ -98,15 +108,15 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
       },
       %{
         parent_name: "Cajas",
-        name: "Caja Rápida",
+        name: "Caja_rapida",
         account: "2-001-0010-0010",
         account_type: "Activo",
         color_sub_account_type: "green",
         childs_number: 5
       },
       %{
-        parent_name: "Almacén",
-        name: "Almacén 1",
+        parent_name: "Caja_rapida",
+        name: "Almacen_1",
         account: "3-001-0010-0010",
         account_type: "Activo",
         color_sub_account_type: "green",
@@ -185,5 +195,7 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
         childs_number: 5
       }
     ]
+
+
 
 end
