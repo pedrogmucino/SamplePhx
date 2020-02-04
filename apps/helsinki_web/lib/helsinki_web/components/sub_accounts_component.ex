@@ -3,7 +3,7 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
   use Phoenix.HTML
 
   def mount(socket) do
-    {:ok, assign(socket, subaccounts: get_subaccounts())}
+    {:ok, assign(socket, subaccounts: get_subaccounts_1())}
   end
 
   def update(attrs, socket) do
@@ -21,7 +21,7 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
           <h1 class="text-2xl font-medium text-gray-800"> <%= @parent_account %> </h1>
           <label class="block text-gray-700 text-sm font-bold">1-1002-1010-1000</label>
           <label class="block text-gray-700">Nivel: <b>2</b></label>
-          <label class="block text-gray-700">Tipo: <b>Detalle</b></label>
+          <label class="block text-gray-700">Tipo: <b>Acumulativo</b></label>
           <div class="w-full inline-flex py-2">
 
             <div class="w-1/2 px-2">
@@ -74,7 +74,7 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
         <div class="w-full block bg-gray-200 p-3 rounded relative">
           <h2 class="text-gray-700 text-xl"> <%= item.name %> </h2>
           <label class="text-gray-600 font-bold text-sm">1-001-0010-0010</label>
-          <div class="absolute bg-green-200 px-3 text-sm font-bold top-0 right-0 rounded-full text-green-700 mt-2 mr-2">
+          <div class="absolute bg-<%= item.color_sub_account_type %>-200 px-3 text-sm font-bold top-0 right-0 rounded-full text-<%= item.color_sub_account_type %>-700 mt-2 mr-2">
             <%= item.account_type %>
           </div>
         </div>
@@ -86,14 +86,14 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
     """
   end
 
-  defp get_subaccounts(), do:
+  defp get_subaccounts_1(), do:
     [
       %{
         parent_name: "Cajas",
         name: "Caja Principal",
         account: "1-001-0010-0010",
         account_type: "Activo",
-        color_account_type: "green",
+        color_sub_account_type: "green",
         childs_number: 5
       },
       %{
@@ -101,7 +101,7 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
         name: "Caja Rápida",
         account: "2-001-0010-0010",
         account_type: "Activo",
-        color_account_type: "green",
+        color_sub_account_type: "green",
         childs_number: 5
       },
       %{
@@ -109,7 +109,7 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
         name: "Almacén 1",
         account: "3-001-0010-0010",
         account_type: "Activo",
-        color_account_type: "green",
+        color_sub_account_type: "green",
         childs_number: 5
       },
       %{
@@ -117,7 +117,7 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
         name: "BBVA",
         account: "4-001-0010-0010",
         account_type: "Activo",
-        color_account_type: "green",
+        color_sub_account_type: "green",
         childs_number: 5
       },
       %{
@@ -125,7 +125,7 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
         name: "Banco x",
         account: "1-001-0010-0010",
         account_type: "Pasivo",
-        color_account_type: "red",
+        color_sub_account_type: "green",
         childs_number: 5
       },
       %{
@@ -133,7 +133,7 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
         name: "Cliente Frecuente 1",
         account: "2-001-0010-0010",
         account_type: "Pasivo",
-        color_account_type: "red",
+        color_sub_account_type: "green",
         childs_number: 5
       },
       %{
@@ -141,7 +141,7 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
         name: "Proveedor x",
         account: "3-001-0010-0010",
         account_type: "Pasivo",
-        color_account_type: "red",
+        color_sub_account_type: "red",
         childs_number: 5
       },
       %{
@@ -149,7 +149,7 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
         name: "Impuestos por pagar",
         account: "4-001-0010-0010",
         account_type: "Pasivo",
-        color_account_type: "red",
+        color_sub_account_type: "red",
         childs_number: 5
       },
       %{
@@ -157,7 +157,7 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
         name: "Acreedor 2",
         account: "3-001-0010-0010",
         account_type: "Capital",
-        color_account_type: "blue",
+        color_sub_account_type: "red",
         childs_number: 5
       },
       %{
@@ -165,7 +165,7 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
         name: "SAT",
         account: "4-001-0010-0010",
         account_type: "Capital",
-        color_account_type: "blue",
+        color_sub_account_type: "red",
         childs_number: 5
       },
       %{
@@ -173,7 +173,7 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
         name: "Ganancias x",
         account: "3-001-0010-0010",
         account_type: "Capital",
-        color_account_type: "blue",
+        color_sub_account_type: "blue",
         childs_number: 5
       },
       %{
@@ -181,7 +181,7 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
         name: "Ahorros x",
         account: "4-001-0010-0010",
         account_type: "Capital",
-        color_account_type: "blue",
+        color_sub_account_type: "blue",
         childs_number: 5
       }
     ]

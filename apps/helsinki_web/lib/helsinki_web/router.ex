@@ -18,6 +18,7 @@ defmodule AccountingSystemWeb.Router do
   scope "/", AccountingSystemWeb do
     pipe_through :browser
 
+    get "/", HomeController, :index
     get "/home", HomeController, :index
     get "/account", AccountController, :index_fake
     get "/actives", ActivesController, :index
