@@ -1,0 +1,61 @@
+<h1>Listing Accounts</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Code</th>
+      <th>Status</th>
+      <th>Type</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Level</th>
+      <th>Is departamental</th>
+      <th>Parent account</th>
+      <th>Root account</th>
+      <th>Character</th>
+      <th>Group code</th>
+      <th>Uuid voucher</th>
+      <th>Payment method</th>
+      <th>Apply to</th>
+      <th>Third party prosecutor</th>
+      <th>Third party op</th>
+      <th>Apply third party to</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for account <- @accounts do %>
+    <tr>
+      <td><%= account.id %></td>
+      <td><%= account.code %></td>
+      <td><%= account.status %></td>
+      <td><%= account.type %></td>
+      <td><%= account.name %></td>
+      <td><%= account.description %></td>
+      <td><%= account.level %></td>
+      <td><%= account.is_departamental %></td>
+      <td><%= account.parent_account %></td>
+      <td><%= account.root_account %></td>
+      <td><%= account.character %></td>
+      <td><%= account.group_code %></td>
+      <td><%= account.uuid_voucher %></td>
+      <td><%= account.payment_method %></td>
+      <td><%= account.apply_to %></td>
+      <td><%= account.third_party_prosecutor %></td>
+      <td><%= account.third_party_op %></td>
+      <td><%= account.apply_third_party_to %></td>
+
+      <td>
+        <span><%= link "Show", to: Routes.account_path(@conn, :show, account) %></span>
+        <span><%= link "Edit", to: Routes.account_path(@conn, :edit, account) %></span>
+        <span><%= link "Delete", to: Routes.account_path(@conn, :delete, account), method: :delete, data: [confirm: "Are you sure?"] %></span>
+        <span><%= link "New Child", to: Routes.account_path(@conn, :new, account.id) %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Account", to: Routes.account_path(@conn, :new) %></span>

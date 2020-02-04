@@ -1,0 +1,80 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <%= label f, :code %>
+  <%= text_input f, :code %>
+  <%= error_tag f, :code %>
+
+  <%= label f, :status %>
+  <%= text_input f, :status %>
+  <%= error_tag f, :status %>
+
+  <%= label f, :type %>
+  <%= text_input f, :type %>
+  <%= error_tag f, :type %>
+
+  <%= label f, :name %>
+  <%= text_input f, :name %>
+  <%= text_input f, :name2 %>
+  <%= error_tag f, :name %>
+
+  <%= label f, :description %>
+  <%= text_input f, :description %>
+  <%= error_tag f, :description %>
+
+  <%= label f, :level %>
+  <%= number_input f, :level %>
+  <%= error_tag f, :level %>
+
+  <%= label f, :is_departamental %>
+  <%= checkbox f, :is_departamental %>
+  <%= error_tag f, :is_departamental %>
+
+  <%= label f, :parent_account %>
+  <%= number_input f, :parent_account %>
+  <%= error_tag f, :parent_account %>
+
+  <%= label f, :root_account %>
+  <%= number_input f, :root_account %>
+  <%= error_tag f, :root_account %>
+
+  <%= label f, :character %>
+  <%= checkbox f, :character %>
+  <%= error_tag f, :character %>
+
+  <%= label f, :group_code %>
+  <%= number_input f, :group_code %>
+  <%= error_tag f, :group_code %>
+
+  <%= label f, :uuid_voucher %>
+  <%= text_input f, :uuid_voucher %>
+  <%= error_tag f, :uuid_voucher %>
+
+  <%= label f, :payment_method %>
+  <%= checkbox f, :payment_method %>
+  <%= error_tag f, :payment_method %>
+
+  <%= label f, :apply_to %>
+  <%= number_input f, :apply_to %>
+  <%= error_tag f, :apply_to %>
+
+  <%= label f, :third_party_prosecutor %>
+  <%= number_input f, :third_party_prosecutor %>
+  <%= error_tag f, :third_party_prosecutor %>
+
+  <%= label f, :third_party_op %>
+  <%= checkbox f, :third_party_op %>
+  <%= error_tag f, :third_party_op %>
+
+  <%= label f, :apply_third_party_to %>
+  <%= text_input f, :apply_third_party_to %>
+  <%= error_tag f, :apply_third_party_to %>
+
+  <div>
+    <%= submit "Save" %>
+  </div>
+<% end %>

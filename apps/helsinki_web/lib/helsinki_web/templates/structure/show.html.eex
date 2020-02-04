@@ -1,0 +1,27 @@
+<h1>Show Structure</h1>
+
+<ul>
+  <li>
+    <strong>Id:</strong>
+    <%= @structure.id %>
+  </li>
+
+  <li>
+    <strong>size:</strong>
+    <%= @structure.size %>
+  </li>
+
+  <li>
+    <strong>level:</strong>
+    <%= @structure.level %>
+  </li>
+
+  <li>
+    <strong>Max_current_size:</strong>
+    <%= @structure.max_current_size %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.structure_path(@conn, :edit, @structure) %></span>
+<span><%= link "Back", to: Routes.structure_path(@conn, :index) %></span>
