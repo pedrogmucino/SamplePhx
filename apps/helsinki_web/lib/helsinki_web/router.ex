@@ -25,6 +25,7 @@ defmodule AccountingSystemWeb.Router do
     get "/fiscals", FiscalsController, :index
     get "/reports", ReportsController, :index
     get "/subaccounts", SubAccountsController, :index
+    get "/formaccount", FormAccountController, :index
     # get "/submenu", SubMenuController, :sub_menu
     resources "/accounts", AccountController
     resources "/structures", StructureController
