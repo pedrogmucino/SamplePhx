@@ -3,12 +3,17 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
   use Phoenix.HTML
 
   def mount(socket) do
-    {:ok, assign(socket, subaccounts: get_subaccounts_1())}
+    {:ok, socket}
   end
 
   def update(attrs, socket) do
     #{:ok, socket}
-    {:ok, assign(socket, parent_account: attrs.parent_account, id: attrs.id, child?: false)}
+    {:ok, assign(socket,
+      level: attrs.next_level,
+      id: attrs.id,
+      name: attrs.father_name,
+      subaccounts: attrs.subaccounts)
+    }
   end
 
   def render(assigns) do
@@ -16,7 +21,7 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
     <div id="sub_account-<%= @id %>" class="bg-white h-hoch-90 w-80 float-left ml-1 mt-16 block">
       <div class=" w-full pt-6 bg-gray-200">
         <div class="block text-white px-3 text-center">
-          <h1 class="text-2xl font-medium text-gray-800"> <%= @parent_account %>
+          <h1 class="text-2xl font-medium text-gray-800"> <%= @name %>
 
 
           </h1>
@@ -70,23 +75,17 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
 
 
       <%= for item <- @subaccounts do %>
-        <%= if item.parent_name == @parent_account do %>
-        <div class="w-full p-2 block" phx-click="select_child" phx-value-name="<%= item.name %>" phx-value-id="<%= @id %>" phx-target="#sub_account-<%= @id %>">
+        <div class="w-full p-2 block" phx-click="open_child" phx-value-id="<%= item.id %>" phx-target="#one">
           <div class="w-full block bg-gray-200 p-3 rounded relative">
             <h2 class="text-gray-700 text-xl"> <%= item.name %> </h2>
             <label class="text-gray-600 font-bold text-sm">1-001-0010-0010</label>
-            <div class="absolute bg-<%= item.color_sub_account_type %>-200 px-3 text-sm font-bold top-0 right-0 rounded-full text-<%= item.color_sub_account_type %>-700 mt-2 mr-2">
+            <div class="absolute bg-<%= item.color_account_type %>-200 px-3 text-sm font-bold top-0 right-0 rounded-full text-<%= item.color_account_type %>-700 mt-2 mr-2">
               <%= item.account_type %>
             </div>
           </div>
         </div>
-        <% end %>
       <% end %>
     </div>
-
-    <%= if @child? do %>
-      <%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, parent_account: @child_id, id: @child_id) %>
-    <% end %>
 
     """
   end
@@ -96,105 +95,7 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
     {:noreply, assign(socket, child?: true, child_id: params["name"])}
   end
 
-  defp get_subaccounts_1(), do:
-    [
-      %{
-        parent_name: "Cajas",
-        name: "Caja Principal",
-        account: "1-001-0010-0010",
-        account_type: "Activo",
-        color_sub_account_type: "green",
-        childs_number: 5
-      },
-      %{
-        parent_name: "Cajas",
-        name: "Caja_rapida",
-        account: "2-001-0010-0010",
-        account_type: "Activo",
-        color_sub_account_type: "green",
-        childs_number: 5
-      },
-      %{
-        parent_name: "Caja_rapida",
-        name: "Almacen_1",
-        account: "3-001-0010-0010",
-        account_type: "Activo",
-        color_sub_account_type: "green",
-        childs_number: 5
-      },
-      %{
-        parent_name: "Bancos",
-        name: "BBVA",
-        account: "4-001-0010-0010",
-        account_type: "Activo",
-        color_sub_account_type: "green",
-        childs_number: 5
-      },
-      %{
-        parent_name: "Bancos",
-        name: "Banco x",
-        account: "1-001-0010-0010",
-        account_type: "Pasivo",
-        color_sub_account_type: "green",
-        childs_number: 5
-      },
-      %{
-        parent_name: "Clientes",
-        name: "Cliente Frecuente 1",
-        account: "2-001-0010-0010",
-        account_type: "Pasivo",
-        color_sub_account_type: "green",
-        childs_number: 5
-      },
-      %{
-        parent_name: "Proveedores",
-        name: "Proveedor x",
-        account: "3-001-0010-0010",
-        account_type: "Pasivo",
-        color_sub_account_type: "red",
-        childs_number: 5
-      },
-      %{
-        parent_name: "Documentos por pagar",
-        name: "Impuestos por pagar",
-        account: "4-001-0010-0010",
-        account_type: "Pasivo",
-        color_sub_account_type: "red",
-        childs_number: 5
-      },
-      %{
-        parent_name: "Acreedores",
-        name: "Acreedor 2",
-        account: "3-001-0010-0010",
-        account_type: "Capital",
-        color_sub_account_type: "red",
-        childs_number: 5
-      },
-      %{
-        parent_name: "Impuestos por pagar",
-        name: "SAT",
-        account: "4-001-0010-0010",
-        account_type: "Capital",
-        color_sub_account_type: "red",
-        childs_number: 5
-      },
-      %{
-        parent_name: "Capital Contable",
-        name: "Ganancias x",
-        account: "3-001-0010-0010",
-        account_type: "Capital",
-        color_sub_account_type: "blue",
-        childs_number: 5
-      },
-      %{
-        parent_name: "Patrimonio Contable",
-        name: "Ahorros x",
-        account: "4-001-0010-0010",
-        account_type: "Capital",
-        color_sub_account_type: "blue",
-        childs_number: 5
-      }
-    ]
+
 
 
 

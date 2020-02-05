@@ -13,12 +13,10 @@ defmodule AccountingSystemWeb.AccountLiveView do
     {:ok, assign(socket, child?: false)}
   end
 
-  def handle_event("open_child", params, socket) do
-    {:noreply, assign(socket, child?: true, child_id: params["name"])}
-  end
+
 
   def handle_event("create_new", params, socket) do
-    IO.inspect(params, label: "What is this place ?????? -------------------------------->  ")
+    IO.inspect(params, label: "-------------------------------->  ")
     live_component(socket, AccountingSystemWeb.FormAccountComponent, id: "form")
     {:noreply, socket}
   end

@@ -4,7 +4,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
 
   def render(assigns) do
     ~L"""
-      <div class="bg-white h-hoch-90 w-80 mt-16 ml-16 block float-left">
+      <div id="one" class="bg-white h-hoch-93 w-80 mt-16 ml-16 block float-left">
         <div class="relative w-full px-2 mt-4">
           <input class="h-8 w-full rounded border bg-gray-300 pl-2" placeholder="Buscar Cuenta" >
           <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="search" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
@@ -31,103 +31,188 @@ defmodule AccountingSystemWeb.AccountsComponent do
             <label class="mr-auto text-white">Nueva</label>
           </button>
         </div>
-
-        <%= for item <- @accounts do %>
-        <div class="w-full px-2 block">
-          <div phx-click="open_child" phx-value-name="<%= item.name %>" class="cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
-            <h2 class="text-gray-700 text-xl"><%= item.name %></h2>
-            <label class="cursor-pointer text-gray-600 font-bold text-sm"><%= item.account %></label>
-            <div class="absolute bg-<%= item.color_account_type %>-200 px-3 text-sm font-bold top-0 right-0 rounded-full text-<%= item.color_account_type %>-700 mt-2 mr-2">
-              <%= item.account_type %>
+        <div class="h-hoch-80 overflow-y-scroll pb-16">
+          <%= for item <- @accounts do %>
+            <div class="w-full px-2 block">
+              <div phx-click="open_child" phx-value-id="<%= item.id %>" phx-target="#one" class="cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
+                <h2 class="text-gray-700 text-xl"><%= item.name %></h2>
+                <label class="cursor-pointer text-gray-600 font-bold text-sm"><%= item.account %></label>
+                <div class="absolute bg-<%= item.color_account_type %>-200 px-3 text-sm font-bold top-0 right-0 rounded-full text-<%= item.color_account_type %>-700 mt-2 mr-2">
+                  <%= item.account_type %>
+                </div>
+              </div>
             </div>
-          </div>
+          <% end %>
         </div>
-        <% end %>
+
+
 
       </div>
+
+      <%= for component <- @child_components do %>
+         <%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, subaccounts: component.subaccounts, father_name: component.name, next_level: (component.level + 1), id: component.id) %>
+        <% end %>
     """
   end
   def mount(socket) do
-    {:ok, assign(socket, accounts: get_accounts())}
+    {:ok, assign(socket, accounts: get_accounts(1), child_components: [])}
   end
 
   def update(attrs, socket) do
       {:ok, assign(socket, id: attrs.id)}
   end
 
-  defp get_accounts(), do:
-    [
+  def handle_event("open_child", params, socket) do
+    map = socket.assigns.accounts
+    |> Enum.find(fn component -> component.id ==  params["id"] |> String.to_integer end)
+    map = map
+      |> Map.put(:subaccounts, get_accounts(map.level + 1))
+    arr = socket.assigns.child_components ++ [map]
+    |> IO.inspect(label: "NEW FATHER receive this --->    ")
+    {:noreply, assign(socket, child_components: arr)}
+  end
+
+  defp get_accounts(level) do
+    level
+    |> IO.inspect(label: "receive this --->    ")
+    test = [
       %{
         name: "Cajas",
         account: "1-001-0010-0010",
         account_type: "Activo",
         color_account_type: "green",
-        childs_number: 5
+        childs_number: 5,
+        level: 1
       },
       %{
         name: "Bancos",
         account: "2-001-0010-0010",
         account_type: "Activo",
         color_account_type: "green",
-        childs_number: 5
+        childs_number: 5,
+        level: 1
       },
       %{
         name: "Almacén",
         account: "3-001-0010-0010",
         account_type: "Activo",
         color_account_type: "green",
-        childs_number: 5
+        childs_number: 5,
+        level: 1
       },
       %{
         name: "Clientes",
         account: "4-001-0010-0010",
         account_type: "Activo",
         color_account_type: "green",
-        childs_number: 5
+        childs_number: 5,
+        level: 1
       },
       %{
         name: "Proveedores",
         account: "1-001-0010-0010",
         account_type: "Pasivo",
         color_account_type: "red",
-        childs_number: 5
+        childs_number: 5,
+        level: 1
       },
       %{
         name: "Documentos por pagar",
         account: "2-001-0010-0010",
         account_type: "Pasivo",
         color_account_type: "red",
-        childs_number: 5
+        childs_number: 5,
+        level: 1
       },
       %{
         name: "Acreedores",
         account: "3-001-0010-0010",
         account_type: "Pasivo",
         color_account_type: "red",
-        childs_number: 5
+        childs_number: 5,
+        level: 1
       },
       %{
         name: "Impuestos por pagar",
         account: "4-001-0010-0010",
         account_type: "Pasivo",
         color_account_type: "red",
-        childs_number: 5
+        childs_number: 5,
+        level: 1
       },
       %{
         name: "Capital Contable",
         account: "3-001-0010-0010",
         account_type: "Capital",
         color_account_type: "blue",
-        childs_number: 5
+        childs_number: 5,
+        level: 1
       },
       %{
         name: "Patrimonio Contable",
         account: "4-001-0010-0010",
         account_type: "Capital",
         color_account_type: "blue",
-        childs_number: 5
+        childs_number: 5,
+        level: 1
+      },
+      %{
+        name: "Patrimonio Contable",
+        account: "4-001-0010-0010",
+        account_type: "Capital 2",
+        color_account_type: "blue",
+        childs_number: 5,
+        level: 2
+      },
+      %{
+        name: "Patrimonio Contable",
+        account: "4-001-0010-0010",
+        account_type: "Hector 1",
+        color_account_type: "blue",
+        childs_number: 5,
+        level: 2
+      },
+      %{
+        name: "Patrimonio Contable",
+        account: "4-001-0010-0010",
+        account_type: "Hector 2",
+        color_account_type: "blue",
+        childs_number: 5,
+        level: 2
+      },
+      %{
+        name: "Patrimonio Contable",
+        account: "4-001-0010-0010",
+        account_type: "Hector 1",
+        color_account_type: "teal",
+        childs_number: 5,
+        level: 3
+      },
+      %{
+        name: "Patrimonio Contable",
+        account: "4-001-0010-0010",
+        account_type: "Hector 2",
+        color_account_type: "red",
+        childs_number: 5,
+        level: 3
       }
-    ]
 
+    ]
+    |> Enum.map(fn component -> if component.level == level, do: component end)
+    |> clear_arr([])
+
+    test ++ test
+    |> Enum.with_index()
+    |> Enum.map(fn{k,v} -> k |> Map.put(:id, v) end)
+  end
+
+  def clear_arr([value | others], arr) do
+    case value do
+      nil -> clear_arr(others, arr)
+      val -> clear_arr(others, arr ++ [val])
+    end
+  end
+
+  def clear_arr([], arr), do: arr
 
 end
