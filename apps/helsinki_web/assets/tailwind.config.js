@@ -9,7 +9,8 @@ module.exports = {
             'hoch-80': '80vh'
         },
         width: {
-          '80': '20rem'
+          '80': '20rem',
+         '120': '40rem'
         }
       }
     }
