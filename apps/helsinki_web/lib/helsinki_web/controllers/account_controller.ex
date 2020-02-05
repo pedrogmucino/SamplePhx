@@ -19,7 +19,7 @@ defmodule AccountingSystemWeb.AccountController do
   end
 
   def new(conn, _params) do
-    account = List.first(AccountHandler.get_principal_account!())
+    account = AccountHandler.get_principal_account!()
     child = SchemaFormatter.get_root_account(account)
     changeset = AccountHandler.change_account_code(child)
     render(conn, "new.html", changeset: changeset)

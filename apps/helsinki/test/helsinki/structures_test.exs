@@ -6,14 +6,15 @@ defmodule AccountingSystem.StructuresTest do
   describe "structures" do
     alias AccountingSystem.StructureSchema
 
-    @valid_attrs %{size: 42, max_current_size: 42, level: 42}
-    @update_attrs %{size: 43, max_current_size: 43, level: 43}
-    @invalid_attrs %{size: nil, max_current_size: nil, level: nil}
+    @update_attrs %{size: 43, max_current_size: 43, level: 0}
+    @invalid_attrs %{size: nil, max_current_size: nil, level: 0}
+    @invalid_attrs2 %{"size" => nil, "max_current_size" => nil, "level" => 0}
+    @valid_attrs2 %{"size" => 1, "max_current_size" => 0, "level" => 0}
 
     def structure_fixture(attrs \\ %{}) do
       {:ok, structure} =
         attrs
-        |> Enum.into(@valid_attrs)
+        |> Enum.into(@valid_attrs2)
         |> StructureHandler.create_structure()
 
       structure
@@ -30,21 +31,21 @@ defmodule AccountingSystem.StructuresTest do
     end
 
     test "create_structure/1 with valid data creates a structure" do
-      assert {:ok, %StructureSchema{} = structure} = StructureHandler.create_structure(@valid_attrs)
-      assert structure.size == 42
-      assert structure.level == 42
-      assert structure.max_current_size == 42
+      assert {:ok, %StructureSchema{} = structure} = StructureHandler.create_structure(@valid_attrs2)
+      assert structure.size == 1
+      assert structure.level == 0
+      assert structure.max_current_size == 0
     end
 
     test "create_structure/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = StructureHandler.create_structure(@invalid_attrs)
+      assert {:error, %Ecto.Changeset{}} = StructureHandler.create_structure(@invalid_attrs2)
     end
 
     test "update_structure/2 with valid data updates the structure" do
       structure = structure_fixture()
       assert {:ok, %StructureSchema{} = structure} = StructureHandler.update_structure(structure, @update_attrs)
       assert structure.size == 43
-      assert structure.level == 43
+      assert structure.level == 0
       assert structure.max_current_size == 43
     end
 
@@ -56,7 +57,7 @@ defmodule AccountingSystem.StructuresTest do
 
     test "delete_structure/1 deletes the structure" do
       structure = structure_fixture()
-      assert {:ok, %StructureSchema{}} = StructureHandler.delete_structure(structure)
+      assert {:ok} = StructureHandler.delete_structure(structure)
       assert_raise Ecto.NoResultsError, fn -> StructureHandler.get_structure!(structure.id) end
     end
 

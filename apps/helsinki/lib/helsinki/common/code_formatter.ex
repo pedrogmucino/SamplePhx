@@ -1,7 +1,6 @@
 defmodule AccountingSystem.CodeFormatter do
 
   alias AccountingSystem.AccountHandler
-  alias AccountingSystem.GetLastIncrementValueQuery, as: AccountLastIncrement
   alias AccountingSystem.Repo
 
   def add_in_position(string, position) do

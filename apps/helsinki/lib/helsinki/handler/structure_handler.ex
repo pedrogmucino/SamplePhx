@@ -178,11 +178,11 @@ defmodule AccountingSystem.StructureHandler do
     end
   end
 
-  def delet_self_and_childs(%{max_current_size: max_current_size}) when max_current_size > 0 do
+  defp delet_self_and_childs(%{max_current_size: max_current_size}) when max_current_size > 0 do
     {:error}
   end
 
-  def delet_self_and_childs(%{level: level, max_current_size: max_current_size}) when max_current_size == 0 do
+  defp delet_self_and_childs(%{level: level, max_current_size: max_current_size}) when max_current_size == 0 do
     max = AccountingSystem.GetChildVoid.get_max(level) |> Repo.all |> List.first
     AccountingSystem.GetChildVoid.get_all(level, max)
       |> Repo.all
@@ -194,7 +194,7 @@ defmodule AccountingSystem.StructureHandler do
       end)
   end
 
-  def delet_dis(structure) do
+  defp delet_dis(structure) do
     quit_zeros(structure)
     Repo.delete(structure)
   end
