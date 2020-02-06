@@ -11,6 +11,9 @@ module.exports = {
         width: {
           '80': '20rem',
          '160': '40rem'
+        },
+        margin: {
+          'mar-120': '30rem',
         }
       }
     }

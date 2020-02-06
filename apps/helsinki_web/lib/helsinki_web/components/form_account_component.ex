@@ -56,27 +56,28 @@ defmodule AccountingSystemWeb.FormAccountComponent do
         </label>
         <input class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-uuid-voucher" type="text" placeholder="Uuid Voucher">
 
+        <div class="inline-flex">
+          <div class="mb-3 inline-block w-1/2 px-2">
+            <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Group Code</label>
+            <input class="appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" type="text" placeholder="Group Code">
+          </div>
 
+          <div class="mb-3 inline-block w-1/2 px-2">
+            <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Apply to</label>
+            <input class="appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" type="text" placeholder="Apply to">
+          </div>
+
+        </div>
 
         <div class="inline-flex">
-          <div class="mb-3 inline-block w-1/4 px-2">
-            <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Level</label>
-            <input class="appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" type="text" placeholder="Level">
+          <div class="mb-3 inline-block w-1/2 px-2">
+            <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">3rd Party Prosecutor</label>
+            <input class="appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" type="text" placeholder="3rd Party Prosecutor">
           </div>
 
-          <div class="mb-3 inline-block w-1/4 px-2">
-            <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Level</label>
-            <input class="appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" type="text" placeholder="Level">
-          </div>
-
-          <div class="mb-3 inline-block w-1/4 px-2">
-            <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Level</label>
-            <input class="appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" type="text" placeholder="Level">
-          </div>
-
-          <div class="mb-3 inline-block w-1/4 px-2">
-            <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Level</label>
-            <input class="appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" type="text" placeholder="Level">
+          <div class="mb-3 inline-block w-1/2 px-2">
+            <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Apply 3rd Party To</label>
+            <input class="appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" type="text" placeholder="Apply 3rd Party To">
           </div>
 
         </div>
@@ -134,6 +135,26 @@ defmodule AccountingSystemWeb.FormAccountComponent do
               <label class="ml-2 font-bold text-gray-700">Payment Method</label>
             </div>
           </div>
+        </div>
+
+        <div class="inline-flex ml-mar-120 py-8">
+        <button class="py-2 bg-teal-800 text-teal-100 items-center inline-flex font-bold rounded text-sm w-full shadow hover:bg-teal-600 focus:shadow-outline focus:outline-none rounded" type="button">
+          <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="save" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+            class="h-4 w-4 mr-2 ml-auto">
+            <g class="fa-group">
+              <path fill="currentColor" d="M288 352a64 64 0 1 1-64-64 64 64 0 0 1 64 64z"
+              class="text-white">
+              </path>
+              <path fill="currentColor" d="M433.94 129.94l-83.88-83.88A48 48 0 0 0 316.12 32H48A48 48 0 0 0 0 80v352a48 48 0 0 0 48 48h352a48 48 0 0 0 48-48V163.88a48 48 0 0 0-14.06-33.94zM224 416a64 64 0 1 1 64-64 64 64 0 0 1-64 64zm96-204a12 12 0 0 1-12 12H76a12 12 0 0 1-12-12V108a12 12 0 0 1 12-12h228.52a12 12 0 0 1 8.48 3.52l3.48 3.48a12 12 0 0 1 3.52 8.48z"
+              class="text-white">
+              </path>
+            </g>
+          </svg>
+          <label class="mr-auto text-white">Save</label>
+        </button>
+
+
+
         </div>
 
         </form>
