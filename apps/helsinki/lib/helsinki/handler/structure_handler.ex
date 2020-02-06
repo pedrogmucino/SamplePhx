@@ -32,7 +32,7 @@ defmodule AccountingSystem.StructureHandler do
     do_the_update_please(eval, level)
   end
 
-  defp do_the_update_please(length, _) when length == 0, do: ""
+  defp do_the_update_please(length, _) when length == 0, do: :ok
 
   defp do_the_update_please(length, level) when length < 0 do   #Si el cambio fue a Codigo mas CHICO (Quitar ceros)
     case check_if_you_can_delet_zeros(level, length * -1) do
@@ -64,8 +64,8 @@ defmodule AccountingSystem.StructureHandler do
   defp change_db_code(%{code: code, id: id}, level, length) do
     code
       |> CodeFormatter.string_to_list
-      |> List.replace_at(level - 1, CodeFormatter.string_to_list(code)
-        |> Enum.at(level - 1)
+      |> List.replace_at(level, CodeFormatter.string_to_list(code)
+        |> Enum.at(level)
         |> CodeFormatter.add_zeros_at_left(length))
       |> CodeFormatter.list_to_string
       |> AccountsGetSet.set_new_code(id)
@@ -74,8 +74,8 @@ defmodule AccountingSystem.StructureHandler do
   defp reduce_db_code(%{code: code, id: id}, level, length) do #Length = Cuantos ceros a la izquierda voy a quitar
     code
       |> CodeFormatter.string_to_list
-      |> List.replace_at(level - 1, CodeFormatter.string_to_list(code)
-        |> Enum.at(level - 1)
+      |> List.replace_at(level, CodeFormatter.string_to_list(code)
+        |> Enum.at(level)
         |> CodeFormatter.try_quit_zeros(length))
       |> CodeFormatter.list_to_string
       |> AccountsGetSet.set_new_code(id)
@@ -109,11 +109,6 @@ defmodule AccountingSystem.StructureHandler do
 
   """
   def get_structure!(id), do: Repo.get!(StructureSchema, id)
-
-  def get_config() do
-    AccountingSystem.GetSizeLevel.size_level
-      |> Repo.all
-  end
 
   @doc """
   Creates a structure.
