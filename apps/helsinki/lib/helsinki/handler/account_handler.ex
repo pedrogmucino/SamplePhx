@@ -9,7 +9,6 @@ defmodule AccountingSystem.AccountHandler do
   alias AccountingSystem.{
     AccountSchema,
     AccountCodeSchema,
-    CodeFormatter,
     GetAccountList,
     GetStructureByLevel,
     StructureSchema,
@@ -55,17 +54,10 @@ defmodule AccountingSystem.AccountHandler do
   end
 
   def get_last_child(id) do
-    #Obtiene el ultimo hijo + 1
+    #Obtiene el ultimo hijo
     AccountingSystem.GetLastChild.last_child(id)
       |> Repo.all
   end
-
-  def get_config() do
-    AccountingSystem.GetSizeLevel.size_level
-      |> Repo.all
-  end
-
-
 
   @doc """
   Creates a account.

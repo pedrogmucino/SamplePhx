@@ -110,6 +110,11 @@ defmodule AccountingSystem.StructureHandler do
   """
   def get_structure!(id), do: Repo.get!(StructureSchema, id)
 
+  def get_config() do
+    AccountingSystem.GetSizeLevel.size_level
+      |> Repo.all
+  end
+
   @doc """
   Creates a structure.
 

@@ -1,6 +1,7 @@
 defmodule AccountingSystem.CodeFormatter do
 
   alias AccountingSystem.AccountHandler
+  alias AccountingSystem.StructureHandler
   alias AccountingSystem.Repo
 
   def add_in_position(string, position) do
@@ -19,7 +20,7 @@ defmodule AccountingSystem.CodeFormatter do
   defp add_line([]), do: ""
 
   def first_configuration do
-    AccountHandler.get_config()
+    StructureHandler.get_config()
     |> get_config_as_list
     |> list_to_string
     |> add_in_position(0)
