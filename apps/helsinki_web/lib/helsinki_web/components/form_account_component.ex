@@ -83,45 +83,61 @@ defmodule AccountingSystemWeb.FormAccountComponent do
 
 
         <div class="inline-flex">
-          <div class="mb-3 inline-block">
+          <div class="mb-3 inline-block w-1/3">
             <div class="inline-flex items-center">
               <div class="modern-checkbox flex shadow-md h-6 w-12 rounded-full " >
-                <input class="hidden" type="checkbox" id="checkbox-1">
-                <label class="relative inline bg-transparent w-10" for="checkbox-1">
-                </label>
+                <input class="hidden" type="checkbox" id="checkbox-1" checked>
+                <label class="relative inline bg-transparent w-10" for="checkbox-1"></label>
               </div>
               <label class="ml-2 font-bold text-gray-700">Active</label>
             </div>
+          </div>
 
-            <div class="py-2 form-switch block align-middle">
-              <input type="checkbox" name="1" id="1" class="form-switch-checkbox" checked />
-              <label class="ml-2 text-gray-700 font-bold">Active</label>
-            </div>
-            <div class="py-2 form-switch block align-middle">
-              <input type="checkbox" name="1" id="1" class="form-switch-checkbox" />
-              <label class="ml-2 text-gray-700 font-bold">Character</label>
-            </div>
-            <div class="py-2 form-switch block align-middle">
-              <input type="checkbox" name="1" id="1" class="form-switch-checkbox" />
-              <label class="ml-2 text-gray-700 font-bold">Third Party To</label>
+          <div class="mb-3 inline-block w-1/3 px-2">
+            <div class="inline-flex items-center">
+              <div class="modern-checkbox flex shadow-md h-6 w-12 rounded-full " >
+                <input class="hidden" type="checkbox" id="checkbox-1">
+                <label class="relative inline bg-transparent w-10" for="checkbox-1"></label>
+              </div>
+              <label class="ml-2 font-bold text-gray-700">Is Departamental</label>
             </div>
           </div>
 
-          <div class="ml-32 mb-3 inline-block">
-            <div class="py-2 form-switch block align-middle">
-              <input type="checkbox" name="1" id="1" class="form-switch-checkbox" />
-              <label class="ml-2 text-gray-700 font-bold">Is Departamental</label>
+          <div class="mb-3 inline-block w-1/3 px-2">
+            <div class="inline-flex items-center">
+              <div class="modern-checkbox flex shadow-md h-6 w-12 rounded-full " >
+                <input class="hidden" type="checkbox" id="checkbox-1">
+                <label class="relative inline bg-transparent w-10" for="checkbox-1"></label>
+              </div>
+              <label class="ml-2 font-bold text-gray-700">Character</label>
             </div>
-            <div class="py-2 form-switch block align-middle">
-              <input type="checkbox" name="1" id="1" class="form-switch-checkbox" />
-              <label class="ml-2 text-gray-700 font-bold">Payment Method</label>
+          </div>
+        </div>
+
+        <div class="inline-flex">
+          <div class="mb-3 inline-block w-1/3 px-2">
+            <div class="inline-flex items-center">
+              <div class="modern-checkbox flex shadow-md h-6 w-12 rounded-full " >
+                <input class="hidden" type="checkbox" id="checkbox-1">
+                <label class="relative inline bg-transparent w-10" for="checkbox-1"></label>
+              </div>
+              <label class="ml-2 font-bold text-gray-700">Third Party To</label>
+            </div>
+          </div>
+
+          <div class="mb-3 inline-block w-1/3 px-2">
+            <div class="inline-flex items-center">
+              <div class="modern-checkbox flex shadow-md h-6 w-12 rounded-full " >
+                <input class="hidden" type="checkbox" id="checkbox-1">
+                <label class="relative inline bg-transparent w-10" for="checkbox-1"></label>
+              </div>
+              <label class="ml-2 font-bold text-gray-700">Payment Method</label>
             </div>
           </div>
         </div>
 
         </form>
       <div>
-
 
     </div>
     """
