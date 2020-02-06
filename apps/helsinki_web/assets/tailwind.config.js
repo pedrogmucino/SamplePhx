@@ -14,6 +14,9 @@ module.exports = {
         },
         margin: {
           'mar-120': '30rem',
+          'mar-80': '20rem',
+          'mar-100': '25rem',
+          'mar-110': '27.5rem',
         }
       }
     }
