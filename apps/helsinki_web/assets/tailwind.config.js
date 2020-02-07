@@ -10,7 +10,8 @@ module.exports = {
         },
         width: {
           '80': '20rem',
-         '160': '40rem'
+         '160': '40rem',
+         '240': '60rem'
         },
         margin: {
           'mar-120': '30rem',
