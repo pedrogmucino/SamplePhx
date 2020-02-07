@@ -10,10 +10,12 @@ defmodule AccountingSystemWeb.ConfigurationComponent do
     ~L"""
     <div class="bg-white ml-16 mt-16 ml-1 w-80 h-hoch-93 rounded border">
 
-      <div class="inline-block bg-blue-800 text-white px-6 py-8 w-full">
+      <div class="inline-block bg-blue-800 text-white px-6 py-6 w-full">
         <h1 class="text-2xl font-medium text-white block">Account Configuration</h1>
-        <label class="block">Level: <b>2</b></label>
-        <label class="block">Max Current Size: <b>0</b></label>
+        <div class="py-2">
+          <label class="block">Level: <b>2</b></label>
+          <label class="block">Max Current Size: <b>0</b></label>
+        </div>
       </div>
 
       <div class="h-hoch-80 px-8 w-full py-6 inline-flex items-center -mt-8 relative" >
