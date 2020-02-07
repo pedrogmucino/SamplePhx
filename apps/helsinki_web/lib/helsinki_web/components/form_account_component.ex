@@ -117,8 +117,8 @@ defmodule AccountingSystemWeb.FormAccountComponent do
         </div>
       </div>
 
-      <div class="inline-block py-6 flex flex-col my-2">
-        <button class="ml-auto mr-8 py-2 w-32 bg-teal-800 text-teal-100 items-center inline-flex font-bold rounded shadow hover:bg-teal-600 focus:shadow-outline focus:outline-none rounded" type="button">
+      <div class="w-240 absolute bottom-0 inline-block py-8 flex flex-col my-2 pr-8">
+        <button class="ml-auto py-2 w-32 bg-teal-800 text-teal-100 items-center inline-flex font-bold rounded shadow hover:bg-teal-600 focus:shadow-outline focus:outline-none rounded" type="button">
           <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="save" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
           class="h-4 w-4 mr-2 ml-auto">
             <g class="fa-group">
