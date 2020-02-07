@@ -54,13 +54,16 @@ defmodule AccountingSystemWeb.AccountsComponent do
         <%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, subaccounts: component.subaccounts, father_name: component.name, next_level: (component.level + 1), id: component.id) %>
       <% end %>
 
-      <%= if @id_form == "xxx" do %>
+      <%= if @new? do %>
         <%= live_component(@socket, AccountingSystemWeb.FormAccountComponent, id: "form_account") %>
       <% end %>
     """
   end
   def mount(socket) do
-    {:ok, assign(socket, accounts: get_accounts(1), child_components: [], id_form: "")}
+    {:ok, assign(socket,
+    accounts: get_accounts(1),
+    child_components: [],
+    new?: false)}
   end
 
   def update(attrs, socket) do
@@ -74,13 +77,11 @@ defmodule AccountingSystemWeb.AccountsComponent do
       |> Map.put(:subaccounts, get_accounts(map.level + 1))
     arr = socket.assigns.child_components ++ [map]
     |> IO.inspect(label: "NEW FATHER receive this --->    ")
-    {:noreply, assign(socket, child_components: arr)}
+    {:noreply, assign(socket, child_components: arr, new?: false)}
   end
 
-  def handle_event("create_new", params, socket) do
-    IO.inspect(params, label: "--------------------------------> Params  ")
-    IO.inspect(socket, label: "--------------------------------> Socket  ")
-    {:noreply, assign(socket, id_form: "xxx")}
+  def handle_event("create_new", _params, socket) do
+    {:noreply, assign(socket, new?: true, child_components: [])}
   end
 
 
