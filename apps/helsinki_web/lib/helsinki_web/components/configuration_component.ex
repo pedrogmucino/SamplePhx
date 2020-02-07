@@ -10,21 +10,21 @@ defmodule AccountingSystemWeb.ConfigurationComponent do
     ~L"""
     <div class="bg-white ml-16 mt-16 ml-1 w-80 h-hoch-93 rounded border">
 
-      <div class="inline-block bg-blue-800 text-white px-6 py-6 w-full">
+      <div class="inline-block bg-blue-800 text-white px-6 py-4 w-full">
         <h1 class="text-2xl font-medium text-white block">Account Configuration</h1>
-        <div class="py-2">
+        <div class="mt-2">
           <label class="block">Level: <b>2</b></label>
           <label class="block">Max Current Size: <b>0</b></label>
         </div>
       </div>
 
-      <div class="h-hoch-80 px-8 w-full py-6 inline-flex items-center -mt-8 relative" >
-        <form class="w-full">
+      <div class="h-hoch-80 px-8 w-full py-6 inline-flex -mt-8 relative" >
+        <form class="w-full py-6 my-2">
           <label class="block tracking-wide text-gray-700 font-bold" for="grid-code">Size</label>
-          <input class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code" type="text" placeholder="Code">
+          <input class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code" type="text" placeholder="Size">
         </form>
 
-        <div class="inline-flex w-full py-8 absolute bottom-0 right-0 pr-8">
+        <div class="inline-flex w-full py-3 absolute bottom-0 right-0 pr-8">
           <button class="ml-auto w-32 py-2 bg-teal-800 text-teal-100 items-center inline-flex font-bold rounded shadow hover:bg-teal-600 focus:shadow-outline focus:outline-none rounded" type="button">
             <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="save" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
               class="h-4 w-4 mr-2 ml-auto">
