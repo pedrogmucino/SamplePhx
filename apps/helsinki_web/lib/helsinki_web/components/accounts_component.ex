@@ -21,16 +21,17 @@ defmodule AccountingSystemWeb.AccountsComponent do
         </div>
 
         <div class="w-1/2 px-2 mt-2">
-          <button phx-click="create_new" phx-value-name="xxx" class="py-2 bg-teal-800 text-teal-100 items-center inline-flex font-bold rounded text-sm w-full ">
+          <button phx-click="create_new" phx-value-id="xxx" phx-target="#one" class="py-2 bg-teal-800 text-teal-100 items-center inline-flex font-bold rounded text-sm w-full ">
             <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
               class="h-4 w-4 mr-2 ml-auto">
               <path fill="currentColor" d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
               class="text-white">
               </path>
             </svg>
-            <label class="mr-auto text-white">Nueva</label>
+            <label class="cursor-pointer mr-auto text-white">Nueva</label>
           </button>
         </div>
+
         <div class="h-hoch-80 overflow-y-scroll pb-16">
           <%= for item <- @accounts do %>
             <div class="w-full px-2 block">
@@ -50,12 +51,16 @@ defmodule AccountingSystemWeb.AccountsComponent do
       </div>
 
       <%= for component <- @child_components do %>
-         <%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, subaccounts: component.subaccounts, father_name: component.name, next_level: (component.level + 1), id: component.id) %>
-        <% end %>
+        <%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, subaccounts: component.subaccounts, father_name: component.name, next_level: (component.level + 1), id: component.id) %>
+      <% end %>
+
+      <%= if @id_form == "xxx" do %>
+        <%= live_component(@socket, AccountingSystemWeb.FormAccountComponent, id: "form_account") %>
+      <% end %>
     """
   end
   def mount(socket) do
-    {:ok, assign(socket, accounts: get_accounts(1), child_components: [])}
+    {:ok, assign(socket, accounts: get_accounts(1), child_components: [], id_form: "")}
   end
 
   def update(attrs, socket) do
@@ -71,6 +76,13 @@ defmodule AccountingSystemWeb.AccountsComponent do
     |> IO.inspect(label: "NEW FATHER receive this --->    ")
     {:noreply, assign(socket, child_components: arr)}
   end
+
+  def handle_event("create_new", params, socket) do
+    IO.inspect(params, label: "--------------------------------> Params  ")
+    IO.inspect(socket, label: "--------------------------------> Socket  ")
+    {:noreply, assign(socket, id_form: "xxx")}
+  end
+
 
   defp get_accounts(level) do
     level

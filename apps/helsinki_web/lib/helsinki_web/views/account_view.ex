@@ -15,10 +15,6 @@ defmodule AccountingSystemWeb.AccountLiveView do
 
 
 
-  def handle_event("create_new", params, socket) do
-    IO.inspect(params, label: "-------------------------------->  ")
-    live_component(socket, AccountingSystemWeb.FormAccountComponent, id: "form")
-    {:noreply, socket}
-  end
+
 
 end
