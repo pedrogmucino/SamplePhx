@@ -1,0 +1,48 @@
+<h1>Listing Auxiliaries</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Policy number</th>
+      <th>Id account</th>
+      <th>Concept</th>
+      <th>Debit credit</th>
+      <th>Mxn amount</th>
+      <th>Amount</th>
+      <th>Department</th>
+      <th>Counterpart</th>
+      <th>Cost center</th>
+      <th>Group</th>
+      <th>Iduuid</th>
+      <th>Exchange rate</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for auxiliary <- @auxiliaries do %>
+    <tr>
+      <td><%= auxiliary.policy_number %></td>
+      <td><%= auxiliary.id_account %></td>
+      <td><%= auxiliary.concept %></td>
+      <td><%= auxiliary.debit_credit %></td>
+      <td><%= auxiliary.mxn_amount %></td>
+      <td><%= auxiliary.amount %></td>
+      <td><%= auxiliary.department %></td>
+      <td><%= auxiliary.counterpart %></td>
+      <td><%= auxiliary.cost_center %></td>
+      <td><%= auxiliary.group %></td>
+      <td><%= auxiliary.iduuid %></td>
+      <td><%= auxiliary.exchange_rate %></td>
+
+      <td>
+        <span><%= link "Show", to: Routes.auxiliary_path(@conn, :show, auxiliary) %></span>
+        <span><%= link "Edit", to: Routes.auxiliary_path(@conn, :edit, auxiliary) %></span>
+        <span><%= link "Delete", to: Routes.auxiliary_path(@conn, :delete, auxiliary), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Auxiliary", to: Routes.auxiliary_path(@conn, :new) %></span>

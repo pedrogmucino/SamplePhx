@@ -1,7 +1,4 @@
 defmodule AccountingSystem.GetLastStructureQuery do
-
-  alias AccountingSystem.StructureHandler
-  alias AccountingSystem.StructureSchema
   import Ecto.Query, warn: false
   alias AccountingSystem.Repo
 
