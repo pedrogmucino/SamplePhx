@@ -1,0 +1,23 @@
+<h1>Show Third party operation</h1>
+
+<ul>
+
+  <li>
+    <strong>Policy:</strong>
+    <%= @third_party_operation.policy_id %>
+  </li>
+
+  <li>
+    <strong>Account number:</strong>
+    <%= @third_party_operation.account_number %>
+  </li>
+
+  <li>
+    <strong>Provider:</strong>
+    <%= @third_party_operation.provider_id %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.third_party_operation_path(@conn, :edit, @third_party_operation) %></span>
+<span><%= link "Back", to: Routes.third_party_operation_path(@conn, :index) %></span>

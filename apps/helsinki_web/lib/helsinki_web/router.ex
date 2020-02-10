@@ -23,6 +23,11 @@ defmodule AccountingSystemWeb.Router do
     resources "/structures", StructureController
     get "/accounts/:id/new", AccountController, :new
     live "/example", ExampleLive
+    resources "/auxiliaries", AuxiliaryController
+    resources "/policies", PolicyController
+    resources "/providers", ProviderController
+    resources "/thirdpartyoperations", ThirdPartyOperationController
+    resources "/policytypes", PolicyTypeController
   end
 
   # Other scopes may use custom stacks.

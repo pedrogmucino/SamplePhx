@@ -1,0 +1,5 @@
+<h1>Edit Third party operation</h1>
+
+<%= render "form.html", Map.put(assigns, :action, Routes.third_party_operation_path(@conn, :update, @third_party_operation)) %>
+
+<span><%= link "Back", to: Routes.third_party_operation_path(@conn, :index) %></span>
