@@ -215,4 +215,15 @@ defmodule AccountingSystem.AccountHandler do
   def change_account_code(%AccountCodeSchema{} = account) do
     AccountCodeSchema.changeset(account, %{})
   end
+
+  def get_all_as_list() do
+    AccountingSystem.GetAllIdCode.id_code
+      |> Repo.all
+      |> Enum.map(fn x -> Map.to_list(x) end)
+  end
+
+  def list_of_childs(level, id_account) do
+    AccountingSystem.GetChilds.of(id_account, level + 1)
+      |> Repo.all
+  end
 end
