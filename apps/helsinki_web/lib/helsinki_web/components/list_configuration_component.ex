@@ -1,10 +1,13 @@
 defmodule AccountingSystemWeb.ListConfigurationComponent do
   use Phoenix.LiveComponent
   use Phoenix.HTML
+  alias AccountingSystem.{
+    StructureHandler
+  }
 
   def mount(socket) do
     {:ok, assign(socket,
-    list_configuration: get_list_configuration(),
+    list_configuration: StructureHandler.list_structures(),
     new?: false
     )}
   end
@@ -62,59 +65,6 @@ defmodule AccountingSystemWeb.ListConfigurationComponent do
     <% end %>
 
     """
-  end
-
-  defp get_list_configuration() do
-    [
-      %{
-        size: 5,
-        max_current_size: 5,
-        level: 1,
-        id: 1
-      },
-      %{
-        size: 5,
-        max_current_size: 5,
-        level: 2,
-        id: 2
-      },
-      %{
-        size: 5,
-        max_current_size: 5,
-        level: 3,
-        id: 3
-      },
-      %{
-        size: 5,
-        max_current_size: 5,
-        level: 4,
-        id: 4
-      },
-      %{
-        size: 5,
-        max_current_size: 5,
-        level: 5,
-        id: 5
-      },
-      %{
-        size: 5,
-        max_current_size: 5,
-        level: 6,
-        id: 6
-      },
-      %{
-        size: 5,
-        max_current_size: 5,
-        level: 7,
-        id: 7
-      },
-      %{
-        size: 5,
-        max_current_size: 5,
-        level: 8,
-        id: 8
-      }
-    ]
   end
 
   def handle_event("create_new", _params, socket) do
