@@ -7,4 +7,8 @@ defmodule AccountingSystem.PrefixFormatter do
 
   end
 
+  def get_prefix(year, month) do
+    "p_" <> Integer.to_string(year) <> "_" <> Integer.to_string(month)
+  end
+
 end
