@@ -4,7 +4,7 @@ defmodule AccountingSystemWeb.HeaderComponent do
 
   def render(assigns) do
     ~L"""
-    <div class="fixed w-full py-2 bg-blue-900 top-0 left-0 z-20">
+    <div class="fixed w-full py-2 bg-blue-700 top-0 left-0 z-20">
       <div class="flex">
         <img src="https://santiago.mx/assets/images/logo-white.png" class="w-56 ml-6">
 
@@ -22,7 +22,7 @@ defmodule AccountingSystemWeb.HeaderComponent do
         <div class="block h-24"></div>
         <%= for item <- @menu do %>
           <div class="block my-3">
-            <a href="<%= item.link %>" class="rounded hover:border-gray-200 text-blue-500 hover:bg-gray-200 py-1 inline-flex items-center w-full">
+            <a href="<%= item.link %>" class="rounded hover:border-gray-200 text-gray-800 hover:bg-gray-200 py-1 inline-flex items-center w-full">
               <%= Phoenix.HTML.raw(item.icon ) %>
               <label class="cursor-pointer ml-2 mr-auto font-bold transition-menu-label"><%= item.name %></label>
             </a>
@@ -32,7 +32,7 @@ defmodule AccountingSystemWeb.HeaderComponent do
 
       <div class="absolute inset-x-0 bottom-0 h-12">
 
-        <a href="/configuration" class="rounded hover:border-gray-200 text-blue-500 hover:bg-gray-200 py-1 inline-flex items-center w-full">
+        <a href="/configuration" class="rounded hover:border-gray-200 text-gray-800 hover:bg-gray-200 py-1 inline-flex items-center w-full">
         <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="cog" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
           class="h-8 w-8 ml-2 mr-auto">
             <g>
