@@ -4,7 +4,7 @@ defmodule AccountingSystemWeb.HeaderComponent do
 
   def render(assigns) do
     ~L"""
-    <div class="fixed w-full py-2 bg-blue-900 top-0 left-0 z-20">
+    <div class="fixed w-full py-2 bg-blue-700 top-0 left-0 z-20">
       <div class="flex">
         <img src="https://santiago.mx/assets/images/logo-white.png" class="w-56 ml-6">
 

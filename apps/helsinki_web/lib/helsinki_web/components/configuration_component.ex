@@ -21,11 +21,11 @@ defmodule AccountingSystemWeb.ConfigurationComponent do
       <div class="h-hoch-80 px-8 w-full py-6 inline-flex -mt-8 relative" >
         <form class="w-full py-6 my-2">
           <label class="block tracking-wide text-gray-700 font-bold" for="grid-code">Size</label>
-          <input class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code" type="text" placeholder="Size">
+          <input class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code" type="text" placeholder="Size">
         </form>
 
         <div class="inline-flex w-full py-3 absolute bottom-0 right-0 pr-8">
-          <button class="ml-auto w-32 py-2 bg-teal-800 text-teal-100 items-center inline-flex font-bold rounded shadow hover:bg-teal-600 focus:shadow-outline focus:outline-none rounded" type="button">
+          <button class="ml-auto w-32 py-2 bg-teal-500 text-teal-100 items-center inline-flex font-bold rounded shadow hover:bg-teal-400 focus:shadow-outline focus:outline-none rounded" type="button">
             <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="save" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
               class="h-4 w-4 mr-2 ml-auto">
               <g class="fa-group">

@@ -37,10 +37,15 @@ defmodule AccountingSystemWeb.AccountsComponent do
             <div class="w-full px-2 block">
               <div phx-click="open_child" phx-value-id="<%= item.id %>" phx-target="#one" class="cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
                 <h2 class="text-gray-700 text-xl"><%= item.name %></h2>
-                <label class="cursor-pointer text-gray-600 font-bold text-sm"><%= item.account %></label>
-                <div class="absolute bg-<%= item.color_account_type %>-200 px-3 text-sm font-bold top-0 right-0 rounded-full text-<%= item.color_account_type %>-700 mt-2 mr-2">
-                  <%= item.account_type %>
+                <label class="cursor-pointer text-gray-600 font-bold text-sm"><%= item.code %></label>
+                <div class="absolute bg-<%= if item.status == "A", do: "green", else: "red" %>-200 px-3 text-sm font-bold top-0 right-0 rounded-full text-<%= if item.status == "A", do: "green", else: "red" %>-700 mt-2 mr-2">
+                  <%= if item.status == "A" do %>
+                    Activo
+                  <% else %>
+                    Inactivo
+                  <% end %>
                 </div>
+                <div> Nivel: <%= item.level %> </div>
               </div>
             </div>
           <% end %>
@@ -61,7 +66,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
   end
   def mount(socket) do
     {:ok, assign(socket,
-    accounts: get_accounts(1),
+    accounts: get_accounts_t(1),
     child_components: [],
     new?: false)}
   end
@@ -84,13 +89,19 @@ defmodule AccountingSystemWeb.AccountsComponent do
     {:noreply, assign(socket, new?: true, child_components: [])}
   end
 
+  defp get_accounts_t(level) do
+    level
+    |> IO.inspect(label: "receive this in t --->    ")
+    AccountingSystem.AccountHandler.list_accounts()
+    |> IO.inspect(label: "Data from database--------------------")
+  end
 
   defp get_accounts(level) do
     level
     |> IO.inspect(label: "receive this --->    ")
     test = [
       %{
-        name: "Cajas",
+        name: "Cajasx",
         account: "1-001-0010-0010",
         account_type: "Activo",
         color_account_type: "green",
@@ -162,7 +173,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
         level: 1
       },
       %{
-        name: "Patrimonio Contable",
+        name: "Patrimonio Contablex",
         account: "4-001-0010-0010",
         account_type: "Capital",
         color_account_type: "blue",
