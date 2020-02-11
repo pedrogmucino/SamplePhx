@@ -4,9 +4,11 @@ defmodule AccountingSystem.AuxiliaryHandler do
   """
 
   import Ecto.Query, warn: false
-  alias AccountingSystem.Repo
-
-  alias AccountingSystem.AuxiliarySchema
+  alias AccountingSystem.{
+    AuxiliarySchema,
+    PrefixFormatter,
+    Repo
+  }
 
   @doc """
   Returns the list of auxiliaries.
@@ -18,7 +20,11 @@ defmodule AccountingSystem.AuxiliaryHandler do
 
   """
   def list_auxiliaries do
-    Repo.all(AuxiliarySchema)
+    Repo.all(AuxiliarySchema, prefix: PrefixFormatter.get_current_prefix)
+  end
+
+  def list_auxiliaries(year, month) do
+    Repo.all(AuxiliarySchema, prefix: PrefixFormatter.get_prefix(year, month))
   end
 
   @doc """
@@ -35,7 +41,9 @@ defmodule AccountingSystem.AuxiliaryHandler do
       ** (Ecto.NoResultsError)
 
   """
-  def get_auxiliary!(id), do: Repo.get!(AuxiliarySchema, id)
+  def get_auxiliary!(id), do: Repo.get!(AuxiliarySchema, id, prefix: PrefixFormatter.get_current_prefix)
+
+  def get_auxiliary!(id, year, month), do: Repo.get!(AuxiliarySchema, id, prefix: PrefixFormatter.get_prefix(year, month))
 
   @doc """
   Creates a auxiliary.
@@ -52,7 +60,13 @@ defmodule AccountingSystem.AuxiliaryHandler do
   def create_auxiliary(attrs \\ %{}) do
     %AuxiliarySchema{}
     |> AuxiliarySchema.changeset(attrs)
-    |> Repo.insert()
+    |> Repo.insert(prefix: PrefixFormatter.get_current_prefix)
+  end
+
+  def create_auxiliary(attrs \\ %{}, year, month) do
+    %AuxiliarySchema{}
+    |> AuxiliarySchema.changeset(attrs)
+    |> Repo.insert(prefix: PrefixFormatter.get_prefix(year, month))
   end
 
   @doc """
@@ -70,7 +84,13 @@ defmodule AccountingSystem.AuxiliaryHandler do
   def update_auxiliary(%AuxiliarySchema{} = auxiliary, attrs) do
     auxiliary
     |> AuxiliarySchema.changeset(attrs)
-    |> Repo.update()
+    |> Repo.update(prefix: PrefixFormatter.get_current_prefix)
+  end
+
+  def update_auxiliary(%AuxiliarySchema{} = auxiliary, attrs, year, month) do
+    auxiliary
+    |> AuxiliarySchema.changeset(attrs)
+    |> Repo.update(prefix: PrefixFormatter.get_prefix(year, month))
   end
 
   @doc """
@@ -86,7 +106,11 @@ defmodule AccountingSystem.AuxiliaryHandler do
 
   """
   def delete_auxiliary(%AuxiliarySchema{} = auxiliary) do
-    Repo.delete(auxiliary)
+    Repo.delete(auxiliary, prefix: PrefixFormatter.get_current_prefix)
+  end
+
+  def delete_auxiliary(%AuxiliarySchema{} = auxiliary, year, month) do
+    Repo.delete(auxiliary, prefix: PrefixFormatter.get_prefix(year, month))
   end
 
   @doc """
