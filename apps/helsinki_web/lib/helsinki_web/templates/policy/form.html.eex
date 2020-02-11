@@ -10,7 +10,7 @@
   <%= error_tag f, :policy_number %>
 
   <%= label f, :policy_type %>
-  <%= number_input f, :policy_type %>
+  <%= select f, :policy_type, @dropdowns |> Map.get(:policy_type) %>
   <%= error_tag f, :policy_type %>
 
   <%= label f, :period %>
@@ -36,6 +36,38 @@
   <%= label f, :has_documents %>
   <%= checkbox f, :has_documents %>
   <%= error_tag f, :has_documents %>
+
+  <%= label f, :id_account1 %>
+  <%= select f, :id_account1, @dropdowns |> Map.get(:id_account1) %>
+  <%= error_tag f, :id_account1 %>
+  <%= label f, :department_1 %>
+  <%= number_input f, :department1 %>
+  <%= error_tag f, :department1 %>
+  <%= label f, :concept_1 %>
+  <%= text_input f, :concept1 %>
+  <%= error_tag f, :concept1 %>
+  <%= label f, :haber_1 %>
+  <%= number_input f, :haber_1, step: "any" %>
+  <%= error_tag f, :haber_1 %>
+  <%= label f, :debe_1 %>
+  <%= number_input f, :debe_1, step: "any" %>
+  <%= error_tag f, :debe_1 %>
+
+  <%= label f, :id_account2 %>
+  <%= select f, :id_account2, @dropdowns |> Map.get(:id_account1) %>
+  <%= error_tag f, :id_account2 %>
+  <%= label f, :department_2 %>
+  <%= number_input f, :department2 %>
+  <%= error_tag f, :department2 %>
+  <%= label f, :concept_2 %>
+  <%= text_input f, :concept2 %>
+  <%= error_tag f, :concept2 %>
+  <%= label f, :haber_2 %>
+  <%= number_input f, :haber_2, step: "any" %>
+  <%= error_tag f, :haber_2 %>
+  <%= label f, :debe_2 %>
+  <%= number_input f, :debe_2, step: "any" %>
+  <%= error_tag f, :debe_2 %>
 
   <div>
     <%= submit "Save" %>

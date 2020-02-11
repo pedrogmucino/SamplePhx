@@ -66,7 +66,7 @@ defmodule AccountingSystem.PoliciesTest do
 
     test "delete_policy/1 deletes the policy" do
       policy = policy_fixture()
-      assert {:ok, %Policy{}} = PolicyHandler.delete_policy(policy)
+      assert {:ok, %PolicySchema{}} = PolicyHandler.delete_policy(policy)
       assert_raise Ecto.NoResultsError, fn -> PolicyHandler.get_policy!(policy.id) end
     end
 
