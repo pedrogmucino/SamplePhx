@@ -3,8 +3,8 @@ defmodule AccountingSystemWeb.AuxiliaryControllerTest do
 
   alias AccountingSystem.AuxiliaryHandler
 
-  @create_attrs %{amount: 120.5, concept: "some concept", cost_center: 42, counterpart: "some counterpart", debit_credit: "some debit_credit", department: 42, exchange_rate: 120.5, group: 42, id_account: 42, iduuid: 42, mxn_amount: 120.5, policy_number: 42}
-  @update_attrs %{amount: 456.7, concept: "some updated concept", cost_center: 43, counterpart: "some updated counterpart", debit_credit: "some updated debit_credit", department: 43, exchange_rate: 456.7, group: 43, id_account: 43, iduuid: 43, mxn_amount: 456.7, policy_number: 43}
+  @create_attrs %{amount: 120.5, concept: "some concept", cost_center: 42, counterpart: "some counterpart", debit_credit: "d", department: 42, exchange_rate: 120.5, group: 42, id_account: 42, iduuid: 42, mxn_amount: 120.5, policy_number: 42}
+  @update_attrs %{amount: 456.7, concept: "some updated concept", cost_center: 43, counterpart: "some updated counterpart", debit_credit: "s", department: 43, exchange_rate: 456.7, group: 43, id_account: 43, iduuid: 43, mxn_amount: 456.7, policy_number: 43}
   @invalid_attrs %{amount: nil, concept: nil, cost_center: nil, counterpart: nil, debit_credit: nil, department: nil, exchange_rate: nil, group: nil, id_account: nil, iduuid: nil, mxn_amount: nil, policy_number: nil}
 
   def fixture(:auxiliary) do
@@ -28,7 +28,7 @@ defmodule AccountingSystemWeb.AuxiliaryControllerTest do
 
   describe "create auxiliary" do
     test "redirects to show when data is valid", %{conn: conn} do
-      conn = post(conn, Routes.auxiliary_path(conn, :create), auxiliary: @create_attrs)
+      conn = post(conn, Routes.auxiliary_path(conn, :create), auxiliary_schema: @create_attrs)
 
       assert %{id: id} = redirected_params(conn)
       assert redirected_to(conn) == Routes.auxiliary_path(conn, :show, id)
@@ -38,7 +38,7 @@ defmodule AccountingSystemWeb.AuxiliaryControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, Routes.auxiliary_path(conn, :create), auxiliary: @invalid_attrs)
+      conn = post(conn, Routes.auxiliary_path(conn, :create), auxiliary_schema: @invalid_attrs)
       assert html_response(conn, 200) =~ "New Auxiliary"
     end
   end
@@ -56,7 +56,7 @@ defmodule AccountingSystemWeb.AuxiliaryControllerTest do
     setup [:create_auxiliary]
 
     test "redirects when data is valid", %{conn: conn, auxiliary: auxiliary} do
-      conn = put(conn, Routes.auxiliary_path(conn, :update, auxiliary), auxiliary: @update_attrs)
+      conn = put(conn, Routes.auxiliary_path(conn, :update, auxiliary), auxiliary_schema: @update_attrs)
       assert redirected_to(conn) == Routes.auxiliary_path(conn, :show, auxiliary)
 
       conn = get(conn, Routes.auxiliary_path(conn, :show, auxiliary))
@@ -64,7 +64,7 @@ defmodule AccountingSystemWeb.AuxiliaryControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn, auxiliary: auxiliary} do
-      conn = put(conn, Routes.auxiliary_path(conn, :update, auxiliary), auxiliary: @invalid_attrs)
+      conn = put(conn, Routes.auxiliary_path(conn, :update, auxiliary), auxiliary_schema: @invalid_attrs)
       assert html_response(conn, 200) =~ "Edit Auxiliary"
     end
   end
