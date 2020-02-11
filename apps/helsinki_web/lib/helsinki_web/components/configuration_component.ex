@@ -1,9 +1,17 @@
 defmodule AccountingSystemWeb.ConfigurationComponent do
   use Phoenix.LiveComponent
   use Phoenix.HTML
+  alias AccountingSystem.{
+    StructureHandler
+  }
 
   def mount(socket) do
-    {:ok, socket}
+    {:ok, assign(socket,
+    structure: get_structure()) }
+  end
+
+  def get_structure() do
+    StructureHandler.get_last_structure
   end
 
   def render(assigns) do
@@ -13,7 +21,7 @@ defmodule AccountingSystemWeb.ConfigurationComponent do
       <div class="inline-block bg-blue-700 text-white px-6 py-4 w-full">
         <h1 class="text-2xl font-medium text-white block">Account Configuration</h1>
         <div class="mt-2">
-          <label class="block">Level: <b>2</b></label>
+          <label class="block">Level: <b><%= @structure.level + 1 %></b></label>
           <label class="block">Max Current Size: <b>0</b></label>
         </div>
       </div>
