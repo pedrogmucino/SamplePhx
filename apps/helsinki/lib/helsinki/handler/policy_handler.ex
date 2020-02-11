@@ -23,6 +23,10 @@ defmodule AccountingSystem.PolicyHandler do
     Repo.all(PolicySchema, prefix: PrefixFormatter.get_current_prefix)
   end
 
+  def list_policies(year, month) do
+    Repo.all(PolicySchema, prefix: PrefixFormatter.get_prefix(year, month))
+  end
+
   @doc """
   Gets a single policy.
 
@@ -38,6 +42,9 @@ defmodule AccountingSystem.PolicyHandler do
 
   """
   def get_policy!(id), do: Repo.get!(PolicySchema, id, prefix: PrefixFormatter.get_current_prefix)
+
+  def get_policy!(id, year, month), do: Repo.get!(PolicySchema, id, prefix: PrefixFormatter.get_prefix(year, month))
+
 
   @doc """
   Creates a policy.
@@ -55,6 +62,12 @@ defmodule AccountingSystem.PolicyHandler do
     %PolicySchema{}
     |> PolicySchema.changeset(attrs)
     |> Repo.insert(prefix: PrefixFormatter.get_current_prefix)
+  end
+
+  def create_policy(attrs \\ %{}, year, month) do
+    %PolicySchema{}
+    |> PolicySchema.changeset(attrs)
+    |> Repo.insert(prefix: PrefixFormatter.get_prefix(year, month))
   end
 
   @doc """
@@ -75,6 +88,12 @@ defmodule AccountingSystem.PolicyHandler do
     |> Repo.update(prefix: PrefixFormatter.get_current_prefix)
   end
 
+  def update_policy(%PolicySchema{} = policy, attrs, year, month) do
+    policy
+    |> PolicySchema.changeset(attrs)
+    |> Repo.update(prefix: PrefixFormatter.get_prefix(year, month))
+  end
+
   @doc """
   Deletes a policy.
 
@@ -89,6 +108,10 @@ defmodule AccountingSystem.PolicyHandler do
   """
   def delete_policy(%PolicySchema{} = policy) do
     Repo.delete(policy, prefix: PrefixFormatter.get_current_prefix)
+  end
+
+  def delete_policy(%PolicySchema{} = policy, year, month) do
+    Repo.delete(policy, prefix: PrefixFormatter.get_prefix(year, month))
   end
 
   @doc """
