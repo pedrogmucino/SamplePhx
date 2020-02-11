@@ -4,16 +4,16 @@ defmodule AccountingSystemWeb.HeaderComponent do
 
   def render(assigns) do
     ~L"""
-    <div class="fixed w-full py-2 bg-blue-700 top-0 left-0 z-20">
+    <div class="fixed w-full py-2 bg-blue-700 top-0 left-0 z-20 border-b-2 border-blue-100">
       <div class="flex">
         <img src="https://santiago.mx/assets/images/logo-white.png" class="w-56 ml-6">
 
         <div class="ml-auto block text-right">
-          <p class="font-bold text-lg text-white ">Héctor López</p>
+          <p class="font-bold text-lg text-white ">Sebastian Stan</p>
           <p class="text-medium text-white ">Administrador contable</p>
         </div>
         <div class="inline-flex items-center ml-4 mr-6">
-          <img src="https://cdn.memegenerator.es/imagenes/memes/full/26/81/26810815.jpg" class="rounded-full w-10 h-10">
+          <img src="https://cdn.vox-cdn.com/thumbor/24I1h6pROyMIB1-bRTHG4MSlkko=/0x0:1200x600/1200x800/filters:focal(552x137:744x329)/cdn.vox-cdn.com/uploads/chorus_image/image/58955377/Winter_Soldier.0.jpg" alt="https://cdn.vox-cdn.com/thumbor/24I1h6pROyMIB1-bRTHG4MSlkko=/0x0:1200x600/1200x800/filters:focal(552x137:744x329)/cdn.vox-cdn.com/uploads/chorus_image/image/58955377/Winter_Soldier.0.jpg" class="rounded-sm w-12 h-10">
         </div>
       </div>
     </div>

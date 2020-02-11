@@ -10,7 +10,7 @@ defmodule AccountingSystemWeb.FormAccountComponent do
     ~L"""
     <div class="bg-white mt-16 ml-1 w-240 rounded border">
 
-      <div class="inline-block bg-blue-800 text-white px-6 py-3 w-full">
+      <div class="inline-block bg-blue-700 text-white px-6 py-3 w-full">
         <h1 class="text-2xl font-medium text-white  block">
           Nueva Cuenta
         </h1>
@@ -21,16 +21,16 @@ defmodule AccountingSystemWeb.FormAccountComponent do
         <div class="px-8 py-6 flex flex-col my-2 w-160">
           <form class="w-full">
             <label class="block tracking-wide text-gray-700 font-bold" for="grid-code">Code</label>
-            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code" type="text" placeholder="Code">
+            <input class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code" type="text" placeholder="Code">
 
             <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Name</label>
             <div class="inline-flex w-full">
-              <input class="appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" type="text" placeholder="Name">
-              <input class="ml-4 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" type="text" placeholder="Name">
+              <input class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" type="text" placeholder="Name">
+              <input class="focus:outline-none focus:bg-white focus:border-blue-500 ml-4 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" type="text" placeholder="Name">
             </div>
 
             <label class="block tracking-wide text-gray-700 font-bold" for="grid-description">Description</label>
-            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-description" type="text" placeholder="Description">
+            <input class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-description" type="text" placeholder="Description">
 
             <label class="block tracking-wide text-gray-700 font-bold" for="grid-state">Type</label>
             <div class="relative mb-3">
@@ -46,27 +46,27 @@ defmodule AccountingSystemWeb.FormAccountComponent do
             <label class="block tracking-wide text-gray-700 font-bold" for="uuid-voucher">
               Uuid Voucher
             </label>
-            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-uuid-voucher" type="text" placeholder="Uuid Voucher">
+            <input class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-uuid-voucher" type="text" placeholder="Uuid Voucher">
 
             <div class="inline-flex w-full">
               <div class="mb-3 inline-block w-1/2 px-2">
                 <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Group Code</label>
-                <input class="appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" type="text" placeholder="Group Code">
+                <input class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" type="text" placeholder="Group Code">
               </div>
               <div class="mb-3 inline-block w-1/2 px-2">
                 <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Apply to</label>
-                <input class="appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" type="text" placeholder="Apply to">
+                <input class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" type="text" placeholder="Apply to">
               </div>
             </div>
 
             <div class="inline-flex w-full">
               <div class="mb-3 inline-block w-1/2 px-2">
                 <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Third Party Prosecutor</label>
-                <input class="appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" type="text" placeholder="Third Party Prosecutor">
+                <input class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" type="text" placeholder="Third Party Prosecutor">
               </div>
               <div class="mb-3 inline-block w-1/2 px-2">
                 <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Apply Third Party To</label>
-                <input class="appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" type="text" placeholder="Apply Third Party To">
+                <input class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" type="text" placeholder="Apply Third Party To">
               </div>
             </div>
 
@@ -118,7 +118,7 @@ defmodule AccountingSystemWeb.FormAccountComponent do
       </div>
 
       <div class="w-240 absolute bottom-0 inline-block py-8 flex flex-col my-2 pr-8">
-        <button class="ml-auto py-2 w-32 bg-teal-800 text-teal-100 items-center inline-flex font-bold rounded shadow hover:bg-teal-600 focus:shadow-outline focus:outline-none rounded" type="button">
+        <button class="ml-auto py-2 w-32 bg-teal-500 text-white hover:bg-teal-400 items-center inline-flex font-bold rounded shadow focus:shadow-outline focus:outline-none rounded" type="button">
           <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="save" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
           class="h-4 w-4 mr-2 ml-auto">
             <g class="fa-group">
