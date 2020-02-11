@@ -36,8 +36,8 @@ defmodule AccountingSystemWeb.AccountsComponent do
           <%= for item <- @accounts do %>
             <div class="w-full px-2 block">
               <div phx-click="open_child" phx-value-id="<%= item.id %>" phx-target="#one" class="cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
-                <h2 class="text-gray-700 text-xl"><%= item.name %></h2>
-                <label class="cursor-pointer text-gray-600 font-bold text-sm"><%= item.code %></label>
+                <h2 class="text-gray-800 text-xl"><%= item.name %></h2>
+                <label class="cursor-pointer text-gray-500 font-bold text-sm"><%= item.code %></label>
                 <div class="absolute bg-<%= if item.status == "A", do: "green", else: "red" %>-200 px-3 text-sm font-bold top-0 right-0 rounded-full text-<%= if item.status == "A", do: "green", else: "red" %>-700 mt-2 mr-2">
                   <%= if item.status == "A" do %>
                     Activo
