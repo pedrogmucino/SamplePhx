@@ -32,7 +32,7 @@ defmodule AccountingSystemWeb.HeaderComponent do
 
       <div class="absolute inset-x-0 bottom-0 h-12">
 
-        <a href="/configuration" class="rounded hover:border-gray-200 text-gray-800 hover:bg-gray-200 py-1 inline-flex items-center w-full">
+        <a href="/listconfiguration" class="rounded hover:border-gray-200 text-gray-800 hover:bg-gray-200 py-1 inline-flex items-center w-full">
         <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="cog" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
           class="h-8 w-8 ml-2 mr-auto">
             <g>

@@ -4,7 +4,9 @@ defmodule AccountingSystemWeb.ListConfigurationComponent do
 
   def mount(socket) do
     {:ok, assign(socket,
-    list_configuration: get_list_configuration())}
+    list_configuration: get_list_configuration(),
+    new?: false
+    )}
   end
 
   def update(attrs, socket) do
@@ -31,7 +33,7 @@ defmodule AccountingSystemWeb.ListConfigurationComponent do
     </div>
 
     <div class="w-1/2 px-2 mt-2">
-      <button phx-click="create_new" phx-value-id="xxx" phx-target="#one" class="py-2 bg-teal-800 text-teal-100 items-center inline-flex font-bold rounded text-sm w-full ">
+      <button phx-click="create_new" phx-value-id="xxx" phx-target="#one" class="py-2 bg-teal-500 hover:bg-teal-400 text-white items-center inline-flex font-bold rounded text-sm w-full ">
         <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
         class="h-4 w-4 mr-2 ml-auto">
           <path fill="currentColor" d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
@@ -53,12 +55,11 @@ defmodule AccountingSystemWeb.ListConfigurationComponent do
         </div>
       <% end %>
     </div>
-
-
-
-
     </div>
 
+    <%= if @new? do %>
+      <%= live_component(@socket, AccountingSystemWeb.ConfigurationComponent, id: "configuration") %>
+    <% end %>
 
     """
   end
@@ -114,6 +115,10 @@ defmodule AccountingSystemWeb.ListConfigurationComponent do
         id: 8
       }
     ]
+  end
+
+  def handle_event("create_new", _params, socket) do
+    {:noreply, assign(socket, new?: true)}
   end
 
 end

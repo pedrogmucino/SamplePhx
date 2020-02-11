@@ -8,9 +8,9 @@ defmodule AccountingSystemWeb.ConfigurationComponent do
 
   def render(assigns) do
     ~L"""
-    <div class="bg-white ml-16 mt-16 ml-1 w-80 h-hoch-93 rounded border">
+    <div class="bg-white mt-16 ml-1 w-80 h-hoch-93 rounded border">
 
-      <div class="inline-block bg-blue-800 text-white px-6 py-4 w-full">
+      <div class="inline-block bg-blue-700 text-white px-6 py-4 w-full">
         <h1 class="text-2xl font-medium text-white block">Account Configuration</h1>
         <div class="mt-2">
           <label class="block">Level: <b>2</b></label>
