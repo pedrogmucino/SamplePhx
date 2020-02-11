@@ -34,7 +34,7 @@ defmodule AccountingSystemWeb.FormAccountComponent do
 
             <label class="block tracking-wide text-gray-700 font-bold" for="grid-state">Type</label>
             <div class="relative mb-3">
-              <select class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
+              <select class="focus:outline-none focus:bg-white focus:border-blue-500 block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded leading-tight" id="option-type">
                 <option>Acumulativo</option>
                 <option>Detalle</option>
               </select>
@@ -49,22 +49,22 @@ defmodule AccountingSystemWeb.FormAccountComponent do
             <input class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-uuid-voucher" type="text" placeholder="Uuid Voucher">
 
             <div class="inline-flex w-full">
-              <div class="mb-3 inline-block w-1/2 px-2">
+              <div class="inline-block w-full mr-2">
                 <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Group Code</label>
                 <input class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" type="text" placeholder="Group Code">
               </div>
-              <div class="mb-3 inline-block w-1/2 px-2">
-                <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Apply to</label>
-                <input class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" type="text" placeholder="Apply to">
+              <div class="inline-block w-full ml-2">
+                <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Apply To</label>
+                <input class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" type="text" placeholder="Apply To">
               </div>
             </div>
 
             <div class="inline-flex w-full">
-              <div class="mb-3 inline-block w-1/2 px-2">
+              <div class="inline-block w-full mr-2">
                 <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Third Party Prosecutor</label>
                 <input class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" type="text" placeholder="Third Party Prosecutor">
               </div>
-              <div class="mb-3 inline-block w-1/2 px-2">
+              <div class="inline-block w-full ml-2">
                 <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Apply Third Party To</label>
                 <input class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" type="text" placeholder="Apply Third Party To">
               </div>
