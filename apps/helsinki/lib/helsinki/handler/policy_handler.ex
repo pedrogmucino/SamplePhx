@@ -4,9 +4,11 @@ defmodule AccountingSystem.PolicyHandler do
   """
 
   import Ecto.Query, warn: false
-  alias AccountingSystem.Repo
-
-  alias AccountingSystem.PolicySchema
+  alias AccountingSystem.{
+    PolicySchema,
+    PrefixFormatter,
+    Repo
+  }
 
   @doc """
   Returns the list of policies.
@@ -18,7 +20,11 @@ defmodule AccountingSystem.PolicyHandler do
 
   """
   def list_policies do
-    Repo.all(PolicySchema)
+    Repo.all(PolicySchema, prefix: PrefixFormatter.get_current_prefix)
+  end
+
+  def list_policies(year, month) do
+    Repo.all(PolicySchema, prefix: PrefixFormatter.get_prefix(year, month))
   end
 
   @doc """
@@ -35,7 +41,10 @@ defmodule AccountingSystem.PolicyHandler do
       ** (Ecto.NoResultsError)
 
   """
-  def get_policy!(id), do: Repo.get!(PolicySchema, id)
+  def get_policy!(id), do: Repo.get!(PolicySchema, id, prefix: PrefixFormatter.get_current_prefix)
+
+  def get_policy!(id, year, month), do: Repo.get!(PolicySchema, id, prefix: PrefixFormatter.get_prefix(year, month))
+
 
   @doc """
   Creates a policy.
@@ -52,7 +61,13 @@ defmodule AccountingSystem.PolicyHandler do
   def create_policy(attrs \\ %{}) do
     %PolicySchema{}
     |> PolicySchema.changeset(attrs)
-    |> Repo.insert()
+    |> Repo.insert(prefix: PrefixFormatter.get_current_prefix)
+  end
+
+  def create_policy(attrs \\ %{}, year, month) do
+    %PolicySchema{}
+    |> PolicySchema.changeset(attrs)
+    |> Repo.insert(prefix: PrefixFormatter.get_prefix(year, month))
   end
 
   @doc """
@@ -70,7 +85,13 @@ defmodule AccountingSystem.PolicyHandler do
   def update_policy(%PolicySchema{} = policy, attrs) do
     policy
     |> PolicySchema.changeset(attrs)
-    |> Repo.update()
+    |> Repo.update(prefix: PrefixFormatter.get_current_prefix)
+  end
+
+  def update_policy(%PolicySchema{} = policy, attrs, year, month) do
+    policy
+    |> PolicySchema.changeset(attrs)
+    |> Repo.update(prefix: PrefixFormatter.get_prefix(year, month))
   end
 
   @doc """
@@ -86,7 +107,11 @@ defmodule AccountingSystem.PolicyHandler do
 
   """
   def delete_policy(%PolicySchema{} = policy) do
-    Repo.delete(policy)
+    Repo.delete(policy, prefix: PrefixFormatter.get_current_prefix)
+  end
+
+  def delete_policy(%PolicySchema{} = policy, year, month) do
+    Repo.delete(policy, prefix: PrefixFormatter.get_prefix(year, month))
   end
 
   @doc """
@@ -101,4 +126,6 @@ defmodule AccountingSystem.PolicyHandler do
   def change_policy(%PolicySchema{} = policy) do
     PolicySchema.changeset(policy, %{})
   end
+
+  #************************************************************************************************************************************
 end

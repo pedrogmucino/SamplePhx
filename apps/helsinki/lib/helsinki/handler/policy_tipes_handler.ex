@@ -101,4 +101,10 @@ defmodule AccountingSystem.PolicyTipeHandler do
   def change_policy_type(%PolicyTypeSchema{} = policy_type) do
     PolicyTypeSchema.changeset(policy_type, %{})
   end
+
+  def get_all_as_list() do
+    AccountingSystem.GetAllIdName.id_name()
+      |> Repo.all
+      |> Enum.map(fn x -> Map.to_list(x) end)
+  end
 end

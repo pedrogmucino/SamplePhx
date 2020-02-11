@@ -3,6 +3,7 @@ defmodule AccountingSystemWeb.PolicyController do
 
   alias AccountingSystem.PolicyHandler
   alias AccountingSystem.PolicySchema
+  alias AccountingSystem.PolicyFormatter
 
   def index(conn, _params) do
     policies = PolicyHandler.list_policies()
@@ -10,11 +11,13 @@ defmodule AccountingSystemWeb.PolicyController do
   end
 
   def new(conn, _params) do
+    dropdowns = PolicyFormatter.get_necesaries()
     changeset = PolicyHandler.change_policy(%PolicySchema{})
-    render(conn, "new.html", changeset: changeset)
+    render(conn, "new.html", changeset: changeset, dropdowns: dropdowns)
   end
 
   def create(conn, %{"policy_schema" => policy_params}) do
+    IO.inspect(policy_params, label: "WHEN YOU AAAAAAA SEN POLICYT PARAMS")
     case PolicyHandler.create_policy(policy_params) do
       {:ok, policy} ->
         conn

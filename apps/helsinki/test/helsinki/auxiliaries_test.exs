@@ -74,7 +74,7 @@ defmodule AccountingSystem.AuxiliariesTest do
 
     test "delete_auxiliary/1 deletes the auxiliary" do
       auxiliary = auxiliary_fixture()
-      assert {:ok, %Auxiliary{}} = AuxiliaryHandler.delete_auxiliary(auxiliary)
+      assert {:ok, %AuxiliarySchema{}} = AuxiliaryHandler.delete_auxiliary(auxiliary)
       assert_raise Ecto.NoResultsError, fn -> AuxiliaryHandler.get_auxiliary!(auxiliary.id) end
     end
 
