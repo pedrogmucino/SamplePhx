@@ -9,7 +9,8 @@ defmodule AccountingSystem.StructureHandler do
   alias AccountingSystem.{
     StructureSchema,
     GetStructureList,
-    CodeFormatter
+    CodeFormatter,
+    GetMostRecentStructureQuery
   }
   alias AccountingSystem.GetSetAccountsCodes, as: AccountsGetSet
   # alias AccountingSystem.CodeFormatter
@@ -109,6 +110,11 @@ defmodule AccountingSystem.StructureHandler do
 
   """
   def get_structure!(id), do: Repo.get!(StructureSchema, id)
+
+  def get_last_structure do
+    GetMostRecentStructureQuery.new
+    |> Repo.one!
+  end
 
   @doc """
   Creates a structure.
