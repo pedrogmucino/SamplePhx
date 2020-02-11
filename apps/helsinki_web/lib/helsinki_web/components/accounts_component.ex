@@ -66,7 +66,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
   end
   def mount(socket) do
     {:ok, assign(socket,
-    accounts: get_accounts_t(1),
+    accounts: get_accounts_t(0, -1),
     child_components: [],
     new?: false)}
   end
@@ -76,167 +76,31 @@ defmodule AccountingSystemWeb.AccountsComponent do
   end
 
   def handle_event("open_child", params, socket) do
-    map = socket.assigns.accounts
-    |> Enum.find(fn component -> component.id ==  params["id"] |> String.to_integer end)
-    map = map
-      |> Map.put(:subaccounts, get_accounts(map.level + 1))
-    arr = socket.assigns.child_components ++ [map]
-    |> IO.inspect(label: "NEW FATHER receive this --->    ")
-    {:noreply, assign(socket, child_components: arr, new?: false)}
+    map_accounts = socket.assigns.accounts
+    |> Enum.find(fn account -> account.id == params["id"] |> String.to_integer end)
+    map_accounts = map_accounts
+      |> Map.put(:subaccounts, get_accounts_t(map_accounts.level, map_accounts.id))
+    arr = socket.assigns.child_components ++ [map_accounts]
+    |> IO.inspect(label: "Accounts -> -> ->")
+    {:noreply, assign(socket, child_components: arr)}
+
   end
 
   def handle_event("create_new", _params, socket) do
     {:noreply, assign(socket, new?: true, child_components: [])}
   end
 
-  defp get_accounts_t(level) do
-    level
-    |> IO.inspect(label: "receive this in t --->    ")
-    AccountingSystem.AccountHandler.list_accounts()
-    |> IO.inspect(label: "Data from database--------------------")
+  defp get_accounts_t(level, parent_account) do
+    AccountingSystem.AccountHandler.list_of_childs(level, parent_account)
   end
 
-  defp get_accounts(level) do
-    level
-    |> IO.inspect(label: "receive this --->    ")
-    test = [
-      %{
-        name: "Cajasx",
-        account: "1-001-0010-0010",
-        account_type: "Activo",
-        color_account_type: "green",
-        childs_number: 5,
-        level: 1
-      },
-      %{
-        name: "Bancos",
-        account: "2-001-0010-0010",
-        account_type: "Activo",
-        color_account_type: "green",
-        childs_number: 5,
-        level: 1
-      },
-      %{
-        name: "Almacén",
-        account: "3-001-0010-0010",
-        account_type: "Activo",
-        color_account_type: "green",
-        childs_number: 5,
-        level: 1
-      },
-      %{
-        name: "Clientes",
-        account: "4-001-0010-0010",
-        account_type: "Activo",
-        color_account_type: "green",
-        childs_number: 5,
-        level: 1
-      },
-      %{
-        name: "Proveedores",
-        account: "1-001-0010-0010",
-        account_type: "Pasivo",
-        color_account_type: "red",
-        childs_number: 5,
-        level: 1
-      },
-      %{
-        name: "Documentos por pagar",
-        account: "2-001-0010-0010",
-        account_type: "Pasivo",
-        color_account_type: "red",
-        childs_number: 5,
-        level: 1
-      },
-      %{
-        name: "Acreedores",
-        account: "3-001-0010-0010",
-        account_type: "Pasivo",
-        color_account_type: "red",
-        childs_number: 5,
-        level: 1
-      },
-      %{
-        name: "Impuestos por pagar",
-        account: "4-001-0010-0010",
-        account_type: "Pasivo",
-        color_account_type: "red",
-        childs_number: 5,
-        level: 1
-      },
-      %{
-        name: "Capital Contable",
-        account: "3-001-0010-0010",
-        account_type: "Capital",
-        color_account_type: "blue",
-        childs_number: 5,
-        level: 1
-      },
-      %{
-        name: "Patrimonio Contablex",
-        account: "4-001-0010-0010",
-        account_type: "Capital",
-        color_account_type: "blue",
-        childs_number: 5,
-        level: 1
-      },
-      %{
-        name: "Patrimonio Contable",
-        account: "4-001-0010-0010",
-        account_type: "Capital 2",
-        color_account_type: "blue",
-        childs_number: 5,
-        level: 2
-      },
-      %{
-        name: "Patrimonio Contable",
-        account: "4-001-0010-0010",
-        account_type: "Hector 1",
-        color_account_type: "blue",
-        childs_number: 5,
-        level: 2
-      },
-      %{
-        name: "Patrimonio Contable",
-        account: "4-001-0010-0010",
-        account_type: "Hector 2",
-        color_account_type: "blue",
-        childs_number: 5,
-        level: 2
-      },
-      %{
-        name: "Patrimonio Contable",
-        account: "4-001-0010-0010",
-        account_type: "Hector 1",
-        color_account_type: "teal",
-        childs_number: 5,
-        level: 3
-      },
-      %{
-        name: "Patrimonio Contable",
-        account: "4-001-0010-0010",
-        account_type: "Hector 2",
-        color_account_type: "red",
-        childs_number: 5,
-        level: 3
-      }
+  # def clear_arr([value | others], arr) do
+  #   case value do
+  #     nil -> clear_arr(others, arr)
+  #     val -> clear_arr(others, arr ++ [val])
+  #   end
+  # end
 
-    ]
-    |> Enum.map(fn component -> if component.level == level, do: component end)
-    |> clear_arr([])
-
-    test ++ test
-    |> Enum.with_index()
-    |> Enum.map(fn{k,v} -> k |> Map.put(:id, v) end)
-  end
-
-  def clear_arr([value | others], arr) do
-    case value do
-      nil -> clear_arr(others, arr)
-      val -> clear_arr(others, arr ++ [val])
-    end
-  end
-
-  def clear_arr([], arr), do: arr
+  # def clear_arr([], arr), do: arr
 
 end

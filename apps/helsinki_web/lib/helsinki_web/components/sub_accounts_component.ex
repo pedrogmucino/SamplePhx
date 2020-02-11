@@ -79,8 +79,8 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
           <div class="w-full block bg-gray-200 p-3 rounded relative">
             <h2 class="text-gray-700 text-xl"> <%= item.name %> </h2>
             <label class="text-gray-600 font-bold text-sm">1-001-0010-0010</label>
-            <div class="absolute bg-<%= item.color_account_type %>-200 px-3 text-sm font-bold top-0 right-0 rounded-full text-<%= item.color_account_type %>-700 mt-2 mr-2">
-              <%= item.account_type %>
+            <div class="absolute bg-yellow-200 px-3 text-sm font-bold top-0 right-0 rounded-full text-yellow-700 mt-2 mr-2">
+              <%= item.name %>
             </div>
           </div>
         </div>
