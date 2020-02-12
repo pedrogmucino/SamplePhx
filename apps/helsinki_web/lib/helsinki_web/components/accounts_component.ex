@@ -40,12 +40,10 @@ defmodule AccountingSystemWeb.AccountsComponent do
               <div phx-click="open_child" phx-value-id="<%= item.id %>" phx-value-level="0" phx-value-origin="true" phx-target="#one" class="border cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
                 <h2 class="text-gray-800 text-xl"><%= item.name %></h2>
                 <label class="cursor-pointer text-gray-500 font-bold text-sm"><%= item.code %></label>
+                <br>
+                <label class="cursor-pointer text-gray-500 font-bold text-sm"><%= if item.type == "A", do: "Acumulativo", else: "Detalle" %></label>
                 <div class="absolute bg-<%= if item.status == "A", do: "green", else: "red" %>-200 px-3 text-sm font-bold top-0 right-0 rounded-full text-<%= if item.status == "A", do: "green", else: "red" %>-700 mt-2 mr-2">
-                  <%= if item.status == "A" do %>
-                    Activo
-                  <% else %>
-                    Inactivo
-                  <% end %>
+                <%= if item.status == "A", do: "Activo", else: "Inactivo" %>
                 </div>
               </div>
             </div>
@@ -67,7 +65,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
   end
   def mount(socket) do
     {:ok, assign(socket,
-    accounts: get_accounts_t(0, -1),
+    accounts: get_accounts_t(-1, -1),
     child_components: [],
     actually_level: 1,
     new?: false)}
