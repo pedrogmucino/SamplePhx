@@ -50,7 +50,7 @@ defmodule AccountingSystemWeb.ListConfigurationComponent do
     <div class="h-hoch-80 overflow-y-scroll pb-16">
       <%= for item <- @list_configuration do %>
         <div class="w-full px-2 block">
-          <div phx-click="open_child" phx-value-id="<%= item.id %>" phx-target="#one" class="cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
+          <div phx-click="open_child" phx-value-id="<%= item.id %>" phx-target="#one" class="border cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
             <h2 class="text-gray-700 text-xl">Size: <%= item.size %></h2>
             <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Level: <b><%= item.level %></b></label>
             <label class="ml-10 inline-block cursor-pointer text-gray-600 font-bold text-sm">Max Current Size: <b><%= item.max_current_size %></b></label>

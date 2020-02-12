@@ -59,7 +59,7 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
 
       </div>
       <div class="relative w-full px-2 mt-2">
-        <input class="h-8 w-full rounded border bg-gray-300 pl-2" placeholder="Buscar Cuenta" >
+        <input class="focus:outline-none focus:bg-white focus:border-blue-500 h-8 w-full rounded border bg-gray-300 pl-2" placeholder="Buscar Cuenta" >
         <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="search" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
           class="absolute right-0 top-0 h-4 w-4 mr-4 mt-2">
           <g>
@@ -76,7 +76,7 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
 
       <%= for item <- @subaccounts do %>
         <div class="w-full p-2 block" phx-click="open_child" phx-value-id="<%= item.id %>" phx-target="#one">
-          <div class="w-full block bg-gray-200 p-3 rounded relative">
+          <div class="border w-full block bg-gray-200 p-3 rounded relative">
             <h2 class="text-gray-700 text-xl"> <%= item.name %> </h2>
             <label class="text-gray-600 font-bold text-sm"><%= item.code %></label>
             <div class="absolute bg-<%= if item.status == "A", do: "green", else: "red" %>-200 px-3 text-sm font-bold top-0 right-0 rounded-full text-<%= if item.status == "A", do: "green", else: "red" %>-700 mt-2 mr-2">
