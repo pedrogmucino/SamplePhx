@@ -125,7 +125,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
     clear_level(others, new_arr, level)
   end
 
-  defp clear_level([], new_arr, _level), do: new_arr |> IO.inspect(label: "new_arr -> ")
+  defp clear_level([], new_arr, _level), do: new_arr |> IO.inspect(label: "new_arr -> ") |> (Enum.sort_by & &1.level)
 
   # def clear_arr([value | others], arr) do
   #   case value do
