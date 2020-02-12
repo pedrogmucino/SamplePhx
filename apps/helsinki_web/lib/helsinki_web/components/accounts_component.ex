@@ -47,7 +47,6 @@ defmodule AccountingSystemWeb.AccountsComponent do
                     Inactivo
                   <% end %>
                 </div>
-                <div> Nivel: <%= item.level %> </div>
               </div>
             </div>
           <% end %>
@@ -58,7 +57,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
       </div>
 
       <%= for component <- @child_components do %>
-        <%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, subaccounts: component.subaccounts, father_name: component.name, next_level: (component.level + 1), id: component.id) %>
+        <%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, subaccounts: component.subaccounts, father_name: component.name, next_level: (component.level + 1), id: component.id, code: component.code, type: component.type, description: component.description) %>
       <% end %>
 
       <%= if @new? do %>

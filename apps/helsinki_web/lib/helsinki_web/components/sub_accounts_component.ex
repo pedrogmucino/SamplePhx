@@ -12,7 +12,10 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
       level: attrs.next_level,
       id: attrs.id,
       name: attrs.father_name,
-      subaccounts: attrs.subaccounts)
+      subaccounts: attrs.subaccounts,
+      code: attrs.code,
+      type: attrs.type,
+      description: attrs.description)
     }
   end
 
@@ -25,9 +28,9 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
 
 
           </h1>
-          <label class="block text-gray-700 text-sm font-bold">1-1002-1010-1000</label>
-          <label class="block text-gray-700">Nivel: <b><%= @id %></b></label>
-          <label class="block text-gray-700">Tipo: <b>Acumulativo</b></label>
+          <label class="block text-gray-700 text-sm font-bold"><b><%= @code %></b></label>
+          <label class="block text-gray-700">Descripción: <b><%= @description %></b></label>
+          <label class="block text-gray-700">Tipo: <b><%= if @type == "A", do: "Acumulativo", else: "Detalle" %></b></label>
           <div class="w-full inline-flex py-2">
 
             <div class="w-1/2 px-2">
@@ -76,14 +79,14 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
 
       <%= for item <- @subaccounts do %>
         <div class="w-full p-2 block cursor-pointer" phx-click="open_child" phx-value-origin="false" phx-value-level="<%= @level %>" phx-value-id="<%= item.id %>" phx-target="#one">
-          <div class="border w-full block bg-gray-200 p-3 rounded relative">
+          <div class="hover:bg-gray-300 border w-full block bg-gray-200 p-3 rounded relative">
             <h2 class="text-gray-700 text-xl"> <%= item.name %> </h2>
-            <label class="text-gray-600 font-bold text-sm"><%= item.code %></label>
+            <label class="cursor-pointer text-gray-600 font-bold text-sm"><%= item.code %></label>
             <div class="absolute bg-<%= if item.status == "A", do: "green", else: "red" %>-200 px-3 text-sm font-bold top-0 right-0 rounded-full text-<%= if item.status == "A", do: "green", else: "red" %>-700 mt-2 mr-2">
-            <%= if item.status == "A" do %>
-              Activo
+            <%= if item.type == "A" do %>
+              Acumulativo
             <% else %>
-              Inactivo
+              Detalle
             <% end %>
             </div>
           </div>
