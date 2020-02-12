@@ -2,6 +2,8 @@ defmodule AccountingSystemWeb.AccountsComponent do
   use Phoenix.LiveComponent
   use Phoenix.HTML
 
+  alias AccountingSystem.AccountHandler
+
   def render(assigns) do
     ~L"""
       <div id="one" class="bg-white h-hoch-93 w-80 mt-16 ml-16 block float-left">
@@ -35,7 +37,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
         <div class="h-hoch-80 overflow-y-scroll pb-16">
           <%= for item <- @accounts do %>
             <div class="w-full px-2 block">
-              <div phx-click="open_child" phx-value-id="<%= item.id %>" phx-target="#one" class="border cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
+              <div phx-click="open_child" phx-value-id="<%= item.id %>" phx-value-level="0" phx-value-origin="true" phx-target="#one" class="border cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
                 <h2 class="text-gray-800 text-xl"><%= item.name %></h2>
                 <label class="cursor-pointer text-gray-500 font-bold text-sm"><%= item.code %></label>
                 <div class="absolute bg-<%= if item.status == "A", do: "green", else: "red" %>-200 px-3 text-sm font-bold top-0 right-0 rounded-full text-<%= if item.status == "A", do: "green", else: "red" %>-700 mt-2 mr-2">
@@ -68,6 +70,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
     {:ok, assign(socket,
     accounts: get_accounts_t(0, -1),
     child_components: [],
+    actually_level: 1,
     new?: false)}
   end
 
@@ -76,14 +79,21 @@ defmodule AccountingSystemWeb.AccountsComponent do
   end
 
   def handle_event("open_child", params, socket) do
-    map_accounts = socket.assigns.accounts
-    |> Enum.find(fn account -> account.id == params["id"] |> String.to_integer end)
+    level = params["level"] |> String.to_integer
+    map_accounts = params["id"]
+      |> String.to_integer
+      |> get_account()
     map_accounts = map_accounts
       |> Map.put(:subaccounts, get_accounts_t(map_accounts.level, map_accounts.id))
-    arr = socket.assigns.child_components ++ [map_accounts]
-    |> IO.inspect(label: "Accounts -> -> ->")
-    {:noreply, assign(socket, child_components: arr)}
+    arr = get_childs(params["origin"] |> to_bool(),
+      socket.assigns.child_components,
+      map_accounts,
+      level)
 
+    {:noreply, assign(socket,
+      child_components: arr |> IO.inspect(label: "arr -> "),
+      new?: false,
+      actually_level: level)}
   end
 
   def handle_event("create_new", _params, socket) do
@@ -91,8 +101,34 @@ defmodule AccountingSystemWeb.AccountsComponent do
   end
 
   defp get_accounts_t(level, parent_account) do
-    AccountingSystem.AccountHandler.list_of_childs(level, parent_account)
+    AccountHandler.list_of_childs(level, parent_account)
   end
+
+  defp get_account(id), do: id |> AccountHandler.get_account!()
+
+  defp get_childs(true, _others, accounts, _level), do: [accounts]
+  defp get_childs(false, others, accounts, level) do
+    IO.inspect(level, label: "level to find -> ")
+    (others
+    |> Enum.find(fn child -> child.level == level end)
+    |> IO.inspect(label: "find ?    ----> ")
+    |> case do
+      nil -> others
+      _child -> others |> clear_level([], level)
+    end) ++ [accounts]
+  end
+
+  defp to_bool(text), do: text == "true"
+
+  defp clear_level([account | others], new_arr, level) do
+    new_arr = case account.level >= level do
+      true -> new_arr
+      false -> new_arr ++ [account]
+    end
+    clear_level(others, new_arr, level)
+  end
+
+  defp clear_level([], new_arr, _level), do: new_arr |> IO.inspect(label: "new_arr -> ")
 
   # def clear_arr([value | others], arr) do
   #   case value do

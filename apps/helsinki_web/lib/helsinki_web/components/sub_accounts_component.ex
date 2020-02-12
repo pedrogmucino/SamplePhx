@@ -75,7 +75,7 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
 
 
       <%= for item <- @subaccounts do %>
-        <div class="w-full p-2 block" phx-click="open_child" phx-value-id="<%= item.id %>" phx-target="#one">
+        <div class="w-full p-2 block cursor-pointer" phx-click="open_child" phx-value-origin="false" phx-value-level="<%= @level %>" phx-value-id="<%= item.id %>" phx-target="#one">
           <div class="border w-full block bg-gray-200 p-3 rounded relative">
             <h2 class="text-gray-700 text-xl"> <%= item.name %> </h2>
             <label class="text-gray-600 font-bold text-sm"><%= item.code %></label>
@@ -96,7 +96,7 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
 
   def handle_event("select_child", params, socket) do
     IO.inspect(params, label: "params receive --->  ")
-    {:noreply, assign(socket, child?: true, child_id: params["name"])}
+    {:noreply, assign(socket, child?: true, child_id: params["name"] )}
   end
 
 
