@@ -1,0 +1,52 @@
+<h1>New Policy</h1>
+<div style="display: inline-flex; width: 100%">
+  <div style="display: inline-flex; width: 80%; margin-left: auto; margin-right: auto;">
+    <div style="width: 50%; margin-right: 5rem;">
+      <%= render "form.html", Map.put(assigns, :action, Routes.account_path(@socket, :create)) %>
+    </div>
+    <div style="width: 50%; margin-left: 5rem;">
+      <table>
+        <tr>
+          <td>Partida</td>
+          <td>Cuenta</td>
+          <td>Concepto</td>
+          <td>Departamento</td>
+          <td>Debe</td>
+          <td>Haber</td>
+          </tr>
+        <%= for item <- @arr do %>
+          <tr>
+            <td><%= item["id"] + 1 %></td>
+            <td><%= item["id_account"]%></td>
+            <td><%= item["concept"] %></td>
+            <td><%= item["department"] %></td>
+            <td><%= item["debe"] %></td>
+            <td><%= item["haber"] %></td>
+            <td> <button phx-click="editar" phx-value-id="<%= item["id"] %>" >Editar</button> </td>
+          </tr>
+        <% end %>
+      </table>
+      Cuenta
+      <form  phx-submit="fu" >
+        <select name="id_account">
+          <%= for account <- @dropdowns do %>
+              <option value="<%= account.value %>" <% if account.value == @actual["id_account"], do: 'selected', else: '' %>  ><%= account.key %></option>
+          <% end %>
+        </select> 
+        <br>
+        <h4>Department</h4>
+        <input value="<%= @actual["department"] %>" name="department" type="number"> 
+        Concept
+        <input value="<%= @actual["concept"] %>" name="concept" type="text"> 
+        Haber
+        <input value="<%= @actual["haber"] %>" name="haber" type="number"> 
+        Debe
+        <input value="<%= @actual["debe"] %>" name="debe" type="number"> 
+
+        <input type="submit" value= "Agregar">
+      </form>
+    </div>
+  </div>
+</div>
+
+

@@ -13,6 +13,8 @@ defmodule AccountingSystem.PolicySchema do
     field :policy_type, :integer
 
     timestamps()
+
+    #has_many :auxiliaries, AccountingSystem.AuxiliarySchema, foreign_key: :policy_number
   end
 
   @doc false

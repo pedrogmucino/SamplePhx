@@ -7,7 +7,9 @@ defmodule AccountingSystem.PolicyHandler do
   alias AccountingSystem.{
     PolicySchema,
     PrefixFormatter,
-    Repo
+    Repo,
+    PolicyFormatter,
+    GenericFunctions
   }
 
   @doc """
@@ -65,8 +67,9 @@ defmodule AccountingSystem.PolicyHandler do
   end
 
   def create_policy(attrs \\ %{}, year, month) do
+    %{"policy_schema" => ps} = attrs
     %PolicySchema{}
-    |> PolicySchema.changeset(attrs)
+    |> PolicySchema.changeset(GenericFunctions.string_map_to_atom(ps))
     |> Repo.insert(prefix: PrefixFormatter.get_prefix(year, month))
   end
 
@@ -128,4 +131,25 @@ defmodule AccountingSystem.PolicyHandler do
   end
 
   #************************************************************************************************************************************
+
+  def save_policy(params, socket) do
+    Repo.transaction(fn() ->
+      case save_all(params, socket.assigns.arr) do
+        :ok ->
+          {:ok, socket}
+        {:error, reason} ->
+          {Repo.rollback({:error, reason})}
+      end
+    end)
+  end
+
+  defp save_all(params, auxiliaries) do
+    %{"policy_schema" => policy_schema} = params
+    case AccountingSystem.PolicyHandler.create_policy(params, PolicyFormatter.get_year(params), PolicyFormatter.get_month(params)) do
+      {:ok, _} ->
+        Enum.each(auxiliaries, fn x -> AccountingSystemWeb.AuxiliaryController.create(x, policy_schema["policy_number"], PolicyFormatter.get_year(params), PolicyFormatter.get_month(params)) end)
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
 end

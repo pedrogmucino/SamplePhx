@@ -1,6 +1,8 @@
 defmodule AccountingSystemWeb.PolicyController do
   use AccountingSystemWeb, :controller
 
+  alias Phoenix.LiveView
+
   alias AccountingSystem.PolicyHandler
   alias AccountingSystem.PolicySchema
   alias AccountingSystem.PolicyFormatter
@@ -11,13 +13,10 @@ defmodule AccountingSystemWeb.PolicyController do
   end
 
   def new(conn, _params) do
-    dropdowns = PolicyFormatter.get_necesaries()
-    changeset = PolicyHandler.change_policy(%PolicySchema{})
-    render(conn, "new.html", changeset: changeset, dropdowns: dropdowns)
+    LiveView.Controller.live_render(conn, AccountingSystemWeb.PolicyLiveView, session: %{})
   end
 
   def create(conn, %{"policy_schema" => policy_params}) do
-    IO.inspect(policy_params, label: "WHEN YOU AAAAAAA SEN POLICYT PARAMS")
     case PolicyHandler.create_policy(policy_params) do
       {:ok, policy} ->
         conn
@@ -54,9 +53,11 @@ defmodule AccountingSystemWeb.PolicyController do
     end
   end
 
-  def delete(conn, %{"id" => id}) do
-    policy = PolicyHandler.get_policy!(id)
-    {:ok, _policy} = PolicyHandler.delete_policy(policy)
+  def delete(conn, params) do
+    IO.inspect(params, label: "POLICADELETEEEEEEEEEEEEEEEEEEEEEE::::::::::>>>>")
+    #policy = PolicyHandler.get_policy!(id)
+    #IO.inspect(policy, label: "POLICADELETEEEEEEEEEEEEEEEEEEEEEE::::::::::>>>>")
+    #{:ok, _policy} = PolicyHandler.delete_policy(policy)
 
     conn
     |> put_flash(:info, "Policy deleted successfully.")

@@ -1,8 +1,10 @@
 defmodule AccountingSystemWeb.AuxiliaryController do
   use AccountingSystemWeb, :controller
 
-  alias AccountingSystem.AuxiliarySchema
-  alias AccountingSystem.AuxiliaryHandler
+  alias AccountingSystem.{
+    AuxiliarySchema,
+    AuxiliaryHandler
+  }
 
   def index(conn, _params) do
     auxiliaries = AuxiliaryHandler.list_auxiliaries()
@@ -14,16 +16,9 @@ defmodule AccountingSystemWeb.AuxiliaryController do
     render(conn, "new.html", changeset: changeset)
   end
 
-  def create(conn, %{"auxiliary_schema" => auxiliary_params}) do
-    case AuxiliaryHandler.create_auxiliary(auxiliary_params) do
-      {:ok, auxiliary} ->
-        conn
-        |> put_flash(:info, "Auxiliary created successfully.")
-        |> redirect(to: Routes.auxiliary_path(conn, :show, auxiliary))
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
-    end
+  def create(auxiliary_params, policy_number, year, month) do
+    #Cada auxiliar se debe guardar en la base
+    AuxiliaryHandler.create_auxiliary(AuxiliaryHandler.format_to_save(auxiliary_params, policy_number), year, month)
   end
 
   def show(conn, %{"id" => id}) do
