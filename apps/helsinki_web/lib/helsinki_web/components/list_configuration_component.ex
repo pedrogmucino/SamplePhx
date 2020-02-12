@@ -24,12 +24,10 @@ defmodule AccountingSystemWeb.ListConfigurationComponent do
           |> put_flash(:info, "Estructura creada")
           |> assign(list_configuration: StructureHandler.list_structures(), new?: false)
         }
-          # |> redirect(to: Routes.user_path(AccountingSystemWeb.Endpoint, AccountingSystemWeb.StructureView.render(AccountingSystemWeb.ListConfigurationView, "index.html")))}
 
-        {:error, %Ecto.Changeset{} = changeset} ->
-          {:noreply, assign(socket, changeset: changeset)}
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply, assign(socket, changeset: changeset)}
     end
-    # {:noreply, assign(socket, list_configuration: StructureHandler.list_structures())}
   end
 
   def render(assigns) do
