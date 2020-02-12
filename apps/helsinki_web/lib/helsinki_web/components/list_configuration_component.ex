@@ -16,6 +16,22 @@ defmodule AccountingSystemWeb.ListConfigurationComponent do
       {:ok, assign(socket, id: attrs.id)}
   end
 
+  def handle_event("set_size", params, socket) do
+    case StructureHandler.create_structure(params) do
+      {:ok, _structure} ->
+        {:noreply,
+          socket
+          |> put_flash(:info, "Estructura creada")
+          |> assign(list_configuration: StructureHandler.list_structures(), new?: false)
+        }
+          # |> redirect(to: Routes.user_path(AccountingSystemWeb.Endpoint, AccountingSystemWeb.StructureView.render(AccountingSystemWeb.ListConfigurationView, "index.html")))}
+
+        {:error, %Ecto.Changeset{} = changeset} ->
+          {:noreply, assign(socket, changeset: changeset)}
+    end
+    # {:noreply, assign(socket, list_configuration: StructureHandler.list_structures())}
+  end
+
   def render(assigns) do
     ~L"""
 
