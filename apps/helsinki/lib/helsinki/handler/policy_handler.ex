@@ -7,7 +7,9 @@ defmodule AccountingSystem.PolicyHandler do
   alias AccountingSystem.{
     PolicySchema,
     PrefixFormatter,
-    Repo
+    Repo,
+    PolicyFormatter,
+    GenericFunctions
   }
 
   @doc """
@@ -65,8 +67,9 @@ defmodule AccountingSystem.PolicyHandler do
   end
 
   def create_policy(attrs \\ %{}, year, month) do
+    %{"policy_schema" => ps} = attrs
     %PolicySchema{}
-    |> PolicySchema.changeset(attrs)
+    |> PolicySchema.changeset(GenericFunctions.string_map_to_atom(ps))
     |> Repo.insert(prefix: PrefixFormatter.get_prefix(year, month))
   end
 
@@ -128,4 +131,56 @@ defmodule AccountingSystem.PolicyHandler do
   end
 
   #************************************************************************************************************************************
+
+  def save_policy(params, socket) do
+    Repo.transaction(fn() ->
+      case save_all(params, socket.assigns.arr) do
+        :ok ->
+          {:ok, socket}
+        {:error, reason} ->
+          {Repo.rollback({:error, reason})}
+      end
+    end)
+  end
+
+  defp save_all(params, auxiliaries) do
+    %{"policy_schema" => policy_schema} = params
+    case AccountingSystem.PolicyHandler.create_policy(params, PolicyFormatter.get_year(params), PolicyFormatter.get_month(params)) do
+      {:ok, _} ->
+        Enum.each(auxiliaries, fn x -> AccountingSystemWeb.AuxiliaryController.create(x, policy_schema["policy_number"], PolicyFormatter.get_year(params), PolicyFormatter.get_month(params)) end)
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
+
+  def delete_policy_with_aux(id) do
+    polly = get_policy!(id)
+    auxiliaries = AccountingSystem.GetAllId.from_policy(String.to_integer(id)) |> Repo.all(prefix: PrefixFormatter.get_current_prefix)
+    Repo.transaction(fn() ->
+      case delete_all(polly, auxiliaries) |> IO.inspect(label: "RETURN OF DELETE_ALLLL::::::::>>>>>>>>>") do
+        :ok ->
+          :ok
+        _ ->
+          {Repo.rollback(:error)}
+      end
+    end)
+  end
+
+  defp delete_all(polly, auxiliaries) do
+    case delete_policy(polly)  do
+      {:ok, _} ->
+        Enum.each(auxiliaries, fn id_aux -> AccountingSystem.AuxiliaryHandler.get_auxiliary!(Integer.to_string(id_aux)) |> AccountingSystem.AuxiliaryHandler.delete_auxiliary end) |> IO.inspect(label: "RETURN OF ENUM_EACHHHHHH::::::::>>>>>>>>>")
+      _ ->
+        :error
+    end
+  end
+
+  def last_policy() do
+    AccountingSystem.GetLastNumber.of_policy()
+      |> Repo.one(prefix: PrefixFormatter.get_current_prefix)
+      |> get_number
+  end
+
+  defp get_number(nil), do: 1
+  defp get_number(number), do: (number + 1)
 end

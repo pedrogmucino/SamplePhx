@@ -1,75 +1,37 @@
-<%= form_for @changeset, @action, fn f -> %>
-  <%= if @changeset.action do %>
-    <div class="alert alert-danger">
-      <p>Oops, something went wrong! Please check the errors below.</p>
-    </div>
-  <% end %>
+<%= f = form_for @changeset, "#", [phx_submit: :save, phx_change: :save_change] %>
+
 
   <%= label f, :policy_number %>
-  <%= number_input f, :policy_number %>
+  <%= number_input f, :policy_number, value: @pollys["policy_number"]%>
   <%= error_tag f, :policy_number %>
 
   <%= label f, :policy_type %>
-  <%= select f, :policy_type, @dropdowns |> Map.get(:policy_type) %>
+  <%= select f, :policy_type, @policytypes, selected: @pollys["policy_type"]%>
   <%= error_tag f, :policy_type %>
 
   <%= label f, :period %>
-  <%= number_input f, :period %>
+  <%= number_input f, :period, value: @pollys["period"] %>
   <%= error_tag f, :period %>
 
   <%= label f, :fiscal_exercise %>
-  <%= number_input f, :fiscal_exercise %>
+  <%= number_input f, :fiscal_exercise, value: @pollys["fiscal_exercise"]%>
   <%= error_tag f, :fiscal_exercise %>
 
   <%= label f, :policy_date %>
-  <%= date_select f, :policy_date %>
+  <%= date_select f, :policy_date, value: @pollys["policy_date"]%>
   <%= error_tag f, :policy_date %>
 
   <%= label f, :concept %>
-  <%= text_input f, :concept %>
+  <%= text_input f, :concept, value: @pollys["concept"]%>
   <%= error_tag f, :concept %>
 
   <%= label f, :audited %>
-  <%= checkbox f, :audited %>
+  <%= checkbox f, :audited, value: @pollys["audited"] %>
   <%= error_tag f, :audited %>
 
   <%= label f, :has_documents %>
-  <%= checkbox f, :has_documents %>
+  <%= checkbox f, :has_documents, value: @pollys["has_documents"] %>
   <%= error_tag f, :has_documents %>
-
-  <%= label f, :id_account1 %>
-  <%= select f, :id_account1, @dropdowns |> Map.get(:id_account1) %>
-  <%= error_tag f, :id_account1 %>
-  <%= label f, :department_1 %>
-  <%= number_input f, :department1 %>
-  <%= error_tag f, :department1 %>
-  <%= label f, :concept_1 %>
-  <%= text_input f, :concept1 %>
-  <%= error_tag f, :concept1 %>
-  <%= label f, :haber_1 %>
-  <%= number_input f, :haber_1, step: "any" %>
-  <%= error_tag f, :haber_1 %>
-  <%= label f, :debe_1 %>
-  <%= number_input f, :debe_1, step: "any" %>
-  <%= error_tag f, :debe_1 %>
-
-  <%= label f, :id_account2 %>
-  <%= select f, :id_account2, @dropdowns |> Map.get(:id_account1) %>
-  <%= error_tag f, :id_account2 %>
-  <%= label f, :department_2 %>
-  <%= number_input f, :department2 %>
-  <%= error_tag f, :department2 %>
-  <%= label f, :concept_2 %>
-  <%= text_input f, :concept2 %>
-  <%= error_tag f, :concept2 %>
-  <%= label f, :haber_2 %>
-  <%= number_input f, :haber_2, step: "any" %>
-  <%= error_tag f, :haber_2 %>
-  <%= label f, :debe_2 %>
-  <%= number_input f, :debe_2, step: "any" %>
-  <%= error_tag f, :debe_2 %>
-
-  <div>
-    <%= submit "Save" %>
-  </div>
-<% end %>
+<br>
+<%= submit "Save" %>
+</form>

@@ -3,7 +3,7 @@ defmodule AccountingSystemWeb.PolicyControllerTest do
 
   alias AccountingSystem.PolicyHandler
 
-  @create_attrs %{audited: true, concept: "some concept", fiscal_exercise: 42, has_documents: true, period: 42, policy_date: ~D[2010-04-17], policy_number: 42, policy_type: 42}
+  @create_attrs %{"audited" => true, "concept" => "some concept", "fiscal_exercise" => 42, "has_documents" => true, "period" => 42, "policy_date" => ~D[2010-04-17], "policy_number" => 42, "policy_type" => 42}
   @update_attrs %{audited: false, concept: "some updated concept", fiscal_exercise: 43, has_documents: false, period: 43, policy_date: ~D[2011-05-18], policy_number: 43, policy_type: 43}
   @invalid_attrs %{audited: nil, concept: nil, fiscal_exercise: nil, has_documents: nil, period: nil, policy_date: nil, policy_number: nil, policy_type: nil}
 
@@ -28,7 +28,7 @@ defmodule AccountingSystemWeb.PolicyControllerTest do
 
   describe "create policy" do
     test "redirects to show when data is valid", %{conn: conn} do
-      conn = post(conn, Routes.policy_path(conn, :create), policy: @create_attrs)
+      conn = post(conn, Routes.policy_path(conn, :create), policy_schema: @create_attrs)
 
       assert %{id: id} = redirected_params(conn)
       assert redirected_to(conn) == Routes.policy_path(conn, :show, id)
@@ -38,7 +38,7 @@ defmodule AccountingSystemWeb.PolicyControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, Routes.policy_path(conn, :create), policy: @invalid_attrs)
+      conn = post(conn, Routes.policy_path(conn, :create), policy_schema: @invalid_attrs)
       assert html_response(conn, 200) =~ "New Policy"
     end
   end
@@ -56,7 +56,7 @@ defmodule AccountingSystemWeb.PolicyControllerTest do
     setup [:create_policy]
 
     test "redirects when data is valid", %{conn: conn, policy: policy} do
-      conn = put(conn, Routes.policy_path(conn, :update, policy), policy: @update_attrs)
+      conn = put(conn, Routes.policy_path(conn, :update, policy), policy_schema: @update_attrs)
       assert redirected_to(conn) == Routes.policy_path(conn, :show, policy)
 
       conn = get(conn, Routes.policy_path(conn, :show, policy))
@@ -64,7 +64,7 @@ defmodule AccountingSystemWeb.PolicyControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn, policy: policy} do
-      conn = put(conn, Routes.policy_path(conn, :update, policy), policy: @invalid_attrs)
+      conn = put(conn, Routes.policy_path(conn, :update, policy), policy_schema: @invalid_attrs)
       assert html_response(conn, 200) =~ "Edit Policy"
     end
   end

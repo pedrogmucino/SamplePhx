@@ -22,7 +22,7 @@ defmodule AccountingSystem.AuxiliarySchema do
   @doc false
   def changeset(auxiliary, attrs) do
     auxiliary
-    |> cast(attrs, [:policy_number, :id_account, :concept, :debit_credit, :mxn_amount, :amount, :department, :counterpart, :cost_center, :group, :iduuid, :exchange_rate])
-    |> validate_required([:policy_number, :id_account, :concept, :debit_credit, :mxn_amount, :amount, :department, :counterpart, :cost_center, :group, :iduuid, :exchange_rate])
+    |> cast(attrs, [:policy_number, :id_account, :concept, :debit_credit, :mxn_amount, :amount, :department, :exchange_rate])
+    |> validate_required([:policy_number, :id_account, :concept, :debit_credit, :mxn_amount, :amount, :department, :exchange_rate])
   end
 end

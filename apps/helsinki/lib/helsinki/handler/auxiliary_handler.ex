@@ -7,7 +7,8 @@ defmodule AccountingSystem.AuxiliaryHandler do
   alias AccountingSystem.{
     AuxiliarySchema,
     PrefixFormatter,
-    Repo
+    Repo,
+    GenericFunctions
   }
 
   @doc """
@@ -124,5 +125,52 @@ defmodule AccountingSystem.AuxiliaryHandler do
   """
   def change_auxiliary(%AuxiliarySchema{} = auxiliary) do
     AuxiliarySchema.changeset(auxiliary, %{})
+  end
+
+  #****************************************************************************************************
+  def validate_auxiliar(params) do #Valida si los parametros de auxiliar estan completos
+    case are_complete(params) do
+      4 ->
+        {:ok, params}
+      _ ->
+        {:error, params}
+
+    end
+  end
+
+  defp are_complete(params) do #regresa la cantidad de valores no vacios de un mapa
+    params
+      |> Map.values
+      |> Enum.reject(fn x -> x == "" end)
+      |> Enum.count
+  end
+
+  def format_to_save(params, policy_number) do
+    params = Map.merge(params, %{"debit_credit" => h_or_d(params)})
+    params = Map.merge(params, %{"mxn_amount" => amount(params)})
+    params = Map.merge(params, %{"amount" => amount(params)})
+    params = Map.merge(params, %{"exchange_rate" => 1})
+    params = Map.merge(params, %{"policy_number" => policy_number})
+    params = Map.delete(params, "haber")
+    params = Map.delete(params, "debe")
+    params = Map.delete(params, "id")
+    GenericFunctions.string_map_to_atom(params)
+  end
+
+  def h_or_d(%{"haber" => hab}) do
+    case hab do
+      "" ->
+        "D"
+      _ ->
+        "H"
+    end
+  end
+
+  def amount(%{"haber" => hab}) when hab != "" do
+    hab
+  end
+
+  def amount(%{"debe" => deb}) when deb != "" do
+    deb
   end
 end

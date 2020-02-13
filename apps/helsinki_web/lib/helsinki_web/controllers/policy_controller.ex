@@ -1,9 +1,9 @@
 defmodule AccountingSystemWeb.PolicyController do
   use AccountingSystemWeb, :controller
 
+  alias Phoenix.LiveView
+
   alias AccountingSystem.PolicyHandler
-  alias AccountingSystem.PolicySchema
-  alias AccountingSystem.PolicyFormatter
 
   def index(conn, _params) do
     policies = PolicyHandler.list_policies()
@@ -11,13 +11,10 @@ defmodule AccountingSystemWeb.PolicyController do
   end
 
   def new(conn, _params) do
-    dropdowns = PolicyFormatter.get_necesaries()
-    changeset = PolicyHandler.change_policy(%PolicySchema{})
-    render(conn, "new.html", changeset: changeset, dropdowns: dropdowns)
+    LiveView.Controller.live_render(conn, AccountingSystemWeb.PolicyLiveView, session: %{})
   end
 
   def create(conn, %{"policy_schema" => policy_params}) do
-    IO.inspect(policy_params, label: "WHEN YOU AAAAAAA SEN POLICYT PARAMS")
     case PolicyHandler.create_policy(policy_params) do
       {:ok, policy} ->
         conn
@@ -55,11 +52,23 @@ defmodule AccountingSystemWeb.PolicyController do
   end
 
   def delete(conn, %{"id" => id}) do
-    policy = PolicyHandler.get_policy!(id)
-    {:ok, _policy} = PolicyHandler.delete_policy(policy)
+    IO.inspect(id, label: "POLICADELETEEEEEEEEEEEEEEEEEEEEEE::::::::::>>>>")
+    case PolicyHandler.delete_policy_with_aux(id) |> IO.inspect(label: "RETURN OF DELETE_POLIX_WITH_AUX::::::::>>>>>>>>>") do
+      {:ok, :ok} ->
+        conn
+          |> put_flash(:info, "Policy deleted successfully.")
+          |> redirect(to: Routes.policy_path(conn, :index))
+      _ ->
+        conn
+          |> put_flash(:error, "No se ha podido eliminar")
+          |> redirect(to: Routes.policy_path(conn, :index))
+    end
+  end
 
+  def deletex(conn, params) do
+    IO.inspect(params, label: "DELETEXXXXXXXXXXX PARAAAAMSSS::::::::::>>>>")
     conn
-    |> put_flash(:info, "Policy deleted successfully.")
-    |> redirect(to: Routes.policy_path(conn, :index))
+      |> put_flash(:info, "Deletex was succesfull")
+      |> redirect(to: Routes.policy_path(conn, :index))
   end
 end
