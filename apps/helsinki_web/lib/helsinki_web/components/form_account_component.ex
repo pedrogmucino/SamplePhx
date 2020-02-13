@@ -3,30 +3,26 @@ defmodule AccountingSystemWeb.FormAccountComponent do
   use Phoenix.HTML
 
   def mount(socket) do
-    {:ok, socket}
+    #{:ok, socket}
+    {:ok, assign(socket,
+    id: 0
+    )}
   end
 
+  def update(attrs, socket) do
+    attrs |> IO.inspect(label: "--------------------- > FORM PARAMS")
+    values = load_values()
+    |> IO.inspect(label: " -> LOAD VALUES")
+    values.code |> IO.inspect(labe: " -----------------> CODE")
 
+    {:ok, assign(socket, id: attrs.id)}
+  end
 
-  # def render(assigns) do
-  #   ~L"""
-  #   <div id="x" class="bg-white mt-16 ml-1 w-240 rounded border">
-  #   <div class="inline-block bg-blue-700 text-white px-6 py-3 w-full">
-  #       <h1 class="text-2xl font-medium text-white  block">
-  #         Nueva Cuenta
-  #       </h1>
-  #       <label class="block">Nivel: <b>2</b></label>
-  #     </div>
-  #   <form phx-submit="save_new" phx-target="#x">
-  #     <div class="inline-block">
-  #     <input type="text" name="xxx" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code" type="text" placeholder="Code"/>
-  #     <input type="text" name="aaa" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code" type="text" placeholder="Code"/>
-  #     </div>
-  #     <button>Click</button>
-  #   </form>
-  #   </div>
-  #   """
-  # end
+  def load_values() do
+    AccountingSystem.AccountHandler.get_principal_account!()
+    |> AccountingSystem.SchemaFormatter.get_root_account()
+    #|> AccountingSystem.AccountHandler.change_account_code()
+  end
 
   def render(assigns) do
     ~L"""

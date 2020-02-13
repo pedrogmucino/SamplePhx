@@ -59,7 +59,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
       <% end %>
 
       <%= if @new? do %>
-        <%= live_component(@socket, AccountingSystemWeb.FormAccountComponent, id: "form_account") %>
+        <%= live_component(@socket, AccountingSystemWeb.FormAccountComponent, id: @level_form_account + 1) %>
       <% end %>
     """
   end
@@ -68,6 +68,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
     accounts: get_accounts_t(-1, -1),
     child_components: [],
     actually_level: 0,
+    level_form_account: 0,
     new?: false)}
   end
 
@@ -99,10 +100,10 @@ defmodule AccountingSystemWeb.AccountsComponent do
       |> Enum.find(fn acc -> acc.level == level end)
       |> IO.inspect(label: "find?   -> ")
       |> case do
-        nil -> {:noreply, assign(socket, new?: true, child_components: [])}
+        nil -> {:noreply, assign(socket, new?: true, child_components: [], level_form_account: level)}
         acc -> {:noreply, assign(socket,
           new?: true,
-          child_components: get_childs(false, socket.assigns.child_components, acc, level))}
+          child_components: get_childs(false, socket.assigns.child_components, acc, level), level_form_account: level)}
       end
   end
 
