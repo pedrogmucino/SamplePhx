@@ -45,15 +45,15 @@ defmodule AccountingSystemWeb.FormAccountComponent do
 
           <div class="px-8 py-6 flex flex-col my-2 w-160">
             <label class="block tracking-wide text-gray-700 font-bold" for="grid-code">Code</label>
-            <input type="text" name="code" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code" placeholder="Code">
+            <input type="text" name="code" maxlength="128" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code" placeholder="Code">
 
             <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Name</label>
             <div class="inline-flex w-full">
-              <input type="text" name="name" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Name">
-              <input type="text" name="name_2" class="focus:outline-none focus:bg-white focus:border-blue-500 ml-4 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Name">
+              <input type="text" name="name" maxlength="32" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Name" readonly>
+              <input type="text" name="name2" maxlength="32" class="focus:outline-none focus:bg-white focus:border-blue-500 ml-4 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Name">
             </div>
             <label class="block tracking-wide text-gray-700 font-bold" for="grid-description">Description</label>
-            <input type="text" name="description" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-description" placeholder="Description">
+            <input type="text" name="description" maxlength="128" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-description" placeholder="Description">
 
             <label class="block tracking-wide text-gray-700 font-bold" for="grid-state">Type</label>
             <div class="relative mb-3">
@@ -68,27 +68,27 @@ defmodule AccountingSystemWeb.FormAccountComponent do
             <label class="block tracking-wide text-gray-700 font-bold" for="uuid-voucher">
               Uuid Voucher
             </label>
-            <input type="text" name="uuid_voucher" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-uuid-voucher" placeholder="Uuid Voucher">
+            <input type="text" name="uuid_voucher" maxlength="32" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-uuid-voucher" placeholder="Uuid Voucher">
 
             <div class="inline-flex w-full">
               <div class="inline-block w-full mr-2">
                 <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Group Code</label>
-                <input type="text" name="group_code" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Group Code">
+                <input type="number" name="group_code" min="1" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Group Code">
               </div>
               <div class="inline-block w-full ml-2">
                 <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Apply To</label>
-                <input type="text" name="apply_to" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Apply To">
+                <input type="number" name="apply_to" min="1" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Apply To">
               </div>
             </div>
 
             <div class="inline-flex w-full">
               <div class="inline-block w-full mr-2">
                 <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Third Party Prosecutor</label>
-                <input type="text" name="third_party_prosecutor" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Third Party Prosecutor">
+                <input type="number" name="third_party_prosecutor" min="1" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Third Party Prosecutor">
               </div>
               <div class="inline-block w-full ml-2">
                 <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Apply Third Party To</label>
-                <input type="text" name="apply_third_party_to" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Apply Third Party To">
+                <input type="text" name="apply_third_party_to" maxlength="2" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Apply Third Party To">
               </div>
             </div>
 
