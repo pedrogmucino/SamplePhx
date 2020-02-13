@@ -44,12 +44,17 @@ defmodule AccountingSystemWeb.ListConfigurationComponent do
     structure =
     StructureHandler.get_structure!(params["structure_id"])
     attrs =
-    %{size: params["size"]}
+    %{"size" => params["size"]}
     try do
-      StructureHandler.update_structure(structure, attrs)
-      socket
-        |> put_flash(:info, "Estructura actualizada")
-
+      case StructureHandler.update_code_size(structure, attrs) do
+        {:error} ->
+          socket
+          |> put_flash(:error, "No puede tener un tamaño menor al tamaño máximo actual")
+        _ ->
+          StructureHandler.update_structure(structure, attrs)
+          socket
+          |> put_flash(:info, "Estructura actualizada")
+      end
     rescue
       Ecto.QueryError ->
         socket
@@ -57,6 +62,11 @@ defmodule AccountingSystemWeb.ListConfigurationComponent do
     end
 
     {:noreply, assign(socket, list_configuration: StructureHandler.list_structures(), new?: false, edit?: false)}
+  end
+
+  def handle_event("delete_structure", params, socket) do
+    IO.inspect(params, label: "**************ELIMINAR PARAMS")
+    {:noreply, socket}
   end
 
   def render(assigns) do
