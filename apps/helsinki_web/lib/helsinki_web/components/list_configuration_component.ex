@@ -8,7 +8,8 @@ defmodule AccountingSystemWeb.ListConfigurationComponent do
   def mount(socket) do
     {:ok, assign(socket,
     list_configuration: StructureHandler.list_structures(),
-    new?: false
+    new?: false,
+    edit?: false
     )}
   end
 
@@ -16,18 +17,56 @@ defmodule AccountingSystemWeb.ListConfigurationComponent do
       {:ok, assign(socket, id: attrs.id)}
   end
 
-  def handle_event("set_size", params, socket) do
+  def handle_event("create_structure", params, socket) do
     case StructureHandler.create_structure(params) do
       {:ok, _structure} ->
         {:noreply,
           socket
           |> put_flash(:info, "Estructura creada")
-          |> assign(list_configuration: StructureHandler.list_structures(), new?: false)
+          |> assign(list_configuration: StructureHandler.list_structures(), new?: false, edit?: false)
         }
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
     end
+  end
+
+  def handle_event("open_structure", params, socket) do
+    assign(socket, structure: params["id"])
+    id =
+    params
+    |> Map.get("id")
+
+    {:noreply, assign(socket, new?: false, edit?: true, structure_id: id)}
+  end
+
+  def handle_event("set_size", params, socket) do
+    structure =
+    StructureHandler.get_structure!(params["structure_id"])
+    attrs =
+    %{"size" => params["size"]}
+    try do
+      case StructureHandler.update_code_size(structure, attrs) do
+        {:error} ->
+          socket
+          |> put_flash(:error, "No puede tener un tamaño menor al tamaño máximo actual")
+        _ ->
+          StructureHandler.update_structure(structure, attrs)
+          socket
+          |> put_flash(:info, "Estructura actualizada")
+      end
+    rescue
+      Ecto.QueryError ->
+        socket
+        |> put_flash(:info, "No pudo actualizarse")
+    end
+
+    {:noreply, assign(socket, list_configuration: StructureHandler.list_structures(), new?: false, edit?: false)}
+  end
+
+  def handle_event("delete_structure", params, socket) do
+    IO.inspect(params, label: "**************ELIMINAR PARAMS")
+    {:noreply, socket}
   end
 
   def render(assigns) do
@@ -64,12 +103,13 @@ defmodule AccountingSystemWeb.ListConfigurationComponent do
     <div class="h-hoch-80 overflow-y-scroll pb-16">
       <%= for item <- @list_configuration do %>
         <div class="w-full px-2 block">
-          <div phx-click="open_child" phx-value-id="<%= item.id %>" phx-target="#one" class="border cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
-            <h2 class="text-gray-700 text-xl">Size: <%= item.size %></h2>
-            <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Level: <b><%= item.level %></b></label>
-            <label class="ml-10 inline-block cursor-pointer text-gray-600 font-bold text-sm">Max Current Size: <b><%= item.max_current_size %></b></label>
+          <div phx-click="open_structure" phx-value-id="<%= item.id %>" phx-target="#one" class="border cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
+            <h2 class="text-gray-700 text-xl">Nivel: <%= item.level %></h2>
+            <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Tamaño: <b><%= item.size %></b></label>
+            <label class="ml-10 inline-block cursor-pointer text-gray-600 font-bold text-sm">Máximo actual: <b><%= item.max_current_size %></b></label>
           </div>
         </div>
+
       <% end %>
     </div>
     </div>
@@ -78,11 +118,15 @@ defmodule AccountingSystemWeb.ListConfigurationComponent do
       <%= live_component(@socket, AccountingSystemWeb.ConfigurationComponent, id: "configuration") %>
     <% end %>
 
+    <%= if @edit? do %>
+
+      <%= live_component(@socket, AccountingSystemWeb.ConfigurationEditComponent, id: @structure_id) %>
+    <% end %>
     """
   end
 
   def handle_event("create_new", _params, socket) do
-    {:noreply, assign(socket, new?: true)}
+    {:noreply, assign(socket, new?: true, edit?: false)}
   end
 
 end
