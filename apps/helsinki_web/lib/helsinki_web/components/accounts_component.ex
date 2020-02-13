@@ -59,7 +59,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
       <% end %>
 
       <%= if @new? do %>
-        <%= live_component(@socket, AccountingSystemWeb.FormAccountComponent, id: @level_form_account + 1) %>
+        <%= live_component(@socket, AccountingSystemWeb.FormAccountComponent, level: @level_form_account + 1) %>
       <% end %>
     """
   end

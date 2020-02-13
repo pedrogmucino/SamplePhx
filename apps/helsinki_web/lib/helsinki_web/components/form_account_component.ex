@@ -5,7 +5,9 @@ defmodule AccountingSystemWeb.FormAccountComponent do
   def mount(socket) do
     #{:ok, socket}
     {:ok, assign(socket,
-    id: 0
+    levelx: 0,
+    codex: "",
+    parent_accountx: 0
     )}
   end
 
@@ -13,9 +15,13 @@ defmodule AccountingSystemWeb.FormAccountComponent do
     attrs |> IO.inspect(label: "--------------------- > FORM PARAMS")
     values = load_values()
     |> IO.inspect(label: " -> LOAD VALUES")
-    values.code |> IO.inspect(labe: " -----------------> CODE")
 
-    {:ok, assign(socket, id: attrs.id)}
+    {:ok, assign(socket,
+      levelx: attrs.level,
+      codex: values.code,
+      parent_accountx: values.parent_account,
+      root_accountx: values.root_account
+      )}
   end
 
   def load_values() do
@@ -41,7 +47,7 @@ defmodule AccountingSystemWeb.FormAccountComponent do
 
           <div class="px-8 py-6 flex flex-col my-2 w-160">
             <label class="block tracking-wide text-gray-700 font-bold" for="grid-code">Code</label>
-            <input type="text" name="code" maxlength="128" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code" placeholder="Code">
+            <input type="text" name="code" maxlength="128" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code" placeholder="Code" value="<%= @codex %>">
 
             <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Name</label>
             <div class="inline-flex w-full">
@@ -131,9 +137,9 @@ defmodule AccountingSystemWeb.FormAccountComponent do
           </div>
 
           <div>
-            <input type="hidden" name="parent_account" value=-1>
-            <input type="hidden" name="root_account" value= 0>
-            <input type="hidden" name="level" value= 0>
+            <input type="hidden" name="parent_account" value="<%= @parent_accountx %>">
+            <input type="hidden" name="root_account" value="<%= @root_accountx %>">
+            <input type="hidden" name="level" value="<%= @levelx %>">
           </div>
 
         </div>
