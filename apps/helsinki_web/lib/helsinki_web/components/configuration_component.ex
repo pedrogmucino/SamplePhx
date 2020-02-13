@@ -40,7 +40,7 @@ defmodule AccountingSystemWeb.ConfigurationComponent do
           <input type="number" name="size" min="1" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code" type="text" placeholder="Introduce el tamaño deseado">
           <input type="hidden" name="level" value=<%= @structure.level + 1 %>>
           <input type="hidden" name="max_current_size" value=0>
-          <div class="inline-flex w-full py-3 absolute bottom-0 right-0 pr-0">
+          <div class="inline-flex w-full py-8 absolute bottom-0 right-0 pr-0">
             <button class= "ml-auto mr-6 w-24 py-2 bg-teal-500 text-teal-100 text-center font-bold rounded shadow hover:bg-teal-400 focus:shadow-outline focus:outline-none rounded">
               Guardar
             </button>

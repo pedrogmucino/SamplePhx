@@ -29,7 +29,10 @@ defmodule AccountingSystemWeb.ConfigurationEditComponent do
           <input type="hidden" name="level" value=<%= @structure.level %>>
           <input type="hidden" name="max_current_size" value= <%= @structure.max_current_size %> >
           <input type="hidden" name="structure_id" value=<%= @structure.id %> >
-          <div class="inline-flex w-full py-3 absolute bottom-0 right-0 pr-0">
+          <div class="inline-flex w-full py-8 absolute bottom-0 right-0 pr-0">
+            <button phx-click="delete_structure" phx-target="#comp" class= "ml-auto mr-6 w-24 py-2 bg-teal-500 text-teal-100 text-center font-bold rounded shadow hover:bg-teal-400 focus:shadow-outline focus:outline-none rounded">
+              Eliminar
+            </button>
             <button class= "ml-auto mr-6 w-24 py-2 bg-teal-500 text-teal-100 text-center font-bold rounded shadow hover:bg-teal-400 focus:shadow-outline focus:outline-none rounded">
               Actualizar
             </button>
