@@ -37,4 +37,4 @@
   </tbody>
 </table>
 
-<span><%= link "New Policy", to: Routes.policy_path(@conn, :new) %></span>
+<span><%= link "New Policy", to: Routes.policy_path(@conn, :new), method: :get %></span>

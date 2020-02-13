@@ -14,7 +14,7 @@
   <%= error_tag f, :period %>
 
   <%= label f, :fiscal_exercise %>
-  <%= number_input f, :fiscal_exercise, value: @pollys["fiscal_excercise"]%>
+  <%= number_input f, :fiscal_exercise, value: @pollys["fiscal_exercise"]%>
   <%= error_tag f, :fiscal_exercise %>
 
   <%= label f, :policy_date %>

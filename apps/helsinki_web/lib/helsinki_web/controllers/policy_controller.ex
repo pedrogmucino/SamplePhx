@@ -4,8 +4,6 @@ defmodule AccountingSystemWeb.PolicyController do
   alias Phoenix.LiveView
 
   alias AccountingSystem.PolicyHandler
-  alias AccountingSystem.PolicySchema
-  alias AccountingSystem.PolicyFormatter
 
   def index(conn, _params) do
     policies = PolicyHandler.list_policies()
@@ -53,14 +51,24 @@ defmodule AccountingSystemWeb.PolicyController do
     end
   end
 
-  def delete(conn, params) do
-    IO.inspect(params, label: "POLICADELETEEEEEEEEEEEEEEEEEEEEEE::::::::::>>>>")
-    #policy = PolicyHandler.get_policy!(id)
-    #IO.inspect(policy, label: "POLICADELETEEEEEEEEEEEEEEEEEEEEEE::::::::::>>>>")
-    #{:ok, _policy} = PolicyHandler.delete_policy(policy)
+  def delete(conn, %{"id" => id}) do
+    IO.inspect(id, label: "POLICADELETEEEEEEEEEEEEEEEEEEEEEE::::::::::>>>>")
+    case PolicyHandler.delete_policy_with_aux(id) |> IO.inspect(label: "RETURN OF DELETE_POLIX_WITH_AUX::::::::>>>>>>>>>") do
+      {:ok, :ok} ->
+        conn
+          |> put_flash(:info, "Policy deleted successfully.")
+          |> redirect(to: Routes.policy_path(conn, :index))
+      _ ->
+        conn
+          |> put_flash(:error, "No se ha podido eliminar")
+          |> redirect(to: Routes.policy_path(conn, :index))
+    end
+  end
 
+  def deletex(conn, params) do
+    IO.inspect(params, label: "DELETEXXXXXXXXXXX PARAAAAMSSS::::::::::>>>>")
     conn
-    |> put_flash(:info, "Policy deleted successfully.")
-    |> redirect(to: Routes.policy_path(conn, :index))
+      |> put_flash(:info, "Deletex was succesfull")
+      |> redirect(to: Routes.policy_path(conn, :index))
   end
 end

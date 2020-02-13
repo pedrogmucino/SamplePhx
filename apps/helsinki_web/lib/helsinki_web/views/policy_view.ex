@@ -17,7 +17,7 @@ defmodule AccountingSystemWeb.PolicyLiveView do
     policytypes = AccountingSystem.PolicyTipeHandler.get_all_as_list
     changeset = PolicyHandler.change_policy(%PolicySchema{})
     actual = %{"concept" => "", "debe" => "", "department" => "", "haber" => "", "id_account" => ""}
-    pollys = %{"audited" => false, "concept" => "", "fiscal_exercise" => "", "has_documents" => false, "period" => "", "policy_date" => %{"day" => "1", "month" => "2", "year" => "2020"}, "policy_number" => "1", "policy_type" => "2"}
+    pollys = %{"audited" => false, "concept" => "", "fiscal_exercise" => "", "has_documents" => false, "period" => "", "policy_date" => %{"day" => "1", "month" => "2", "year" => "2020"}, "policy_number" => PolicyHandler.last_policy, "policy_type" => "2"}
     {:ok, assign(socket, dropdowns: dropdowns, arr: [], actual: actual, changeset: changeset, policytypes: policytypes, pollys: pollys)}
   end
 

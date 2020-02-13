@@ -152,4 +152,35 @@ defmodule AccountingSystem.PolicyHandler do
         {:error, reason}
     end
   end
+
+  def delete_policy_with_aux(id) do
+    polly = get_policy!(id)
+    auxiliaries = AccountingSystem.GetAllId.from_policy(String.to_integer(id)) |> Repo.all(prefix: PrefixFormatter.get_current_prefix)
+    Repo.transaction(fn() ->
+      case delete_all(polly, auxiliaries) |> IO.inspect(label: "RETURN OF DELETE_ALLLL::::::::>>>>>>>>>") do
+        :ok ->
+          :ok
+        _ ->
+          {Repo.rollback(:error)}
+      end
+    end)
+  end
+
+  defp delete_all(polly, auxiliaries) do
+    case delete_policy(polly)  do
+      {:ok, _} ->
+        Enum.each(auxiliaries, fn id_aux -> AccountingSystem.AuxiliaryHandler.get_auxiliary!(Integer.to_string(id_aux)) |> AccountingSystem.AuxiliaryHandler.delete_auxiliary end) |> IO.inspect(label: "RETURN OF ENUM_EACHHHHHH::::::::>>>>>>>>>")
+      _ ->
+        :error
+    end
+  end
+
+  def last_policy() do
+    AccountingSystem.GetLastNumber.of_policy()
+      |> Repo.one(prefix: PrefixFormatter.get_current_prefix)
+      |> get_number
+  end
+
+  defp get_number(nil), do: 1
+  defp get_number(number), do: (number + 1)
 end
