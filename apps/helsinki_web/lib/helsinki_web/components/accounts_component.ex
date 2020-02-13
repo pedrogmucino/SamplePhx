@@ -106,6 +106,29 @@ defmodule AccountingSystemWeb.AccountsComponent do
       end
   end
 
+  def handle_event("save_new", params, socket) do
+    params = exist_add(params, "is_departamental")
+    params = exist_add(params, "character")
+    params = exist_add(params, "payment_method")
+    params = exist_add(params, "third_party_op")
+
+    case AccountingSystem.AccountHandler.create_account(params) do
+      {:ok, _account} ->
+        {:noreply,
+          socket
+          |> put_flash(:info, "Cuenta creada")
+        }
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply, assign(socket, changeset: changeset)}
+    end
+  end
+
+  defp exist_add(map, label) do
+    if map[label] == nil do
+      map |> Map.put(label, false)
+    end
+  end
+
   defp get_accounts_t(level, parent_account) do
     AccountHandler.list_of_childs(level, parent_account)
   end
@@ -136,13 +159,5 @@ defmodule AccountingSystemWeb.AccountsComponent do
 
   defp clear_level([], new_arr, _level), do: new_arr |> IO.inspect(label: "new_arr -> ") |> (Enum.sort_by & &1.level)
 
-  # def clear_arr([value | others], arr) do
-  #   case value do
-  #     nil -> clear_arr(others, arr)
-  #     val -> clear_arr(others, arr ++ [val])
-  #   end
-  # end
-
-  # def clear_arr([], arr), do: arr
 
 end
