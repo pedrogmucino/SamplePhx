@@ -14,7 +14,7 @@ defmodule AccountingSystemWeb.ConfigurationEditComponent do
     <div id="comp" class="bg-white mt-16 ml-1 w-80 h-hoch-93 rounded border">
 
       <div class="inline-block bg-blue-700 text-white px-6 py-4 w-full">
-        <h1 class="text-2xl font-medium text-white block">Account Configuration</h1>
+        <h1 class="text-2xl font-medium text-white block">Editar estructura de cuenta</h1>
         <div class="mt-2">
           <label class="block">Nivel: <b><%= @structure.level%></b></label>
           <label class="block">Tamaño máximo actual: <b><%= @structure.max_current_size %></b></label>
