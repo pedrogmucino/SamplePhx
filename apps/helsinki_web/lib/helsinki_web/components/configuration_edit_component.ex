@@ -28,9 +28,10 @@ defmodule AccountingSystemWeb.ConfigurationEditComponent do
           <input type="number" name="size" min="1" value=<%= @structure.size %> class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code" type="text" placeholder="Introduce el tamaño deseado">
           <input type="hidden" name="level" value=<%= @structure.level %>>
           <input type="hidden" name="max_current_size" value= <%= @structure.max_current_size %> >
+          <input type="hidden" name="structure_id" value=<%= @structure.id %> >
           <div class="inline-flex w-full py-3 absolute bottom-0 right-0 pr-0">
             <button class= "ml-auto mr-6 w-24 py-2 bg-teal-500 text-teal-100 text-center font-bold rounded shadow hover:bg-teal-400 focus:shadow-outline focus:outline-none rounded">
-              Guardar
+              Actualizar
             </button>
           </div>
         </form>
@@ -50,8 +51,4 @@ defmodule AccountingSystemWeb.ConfigurationEditComponent do
   def get_structure(id) do
     StructureHandler.get_structure!(id)
   end
-
-
-
-
 end

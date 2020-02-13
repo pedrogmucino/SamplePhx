@@ -40,6 +40,25 @@ defmodule AccountingSystemWeb.ListConfigurationComponent do
     {:noreply, assign(socket, new?: false, edit?: true, structure_id: id)}
   end
 
+  def handle_event("set_size", params, socket) do
+    structure =
+    StructureHandler.get_structure!(params["structure_id"])
+    attrs =
+    %{size: params["size"]}
+    try do
+      StructureHandler.update_structure(structure, attrs)
+      socket
+        |> put_flash(:info, "Estructura actualizada")
+
+    rescue
+      Ecto.QueryError ->
+        socket
+        |> put_flash(:info, "No pudo actualizarse")
+    end
+
+    {:noreply, assign(socket, list_configuration: StructureHandler.list_structures(), new?: false, edit?: false)}
+  end
+
   def render(assigns) do
     ~L"""
 
@@ -93,10 +112,6 @@ defmodule AccountingSystemWeb.ListConfigurationComponent do
 
       <%= live_component(@socket, AccountingSystemWeb.ConfigurationEditComponent, id: @structure_id) %>
     <% end %>
-
-
-
-
     """
   end
 
