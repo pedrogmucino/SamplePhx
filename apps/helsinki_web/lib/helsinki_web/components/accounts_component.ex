@@ -23,7 +23,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
         </div>
 
         <div class="w-1/2 px-2 mt-2">
-          <button phx-click="create_new" phx-value-id="xxx" phx-target="#one" class="py-2 bg-teal-500 text-white hover:bg-teal-400 items-center inline-flex font-bold rounded text-sm w-full ">
+          <button phx-click="create_new" phx-value-level="0" phx-target="#one" class="py-2 bg-teal-500 text-white hover:bg-teal-400 items-center inline-flex font-bold rounded text-sm w-full ">
             <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
               class="h-4 w-4 mr-2 ml-auto">
               <path fill="currentColor" d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
@@ -67,7 +67,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
     {:ok, assign(socket,
     accounts: get_accounts_t(-1, -1),
     child_components: [],
-    actually_level: 1,
+    actually_level: 0,
     new?: false)}
   end
 
@@ -93,8 +93,17 @@ defmodule AccountingSystemWeb.AccountsComponent do
       actually_level: level)}
   end
 
-  def handle_event("create_new", _params, socket) do
-    {:noreply, assign(socket, new?: true, child_components: [])}
+  def handle_event("create_new", params, socket) do
+    level = (params["level"] |> String.to_integer) - 1
+    socket.assigns.child_components
+      |> Enum.find(fn acc -> acc.level == level end)
+      |> IO.inspect(label: "find?   -> ")
+      |> case do
+        nil -> {:noreply, assign(socket, new?: true, child_components: [])}
+        acc -> {:noreply, assign(socket,
+          new?: true,
+          child_components: get_childs(false, socket.assigns.child_components, acc, level))}
+      end
   end
 
   defp get_accounts_t(level, parent_account) do
