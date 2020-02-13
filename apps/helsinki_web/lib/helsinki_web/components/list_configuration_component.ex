@@ -41,11 +41,12 @@ defmodule AccountingSystemWeb.ListConfigurationComponent do
   end
 
   def handle_event("set_size", params, socket) do
-    structure =
-    StructureHandler.get_structure!(params["structure_id"])
-    attrs =
-    %{"size" => params["size"]}
     try do
+      structure =
+      StructureHandler.get_structure!(params["structure_id"])
+      attrs =
+      %{"size" => params["size"]}
+
       case StructureHandler.update_code_size(structure, attrs) do
         {:error} ->
           socket
@@ -56,17 +57,30 @@ defmodule AccountingSystemWeb.ListConfigurationComponent do
           |> put_flash(:info, "Estructura actualizada")
       end
     rescue
-      Ecto.QueryError ->
+      Ecto.NoResultsError ->
         socket
-        |> put_flash(:info, "No pudo actualizarse")
+        |> put_flash(:info, "Estructura eliminada")
     end
 
     {:noreply, assign(socket, list_configuration: StructureHandler.list_structures(), new?: false, edit?: false)}
   end
 
   def handle_event("delete_structure", params, socket) do
-    IO.inspect(params, label: "**************ELIMINAR PARAMS")
-    {:noreply, socket}
+    try do
+      params["id"]
+      |> StructureHandler.get_structure!
+      |> StructureHandler.delete_structure
+    rescue
+    Ecto.NoResultsError ->
+      socket
+      |> put_flash(:info, "No pudo actualizarse")
+    end
+
+    {:noreply, assign(socket, list_configuration: StructureHandler.list_structures(), edit?: false)}
+  end
+
+  def handle_event("create_new", _params, socket) do
+    {:noreply, assign(socket, new?: true, edit?: false)}
   end
 
   def render(assigns) do
@@ -124,9 +138,4 @@ defmodule AccountingSystemWeb.ListConfigurationComponent do
     <% end %>
     """
   end
-
-  def handle_event("create_new", _params, socket) do
-    {:noreply, assign(socket, new?: true, edit?: false)}
-  end
-
 end
