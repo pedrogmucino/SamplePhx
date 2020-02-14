@@ -115,6 +115,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
     params = exist_add(params, "character")
     params = exist_add(params, "payment_method")
     params = exist_add(params, "third_party_op")
+    params = exist_status_add(params, "status")
     IO.inspect(params, label: " -> -> PARAMS -> -> ")
     params = AccountingSystem.CodeFormatter.concat_names(params)
     case AccountingSystem.AccountHandler.create_account(params) do
@@ -134,6 +135,10 @@ defmodule AccountingSystemWeb.AccountsComponent do
     else
       map |> Map.put(labelx, false)
     end
+  end
+
+  defp exist_status_add(map, labelx) do
+    if map[labelx] == nil, do: map |> Map.put(labelx, "I"), else: map |> Map.put(labelx, "A")
   end
 
   defp get_accounts_t(level, parent_account) do
