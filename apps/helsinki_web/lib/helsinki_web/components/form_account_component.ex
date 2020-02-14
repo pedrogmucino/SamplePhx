@@ -53,18 +53,18 @@ defmodule AccountingSystemWeb.FormAccountComponent do
         <div class="inline-flex w-full">
 
           <div class="px-8 py-6 flex flex-col my-2 w-160">
-            <label class="block tracking-wide text-gray-700 font-bold" for="grid-code">Code</label>
-            <input type="text" name="code" maxlength="128" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code" placeholder="Code" value="<%= @codex %>">
+            <label class="block tracking-wide text-gray-700 font-bold" for="grid-code">Código</label>
+            <input type="text" name="code" maxlength="128" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code" placeholder="Código" value="<%= @codex %>">
 
-            <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Name</label>
+            <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Nombre</label>
             <div class="inline-flex w-full">
-              <input type="text" name="name" maxlength="32" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Name" value="<%= @namex %>">
-              <input type="text" name="name2" maxlength="32" class="focus:outline-none focus:bg-white focus:border-blue-500 ml-4 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Name">
+              <input type="text" name="name" maxlength="32" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Nombre" value="<%= @namex %>">
+              <input type="text" name="name2" maxlength="32" class="focus:outline-none focus:bg-white focus:border-blue-500 ml-4 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Nombre">
             </div>
-            <label class="block tracking-wide text-gray-700 font-bold" for="grid-description">Description</label>
-            <input type="text" name="description" maxlength="128" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-description" placeholder="Description">
+            <label class="block tracking-wide text-gray-700 font-bold" for="grid-description">Descripción</label>
+            <input type="text" name="description" maxlength="128" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-description" placeholder="Descripción">
 
-            <label class="block tracking-wide text-gray-700 font-bold" for="grid-state">Type</label>
+            <label class="block tracking-wide text-gray-700 font-bold" for="grid-state">Tipo</label>
             <div class="relative mb-3">
               <select name="type" class="focus:outline-none focus:bg-white focus:border-blue-500 block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded leading-tight" id="option-type">
                 <option value="A">Acumulativo</option>
@@ -75,29 +75,29 @@ defmodule AccountingSystemWeb.FormAccountComponent do
               </div>
             </div>
             <label class="block tracking-wide text-gray-700 font-bold" for="uuid-voucher">
-              Uuid Voucher
+              Vale Uuid
             </label>
-            <input type="text" name="uuid_voucher" maxlength="32" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-uuid-voucher" placeholder="Uuid Voucher">
+            <input type="text" name="uuid_voucher" maxlength="32" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-uuid-voucher" placeholder="Vale Uuid">
 
             <div class="inline-flex w-full">
               <div class="inline-block w-full mr-2">
-                <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Group Code</label>
-                <input type="number" name="group_code" min="1" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Group Code">
+                <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Código de Grupo</label>
+                <input type="number" name="group_code" min="1" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Código de Grupo">
               </div>
               <div class="inline-block w-full ml-2">
-                <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Apply To</label>
-                <input type="number" name="apply_to" min="1" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Apply To">
+                <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Aplicar a</label>
+                <input type="number" name="apply_to" min="1" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Aplicar a">
               </div>
             </div>
 
             <div class="inline-flex w-full">
               <div class="inline-block w-full mr-2">
-                <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Third Party Prosecutor</label>
-                <input type="number" name="third_party_prosecutor" min="1" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Third Party Prosecutor">
+                <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Fiscar Tercero</label>
+                <input type="number" name="third_party_prosecutor" min="1" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Fiscal Tercero">
               </div>
               <div class="inline-block w-full ml-2">
-                <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Apply Third Party To</label>
-                <input type="text" name="apply_third_party_to" maxlength="2" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Apply Third Party To">
+                <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Aplicar Tercero a</label>
+                <input type="text" name="apply_third_party_to" maxlength="2" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Aplicar Tercero a">
               </div>
             </div>
 
@@ -109,35 +109,35 @@ defmodule AccountingSystemWeb.FormAccountComponent do
                 <input type="checkbox" name="status" class="hidden" id="checkbox-active" checked value="A">
                 <label class="relative inline bg-transparent w-10" for="checkbox-active"></label>
               </div>
-              <label class="ml-2 font-bold text-gray-700">Active</label>
+              <label class="ml-2 font-bold text-gray-700">Activo</label>
             </div>
             <div class="inline-flex items-center py-6">
               <div class="modern-checkbox flex shadow-md h-6 w-12 rounded-full " >
                 <input type="checkbox" name="is_departamental" class="hidden" id="checkbox-departamental" value=false>
                 <label class="relative inline bg-transparent w-10" for="checkbox-departamental"></label>
               </div>
-              <label class="ml-2 font-bold text-gray-700">Is Departamental</label>
+              <label class="ml-2 font-bold text-gray-700">Es Departamental</label>
             </div>
             <div class="inline-flex items-center py-6">
               <div class="modern-checkbox flex shadow-md h-6 w-12 rounded-full " >
                 <input type="checkbox" name="character" class="hidden" id="checkbox-character" value=false>
                 <label class="relative inline bg-transparent w-10" for="checkbox-character"></label>
               </div>
-              <label class="ml-2 font-bold text-gray-700">Character</label>
+              <label class="ml-2 font-bold text-gray-700">Caracter</label>
             </div>
             <div class="inline-flex items-center py-6">
               <div class="modern-checkbox flex shadow-md h-6 w-12 rounded-full " >
                 <input type="checkbox" name="third_party_op" class="hidden" id="checkbox-third-party-op" value=false>
                 <label class="relative inline bg-transparent w-10" for="checkbox-third-party-op"></label>
               </div>
-              <label class="ml-2 font-bold text-gray-700">Third Party Op</label>
+              <label class="ml-2 font-bold text-gray-700">Operación de Terceros</label>
             </div>
             <div class="inline-flex items-center py-6">
               <div class="modern-checkbox flex shadow-md h-6 w-12 rounded-full " >
                 <input type="checkbox" name="payment_method" class="hidden" id="checkbox-payment-method" value=false>
                 <label class="relative inline bg-transparent w-10" for="checkbox-payment-method"></label>
               </div>
-              <label class="ml-2 font-bold text-gray-700">Payment Method</label>
+              <label class="ml-2 font-bold text-gray-700">Método de Pago</label>
               </div>
             </div>
 
@@ -164,7 +164,7 @@ defmodule AccountingSystemWeb.FormAccountComponent do
                 </path>
               </g>
             </svg>
-            <label class="cursor-pointer mr-auto text-white">Save</label>
+            <label class="cursor-pointer mr-auto text-white">Guardar</label>
           </button>
         </div>
 
