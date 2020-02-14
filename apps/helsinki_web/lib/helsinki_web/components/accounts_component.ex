@@ -59,7 +59,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
       <% end %>
 
       <%= if @new? do %>
-        <%= live_component(@socket, AccountingSystemWeb.FormAccountComponent, level: @level_form_account + 1) %>
+        <%= live_component(@socket, AccountingSystemWeb.FormAccountComponent, level: @level_form_account + 1, id: @idx ) %>
       <% end %>
     """
   end
@@ -69,7 +69,8 @@ defmodule AccountingSystemWeb.AccountsComponent do
     child_components: [],
     actually_level: 0,
     level_form_account: 0,
-    new?: false)}
+    new?: false,
+    idx: 0)}
   end
 
   def update(attrs, socket) do
@@ -78,6 +79,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
 
   def handle_event("open_child", params, socket) do
     level = params["level"] |> String.to_integer
+    id = params["id"] |> String.to_integer
     map_accounts = params["id"]
       |> String.to_integer
       |> get_account()
@@ -91,7 +93,8 @@ defmodule AccountingSystemWeb.AccountsComponent do
     {:noreply, assign(socket,
       child_components: arr |> IO.inspect(label: "arr -> "),
       new?: false,
-      actually_level: level)}
+      actually_level: level,
+      idx: id)}
   end
 
   def handle_event("create_new", params, socket) do
@@ -112,7 +115,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
     params = exist_add(params, "character")
     params = exist_add(params, "payment_method")
     params = exist_add(params, "third_party_op")
-
+    params = AccountingSystem.CodeFormatter.concat_names(params)
     case AccountingSystem.AccountHandler.create_account(params) do
       {:ok, _account} ->
         {:noreply,

@@ -7,20 +7,22 @@ defmodule AccountingSystemWeb.FormAccountComponent do
     {:ok, assign(socket,
     levelx: 0,
     codex: "",
-    parent_accountx: 0
+    parent_accountx: 0,
+    namex: ""
     )}
   end
 
   def update(attrs, socket) do
-    attrs |> IO.inspect(label: "--------------------- > FORM PARAMS")
-    values = load_values()
-    |> IO.inspect(label: " -> LOAD VALUES")
+    attrs |> IO.inspect(label: "-------- >  Params Arrived ->")
+    values = if attrs.level == 0, do: load_values(), else: load_values_with_id(attrs.id)
+    values |> IO.inspect(label: "VALUES -> -> ")
 
     {:ok, assign(socket,
       levelx: attrs.level,
       codex: values.code,
       parent_accountx: values.parent_account,
-      root_accountx: values.root_account
+      root_accountx: values.root_account,
+      namex: (if attrs.level == 0, do: "", else: values.name)
       )}
   end
 
@@ -28,6 +30,11 @@ defmodule AccountingSystemWeb.FormAccountComponent do
     AccountingSystem.AccountHandler.get_principal_account!()
     |> AccountingSystem.SchemaFormatter.get_root_account()
     #|> AccountingSystem.AccountHandler.change_account_code()
+  end
+
+  def load_values_with_id(id) do
+    AccountingSystem.AccountHandler.get_account_code!(id)
+    |> AccountingSystem.SchemaFormatter.get_child_values()
   end
 
   def render(assigns) do
@@ -51,7 +58,7 @@ defmodule AccountingSystemWeb.FormAccountComponent do
 
             <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Name</label>
             <div class="inline-flex w-full">
-              <input type="text" name="name" maxlength="32" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Name" readonly>
+              <input type="text" name="name" maxlength="32" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Name" value="<%= @namex %>">
               <input type="text" name="name2" maxlength="32" class="focus:outline-none focus:bg-white focus:border-blue-500 ml-4 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Name">
             </div>
             <label class="block tracking-wide text-gray-700 font-bold" for="grid-description">Description</label>
