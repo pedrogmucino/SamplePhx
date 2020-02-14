@@ -113,28 +113,28 @@ defmodule AccountingSystemWeb.FormAccountComponent do
             </div>
             <div class="inline-flex items-center py-6">
               <div class="modern-checkbox flex shadow-md h-6 w-12 rounded-full " >
-                <input type="checkbox" name="is_departamental" class="hidden" id="checkbox-departamental" value=false>
+                <input type="checkbox" name="is_departamental" class="hidden" id="checkbox-departamental">
                 <label class="relative inline bg-transparent w-10" for="checkbox-departamental"></label>
               </div>
               <label class="ml-2 font-bold text-gray-700">Es Departamental</label>
             </div>
             <div class="inline-flex items-center py-6">
               <div class="modern-checkbox flex shadow-md h-6 w-12 rounded-full " >
-                <input type="checkbox" name="character" class="hidden" id="checkbox-character" value=false>
+                <input type="checkbox" name="character" class="hidden" id="checkbox-character">
                 <label class="relative inline bg-transparent w-10" for="checkbox-character"></label>
               </div>
               <label class="ml-2 font-bold text-gray-700">Caracter</label>
             </div>
             <div class="inline-flex items-center py-6">
               <div class="modern-checkbox flex shadow-md h-6 w-12 rounded-full " >
-                <input type="checkbox" name="third_party_op" class="hidden" id="checkbox-third-party-op" value=false>
+                <input type="checkbox" name="third_party_op" class="hidden" id="checkbox-third-party-op">
                 <label class="relative inline bg-transparent w-10" for="checkbox-third-party-op"></label>
               </div>
               <label class="ml-2 font-bold text-gray-700">Operación de Terceros</label>
             </div>
             <div class="inline-flex items-center py-6">
               <div class="modern-checkbox flex shadow-md h-6 w-12 rounded-full " >
-                <input type="checkbox" name="payment_method" class="hidden" id="checkbox-payment-method" value=false>
+                <input type="checkbox" name="payment_method" class="hidden" id="checkbox-payment-method">
                 <label class="relative inline bg-transparent w-10" for="checkbox-payment-method"></label>
               </div>
               <label class="ml-2 font-bold text-gray-700">Método de Pago</label>
