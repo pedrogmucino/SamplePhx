@@ -59,7 +59,11 @@ defmodule AccountingSystemWeb.AccountsComponent do
       <% end %>
 
       <%= if @new? do %>
-        <%= live_component(@socket, AccountingSystemWeb.FormAccountComponent, level: @level_form_account + 1, id: @idx ) %>
+        <%= live_component(@socket, AccountingSystemWeb.FormAccountComponent, level: @level_form_account + 1, id: @idx, edit: @edit?, parent_edit: %{}) %>
+      <% end %>
+
+      <%= if @edit? do %>
+        <%= live_component(@socket, AccountingSystemWeb.FormAccountComponent, level: @level_form_account + 1, id: @idx, edit: @edit?, parent_edit: @parent_editx ) %>
       <% end %>
     """
   end
@@ -70,7 +74,9 @@ defmodule AccountingSystemWeb.AccountsComponent do
     actually_level: 0,
     level_form_account: 0,
     new?: false,
-    idx: 0)}
+    idx: 0,
+    edit?: false,
+    parent_editx: %{})}
   end
 
   def update(attrs, socket) do
@@ -83,6 +89,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
     map_accounts = params["id"]
       |> String.to_integer
       |> get_account()
+    parent_edit = map_accounts
     map_accounts = map_accounts
       |> Map.put(:subaccounts, get_accounts_t(map_accounts.level, map_accounts.id))
     arr = get_childs(params["origin"] |> to_bool(),
@@ -91,10 +98,11 @@ defmodule AccountingSystemWeb.AccountsComponent do
       level)
 
     {:noreply, assign(socket,
-      child_components: arr |> IO.inspect(label: "arr -> "),
+      child_components: arr,
       new?: false,
       actually_level: level,
-      idx: id)}
+      idx: id,
+      parent_editx: parent_edit)}
   end
 
   def handle_event("create_new", params, socket) do
@@ -103,11 +111,17 @@ defmodule AccountingSystemWeb.AccountsComponent do
       |> Enum.find(fn acc -> acc.level == level end)
       |> IO.inspect(label: "find?   -> ")
       |> case do
-        nil -> {:noreply, assign(socket, new?: true, child_components: [], level_form_account: level)}
+        nil -> {:noreply, assign(socket, new?: true, child_components: [], level_form_account: level, edit?: false)}
         acc -> {:noreply, assign(socket,
           new?: true,
-          child_components: get_childs(false, socket.assigns.child_components, acc, level), level_form_account: level)}
+          child_components: get_childs(false, socket.assigns.child_components, acc, level), level_form_account: level, edit?: false)}
       end
+  end
+
+  def handle_event("edit_this", params, socket) do
+    level = (params["level"] |> String.to_integer) - 1
+    IO.inspect(level, label: "VALUES FROM -> EDIT ")
+    {:noreply, assign(socket, new?: false, edit?: true)}
   end
 
   def handle_event("save_new", params, socket) do
