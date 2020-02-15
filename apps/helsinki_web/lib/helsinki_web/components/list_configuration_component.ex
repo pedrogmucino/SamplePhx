@@ -75,6 +75,14 @@ defmodule AccountingSystemWeb.ListConfigurationComponent do
     {:noreply, assign(socket, list_configuration: StructureHandler.list_structures(), edit?: false)}
   end
 
+  def handle_event("create_new", _params, socket) do
+    {:noreply, assign(socket, new?: true, edit?: false)}
+  end
+
+  def handle_event("close", _params, socket) do
+    {:noreply, assign(socket, new?: false, edit?: false)}
+  end
+
   defp execute_delete(id, true, socket) do
     id
     |> StructureHandler.get_structure!
@@ -88,9 +96,7 @@ defmodule AccountingSystemWeb.ListConfigurationComponent do
     |> put_flash(:info, "No es posible eliminar estructura")
   end
 
-  def handle_event("create_new", _params, socket) do
-    {:noreply, assign(socket, new?: true, edit?: false)}
-  end
+
 
   def render(assigns) do
     ~L"""

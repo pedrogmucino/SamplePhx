@@ -13,13 +13,29 @@ defmodule AccountingSystemWeb.ConfigurationEditComponent do
     ~L"""
     <div id="comp" class="bg-white mt-16 ml-1 w-80 h-hoch-93 rounded border">
 
+
       <div class="inline-block bg-blue-700 text-white px-6 py-4 w-full">
+        <div class="inline-flex top-0 right-0 bg-blue-700 text-white mt-2">
+          <button phx-click="close" phx-target="#comp" class="ml-mar-16.5 -mt-4 text-white font-bold rounded shadow">
+            <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+            class="h-5 w-5 ml-auto">
+              <path fill="currentColor"
+                d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z"
+                class="">
+              </path>
+            </svg>
+          </button>
+        </div>
         <h1 class="text-2xl font-medium text-white block">Editar estructura de cuenta</h1>
+
+
         <div class="mt-2">
           <label class="block">Nivel: <b><%= @structure.level%></b></label>
           <label class="block">Tamaño máximo actual: <b><%= @structure.max_current_size %></b></label>
         </div>
+
       </div>
+
 
       <div class="h-hoch-80 px-8 w-full py-6 inline-flex -mt-8 relative" >
         <form phx-submit="set_size" phx-target="#comp">
@@ -29,8 +45,8 @@ defmodule AccountingSystemWeb.ConfigurationEditComponent do
           <input type="hidden" name="level" value=<%= @structure.level %>>
           <input type="hidden" name="max_current_size" value= <%= @structure.max_current_size %> >
           <input type="hidden" name="structure_id" value=<%= @structure.id %> >
-          <div class="inline-flex w-full py-8 absolute bottom-0 right-0 pr-0">
-            <button phx-click="delete_structure" phx-target="#comp" phx-value-id=<%= @structure.id %> class= "ml-auto mr-6 w-24 py-2 bg-red-800 text-teal-100 text-center font-bold rounded shadow hover:bg-red-500 focus:shadow-outline focus:outline-none rounded">
+          <div class="inline-flex w-full py-16 absolute bottom-0 right-0 pr-0">
+            <button phx-click="delete_structure" phx-target="#comp" phx-value-id=<%= @structure.id %> class= "ml-auto mr-6 w-24 py-2 bg-red-800 text-yellow-200 text-center font-bold rounded shadow hover:bg-red-500 focus:shadow-outline focus:outline-none rounded">
               Eliminar
             </button>
             <button class= "ml-auto mr-6 w-24 py-2 bg-teal-500 text-teal-100 text-center font-bold rounded shadow hover:bg-teal-400 focus:shadow-outline focus:outline-none rounded">
