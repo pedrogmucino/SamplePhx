@@ -64,9 +64,4 @@ defmodule AccountingSystemWeb.PolicyController do
     end
   end
 
-  def deletex(conn, params) do
-    conn
-      |> put_flash(:info, "Deletex was succesfull")
-      |> redirect(to: Routes.policy_path(conn, :index))
-  end
 end
