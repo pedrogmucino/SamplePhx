@@ -26,8 +26,7 @@ defmodule AccountingSystemWeb.AccountController do
   end
 
   def create(conn, %{"account_code_schema" => account_params}) do
-    IO.inspect(account_params, label: "AACCCOUUUNNTT CODE SCHEMAAA_::::::>>>>>>>")
-    case AccountHandler.create_account(CodeFormatter.concat_names(account_params) |> IO.inspect(label: "SCHEMA CODEFORAMATEADOOO::::>>>>>>")) do
+    case AccountHandler.create_account(CodeFormatter.concat_names(account_params)) do
       {:ok, account} ->
         conn
         |> put_flash(:info, "Account created successfully.")
