@@ -107,4 +107,9 @@ defmodule AccountingSystem.PolicyTipeHandler do
       |> Repo.all
       |> Enum.map(fn x -> Map.to_list(x) end)
   end
+
+  def get_types() do
+    AccountingSystem.GetAllIdName.id_name()
+      |> Repo.all
+  end
 end
