@@ -33,38 +33,31 @@ defmodule AccountingSystemWeb.SeriesListComponent do
     end
   end
 
-  def handle_event("open_structure", params, socket) do
-    assign(socket, structure: params["id"])
+  def handle_event("open_series", params, socket) do
+    assign(socket, series: params["id"])
     id =
     params
     |> Map.get("id")
 
-    {:noreply, assign(socket, new?: false, edit?: true, structure_id: id)}
+    {:noreply, assign(socket, new?: false, edit?: true, series_id: id)}
   end
 
-  def handle_event("set_size", params, socket) do
+  def handle_event("set_series", params, socket) do
     try do
-      structure =
-      StructureHandler.get_structure!(params["structure_id"])
+      series =
+      SeriesHandler.get_series!(params["series_id"])
       attrs =
-      %{"size" => params["size"]}
+      %{"serial" => params["serial"]}
 
-      case StructureHandler.update_code_size(structure, attrs) do
-        {:error} ->
-          socket
-          |> put_flash(:error, "No puede tener un tamaño menor al tamaño máximo actual")
-        _ ->
-          StructureHandler.update_structure(structure, attrs)
-          socket
-          |> put_flash(:info, "Estructura actualizada")
-      end
+      SeriesHandler.update_series(series, attrs)
+
     rescue
       Ecto.NoResultsError ->
         socket
-        |> put_flash(:info, "Estructura eliminada")
+        |> put_flash(:info, "Serie eliminada")
     end
 
-    {:noreply, assign(socket, list_configuration: StructureHandler.list_structures(), new?: false, edit?: false)}
+    {:noreply, assign(socket, series_list: SeriesHandler.get_series, new?: false, edit?: false)}
   end
 
   def handle_event("delete_structure", params, socket) do
@@ -134,7 +127,7 @@ defmodule AccountingSystemWeb.SeriesListComponent do
     <div class="h-hoch-80 overflow-y-scroll pb-16">
       <%= for item <- @series_list do %>
         <div class="w-full px-2 block">
-          <div phx-click="open_structure" phx-value-id="<%= item.id %>" phx-target="#one" class="border cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
+          <div phx-click="open_series" phx-value-id="<%= item.id %>" phx-target="#one" class="border cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
             <h2 class="text-gray-700 text-xl">Serie: <%= item.serial  %>-<%= item.number %></h2>
             <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Folio Actual: <b><%= item.current_number %></b></label>
             <label class="ml-10 inline-block cursor-pointer text-gray-600 font-bold text-sm">Tipo: <b><%= item.name %></b></label>
@@ -151,7 +144,7 @@ defmodule AccountingSystemWeb.SeriesListComponent do
 
     <%= if @edit? do %>
 
-      <%= live_component(@socket, AccountingSystemWeb.ConfigurationEditComponent, id: @structure_id) %>
+      <%= live_component(@socket, AccountingSystemWeb.SeriesEditComponent, id: @series_id) %>
     <% end %>
     """
   end

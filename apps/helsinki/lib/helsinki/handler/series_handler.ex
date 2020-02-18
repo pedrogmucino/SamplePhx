@@ -7,7 +7,8 @@ defmodule AccountingSystem.SeriesHandler do
   alias AccountingSystem.{
     Repo,
     SeriesSchema,
-    GetSeriesQuery
+    GetSeriesQuery,
+    GetSpecificSeriesQuery
   }
 
 
@@ -29,6 +30,11 @@ defmodule AccountingSystem.SeriesHandler do
   def get_series do
     GetSeriesQuery.new
     |> Repo.all
+  end
+
+  def get_serie(id) do
+    GetSpecificSeriesQuery.new(id)
+    |> Repo.one
   end
 
   @doc """
