@@ -2,7 +2,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
   use Phoenix.LiveComponent
   use Phoenix.HTML
 
-  alias AccountingSystem.AccountHandler
+  alias AccountingSystem.AccountHandler, as: Account
 
   def render(assigns) do
     ~L"""
@@ -88,7 +88,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
     id = params["id"] |> String.to_integer
     map_accounts = params["id"]
       |> String.to_integer
-      |> get_account()
+      |> get_account_by_id()
     parent_edit = map_accounts
     map_accounts = map_accounts
       |> Map.put(:subaccounts, get_accounts_t(map_accounts.level, map_accounts.id))
@@ -124,15 +124,42 @@ defmodule AccountingSystemWeb.AccountsComponent do
     {:noreply, assign(socket, new?: false, edit?: true)}
   end
 
-  def handle_event("save_new", params, socket) do
-    params = exist_add(params, "is_departamental")
-    params = exist_add(params, "character")
-    params = exist_add(params, "payment_method")
-    params = exist_add(params, "third_party_op")
-    params = exist_status_add(params, "status")
-    IO.inspect(params, label: " -> -> PARAMS -> -> ")
+  def handle_event("action_account", params, socket) do
+    action = params["action"]
+    parent_id = params["id"]
+    params = Map.delete(params, "action")
+    params = Map.delete(params, "id")
+    if action == "edit", do: edit(parent_id,params, socket), else: save_new(params, socket)
+    #{:noreply, socket}
+  end
+
+
+  def edit(id, params, socket) do
+    account = get_account_by_id(id)
+    params = load_params(params)
+    |> Map.put("parent_account", account.parent_account)
+    |> Map.put("level", account.level)
+    |> Map.put("root_account", account.root_account)
+    |> Map.put("apply_to", (params["apply_to"] |> String.to_integer))
+    |> Map.put("group_code", (params["group_code"] |> String.to_integer))
+    |> Map.put("third_party_prosecutor", (params["third_party_prosecutor"] |> String.to_integer))
+
+    IO.inspect(params, label: "------------- > PARAMS TO UPDATE -> ")
+    IO.inspect(account, label: "------------- > ACCOUNT TO UPDATE -> ")
+    case Account.update_account(account, params) do
+      {:ok, _account} ->
+        {:noreply, socket |> IO.puts("Actualizado")}
+
+        {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply, assign(socket, changeset: changeset)}
+    end
+    # {:noreply, socket}
+  end
+
+  def save_new( params, socket) do
+    params = load_params(params)
     params = AccountingSystem.CodeFormatter.concat_names(params)
-    case AccountingSystem.AccountHandler.create_account(params) do
+    case Account.create_account(params) do
       {:ok, _account} ->
         {:noreply,
           socket
@@ -143,23 +170,22 @@ defmodule AccountingSystemWeb.AccountsComponent do
     end
   end
 
-  defp exist_add(map, labelx) do
-    if map[labelx] == "on" do
-      map |> Map.put(labelx, true)
-    else
-      map |> Map.put(labelx, false)
-    end
+  defp load_params(params) do
+    params
+    |> exist_add("is_departamental")
+    |> exist_add("character")
+    |> exist_add("payment_method")
+    |> exist_add("third_party_op")
+    |> exist_status_add("status")
   end
 
-  defp exist_status_add(map, labelx) do
-    if map[labelx] == nil, do: map |> Map.put(labelx, "I"), else: map |> Map.put(labelx, "A")
-  end
+  defp exist_add(map, labelx), do: if map[labelx] == "on", do: map |> Map.put(labelx, true), else: map |> Map.put(labelx, false)
 
-  defp get_accounts_t(level, parent_account) do
-    AccountHandler.list_of_childs(level, parent_account)
-  end
+  defp exist_status_add(map, labelx), do: if map[labelx] == nil, do: map |> Map.put(labelx, "I"), else: map |> Map.put(labelx, "A")
 
-  defp get_account(id), do: id |> AccountHandler.get_account!()
+  defp get_accounts_t(level, parent_account), do: Account.list_of_childs(level, parent_account)
+
+  defp get_account_by_id(id), do: id |> Account.get_account!()
 
   defp get_childs(true, _others, accounts, _level), do: [accounts]
   defp get_childs(false, others, accounts, level) do

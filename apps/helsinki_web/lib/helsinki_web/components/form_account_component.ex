@@ -10,7 +10,8 @@ defmodule AccountingSystemWeb.FormAccountComponent do
     parent_accountx: 0,
     namex: "",
     actionx: "",
-    parent_editx: %{}
+    parent_editx: %{},
+    idx: 0
     )}
   end
 
@@ -20,6 +21,7 @@ defmodule AccountingSystemWeb.FormAccountComponent do
     values |> IO.inspect(label: "VALUES -> -> ")
 
     {:ok, assign(socket,
+      idx: attrs.id,
       levelx: attrs.level,
       codex: values.code,
       parent_accountx: values.parent_account,
@@ -52,7 +54,7 @@ defmodule AccountingSystemWeb.FormAccountComponent do
         <label class="block">Nivel: <b>2</b></label>
       </div>
 
-      <form phx-submit="save_new" phx-target="#x">
+      <form phx-submit="action_account" phx-target="#x">
       <div class="inline-block">
         <div class="inline-flex w-full">
 
@@ -151,6 +153,8 @@ defmodule AccountingSystemWeb.FormAccountComponent do
             <input type="hidden" name="parent_account" value="<%= @parent_accountx %>">
             <input type="hidden" name="root_account" value="<%= @root_accountx %>">
             <input type="hidden" name="level" value="<%= @levelx %>">
+            <input type="hidden" name="action" value="<%= @actionx %>">
+            <input type="hidden" name="id" value="<%= @idx %>">
           </div>
 
         </div>
