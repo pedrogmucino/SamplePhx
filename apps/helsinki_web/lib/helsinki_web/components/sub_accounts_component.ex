@@ -80,10 +80,10 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
       <%= for item <- @subaccounts do %>
         <div class="w-full p-2 block cursor-pointer" phx-click="open_child" phx-value-origin="false" phx-value-level="<%= @level %>" phx-value-id="<%= item.id %>" phx-target="#one">
           <div class="hover:bg-gray-300 border w-full block bg-gray-200 p-3 rounded relative">
-            <h2 class="pt-4 text-gray-700 text-xl"> <%= item.name %> </h2>
-            <label class="cursor-pointer text-gray-500 font-bold text-sm"><%= item.code %></label>
+            <h2 class="pt-4 text-gray-800 text-xl"> <%= item.name %> </h2>
+            <label class="cursor-pointer text-gray-600 font-bold text-sm"><%= item.code %></label>
             <br>
-            <label class="cursor-pointer text-gray-500 font-bold text-sm"><%= if item.type == "A", do: "Acumulativo", else: "Detalle" %></label>
+            <label class="cursor-pointer text-gray-600 font-bold text-sm"><%= if item.type == "A", do: "Acumulativo", else: "Detalle" %></label>
             <div class="absolute bg-<%= if item.status == "A", do: "green", else: "red" %>-200 px-3 text-sm font-bold top-0 right-0 rounded-full text-<%= if item.status == "A", do: "green", else: "red" %>-700 mt-2 mr-2">
             <%= if item.status == "A", do: "Activo", else: "Inactivo" %>
             </div>
