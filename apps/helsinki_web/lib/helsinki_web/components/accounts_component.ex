@@ -138,7 +138,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
     account = get_account_by_id(id)
     params = load_params(params)
     |> Map.put("parent_account", account.parent_account)
-    |> Map.put("level", account.level)
+    |> Map.put("level", Integer.to_string(account.level))
     |> Map.put("root_account", account.root_account)
     |> Map.put("apply_to", (params["apply_to"] |> String.to_integer))
     |> Map.put("group_code", (params["group_code"] |> String.to_integer))
@@ -148,12 +148,12 @@ defmodule AccountingSystemWeb.AccountsComponent do
     IO.inspect(account, label: "------------- > ACCOUNT TO UPDATE -> ")
     case Account.update_account(account, params) do
       {:ok, _account} ->
-        {:noreply, socket |> IO.puts("Actualizado")}
+        {:noreply, socket |> put_flash(:info, "Actualizado")}
 
         {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
     end
-    # {:noreply, socket}
+    {:noreply, socket}
   end
 
   def save_new( params, socket) do
