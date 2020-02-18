@@ -39,9 +39,9 @@ defmodule AccountingSystemWeb.AccountsComponent do
             <div class="w-full px-2 block">
               <div phx-click="open_child" phx-value-id="<%= item.id %>" phx-value-level="0" phx-value-origin="true" phx-target="#one" class="border cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
                 <h2 class="pt-4 text-gray-800 text-xl"><%= item.name %></h2>
-                <label class="cursor-pointer text-gray-500 font-bold text-sm"><%= item.code %></label>
+                <label class="cursor-pointer text-gray-600 font-bold text-sm"><%= item.code %></label>
                 <br>
-                <label class="cursor-pointer text-gray-500 font-bold text-sm"><%= if item.type == "A", do: "Acumulativo", else: "Detalle" %></label>
+                <label class="cursor-pointer text-gray-600 font-bold text-sm"><%= if item.type == "A", do: "Acumulativo", else: "Detalle" %></label>
                 <div class="absolute bg-<%= if item.status == "A", do: "green", else: "red" %>-200 px-3 text-sm font-bold top-0 right-0 rounded-full text-<%= if item.status == "A", do: "green", else: "red" %>-700 mt-2 mr-2">
                 <%= if item.status == "A", do: "Activo", else: "Inactivo" %>
                 </div>
@@ -135,17 +135,22 @@ defmodule AccountingSystemWeb.AccountsComponent do
   end
 
   def handle_event("delete_account", params, socket) do
+    IO.inspect(value: params, label: " --------------------------------------- DELETE > ")
     case Account.delete_account(get_account_by_id(params["id"])) do
     {:ok, _account} ->
-      {:noreply, socket |> put_flash(:info, "Eliminado")}
+      {:noreply, assign(socket, edit?: false, new?: false)}
+      #{:noreply, socket |> put_flash(:info, "Eliminado")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
     end
+
+    {:noreply, socket}
   end
 
 
   def edit(id, params, socket) do
+    IO.inspect(value: params, label: " --------------------------------------- EDIT > ")
     account = get_account_by_id(id)
     params = load_params(params)
     |> Map.put("parent_account", account.parent_account)
@@ -162,7 +167,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
         {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
     end
-    #{:noreply, socket}
+    {:noreply, socket}
   end
 
   def save_new( params, socket) do
