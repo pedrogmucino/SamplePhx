@@ -131,6 +131,17 @@ defmodule AccountingSystemWeb.AccountsComponent do
     params = Map.delete(params, "id")
     if action == "edit", do: edit(parent_id,params, socket), else: save_new(params, socket)
     #{:noreply, socket}
+    {:noreply, assign(socket, accounts: get_accounts_t(-1, -1), edit?: false)}
+  end
+
+  def handle_event("delete_account", params, socket) do
+    case Account.delete_account(get_account_by_id(params["id"])) do
+    {:ok, _account} ->
+      {:noreply, socket |> put_flash(:info, "Eliminado")}
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply, assign(socket, changeset: changeset)}
+    end
   end
 
 
@@ -144,8 +155,6 @@ defmodule AccountingSystemWeb.AccountsComponent do
     |> Map.put("group_code", (params["group_code"] |> String.to_integer))
     |> Map.put("third_party_prosecutor", (params["third_party_prosecutor"] |> String.to_integer))
 
-    IO.inspect(params, label: "------------- > PARAMS TO UPDATE -> ")
-    IO.inspect(account, label: "------------- > ACCOUNT TO UPDATE -> ")
     case Account.update_account(account, params) do
       {:ok, _account} ->
         {:noreply, socket |> put_flash(:info, "Actualizado")}
@@ -153,7 +162,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
         {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
     end
-    {:noreply, socket}
+    #{:noreply, socket}
   end
 
   def save_new( params, socket) do
@@ -161,9 +170,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
     params = AccountingSystem.CodeFormatter.concat_names(params)
     case Account.create_account(params) do
       {:ok, _account} ->
-        {:noreply,
-          socket
-          |> put_flash(:info, "Cuenta creada")
+        {:noreply, socket |> put_flash(:info, "Cuenta creada")
         }
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
