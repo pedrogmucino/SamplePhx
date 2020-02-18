@@ -134,6 +134,16 @@ defmodule AccountingSystemWeb.AccountsComponent do
     {:noreply, assign(socket, accounts: get_accounts_t(-1, -1), edit?: false)}
   end
 
+  def handle_event("delete_account", params, socket) do
+    case Account.delete_account(get_account_by_id(params["id"])) do
+    {:ok, _account} ->
+      {:noreply, socket |> put_flash(:info, "Eliminado")}
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply, assign(socket, changeset: changeset)}
+    end
+  end
+
 
   def edit(id, params, socket) do
     account = get_account_by_id(id)
@@ -152,7 +162,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
         {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
     end
-    {:noreply, socket}
+    #{:noreply, socket}
   end
 
   def save_new( params, socket) do
