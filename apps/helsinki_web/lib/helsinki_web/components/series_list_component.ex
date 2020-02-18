@@ -8,7 +8,6 @@ defmodule AccountingSystemWeb.SeriesListComponent do
 
   def mount(socket) do
     {:ok, assign(socket,
-    list_configuration: StructureHandler.list_structures(),
     series_list: SeriesHandler.get_series,
     new?: false,
     edit?: false
@@ -19,13 +18,14 @@ defmodule AccountingSystemWeb.SeriesListComponent do
       {:ok, assign(socket, id: attrs.id)}
   end
 
-  def handle_event("create_structure", params, socket) do
-    case StructureHandler.create_structure(params) do
-      {:ok, _structure} ->
+  def handle_event("create_series", params, socket) do
+    params = Map.replace!(params, "number", Integer.to_string(Date.utc_today.year))
+    case SeriesHandler.create_series(params) do
+      {:ok, _series} ->
         {:noreply,
           socket
-          |> put_flash(:info, "Estructura creada")
-          |> assign(list_configuration: StructureHandler.list_structures(), new?: false, edit?: false)
+          |> put_flash(:info, "Serie creada")
+          |> assign(series_list: SeriesHandler.get_series(), new?: false, edit?: false)
         }
 
       {:error, %Ecto.Changeset{} = changeset} ->

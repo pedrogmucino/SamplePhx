@@ -21,10 +21,9 @@ defmodule AccountingSystemWeb.SeriesComponent do
     end
   end
 
-
   def render(assigns) do
     ~L"""
-    <div id="comp" class="bg-white mt-16 ml-1 w-80 h-hoch-93 rounded border">
+    <div id="series_comp" class="bg-white mt-16 ml-1 w-80 h-hoch-93 rounded border">
 
       <div class="inline-block bg-blue-700 text-white px-6 py-4 w-full">
       <div class="inline-flex top-0 right-0 bg-blue-700 text-white mt-2">
@@ -45,14 +44,14 @@ defmodule AccountingSystemWeb.SeriesComponent do
       </div>
 
       <div class="h-hoch-80 px-8 w-full py-6 inline-flex -mt-8 relative" >
-        <form phx-submit="create_serie" phx-target="#comp" id="series_form">
+        <form phx-submit="create_series" phx-target="#series_comp" id="series_form">
           <label class="block tracking-wide text-gray-700 font-bold" for="grid-code">Serie</label>
           <label class="cursor-pointer mr-auto text-white"></label>
           <input type="text" name="serial" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code" type="text" placeholder="Introduce la serie">
 
           <label class="block tracking-wide text-gray-700 font-bold" for="grid-code">Tipo de póliza</label>
           <label class="cursor-pointer mr-auto text-white"></label>
-          <select id="types" name="type_list" form="series_form">
+          <select id="types" name="policy_type_id" form="series_form">
             <%= for item <- @policy_types do %>
               <option value=<%= item.value %>><%= item.key %></option>
             <% end %>
