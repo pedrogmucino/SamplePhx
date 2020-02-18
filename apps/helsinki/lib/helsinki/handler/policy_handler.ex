@@ -157,7 +157,7 @@ defmodule AccountingSystem.PolicyHandler do
     polly = get_policy!(id)
     auxiliaries = AccountingSystem.GetAllId.from_policy(String.to_integer(id)) |> Repo.all(prefix: PrefixFormatter.get_current_prefix)
     Repo.transaction(fn() ->
-      case delete_all(polly, auxiliaries) |> IO.inspect(label: "RETURN OF DELETE_ALLLL::::::::>>>>>>>>>") do
+      case delete_all(polly, auxiliaries) do
         :ok ->
           :ok
         _ ->
@@ -169,7 +169,7 @@ defmodule AccountingSystem.PolicyHandler do
   defp delete_all(polly, auxiliaries) do
     case delete_policy(polly)  do
       {:ok, _} ->
-        Enum.each(auxiliaries, fn id_aux -> AccountingSystem.AuxiliaryHandler.get_auxiliary!(Integer.to_string(id_aux)) |> AccountingSystem.AuxiliaryHandler.delete_auxiliary end) |> IO.inspect(label: "RETURN OF ENUM_EACHHHHHH::::::::>>>>>>>>>")
+        Enum.each(auxiliaries, fn id_aux -> AccountingSystem.AuxiliaryHandler.get_auxiliary!(Integer.to_string(id_aux)) |> AccountingSystem.AuxiliaryHandler.delete_auxiliary end)
       _ ->
         :error
     end

@@ -6,7 +6,6 @@ defmodule AccountingSystemWeb.PolicyLiveView do
   use Phoenix.LiveView
   alias AccountingSystem.PolicyHandler
   alias AccountingSystem.PolicySchema
-  alias AccountingSystem.PolicyFormatter
 
   def render(assigns) do
     Phoenix.View.render(AccountingSystemWeb.PolicyView, "new.html", assigns)
@@ -40,8 +39,6 @@ defmodule AccountingSystemWeb.PolicyLiveView do
   end
 
   def handle_event("save_change", params, socket) do
-    IO.inspect(params)
-    IO.inspect(socket.assigns.changeset)
     pollys = params["policy_schema"]
     {:noreply, assign(socket, pollys: pollys)}
   end

@@ -52,8 +52,7 @@ defmodule AccountingSystemWeb.PolicyController do
   end
 
   def delete(conn, %{"id" => id}) do
-    IO.inspect(id, label: "POLICADELETEEEEEEEEEEEEEEEEEEEEEE::::::::::>>>>")
-    case PolicyHandler.delete_policy_with_aux(id) |> IO.inspect(label: "RETURN OF DELETE_POLIX_WITH_AUX::::::::>>>>>>>>>") do
+    case PolicyHandler.delete_policy_with_aux(id) do
       {:ok, :ok} ->
         conn
           |> put_flash(:info, "Policy deleted successfully.")
@@ -65,10 +64,4 @@ defmodule AccountingSystemWeb.PolicyController do
     end
   end
 
-  def deletex(conn, params) do
-    IO.inspect(params, label: "DELETEXXXXXXXXXXX PARAAAAMSSS::::::::::>>>>")
-    conn
-      |> put_flash(:info, "Deletex was succesfull")
-      |> redirect(to: Routes.policy_path(conn, :index))
-  end
 end
