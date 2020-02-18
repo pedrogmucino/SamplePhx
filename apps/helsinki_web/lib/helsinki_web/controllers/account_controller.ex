@@ -2,9 +2,14 @@ defmodule AccountingSystemWeb.AccountController do
   use AccountingSystemWeb, :controller
 
   alias AccountingSystem.AccountHandler
+  alias AccountingSystem.AccountSchema
+  alias Phoenix.LiveView
   alias AccountingSystem.CodeFormatter
   alias AccountingSystem.SchemaFormatter
 
+  def index_fake(conn, _params) do
+    LiveView.Controller.live_render(conn, AccountingSystemWeb.AccountLiveView, session: %{})
+  end
   def index(conn, _params) do
     accounts = AccountHandler.list_accounts()
     render(conn, "index.html", accounts: accounts)
@@ -19,7 +24,7 @@ defmodule AccountingSystemWeb.AccountController do
   end
 
   def new(conn, _params) do
-    account = List.first(AccountHandler.get_principal_account!())
+    account = AccountHandler.get_principal_account!()
     child = SchemaFormatter.get_root_account(account)
     changeset = AccountHandler.change_account_code(child)
     render(conn, "new.html", changeset: changeset)

@@ -1,0 +1,9 @@
+<%# For Demo start %>
+<%= live_component(@socket, AccountingSystemWeb.HeaderComponent, id: "header") %> 
+
+<%= live_component(@socket, AccountingSystemWeb.AccountsComponent, id: "accounts") %>
+
+<%# For Demo end %>
+<div class="inline-flex">
+<%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, parent_account: @query, id: "AD445D") %>
+</div>

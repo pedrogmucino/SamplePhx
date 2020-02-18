@@ -1,5 +1,60 @@
-/* This file is for your main application css. */
+/* app.css */
 
-@import "./phoenix.css";
+@tailwind base;
 
-@import "../../../../deps/phoenix_live_view/assets/css/live_view.css";
+@tailwind components;
+
+/* Put your custom components here */
+
+@tailwind utilities;
+
+/* Put your custom utilities here */
+
+.tooltip:hover .tooltip-text {
+    @apply visible;
+}
+.transition-menu { 
+    transition: 0.5s;
+    -moz-transition: 0.5s;
+}
+.transition-menu-label{
+    font-size: .0001px;
+    position: absolute;
+    margin-left: -3rem;
+    opacity: 0;
+    transition: 0.2s;
+    visibility: hidden;
+    -moz-transition: 0.2s;
+}
+.transition-menu:hover {
+    @apply w-48;
+}
+.transition-menu:hover a svg{
+    @apply mr-1 ml-2;
+}
+.transition-menu:hover label{
+    @apply text-base relative opacity-100 ml-3 visible;
+}
+/* For Slide toggle*/
+.modern-checkbox label::before,
+.modern-checkbox label::after {
+    @apply absolute left-0 rounded-full border border-solid border-black cursor-pointer;
+    content: "";
+    transition: all 0.2s ease;
+}
+.modern-checkbox label::before {
+    @apply w-12 h-6 border border-solid border-gray-400 bg-gray-400;
+}
+.modern-checkbox label::after {
+    @apply w-6 h-6 bg-white border-0 top-0 left-0;
+}
+.modern-checkbox input:checked + label::after {
+    left: calc(111% - 20px);
+}
+.modern-checkbox input:checked + label::before {
+    @apply bg-blue-500 border-blue-500;
+}
+.modern-checkbox::after {
+    content: attr(data-label);
+    @apply pl-1 pt-1 flex;
+}

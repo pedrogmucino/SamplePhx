@@ -9,7 +9,8 @@ defmodule AccountingSystem.StructureHandler do
   alias AccountingSystem.{
     StructureSchema,
     GetStructureList,
-    CodeFormatter
+    CodeFormatter,
+    GetMostRecentStructureQuery
   }
   alias AccountingSystem.GetSetAccountsCodes, as: AccountsGetSet
   # alias AccountingSystem.CodeFormatter
@@ -32,7 +33,7 @@ defmodule AccountingSystem.StructureHandler do
     do_the_update_please(eval, level)
   end
 
-  defp do_the_update_please(length, _) when length == 0, do: ""
+  defp do_the_update_please(length, _) when length == 0, do: :ok
 
   defp do_the_update_please(length, level) when length < 0 do   #Si el cambio fue a Codigo mas CHICO (Quitar ceros)
     case check_if_you_can_delet_zeros(level, length * -1) do
@@ -64,8 +65,8 @@ defmodule AccountingSystem.StructureHandler do
   defp change_db_code(%{code: code, id: id}, level, length) do
     code
       |> CodeFormatter.string_to_list
-      |> List.replace_at(level - 1, CodeFormatter.string_to_list(code)
-        |> Enum.at(level - 1)
+      |> List.replace_at(level, CodeFormatter.string_to_list(code)
+        |> Enum.at(level)
         |> CodeFormatter.add_zeros_at_left(length))
       |> CodeFormatter.list_to_string
       |> AccountsGetSet.set_new_code(id)
@@ -74,8 +75,8 @@ defmodule AccountingSystem.StructureHandler do
   defp reduce_db_code(%{code: code, id: id}, level, length) do #Length = Cuantos ceros a la izquierda voy a quitar
     code
       |> CodeFormatter.string_to_list
-      |> List.replace_at(level - 1, CodeFormatter.string_to_list(code)
-        |> Enum.at(level - 1)
+      |> List.replace_at(level, CodeFormatter.string_to_list(code)
+        |> Enum.at(level)
         |> CodeFormatter.try_quit_zeros(length))
       |> CodeFormatter.list_to_string
       |> AccountsGetSet.set_new_code(id)
@@ -109,6 +110,11 @@ defmodule AccountingSystem.StructureHandler do
 
   """
   def get_structure!(id), do: Repo.get!(StructureSchema, id)
+
+  def get_last_structure do
+    GetMostRecentStructureQuery.new
+    |> Repo.one!
+  end
 
   @doc """
   Creates a structure.
@@ -178,11 +184,11 @@ defmodule AccountingSystem.StructureHandler do
     end
   end
 
-  def delet_self_and_childs(%{max_current_size: max_current_size}) when max_current_size > 0 do
+  defp delet_self_and_childs(%{max_current_size: max_current_size}) when max_current_size > 0 do
     {:error}
   end
 
-  def delet_self_and_childs(%{level: level, max_current_size: max_current_size}) when max_current_size == 0 do
+  defp delet_self_and_childs(%{level: level, max_current_size: max_current_size}) when max_current_size == 0 do
     max = AccountingSystem.GetChildVoid.get_max(level) |> Repo.all |> List.first
     AccountingSystem.GetChildVoid.get_all(level, max)
       |> Repo.all
@@ -194,7 +200,7 @@ defmodule AccountingSystem.StructureHandler do
       end)
   end
 
-  def delet_dis(structure) do
+  defp delet_dis(structure) do
     quit_zeros(structure)
     Repo.delete(structure)
   end

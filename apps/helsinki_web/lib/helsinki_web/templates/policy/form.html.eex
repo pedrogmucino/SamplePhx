@@ -1,0 +1,37 @@
+<%= f = form_for @changeset, "#", [phx_submit: :save, phx_change: :save_change] %>
+
+
+  <%= label f, :policy_number %>
+  <%= number_input f, :policy_number, value: @pollys["policy_number"]%>
+  <%= error_tag f, :policy_number %>
+
+  <%= label f, :policy_type %>
+  <%= select f, :policy_type, @policytypes, selected: @pollys["policy_type"]%>
+  <%= error_tag f, :policy_type %>
+
+  <%= label f, :period %>
+  <%= number_input f, :period, value: @pollys["period"] %>
+  <%= error_tag f, :period %>
+
+  <%= label f, :fiscal_exercise %>
+  <%= number_input f, :fiscal_exercise, value: @pollys["fiscal_exercise"]%>
+  <%= error_tag f, :fiscal_exercise %>
+
+  <%= label f, :policy_date %>
+  <%= date_select f, :policy_date, value: @pollys["policy_date"]%>
+  <%= error_tag f, :policy_date %>
+
+  <%= label f, :concept %>
+  <%= text_input f, :concept, value: @pollys["concept"]%>
+  <%= error_tag f, :concept %>
+
+  <%= label f, :audited %>
+  <%= checkbox f, :audited, value: @pollys["audited"] %>
+  <%= error_tag f, :audited %>
+
+  <%= label f, :has_documents %>
+  <%= checkbox f, :has_documents, value: @pollys["has_documents"] %>
+  <%= error_tag f, :has_documents %>
+<br>
+<%= submit "Save" %>
+</form>

@@ -1,7 +1,6 @@
 defmodule AccountingSystem.CodeFormatter do
 
   alias AccountingSystem.AccountHandler
-  alias AccountingSystem.GetLastIncrementValueQuery, as: AccountLastIncrement
   alias AccountingSystem.Repo
 
   def add_in_position(string, position) do
@@ -20,10 +19,11 @@ defmodule AccountingSystem.CodeFormatter do
   defp add_line([]), do: ""
 
   def first_configuration do
-    AccountHandler.get_config()
-    |> get_config_as_list
-    |> list_to_string
-    |> add_in_position(0)
+    AccountingSystem.GetSizeLevel.size_level
+      |> Repo.all
+      |> get_config_as_list
+      |> list_to_string
+      |> add_in_position(0)
   end
 
   defp get_config_as_list(list) do

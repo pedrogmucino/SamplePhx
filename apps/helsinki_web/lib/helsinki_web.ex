@@ -43,6 +43,7 @@ defmodule AccountingSystemWeb do
       import AccountingSystemWeb.Gettext
       import Phoenix.LiveView.Helpers
       alias AccountingSystemWeb.Router.Helpers, as: Routes
+
     end
   end
 

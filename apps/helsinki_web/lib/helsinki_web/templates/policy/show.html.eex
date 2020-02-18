@@ -1,0 +1,48 @@
+<h1>Show Policy</h1>
+
+<ul>
+
+  <li>
+    <strong>Policy number:</strong>
+    <%= @policy.policy_number %>
+  </li>
+
+  <li>
+    <strong>Policy type:</strong>
+    <%= @policy.policy_type %>
+  </li>
+
+  <li>
+    <strong>Period:</strong>
+    <%= @policy.period %>
+  </li>
+
+  <li>
+    <strong>Fiscal exercise:</strong>
+    <%= @policy.fiscal_exercise %>
+  </li>
+
+  <li>
+    <strong>Policy date:</strong>
+    <%= @policy.policy_date %>
+  </li>
+
+  <li>
+    <strong>Concept:</strong>
+    <%= @policy.concept %>
+  </li>
+
+  <li>
+    <strong>Audited:</strong>
+    <%= @policy.audited %>
+  </li>
+
+  <li>
+    <strong>Has documents:</strong>
+    <%= @policy.has_documents %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.policy_path(@conn, :edit, @policy) %></span>
+<span><%= link "Back", to: Routes.policy_path(@conn, :index) %></span>

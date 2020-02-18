@@ -18,11 +18,26 @@ defmodule AccountingSystemWeb.Router do
   scope "/", AccountingSystemWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
+    get "/", HomeController, :index
+    get "/home", HomeController, :index
+    get "/account", AccountController, :index_fake
+    get "/actives", ActivesController, :index
+    get "/fiscals", FiscalsController, :index
+    get "/reports", ReportsController, :index
+    get "/subaccounts", SubAccountsController, :index
+    get "/formaccount", FormAccountController, :index
+    get "/configuration", ConfigurationController, :index
+    get "/listconfiguration", ListConfigurationController, :index
+    # get "/submenu", SubMenuController, :sub_menu
     resources "/accounts", AccountController
     resources "/structures", StructureController
     get "/accounts/:id/new", AccountController, :new
     live "/example", ExampleLive
+    resources "/auxiliaries", AuxiliaryController
+    resources "/policies", PolicyController
+    resources "/providers", ProviderController
+    resources "/thirdpartyoperations", ThirdPartyOperationController
+    resources "/policytypes", PolicyTypeController
   end
 
   # Other scopes may use custom stacks.
