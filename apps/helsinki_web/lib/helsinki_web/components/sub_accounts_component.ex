@@ -29,8 +29,8 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
 
           </h1>
           <label class="block text-gray-700 text-sm font-bold"><b><%= @code %></b></label>
-          <label class="block text-gray-700">Descripción: <b><%= @description %></b></label>
-          <label class="block text-gray-700">Tipo: <b><%= if @type == "A", do: "Acumulativo", else: "Detalle" %></b></label>
+          <label class="block text-gray-700"><b><%= @description %></b></label>
+          <label class="block text-gray-700"><b><%= if @type == "A", do: "Acumulativo", else: "Detalle" %></b></label>
           <div class="w-full inline-flex py-2">
 
             <div class="w-1/2 px-2">
