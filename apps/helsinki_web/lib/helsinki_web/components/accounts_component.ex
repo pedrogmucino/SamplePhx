@@ -38,12 +38,15 @@ defmodule AccountingSystemWeb.AccountsComponent do
           <%= for item <- @accounts do %>
             <div class="w-full px-2 block">
               <div phx-click="open_child" phx-value-id="<%= item.id %>" phx-value-level="0" phx-value-origin="true" phx-target="#one" class="border cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
-                <h2 class="pt-4 text-gray-800 text-xl"><%= item.name %></h2>
-                <label class="cursor-pointer text-gray-600 font-bold text-sm"><%= item.code %></label>
-                <br>
-                <label class="cursor-pointer text-gray-600 font-bold text-sm"><%= if item.type == "A", do: "Acumulativo", else: "Detalle" %></label>
-                <div class="absolute bg-<%= if item.status == "A", do: "green", else: "red" %>-200 px-3 text-sm font-bold top-0 right-0 rounded-full text-<%= if item.status == "A", do: "green", else: "red" %>-700 mt-2 mr-2">
-                <%= if item.status == "A", do: "Activo", else: "Inactivo" %>
+                <h2 class="text-gray-800 text-xl block"><%= item.name %></h2>
+                <label class="cursor-pointer text-gray-600 font-bold text-sm block"><%= item.code %></label>
+                <div class="block relative">
+                  <label class="cursor-pointer text-gray-600 font-bold text-sm">
+                    <%= if item.type == "A", do: "Acumulativo", else: "Detalle" %>
+                  </label>
+                  <div class="absolute bg-<%= if item.status == "A", do: "green", else: "red" %>-200 px-3 text-sm font-bold top-0  right-0 rounded-full text-<%= if item.status == "A", do: "green", else: "red" %>-700  ">
+                    <%= if item.status == "A", do: "Activo", else: "Inactivo" %>
+                  </div>
                 </div>
               </div>
             </div>
@@ -135,9 +138,9 @@ defmodule AccountingSystemWeb.AccountsComponent do
     map_accounts =  get_account_by_id(id)
     map_accounts = Map.put(map_accounts, :subaccounts, [])
     map_accounts = [map_accounts]
-    #val = params["origin"] |> to_bool()
-    #arr = get_childs(val, socket.assigns.child_components, map_accounts, level)
-    #IO.inspect(value: map_accounts, label: "MAP ACCOUNTS  ------------------ -> ")
+    val = params["origin"] |> to_bool()
+    arr = get_childs(val, socket.assigns.child_components, map_accounts, (params["level"] |> String.to_integer))
+    IO.inspect(value: arr, label: "ARR  ------------------ -> ")
 
     {:noreply, assign(socket,
       child_components: map_accounts,
@@ -164,6 +167,9 @@ defmodule AccountingSystemWeb.AccountsComponent do
     end
   end
 
+  def handle_event("close", _params, socket) do
+    {:noreply, assign(socket, new?: false, edit?: false)}
+  end
 
   def edit(id, params, socket) do
     IO.inspect(value: params, label: " --------------------------------------- EDIT > ")

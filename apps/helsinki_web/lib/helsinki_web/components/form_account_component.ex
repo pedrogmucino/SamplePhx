@@ -47,11 +47,21 @@ defmodule AccountingSystemWeb.FormAccountComponent do
     ~L"""
     <div id="x" class="bg-white mt-16 ml-1 w-240 rounded border">
 
-      <div class="inline-block bg-blue-700 text-white px-6 py-3 w-full">
-        <h1 class="text-2xl font-medium text-white  block">
-          <%= (if @actionx == "edit", do: "Editar Cuenta", else: "Nueva Cuenta") %>
-        </h1>
-        <label class="block">Nivel: <b>2</b></label>
+      <div class="inline-flex bg-blue-700 text-white px-6 py-3 w-full">
+        <div class="inline-block">
+          <h1 class="text-2xl font-medium text-white  block">
+            <%= (if @actionx == "edit", do: "Editar Cuenta", else: "Nueva Cuenta") %>
+          </h1>
+          <label class="block">Nivel: <b>2</b></label>
+        </div>
+
+        <button phx-click="close" phx-target="#x" class="ml-auto inline-flex items-center rounded-full bg-blue-200 h-8 w-8 mt-1 -mr-2">
+          <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"
+          class="h-5 w-5 ml-auto mr-auto text-blue-800">
+            <path fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z" class="">
+            </path>
+          </svg>
+        </button>
       </div>
 
       <div class="inline-block">
