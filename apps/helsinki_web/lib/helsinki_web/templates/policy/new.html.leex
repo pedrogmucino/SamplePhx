@@ -25,15 +25,26 @@
             <td> <button phx-click="editar" phx-value-id="<%= item["id"] %>" >Editar</button> </td>
           </tr>
         <% end %>
+        <tr>
+          <td> Total haber <input value="<%= @actual["sum_haber"] %>" type="text"></td>
+          <td> Total debe <input value="<%= @actual["sum_debe"] %>" type="text"></td>
+        </tr>
+        <tr>
+          <td> balance <input value="<%= @actual["total"] %>" type="text"></td>
+        </tr>
       </table>
       Cuenta
       <form  phx-submit="fu" >
-        <select name="id_account">
+        <br>
+        <div>
+        <h4>Department</h4>
+          <input phx-keyup="search" type="text">
+          <select name="id_account">
           <%= for account <- @dropdowns do %>
               <option value="<%= account.value %>" <% if account.value == @actual["id_account"], do: 'selected', else: '' %>  ><%= account.key %></option>
           <% end %>
         </select> 
-        <br>
+        </div>
         <h4>Department</h4>
         <input value="<%= @actual["department"] %>" name="department" type="number"> 
         Concept

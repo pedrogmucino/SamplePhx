@@ -15,7 +15,7 @@ defmodule AccountingSystemWeb.PolicyLiveView do
     dropdowns = AccountingSystem.AccountHandler.get_all_as_list
     policytypes = AccountingSystem.PolicyTipeHandler.get_all_as_list
     changeset = PolicyHandler.change_policy(%PolicySchema{})
-    actual = %{"concept" => "", "debe" => "", "department" => "", "haber" => "", "id_account" => ""}
+    actual = %{"concept" => "", "debe" => "", "department" => "", "haber" => "", "id_account" => "", "sum_haber" => 0, "sum_debe" => 0, "total" => 0}
     pollys = %{"audited" => false, "concept" => "", "fiscal_exercise" => "", "has_documents" => false, "period" => "", "policy_date" => %{"day" => "1", "month" => "2", "year" => "2020"}, "policy_number" => PolicyHandler.last_policy, "policy_type" => "2"}
     {:ok, assign(socket, dropdowns: dropdowns, arr: [], actual: actual, changeset: changeset, policytypes: policytypes, pollys: pollys)}
   end
@@ -23,7 +23,7 @@ defmodule AccountingSystemWeb.PolicyLiveView do
   def handle_event("fu", params, socket) do
     case AccountingSystem.AuxiliaryHandler.validate_auxiliar(params) do
       {:ok, _} ->
-        {:noreply, assign(socket, arr: socket.assigns.arr ++ [params |> Map.put("id", length(socket.assigns.arr))])}
+        totals(params, socket)
       {:error, _} ->
         {:noreply, socket}
     end
@@ -46,5 +46,35 @@ defmodule AccountingSystemWeb.PolicyLiveView do
   def handle_event("editar", params, socket) do
     actual = socket.assigns.arr |> Enum.find(fn elto -> elto["id"] == params["id"] |> String.to_integer end)
     {:noreply, assign(socket, actual: actual)}
+  end
+
+  def handle_event("search",%{"value" => value}, socket) do
+    dropdowns = AccountingSystem.SearchAccount.search(value)
+                  |> AccountingSystem.Repo.all
+                  |> IO.inspect
+    {:noreply, assign(socket, dropdowns: dropdowns)}
+  end
+
+  defp totals(params, socket) do
+    sumh = socket.assigns.actual["sum_haber"]
+    sumd = socket.assigns.actual["sum_debe"]
+    sumhe = sumh + void(params["haber"])
+    sumde = sumd + void(params["debe"])
+    sumtot = sumhe - sumde
+    actual = socket.assigns.actual
+      |> Map.put("sum_haber", sumhe |> Float.round(2))
+      |> Map.put("sum_debe", sumde |> Float.round(2))
+      |> Map.put("total", sumtot |> Float.round(2))
+    {:noreply, assign(socket, arr: socket.assigns.arr ++ [params |> Map.put("id", length(socket.assigns.arr))], actual: actual)}
+  end
+
+  defp void(some) do
+    case some do
+      "" -> 0.0
+      _ -> some
+            |> Float.parse
+            |> Tuple.to_list
+            |> List.first
+    end
   end
 end
