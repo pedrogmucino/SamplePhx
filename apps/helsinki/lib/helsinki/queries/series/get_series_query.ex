@@ -12,7 +12,7 @@ defmodule AccountingSystem.GetSeriesQuery do
     select: %{
       id: s.id,
       serial: s.serial,
-      number: s.number,
+      fiscal_exercise: s.fiscal_exercise,
       current_number: s.current_number,
       name: t.name
     },

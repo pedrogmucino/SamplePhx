@@ -19,7 +19,7 @@ defmodule AccountingSystemWeb.SeriesListComponent do
   end
 
   def handle_event("create_series", params, socket) do
-    params = Map.replace!(params, "number", Integer.to_string(Date.utc_today.year))
+    params = Map.replace!(params, "fiscal_exercise", Integer.to_string(Date.utc_today.year))
     case SeriesHandler.create_series(params) do
       {:ok, _series} ->
         {:noreply,
@@ -43,21 +43,19 @@ defmodule AccountingSystemWeb.SeriesListComponent do
   end
 
   def handle_event("set_series", params, socket) do
-    try do
-      series =
-      SeriesHandler.get_series!(params["series_id"])
-      attrs =
-      %{"serial" => params["serial"]}
-
-      SeriesHandler.update_series(series, attrs)
-
-    rescue
-      Ecto.NoResultsError ->
-        socket
-        |> put_flash(:info, "Serie eliminada")
+    series =
+    params["series_id"]
+    |> SeriesHandler.get_series!()
+    case SeriesHandler.update_series(series, %{"serial" => params["serial"]}) do
+      {:ok, _series} ->
+        {:noreply,
+          socket
+          |> put_flash(:info, "Serie actualizada")
+          |> assign(series_list: SeriesHandler.get_series(), new?: false, edit?: false)
+        }
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply, assign(socket, changeset: changeset)}
     end
-
-    {:noreply, assign(socket, series_list: SeriesHandler.get_series, new?: false, edit?: false)}
   end
 
   def handle_event("delete_series", params, socket) do
@@ -78,21 +76,6 @@ defmodule AccountingSystemWeb.SeriesListComponent do
   def handle_event("close", _params, socket) do
     {:noreply, assign(socket, new?: false, edit?: false)}
   end
-
-  defp execute_delete(id, true, socket) do
-    id
-    |> StructureHandler.get_structure!
-    |> StructureHandler.delete_structure
-    socket
-    |> put_flash(:info, "Estructura eliminada")
-  end
-
-  defp execute_delete(_id, false, socket) do
-    socket
-    |> put_flash(:info, "No es posible eliminar estructura")
-  end
-
-
 
   def render(assigns) do
     ~L"""
@@ -129,7 +112,7 @@ defmodule AccountingSystemWeb.SeriesListComponent do
       <%= for item <- @series_list do %>
         <div class="w-full px-2 block">
           <div phx-click="open_series" phx-value-id="<%= item.id %>" phx-target="#one" class="border cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
-            <h2 class="text-gray-700 text-xl">Serie: <%= item.serial  %>-<%= item.number %></h2>
+            <h2 class="text-gray-700 text-xl">Serie: <%= item.serial  %>-<%= item.fiscal_exercise %></h2>
             <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Folio Actual: <b><%= item.current_number %></b></label>
             <label class="ml-10 inline-block cursor-pointer text-gray-600 font-bold text-sm">Tipo: <b><%= item.name %></b></label>
           </div>

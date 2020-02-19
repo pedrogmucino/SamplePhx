@@ -42,7 +42,7 @@ defmodule AccountingSystemWeb.SeriesEditComponent do
           <label class="block tracking-wide text-gray-700 font-bold" for="grid-code">Serie</label>
           <label class="cursor-pointer mr-auto text-white"></label>
           <input type="text" name="serial" value=<%= @series.serial %> class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code" type="text" placeholder="Introduce la serie deseada">
-          <input type="hidden" name="number" value=<%= @series.number %>>
+          <input type="hidden" name="fiscal_exercise" value=<%= @series.fiscal_exercise %>>
           <input type="hidden" name="series_id" value=<%= @series.id %>>
           <div class="inline-flex w-full py-16 absolute bottom-0 right-0 pr-0">
             <button phx-click="delete_series" phx-target="#series_comp" phx-value-id=<%= @series.id %> class= "ml-auto mr-6 w-24 py-2 bg-red-800 text-yellow-200 text-center font-bold rounded shadow hover:bg-red-500 focus:shadow-outline focus:outline-none rounded">
@@ -58,6 +58,7 @@ defmodule AccountingSystemWeb.SeriesEditComponent do
     """
   end
   def update(params, socket) do
+    IO.inspect(params, label: "****************PARAMS")
     series =
     Map.get(params, :id)
     |> get_series

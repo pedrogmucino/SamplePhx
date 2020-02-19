@@ -12,15 +12,6 @@ defmodule AccountingSystemWeb.SeriesComponent do
     {:ok, assign(socket, policy_types: policytypes) }
   end
 
-  def get_structure() do
-    try do
-      StructureHandler.get_last_structure
-    rescue
-      Ecto.NoResultsError ->
-        %StructureSchema{level: -1, size: 0, max_current_size: 0}
-    end
-  end
-
   def render(assigns) do
     ~L"""
     <div id="series_comp" class="bg-white mt-16 ml-1 w-80 h-hoch-93 rounded border">
@@ -56,7 +47,7 @@ defmodule AccountingSystemWeb.SeriesComponent do
               <option value=<%= item.value %>><%= item.key %></option>
             <% end %>
           </select>
-          <input type="hidden" name="number" value=0>
+          <input type="hidden" name="fiscal_exercise" value=0>
           <input type="hidden" name="current_number" value=0>
           <div class="inline-flex w-full py-16 absolute bottom-0 right-0 pr-0">
             <button class= "ml-auto mr-6 w-24 py-2 bg-teal-500 text-teal-100 text-center font-bold rounded shadow hover:bg-teal-400 focus:shadow-outline focus:outline-none rounded">
@@ -67,12 +58,5 @@ defmodule AccountingSystemWeb.SeriesComponent do
       </div>
     </div>
     """
-
   end
-
-  def update(_assigns, socket) do
-    {:ok, assign(socket,
-    structure: get_structure()) }
-  end
-
 end

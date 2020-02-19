@@ -13,7 +13,7 @@ defmodule AccountingSystem.GetSpecificSeriesQuery do
     select: %{
       id: s.id,
       serial: s.serial,
-      number: s.number,
+      fiscal_exercise: s.fiscal_exercise,
       current_number: s.current_number,
       type: t.name
     }
