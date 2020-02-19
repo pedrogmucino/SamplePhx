@@ -60,14 +60,15 @@ defmodule AccountingSystemWeb.SeriesListComponent do
     {:noreply, assign(socket, series_list: SeriesHandler.get_series, new?: false, edit?: false)}
   end
 
-  def handle_event("delete_structure", params, socket) do
-    last_structure =
-    StructureHandler.get_last_structure
+  def handle_event("delete_series", params, socket) do
 
     params["id"]
-    |> execute_delete(last_structure.id == String.to_integer(params["id"]), socket)
+    |> SeriesHandler.get_series!
+    |> SeriesHandler.delete_series
+    socket
+    |> put_flash(:info, "Serie eliminada")
 
-    {:noreply, assign(socket, list_configuration: StructureHandler.list_structures(), edit?: false)}
+    {:noreply, assign(socket, series_list: SeriesHandler.get_series, edit?: false)}
   end
 
   def handle_event("create_new", _params, socket) do
