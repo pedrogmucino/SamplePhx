@@ -125,27 +125,43 @@ defmodule AccountingSystemWeb.AccountsComponent do
   end
 
   def handle_event("action_account", params, socket) do
+    id = params["id"] |> String.to_integer
     action = params["action"]
     parent_id = params["id"]
     params = Map.delete(params, "action")
     params = Map.delete(params, "id")
     if action == "edit", do: edit(parent_id,params, socket), else: save_new(params, socket)
-    #{:noreply, socket}
-    {:noreply, assign(socket, accounts: get_accounts_t(-1, -1), edit?: false)}
+
+    map_accounts =  get_account_by_id(id)
+    map_accounts = Map.put(map_accounts, :subaccounts, [])
+    map_accounts = [map_accounts]
+    #val = params["origin"] |> to_bool()
+    #arr = get_childs(val, socket.assigns.child_components, map_accounts, level)
+    #IO.inspect(value: map_accounts, label: "MAP ACCOUNTS  ------------------ -> ")
+
+    {:noreply, assign(socket,
+      child_components: map_accounts,
+      edit?: false,
+      new?: false,
+      accounts: get_accounts_t(-1, -1),
+      parent_editx: get_account_by_id(id)
+      #subaccounts: get_accounts_t((params["level"] |> String.to_integer), (params["parent_account"] |> String.to_integer))
+      )}
+
   end
 
   def handle_event("delete_account", params, socket) do
-    IO.inspect(value: params, label: " --------------------------------------- DELETE > ")
+    IO.inspect(value: params, label: " --------------------------------------- DELETE Params > ")
+    IO.inspect(value: socket, label: " --------------------------------------- DELETE Socket > ")
+
     case Account.delete_account(get_account_by_id(params["id"])) do
     {:ok, _account} ->
-      {:noreply, assign(socket, edit?: false, new?: false)}
+      {:noreply, assign(socket, accounts: get_accounts_t(-1, -1), edit?: false, new?: false)}
       #{:noreply, socket |> put_flash(:info, "Eliminado")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
     end
-
-    {:noreply, socket}
   end
 
 
