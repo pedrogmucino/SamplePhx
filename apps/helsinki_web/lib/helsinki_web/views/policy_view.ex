@@ -78,3 +78,15 @@ defmodule AccountingSystemWeb.PolicyLiveView do
     end
   end
 end
+
+defmodule AccountingSystemWeb.PolicyListLiveView do
+  use Phoenix.LiveView
+
+  def render(assigns) do
+    Phoenix.View.render(AccountingSystemWeb.PolicyView, "index_new.html", assigns)
+  end
+
+  def mount(_params, _session, socket) do
+    {:ok, socket}
+  end
+end

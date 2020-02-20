@@ -11,7 +11,8 @@ defmodule AccountingSystem.PolicyHandler do
     Repo,
     PolicyFormatter,
     GenericFunctions,
-    SeriesHandler
+    SeriesHandler,
+    PolicyListQuery
   }
 
   @doc """
@@ -29,6 +30,11 @@ defmodule AccountingSystem.PolicyHandler do
 
   def list_policies(year, month) do
     Repo.all(PolicySchema, prefix: PrefixFormatter.get_prefix(year, month))
+  end
+
+  def get_policy_list() do
+    PolicyListQuery.new
+    |> Repo.all(prefix: PrefixFormatter.get_current_prefix)
   end
 
   @doc """

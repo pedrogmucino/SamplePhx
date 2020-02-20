@@ -39,6 +39,7 @@ defmodule AccountingSystemWeb.Router do
     resources "/thirdpartyoperations", ThirdPartyOperationController
     resources "/policytypes", PolicyTypeController
     resources "/series", SeriesController
+    resources "/policylist", PoliciesController
   end
 
   # Other scopes may use custom stacks.
