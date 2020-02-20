@@ -8,18 +8,22 @@ defmodule AccountingSystem.PolicyFormatter do
 
   def get_month(policy) do
     policy
+
       |> Map.get("policy_schema")
       |> Map.get("policy_date")
       |> Map.get("month")
       |> String.to_integer
+      |> IO.inspect(label: "******************GET MONTH")
   end
 
   def get_year(policy) do
     policy
+
       |> Map.get("policy_schema")
       |> Map.get("policy_date")
       |> Map.get("year")
       |> String.to_integer
+      |> IO.inspect(label: "***************GET YEAR")
   end
 
   def get_day(policy) do

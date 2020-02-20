@@ -15,6 +15,7 @@ defmodule AccountingSystem.AuxiliarySchema do
     field :iduuid, :integer
     field :mxn_amount, :float
     field :policy_number, :integer
+    belongs_to :policy, AccountingSystem.PolicySchema
 
     timestamps()
   end
@@ -22,7 +23,7 @@ defmodule AccountingSystem.AuxiliarySchema do
   @doc false
   def changeset(auxiliary, attrs) do
     auxiliary
-    |> cast(attrs, [:policy_number, :id_account, :concept, :debit_credit, :mxn_amount, :amount, :department, :exchange_rate])
-    |> validate_required([:policy_number, :id_account, :concept, :debit_credit, :mxn_amount, :amount, :department, :exchange_rate])
+    |> cast(attrs, [:policy_number, :id_account, :concept, :debit_credit, :mxn_amount, :amount, :department, :exchange_rate, :policy_id])
+    |> validate_required([:policy_number, :id_account, :concept, :debit_credit, :mxn_amount, :amount, :department, :exchange_rate, :policy_id])
   end
 end
