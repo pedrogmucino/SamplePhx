@@ -8,6 +8,7 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
 
   def update(attrs, socket) do
     #{:ok, socket}
+    attrs |> IO.inspect(label: "  --> PARAMS IN UPDATE SUB ACC")
     {:ok, assign(socket,
       level: attrs.next_level,
       id: attrs.id,
@@ -15,7 +16,8 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
       subaccounts: attrs.subaccounts,
       code: attrs.code,
       type: attrs.type,
-      description: attrs.description)
+      description: attrs.description,
+      status_father: (if attrs.status_father == "A", do: true, else: false))
     }
   end
 
@@ -33,7 +35,9 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
           <label class="block text-gray-700"><b><%= if @type == "A", do: "Acumulativo", else: "Detalle" %></b></label>
           <div class="w-full inline-flex py-2">
 
+
             <div class="w-1/2 px-2">
+              <%= if @status_father do %>
               <button phx-click="create_new" phx-value-id="<%= @id %>" phx-value-level="<%= @level %>" phx-target="#one" class="py-2 bg-teal-500 text-white hover:bg-teal-400 items-center inline-flex font-bold rounded text-sm w-full ">
                 <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
                   class="h-4 w-4 mr-2 ml-auto">
@@ -43,7 +47,9 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
                 </svg>
                 <label class="cursor-pointer mr-auto text-white">Nueva</label>
               </button>
+              <% end %>
             </div>
+
 
             <div class="w-1/2 px-2">
               <button phx-click="edit_this" phx-value-id="<%= @id %>" phx-value-level="<%= @level %>" phx-value-code="<%= @code %>" phx-target="#one" class="py-2 bg-teal-500 text-white hover:bg-teal-400 items-center inline-flex font-bold rounded text-sm w-full ">
