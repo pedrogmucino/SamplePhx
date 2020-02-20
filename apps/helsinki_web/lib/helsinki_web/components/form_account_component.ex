@@ -49,10 +49,8 @@ defmodule AccountingSystemWeb.FormAccountComponent do
 
       <div class="inline-flex bg-blue-700 text-white px-6 py-3 w-full">
         <div class="inline-block">
-          <h1 class="text-2xl font-medium text-white  block">
-            <%= (if @actionx == "edit", do: "Editar Cuenta", else: "Nueva Cuenta") %>
-          </h1>
-          <label class="block">Nivel: <b>2</b></label>
+          <label class="text-2xl font-normal text-white block"><%= (if @actionx == "edit", do: "Editar Cuenta", else: "Nueva Cuenta") %></label>
+          <label class="block font-medium"><b><%= (if @actionx == "edit", do: @parent_editx.name, else: String.trim_trailing(@namex, "-")) %></b></label>
         </div>
 
         <button phx-click="close" phx-target="#x" class="ml-auto h-8 -mt-1 -mr-3">
