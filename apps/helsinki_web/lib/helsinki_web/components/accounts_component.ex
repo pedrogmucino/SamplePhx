@@ -62,11 +62,11 @@ defmodule AccountingSystemWeb.AccountsComponent do
       <% end %>
 
       <%= if @new? do %>
-        <%= live_component(@socket, AccountingSystemWeb.FormAccountComponent, level: @level_form_account + 1, id: @idx, edit: @edit?, parent_edit: %{}) %>
+        <%= live_component(@socket, AccountingSystemWeb.FormAccountComponent, level: @level_form_account + 1, id: @idx, edit: @edit?, parent_edit: %{}, bendiciones?: false) %>
       <% end %>
 
       <%= if @edit? do %>
-        <%= live_component(@socket, AccountingSystemWeb.FormAccountComponent, level: @level_form_account + 1, id: @idx, edit: @edit?, parent_edit: @parent_editx ) %>
+        <%= live_component(@socket, AccountingSystemWeb.FormAccountComponent, level: @level_form_account + 1, id: @idx, edit: @edit?, parent_edit: @parent_editx, bendiciones?: @bendiciones ) %>
       <% end %>
     """
   end
@@ -79,7 +79,9 @@ defmodule AccountingSystemWeb.AccountsComponent do
     new?: false,
     idx: 0,
     edit?: false,
-    parent_editx: %{})}
+    parent_editx: %{},
+    bendiciones: false
+    )}
   end
 
   def update(attrs, socket) do
@@ -99,14 +101,16 @@ defmodule AccountingSystemWeb.AccountsComponent do
     arr = get_childs(params["origin"] |> to_bool(),
       socket.assigns.child_components,
       map_accounts,
-      level)
+      level) |> IO.inspect(label: "  -> _> >_> > ARR ")
 
     {:noreply, assign(socket,
       child_components: arr,
       new?: false,
       actually_level: level,
       idx: id,
-      parent_editx: parent_edit)}
+      parent_editx: parent_edit,
+      bendiciones: (if length(map_accounts.subaccounts) > 0, do: true, else: false)
+      )}
   end
 
   def handle_event("create_new", params, socket) do

@@ -16,9 +16,8 @@ defmodule AccountingSystemWeb.FormAccountComponent do
   end
 
   def update(attrs, socket) do
-    IO.inspect(attrs.parent_edit, label: "VALORES EN ATTRS EDIT ---> ")
+    attrs |> IO.inspect(label: "VALORES EN ATTRS EDIT ---> ")
     values = if attrs.level == 0, do: load_values(), else: load_values_with_id(attrs.id)
-    values |> IO.inspect(label: "VALUES -> -> ")
 
     {:ok, assign(socket,
       idx: attrs.id,
@@ -28,7 +27,8 @@ defmodule AccountingSystemWeb.FormAccountComponent do
       root_accountx: values.root_account,
       namex: (if attrs.level == 0, do: "", else: values.name),
       actionx: (if attrs.edit, do: "edit", else: ""),
-      parent_editx: (if attrs.edit, do: attrs.parent_edit, else: %{})
+      parent_editx: (if attrs.edit, do: attrs.parent_edit, else: %{}),
+      bendiciones: attrs.bendiciones?
       )}
   end
 
@@ -192,7 +192,7 @@ defmodule AccountingSystemWeb.FormAccountComponent do
           </button>
 
 
-        <%= if @actionx == "edit" do %>
+        <%= if @actionx == "edit" && !@bendiciones do %>
           <button phx-click="delete_account" phx-target="#x" phx-value-id=<%= @idx%> phx-value-delete="true"
             class="ml-10 py-2 w-32 bg-red-500 text-white hover:bg-red-400 items-center inline-flex font-bold rounded shadow focus:shadow-outline focus:outline-none rounded">
             <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="trash-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
