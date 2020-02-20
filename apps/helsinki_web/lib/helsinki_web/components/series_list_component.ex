@@ -112,7 +112,7 @@ defmodule AccountingSystemWeb.SeriesListComponent do
       <%= for item <- @series_list do %>
         <div class="w-full px-2 block">
           <div phx-click="open_series" phx-value-id="<%= item.id %>" phx-target="#one" class="border cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
-            <h2 class="text-gray-700 text-xl">Serie: <%= item.serial  %>-<%= item.fiscal_exercise %></h2>
+            <h2 class="text-gray-700 text-xl">Serie: <%= item.serial  %><%= item.fiscal_exercise %></h2>
             <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Folio Actual: <b><%= item.current_number %></b></label>
             <label class="ml-10 inline-block cursor-pointer text-gray-600 font-bold text-sm">Tipo: <b><%= item.name %></b></label>
           </div>

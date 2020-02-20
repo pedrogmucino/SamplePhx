@@ -11,8 +11,7 @@ defmodule AccountingSystem.PolicyHandler do
     Repo,
     PolicyFormatter,
     GenericFunctions,
-    GetPolicySerialQuery,
-    SeriesSchema
+    SeriesHandler
   }
 
   @doc """
@@ -70,9 +69,9 @@ defmodule AccountingSystem.PolicyHandler do
   end
 
   def create_policy(attrs \\ %{}, year, month, serial) do
-    IO.inspect(attrs, label: "**********************POLICYYYYY")
     %{"policy_schema" => ps} = attrs
-    ps = Map.put(ps, "serial", serial)
+    ps = Map.put(ps, "serial", serial.serial)
+    |> Map.put("policy_number", serial.number)
     %PolicySchema{}
     |> PolicySchema.changeset(GenericFunctions.string_map_to_atom(ps))
     |> Repo.insert(prefix: PrefixFormatter.get_prefix(year, month))
@@ -150,7 +149,7 @@ defmodule AccountingSystem.PolicyHandler do
 
   defp save_all(params, auxiliaries) do
     %{"policy_schema" => policy_schema} = params
-    serial = get_serial(Map.get(policy_schema, "fiscal_exercise"), Map.get(policy_schema, "policy_type"))
+    serial = SeriesHandler.get_serial(Map.get(policy_schema, "fiscal_exercise"), Map.get(policy_schema, "policy_type"))
 
     case AccountingSystem.PolicyHandler.create_policy(params, PolicyFormatter.get_year(params), PolicyFormatter.get_month(params), serial) do
       {:ok, policy} ->
@@ -162,35 +161,6 @@ defmodule AccountingSystem.PolicyHandler do
       {:error, reason} ->
         {:error, reason}
     end
-  end
-
-  defp get_serial(fiscal_exercise, policy_type) do
-    serial_map =
-    GetPolicySerialQuery.new(fiscal_exercise, policy_type)
-    |> Repo.one!
-    Map.get(serial_map, :serial)
-    |> get_number(serial_map, fiscal_exercise)
-  end
-
-  defp get_number(serial, serial_map, fiscal_exercise) do
-
-    series_increment(serial_map.id)
-
-    serial_map
-    |> Map.get(:current_number)
-    |> serial_format(serial, fiscal_exercise)
-  end
-
-  defp serial_format(number, serial, fiscal_exercise) do
-    serial <> fiscal_exercise <> "-" <> Integer.to_string(number + 1)
-  end
-
-  defp series_increment(series_id) do
-    series = Repo.get(SeriesSchema, series_id)
-    attrs = %{"current_number" => series.current_number + 1}
-    series
-    |> SeriesSchema.changeset(attrs)
-    |> Repo.update()
   end
 
   def delete_policy_with_aux(id) do
@@ -214,13 +184,4 @@ defmodule AccountingSystem.PolicyHandler do
         :error
     end
   end
-
-  def last_policy() do
-    AccountingSystem.GetLastNumber.of_policy()
-      |> Repo.one(prefix: PrefixFormatter.get_current_prefix)
-      |> get_number
-  end
-
-  defp get_number(nil), do: 1
-  defp get_number(number), do: (number + 1)
 end

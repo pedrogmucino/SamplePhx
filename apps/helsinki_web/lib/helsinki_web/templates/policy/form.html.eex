@@ -1,9 +1,4 @@
-<%= f = form_for @changeset, "#", [phx_submit: :save, phx_change: :save_change] %>
-
-
-  <%= label f, :policy_number %>
-  <%= number_input f, :policy_number, value: @pollys["policy_number"]%>
-  <%= error_tag f, :policy_number %>
+<%= f = form_for @changeset, "#", [phx_submit: :save, phx_change: :save_change] %>  
 
   <%= label f, :policy_type %>
   <%= select f, :policy_type, @policytypes, selected: @pollys["policy_type"]%>

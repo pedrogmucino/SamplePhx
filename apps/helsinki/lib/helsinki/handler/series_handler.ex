@@ -8,7 +8,8 @@ defmodule AccountingSystem.SeriesHandler do
     Repo,
     SeriesSchema,
     GetSeriesQuery,
-    GetSpecificSeriesQuery
+    GetSpecificSeriesQuery,
+    GetPolicySerialQuery
   }
 
 
@@ -116,5 +117,34 @@ defmodule AccountingSystem.SeriesHandler do
   """
   def change_series(%SeriesSchema{} = series) do
     SeriesSchema.changeset(series, %{})
+  end
+
+  def get_serial(fiscal_exercise, policy_type) do
+    serial_map =
+    GetPolicySerialQuery.new(fiscal_exercise, policy_type)
+    |> Repo.one!
+    Map.get(serial_map, :serial)
+    |> get_number(serial_map, fiscal_exercise)
+  end
+
+  defp get_number(serial, serial_map, fiscal_exercise) do
+    series_increment(serial_map.id)
+
+    serial_map
+    |> Map.get(:current_number)
+    |> serial_format(serial, fiscal_exercise)
+  end
+
+  defp serial_format(number, serial, fiscal_exercise) do
+    # serial <> fiscal_exercise <> "-" <> Integer.to_string(number + 1)
+    %{serial: serial <> fiscal_exercise, number: number + 1}
+  end
+
+  defp series_increment(series_id) do
+    series = Repo.get(SeriesSchema, series_id)
+    attrs = %{"current_number" => series.current_number + 1}
+    series
+    |> SeriesSchema.changeset(attrs)
+    |> Repo.update()
   end
 end
