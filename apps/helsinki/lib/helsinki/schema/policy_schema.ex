@@ -15,7 +15,7 @@ defmodule AccountingSystem.PolicySchema do
 
     timestamps()
 
-    #has_many :auxiliaries, AccountingSystem.AuxiliarySchema, foreign_key: :policy_number
+    has_many :auxiliaries, AccountingSystem.AuxiliarySchema, foreign_key: :id
   end
 
   @doc false
