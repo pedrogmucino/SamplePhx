@@ -3,7 +3,8 @@
 <table>
   <thead>
     <tr>
-      <th>Policy number</th>
+      <th>Serie</th>
+      <th>Folio</th>
       <th>Policy type</th>
       <th>Period</th>
       <th>Fiscal exercise</th>
@@ -18,6 +19,7 @@
   <tbody>
 <%= for policy <- @policies do %>
     <tr>
+      <td><%= policy.serial %></td>
       <td><%= policy.policy_number %></td>
       <td><%= policy.policy_type %></td>
       <td><%= policy.period %></td>

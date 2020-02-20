@@ -13,7 +13,6 @@ defmodule AccountingSystem.PolicyFormatter do
       |> Map.get("policy_date")
       |> Map.get("month")
       |> String.to_integer
-      |> IO.inspect(label: "******************GET MONTH")
   end
 
   def get_year(policy) do
@@ -23,7 +22,6 @@ defmodule AccountingSystem.PolicyFormatter do
       |> Map.get("policy_date")
       |> Map.get("year")
       |> String.to_integer
-      |> IO.inspect(label: "***************GET YEAR")
   end
 
   def get_day(policy) do

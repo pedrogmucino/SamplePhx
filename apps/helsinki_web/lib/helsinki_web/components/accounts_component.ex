@@ -8,7 +8,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
     ~L"""
       <div id="one" class="bg-white h-hoch-93 w-80 mt-16 ml-16 block float-left">
         <div class="relative w-full px-2 mt-4">
-          <input class="focus:outline-none focus:bg-white focus:border-blue-500 h-8 w-full rounded border bg-gray-300 pl-2" placeholder="Buscar Cuenta" >
+        <input class="focus:outline-none focus:bg-white focus:border-blue-500 h-8 w-full rounded border bg-gray-300 pl-2" placeholder="Buscar Cuenta" phx-keyup="search_account" phx-target="#one">
           <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="search" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
             class="absolute right-0 top-0 h-4 w-4 mr-4 mt-2">
             <g>
@@ -191,6 +191,11 @@ defmodule AccountingSystemWeb.AccountsComponent do
 
   def handle_event("close", _params, socket) do
     {:noreply, assign(socket, new?: false, edit?: false)}
+  end
+
+  def handle_event("search_account", %{"value" => text}, socket) do
+    result = Account.get_from_strings(text)
+    {:noreply, assign(socket, accounts: result)}
   end
 
   def edit(id, params, socket) do
