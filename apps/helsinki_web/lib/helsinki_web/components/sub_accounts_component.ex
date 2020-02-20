@@ -26,11 +26,9 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
     <div id="sub_account-<%= @id %>" class="bg-white h-hoch-90 w-80 float-left ml-1 mt-16 block">
       <div class=" w-full pt-6 bg-gray-200">
         <div class="block text-white px-3 text-center">
-          <h1 class="text-2xl font-medium text-gray-800"> <%= @name %>
-
-
-          </h1>
+          <h1 class="text-2xl font-medium text-gray-800"> <%= @name %></h1>
           <label class="block text-gray-700 text-sm font-bold"><b><%= @code %></b></label>
+          <br>
           <label class="block text-gray-700"><b><%= @description %></b></label>
           <label class="block text-gray-700"><b><%= if @type == "A", do: "Acumulativo", else: "Detalle" %></b></label>
           <div class="w-full inline-flex py-2">
