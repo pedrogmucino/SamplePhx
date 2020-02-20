@@ -125,10 +125,10 @@ defmodule AccountingSystemWeb.AccountsComponent do
       |> Enum.find(fn acc -> acc.level == level end)
       |> IO.inspect(label: "find?   -> ")
       |> case do
-        nil -> {:noreply, assign(socket, new?: true, child_components: [], level_form_account: level, edit?: false)}
+        nil -> {:noreply, assign(socket, new?: true, child_components: [], level_form_account: level, edit?: false, idx: (params["id"] |> String.to_integer))}
         acc -> {:noreply, assign(socket,
           new?: true,
-          child_components: get_childs(false, socket.assigns.child_components, acc, level), level_form_account: level, edit?: false)}
+          child_components: get_childs(false, socket.assigns.child_components, acc, level), level_form_account: level, edit?: false, idx: (params["id"] |> String.to_integer))}
       end
   end
 
