@@ -98,6 +98,12 @@ defmodule AccountingSystemWeb.AccountsComponent do
     parent_edit = map_accounts
     map_accounts = map_accounts
       |> Map.put(:subaccounts, get_accounts_t(map_accounts.level, map_accounts.id))
+
+    IO.inspect(params["origin"], label: "origin --> ")
+    IO.inspect(socket.assigns.child_components, label: "child_components --> ")
+    IO.inspect(map_accounts, label: "map_accounts --> ")
+    IO.inspect( level, label: "level --> ")
+
     arr = get_childs(params["origin"] |> to_bool(),
       socket.assigns.child_components,
       map_accounts,
@@ -140,29 +146,34 @@ defmodule AccountingSystemWeb.AccountsComponent do
 
   def handle_event("action_account", params, socket) do
     id = params["id"] |> String.to_integer
+    level = params["level"] |> String.to_integer
     action = params["action"]
-    parent_id = params["id"]
-    params = Map.delete(params, "action")
-    params = Map.delete(params, "id")
-    if action == "edit", do: edit(parent_id,params, socket), else: save_new(params, socket)
 
-    map_accounts =  get_account_by_id(id)
-    map_accounts = Map.put(map_accounts, :subaccounts, [])
-    map_accounts = [map_accounts]
-    val = params["origin"] |> to_bool()
-    arr = get_childs(val, socket.assigns.child_components, map_accounts, (params["level"] |> String.to_integer))
-    IO.inspect(value: arr, label: "ARR  ------------------ -> ")
+    if action == "edit",
+      do: edit(id, params, socket),
+      else: save_new(params, socket)
+
+    child_index = socket.assigns.child_components
+    |> Enum.find_index(fn chil -> chil.id == id end)
+
+    dady = socket.assigns.child_components
+    |> Enum.at(child_index - 1)
+    |> IO.inspect(label: "dady ---> ")
+
+    child_components = socket.assigns.child_components
+      |> Enum.map(fn child -> update_family(child, dady, id, level) end)
+      |> IO.inspect(label: "ARR  ------------------ -> ")
 
     {:noreply, assign(socket,
-      child_components: map_accounts,
+      child_components: child_components,
       edit?: false,
       new?: false,
-      accounts: get_accounts_t(-1, -1),
-      parent_editx: get_account_by_id(id)
-      #subaccounts: get_accounts_t((params["level"] |> String.to_integer), (params["parent_account"] |> String.to_integer))
+      accounts: get_accounts_t(-1, -1)
       )}
 
   end
+
+
 
   def handle_event("delete_account", params, socket) do
     IO.inspect(value: params, label: " --------------------------------------- DELETE Params > ")
@@ -231,6 +242,16 @@ defmodule AccountingSystemWeb.AccountsComponent do
   defp get_accounts_t(level, parent_account), do: Account.list_of_childs(level, parent_account)
 
   defp get_account_by_id(id), do: id |> Account.get_account!()
+
+  defp update_family(child, dady, id, level) do
+    cond do
+      child.id == id -> get_account_by_id(id)
+        |> Map.put(:subaccounts, get_accounts_t((level - 1), id))
+      child.id == dady.id -> get_account_by_id(dady.id)
+        |> Map.put(:subaccounts, get_accounts_t((dady.level), dady.id))
+      true -> child
+    end
+  end
 
   defp get_childs(true, _others, accounts, _level), do: [accounts]
   defp get_childs(false, others, accounts, level) do
