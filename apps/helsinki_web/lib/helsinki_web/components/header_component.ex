@@ -21,32 +21,24 @@ defmodule AccountingSystemWeb.HeaderComponent do
     <div class="fixed top-0 left-0 h-screen px-2 bg-white block z-10 shadow-lg transition-menu w-16">
         <div class="block h-24"></div>
         <%= for item <- @menu do %>
-          <div class="block my-3">
-            <a href="<%= item.link %>" class="rounded hover:border-gray-200 text-gray-800 hover:bg-gray-200 py-1 inline-flex items-center w-full">
-              <%= Phoenix.HTML.raw(item.icon ) %>
-              <label class="cursor-pointer ml-2 mr-auto font-bold transition-menu-label"><%= item.name %></label>
-            </a>
-          </div>
+
+          <%= if item.name != "Configuración" do %>
+            <div class="block my-3">
+              <a href="<%= item.link %>" class="rounded hover:border-gray-200 text-gray-800 hover:bg-gray-200 py-1 inline-flex items-center w-full">
+                <%= Phoenix.HTML.raw(item.icon ) %>
+                <label class="cursor-pointer ml-2 mr-auto font-bold transition-menu-label"><%= item.name %></label>
+              </a>
+            </div>
+          <% else %>
+            <div class="block mt-mar-110">
+              <a href="<%= item.link %>" class="rounded hover:border-gray-200 text-gray-800 hover:bg-gray-200 py-1 inline-flex items-center w-full">
+                <%= Phoenix.HTML.raw(item.icon ) %>
+                <label class="cursor-pointer ml-2 mr-auto font-bold transition-menu-label"><%= item.name %></label>
+              </a>
+            </div>
+          <% end %>
+
         <% end %>
-
-
-      <div class="absolute inset-x-0 bottom-0 h-12">
-
-        <a href="/listconfiguration" class="rounded hover:border-gray-200 text-gray-800 hover:bg-gray-200 py-1 inline-flex items-center w-full">
-        <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="cog" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
-          class="h-8 w-8 ml-2 mr-auto">
-            <g>
-              <path fill="currentColor" d="M487.75 315.6l-42.6-24.6a192.62 192.62 0 0 0 0-70.2l42.6-24.6a12.11 12.11 0 0 0 5.5-14 249.2 249.2 0 0 0-54.7-94.6 12 12 0 0 0-14.8-2.3l-42.6 24.6a188.83 188.83 0 0 0-60.8-35.1V25.7A12 12 0 0 0 311 14a251.43 251.43 0 0 0-109.2 0 12 12 0 0 0-9.4 11.7v49.2a194.59 194.59 0 0 0-60.8 35.1L89.05 85.4a11.88 11.88 0 0 0-14.8 2.3 247.66 247.66 0 0 0-54.7 94.6 12 12 0 0 0 5.5 14l42.6 24.6a192.62 192.62 0 0 0 0 70.2l-42.6 24.6a12.08 12.08 0 0 0-5.5 14 249 249 0 0 0 54.7 94.6 12 12 0 0 0 14.8 2.3l42.6-24.6a188.54 188.54 0 0 0 60.8 35.1v49.2a12 12 0 0 0 9.4 11.7 251.43 251.43 0 0 0 109.2 0 12 12 0 0 0 9.4-11.7v-49.2a194.7 194.7 0 0 0 60.8-35.1l42.6 24.6a11.89 11.89 0 0 0 14.8-2.3 247.52 247.52 0 0 0 54.7-94.6 12.36 12.36 0 0 0-5.6-14.1zm-231.4 36.2a95.9 95.9 0 1 1 95.9-95.9 95.89 95.89 0 0 1-95.9 95.9z"
-                class="text-blue-500">
-              </path>
-              <path fill="currentColor" d="M256.35 319.8a63.9 63.9 0 1 1 63.9-63.9 63.9 63.9 0 0 1-63.9 63.9z"
-                class="text-blue-900">
-              </path>
-            </g>
-        </svg>
-          <label class="cursor-pointer ml-2 mr-auto font-bold transition-menu-label">Configuration</label>
-        </a>
-      </div>
 
     </div>
     """
@@ -124,6 +116,15 @@ defmodule AccountingSystemWeb.HeaderComponent do
         <g>
           <path fill="currentColor" d="M304 96h16v64h-16a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h96a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16h-16V48a16 16 0 0 0-16-16h-48a16 16 0 0 0-14.29 8.83l-16 32A16 16 0 0 0 304 96zm26.15 162.91a79 79 0 0 0-55 54.17c-14.25 51.05 21.21 97.77 68.85 102.53a84.07 84.07 0 0 1-20.85 12.91c-7.57 3.4-10.8 12.47-8.18 20.34l9.9 20c2.87 8.63 12.53 13.49 20.9 9.91 58-24.76 86.25-61.61 86.25-132V336c-.02-51.21-48.4-91.34-101.85-77.09zM352 356a20 20 0 1 1 20-20 20 20 0 0 1-20 20z" class="text-blue-500"></path>
           <path fill="currentColor" d="M176 352h-48V48a16 16 0 0 0-16-16H80a16 16 0 0 0-16 16v304H16c-14.19 0-21.36 17.24-11.29 27.31l80 96a16 16 0 0 0 22.62 0l80-96C197.35 369.26 190.22 352 176 352z" class="text-blue-900"></path>
+        </g>
+    </svg>
+    """},
+    %{name: "Configuración", link: "/listconfiguration", icon: """
+    <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="cog" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+      class="h-8 w-8 ml-2 mr-auto">
+        <g>
+          <path fill="currentColor" d="M487.75 315.6l-42.6-24.6a192.62 192.62 0 0 0 0-70.2l42.6-24.6a12.11 12.11 0 0 0 5.5-14 249.2 249.2 0 0 0-54.7-94.6 12 12 0 0 0-14.8-2.3l-42.6 24.6a188.83 188.83 0 0 0-60.8-35.1V25.7A12 12 0 0 0 311 14a251.43 251.43 0 0 0-109.2 0 12 12 0 0 0-9.4 11.7v49.2a194.59 194.59 0 0 0-60.8 35.1L89.05 85.4a11.88 11.88 0 0 0-14.8 2.3 247.66 247.66 0 0 0-54.7 94.6 12 12 0 0 0 5.5 14l42.6 24.6a192.62 192.62 0 0 0 0 70.2l-42.6 24.6a12.08 12.08 0 0 0-5.5 14 249 249 0 0 0 54.7 94.6 12 12 0 0 0 14.8 2.3l42.6-24.6a188.54 188.54 0 0 0 60.8 35.1v49.2a12 12 0 0 0 9.4 11.7 251.43 251.43 0 0 0 109.2 0 12 12 0 0 0 9.4-11.7v-49.2a194.7 194.7 0 0 0 60.8-35.1l42.6 24.6a11.89 11.89 0 0 0 14.8-2.3 247.52 247.52 0 0 0 54.7-94.6 12.36 12.36 0 0 0-5.6-14.1zm-231.4 36.2a95.9 95.9 0 1 1 95.9-95.9 95.89 95.89 0 0 1-95.9 95.9z" class="text-blue-500"></path>
+          <path fill="currentColor" d="M256.35 319.8a63.9 63.9 0 1 1 63.9-63.9 63.9 63.9 0 0 1-63.9 63.9z"class="text-blue-900"></path>
         </g>
     </svg>
     """}

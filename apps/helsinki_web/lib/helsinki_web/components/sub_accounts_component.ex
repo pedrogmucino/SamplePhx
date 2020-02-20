@@ -8,6 +8,7 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
 
   def update(attrs, socket) do
     #{:ok, socket}
+    attrs |> IO.inspect(label: "  --> PARAMS IN UPDATE SUB ACC")
     {:ok, assign(socket,
       level: attrs.next_level,
       id: attrs.id,
@@ -15,7 +16,8 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
       subaccounts: attrs.subaccounts,
       code: attrs.code,
       type: attrs.type,
-      description: attrs.description)
+      description: attrs.description,
+      status_father: (if attrs.status_father == "A", do: true, else: false))
     }
   end
 
@@ -29,12 +31,14 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
 
           </h1>
           <label class="block text-gray-700 text-sm font-bold"><b><%= @code %></b></label>
-          <label class="block text-gray-700">Descripción: <b><%= @description %></b></label>
-          <label class="block text-gray-700">Tipo: <b><%= if @type == "A", do: "Acumulativo", else: "Detalle" %></b></label>
+          <label class="block text-gray-700"><b><%= @description %></b></label>
+          <label class="block text-gray-700"><b><%= if @type == "A", do: "Acumulativo", else: "Detalle" %></b></label>
           <div class="w-full inline-flex py-2">
 
+
             <div class="w-1/2 px-2">
-              <button phx-click="create_new" phx-value-level="<%= @level %>" phx-target="#one" class="py-2 bg-teal-500 text-white hover:bg-teal-400 items-center inline-flex font-bold rounded text-sm w-full ">
+              <%= if @status_father do %>
+              <button phx-click="create_new" phx-value-id="<%= @id %>" phx-value-level="<%= @level %>" phx-target="#one" class="py-2 bg-teal-500 text-white hover:bg-teal-400 items-center inline-flex font-bold rounded text-sm w-full ">
                 <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
                   class="h-4 w-4 mr-2 ml-auto">
                   <path fill="currentColor" d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
@@ -43,10 +47,12 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
                 </svg>
                 <label class="cursor-pointer mr-auto text-white">Nueva</label>
               </button>
+              <% end %>
             </div>
 
+
             <div class="w-1/2 px-2">
-              <button phx-click="edit_this" phx-value-level="<%= @level %>" phx-value-code="<%= @code %>" phx-target="#one" class="py-2 bg-teal-500 text-white hover:bg-teal-400 items-center inline-flex font-bold rounded text-sm w-full ">
+              <button phx-click="edit_this" phx-value-id="<%= @id %>" phx-value-level="<%= @level %>" phx-value-code="<%= @code %>" phx-target="#one" class="py-2 bg-teal-500 text-white hover:bg-teal-400 items-center inline-flex font-bold rounded text-sm w-full ">
                 <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="pencil-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
                   class="h-4 w-4 mr-2 ml-auto">
                   <path fill="currentColor" d="M497.9 142.1l-46.1 46.1c-4.7 4.7-12.3 4.7-17 0l-111-111c-4.7-4.7-4.7-12.3 0-17l46.1-46.1c18.7-18.7 49.1-18.7 67.9 0l60.1 60.1c18.8 18.7 18.8 49.1 0 67.9zM284.2 99.8L21.6 362.4.4 483.9c-2.9 16.4 11.4 30.6 27.8 27.8l121.5-21.3 262.6-262.6c4.7-4.7 4.7-12.3 0-17l-111-111c-4.8-4.7-12.4-4.7-17.1 0zM124.1 339.9c-5.5-5.5-5.5-14.3 0-19.8l154-154c5.5-5.5 14.3-5.5 19.8 0s5.5 14.3 0 19.8l-154 154c-5.5 5.5-14.3 5.5-19.8 0zM88 424h48v36.3l-64.5 11.3-31.1-31.1L51.7 376H88v48z"

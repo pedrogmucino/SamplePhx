@@ -58,7 +58,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
       </div>
 
       <%= for component <- @child_components do %>
-        <%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, subaccounts: component.subaccounts, father_name: component.name, next_level: (component.level + 1), id: component.id, code: component.code, type: component.type, description: component.description) %>
+        <%= live_component(@socket, AccountingSystemWeb.SubAccountsComponent, subaccounts: component.subaccounts, father_name: component.name, next_level: (component.level + 1), id: component.id, code: component.code, type: component.type, description: component.description, status_father: component.status) %>
       <% end %>
 
       <%= if @new? do %>
@@ -83,6 +83,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
   end
 
   def update(attrs, socket) do
+    attrs |> IO.inspect(label: " Attrs in Update Account Component -> ")
       {:ok, assign(socket, id: attrs.id)}
   end
 
@@ -123,8 +124,14 @@ defmodule AccountingSystemWeb.AccountsComponent do
 
   def handle_event("edit_this", params, socket) do
     level = (params["level"] |> String.to_integer) - 1
-    IO.inspect(level, label: "VALUES FROM -> EDIT ")
-    {:noreply, assign(socket, new?: false, edit?: true)}
+    socket.assigns.child_components
+      |> Enum.find(fn acc -> acc.level == level end)
+      |> IO.inspect(label: "-------------------------- > > > ")
+      |> case do
+        nil -> {:noreply, assign(socket, child_components: [], level_form_account: level, edit?: true, new?: false, parent_editx: params["id"] |> String.to_integer |> get_account_by_id())}
+        acc -> {:noreply, assign(socket, child_components: get_childs(false, socket.assigns.child_components, acc, level), level_form_account: level, edit?: true, new?: false, parent_editx: params["id"] |> String.to_integer |> get_account_by_id())}
+      end
+
   end
 
   def handle_event("action_account", params, socket) do
