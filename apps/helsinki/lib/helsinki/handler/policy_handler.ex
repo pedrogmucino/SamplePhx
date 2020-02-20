@@ -5,11 +5,14 @@ defmodule AccountingSystem.PolicyHandler do
 
   import Ecto.Query, warn: false
   alias AccountingSystem.{
+    AuxiliaryHandler,
     PolicySchema,
     PrefixFormatter,
     Repo,
     PolicyFormatter,
-    GenericFunctions
+    GenericFunctions,
+    GetPolicySerialQuery,
+    SeriesSchema
   }
 
   @doc """
@@ -66,8 +69,10 @@ defmodule AccountingSystem.PolicyHandler do
     |> Repo.insert(prefix: PrefixFormatter.get_current_prefix)
   end
 
-  def create_policy(attrs \\ %{}, year, month) do
+  def create_policy(attrs \\ %{}, year, month, serial) do
+    IO.inspect(attrs, label: "**********************POLICYYYYY")
     %{"policy_schema" => ps} = attrs
+    ps = Map.put(ps, "serial", serial)
     %PolicySchema{}
     |> PolicySchema.changeset(GenericFunctions.string_map_to_atom(ps))
     |> Repo.insert(prefix: PrefixFormatter.get_prefix(year, month))
@@ -145,12 +150,47 @@ defmodule AccountingSystem.PolicyHandler do
 
   defp save_all(params, auxiliaries) do
     %{"policy_schema" => policy_schema} = params
-    case AccountingSystem.PolicyHandler.create_policy(params, PolicyFormatter.get_year(params), PolicyFormatter.get_month(params)) do
-      {:ok, _} ->
-        Enum.each(auxiliaries, fn x -> AccountingSystemWeb.AuxiliaryController.create(x, policy_schema["policy_number"], PolicyFormatter.get_year(params), PolicyFormatter.get_month(params)) end)
+    serial = get_serial(Map.get(policy_schema, "fiscal_exercise"), Map.get(policy_schema, "policy_type"))
+
+    case AccountingSystem.PolicyHandler.create_policy(params, PolicyFormatter.get_year(params), PolicyFormatter.get_month(params), serial) do
+      {:ok, policy} ->
+        Enum.each(auxiliaries, fn x ->
+          AuxiliaryHandler.create_auxiliary(AuxiliaryHandler.format_to_save(x, policy_schema["policy_number"], policy.id),
+          PolicyFormatter.get_year(params),
+          PolicyFormatter.get_month(params))
+        end)
       {:error, reason} ->
         {:error, reason}
     end
+  end
+
+  defp get_serial(fiscal_exercise, policy_type) do
+    serial_map =
+    GetPolicySerialQuery.new(fiscal_exercise, policy_type)
+    |> Repo.one!
+    Map.get(serial_map, :serial)
+    |> get_number(serial_map, fiscal_exercise)
+  end
+
+  defp get_number(serial, serial_map, fiscal_exercise) do
+
+    series_increment(serial_map.id)
+
+    serial_map
+    |> Map.get(:current_number)
+    |> serial_format(serial, fiscal_exercise)
+  end
+
+  defp serial_format(number, serial, fiscal_exercise) do
+    serial <> fiscal_exercise <> "-" <> Integer.to_string(number + 1)
+  end
+
+  defp series_increment(series_id) do
+    series = Repo.get(SeriesSchema, series_id)
+    attrs = %{"current_number" => series.current_number + 1}
+    series
+    |> SeriesSchema.changeset(attrs)
+    |> Repo.update()
   end
 
   def delete_policy_with_aux(id) do

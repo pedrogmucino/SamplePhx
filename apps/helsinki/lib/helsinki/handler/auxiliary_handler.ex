@@ -145,11 +145,12 @@ defmodule AccountingSystem.AuxiliaryHandler do
       |> Enum.count
   end
 
-  def format_to_save(params, policy_number) do
+  def format_to_save(params, policy_number, policy_id) do
     params = Map.merge(params, %{"debit_credit" => h_or_d(params)})
     params = Map.merge(params, %{"mxn_amount" => amount(params)})
     params = Map.merge(params, %{"amount" => amount(params)})
     params = Map.merge(params, %{"exchange_rate" => 1})
+    params = Map.merge(params, %{"policy_id" => policy_id})
     params = Map.merge(params, %{"policy_number" => policy_number})
     params = Map.delete(params, "haber")
     params = Map.delete(params, "debe")
