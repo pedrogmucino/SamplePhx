@@ -26,8 +26,16 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
     <div id="sub_account-<%= @id %>" class="bg-white h-hoch-90 w-80 float-left ml-1 mt-16 block">
       <div class=" w-full pt-6 bg-gray-200">
         <div class="block text-white px-3 text-center">
-          <h1 class="text-2xl font-medium text-gray-800"> <%= @name %></h1>
-          <label class="block text-gray-700 text-sm font-bold"><b><%= @code %></b></label>
+          <h1 class="tooltip text-2xl font-medium text-gray-800"> <%= String.slice(@name, 0, 70) %>
+            <%= if String.length(@name) > 70 do %>
+              <span class='tooltip-text text-base text-white bg-blue-700 mt-8 -ml-48 mr-1 rounded'><%= @name %></span>
+            <% end %>
+          </h1>
+          <label class="tooltip block text-gray-700 text-sm font-bold"><b><%= String.slice(@code, 0, 70) %></b>
+            <%= if String.length(@code) > 70 do %>
+              <span class='tooltip-text text-base text-white bg-blue-700 mt-8 -ml-56 mr-1 rounded'><%= @code %></span>
+            <% end %>
+          </label>
           <br>
           <label class="block text-gray-700"><b><%= @description %></b></label>
           <label class="block text-gray-700"><b><%= if @type == "A", do: "Acumulativo", else: "Detalle" %></b></label>
@@ -84,8 +92,16 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
       <%= for item <- @subaccounts do %>
         <div class="w-full p-2 block cursor-pointer" phx-click="open_child" phx-value-origin="false" phx-value-level="<%= @level %>" phx-value-id="<%= item.id %>" phx-target="#one">
           <div class="hover:bg-gray-300 border w-full block bg-gray-200 p-3 rounded relative">
-            <h2 class="pt-4 text-gray-800 text-xl"> <%= item.name %> </h2>
-            <label class="cursor-pointer text-gray-600 font-bold text-sm"><%= item.code %></label>
+            <h2 class="tooltip pt-4 text-gray-800 text-xl"> <%= String.slice(item.name, 0, 70) %>
+              <%= if String.length(item.name) > 70 do %>
+                <span class='tooltip-text text-base text-white bg-blue-700 mt-8 -ml-24 mr-1 rounded'><%= item.name %></span>
+              <% end %>
+            </h2>
+            <label class="tooltip cursor-pointer text-gray-600 font-bold text-sm"><%= String.slice(item.code,0 ,70) %>
+              <%= if String.length(item.code) > 70 do %>
+                <span class='tooltip-text text-base text-white bg-blue-700 mt-8 -ml-20 rounded'><%= item.code %></span>
+              <% end %>
+            </label>
             <br>
             <label class="cursor-pointer text-gray-600 font-bold text-sm"><%= if item.type == "A", do: "Acumulativo", else: "Detalle" %></label>
             <div class="absolute bg-<%= if item.status == "A", do: "green", else: "red" %>-200 px-3 text-sm font-bold top-0 right-0 rounded-full text-<%= if item.status == "A", do: "green", else: "red" %>-700 mt-2 mr-2">
@@ -99,6 +115,8 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
     """
   end
 
+  @spec handle_event(<<_::96>>, nil | keyword | map, Phoenix.LiveView.Socket.t()) ::
+          {:noreply, any}
   def handle_event("select_child", params, socket) do
     IO.inspect(params, label: "params receive --->  ")
     {:noreply, assign(socket, child?: true, child_id: params["name"] )}
