@@ -9,7 +9,8 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     {:ok, assign(socket,
     policy_list: PolicyHandler.get_policy_list,
     new?: false,
-    edit?: false
+    edit?: false,
+    actionx: "edit"
     )}
   end
 
@@ -18,7 +19,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def handle_event("create_policy", params, socket) do
-    {:noreply, socket}
+    {:noreply, assign(socket, new?: true, edit?: false, actionx: "edit")}
   end
 
   def handle_event("open_policy", params, socket) do
@@ -31,6 +32,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def handle_event("create_new", _params, socket) do
+    IO.inspect(socket, label: "SOOOOCKKKKEETTTTT::::::::::::::::>>>>")
     {:noreply, assign(socket, new?: true, edit?: false)}
   end
 
@@ -84,7 +86,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     </div>
 
     <%= if @new? do %>
-      <%= live_component(@socket, AccountingSystemWeb.PolicyComponent, id: "spolicy") %>
+      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: "new") %>
     <% end %>
 
     <%= if @edit? do %>
