@@ -57,7 +57,7 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
                   class="text-white">
                   </path>
                 </svg>
-                <label class="mr-auto text-white">Editar</label>
+                <label class="cursor-pointer mr-auto text-white">Editar</label>
               </button>
             </div>
 

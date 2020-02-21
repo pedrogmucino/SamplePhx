@@ -115,7 +115,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
       actually_level: level,
       idx: id,
       parent_editx: parent_edit,
-      bendiciones: (if length(map_accounts.subaccounts) > 0, do: true, else: false)
+      bendiciones: (if map_accounts.subaccounts != nil, do: (if length(map_accounts.subaccounts) > 0, do: true), else: false)
       )}
   end
 
@@ -149,19 +149,17 @@ defmodule AccountingSystemWeb.AccountsComponent do
     level = params["level"] |> String.to_integer
     action = params["action"]
 
-    if action == "edit",
-      do: edit(id, params, socket),
-      else: save_new(params, socket)
+    if action == "edit", do: edit(id, params, socket), else: save_new(params, socket)
 
     child_index = socket.assigns.child_components
     |> Enum.find_index(fn chil -> chil.id == id end)
 
-    dady = socket.assigns.child_components
+    daddy = socket.assigns.child_components
     |> Enum.at(child_index - 1)
-    |> IO.inspect(label: "dady ---> ")
+    |> IO.inspect(label: "daddy ---> ")
 
     child_components = socket.assigns.child_components
-      |> Enum.map(fn child -> update_family(child, dady, id, level) end)
+      |> Enum.map(fn child -> update_family(child, daddy, id, level) end)
       |> IO.inspect(label: "ARR  ------------------ -> ")
 
     {:noreply, assign(socket,
@@ -248,12 +246,12 @@ defmodule AccountingSystemWeb.AccountsComponent do
 
   defp get_account_by_id(id), do: id |> Account.get_account!()
 
-  defp update_family(child, dady, id, level) do
+  defp update_family(child, daddy, id, level) do
     cond do
       child.id == id -> get_account_by_id(id)
         |> Map.put(:subaccounts, get_accounts_t((level - 1), id))
-      child.id == dady.id -> get_account_by_id(dady.id)
-        |> Map.put(:subaccounts, get_accounts_t((dady.level), dady.id))
+      child.id == daddy.id -> get_account_by_id(daddy.id)
+        |> Map.put(:subaccounts, get_accounts_t((daddy.level), daddy.id))
       true -> child
     end
   end

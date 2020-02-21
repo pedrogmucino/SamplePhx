@@ -191,7 +191,7 @@ defmodule AccountingSystemWeb.FormAccountComponent do
 
 
         <%= if @actionx == "edit" && !@bendiciones do %>
-          <button phx-click="delete_account" phx-target="#x" phx-value-id=<%= @idx%> phx-value-delete="true"
+          <button phx-click="delete_account" phx-target="#x" phx-value-id=<%= @idx%> phx-value-delete="true" phx-value-level=<%= @levelx %>
             class="ml-10 py-2 w-32 bg-red-500 text-white hover:bg-red-400 items-center inline-flex font-bold rounded shadow focus:shadow-outline focus:outline-none rounded">
             <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="trash-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
               class="h-4 w-4 mr-2 ml-auto">
