@@ -40,7 +40,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
               <div phx-click="open_child" phx-value-id="<%= item.id %>" phx-value-level="0" phx-value-origin="true" phx-target="#one" class="border cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
                 <h2 class="tooltip text-gray-800 text-xl block"><%= String.slice(item.name, 0, 70) %>
                   <%= if String.length(item.name) > 70 do %>
-                    <span class='tooltip-text text-base text-white bg-blue-700 mt-8 -ml-20 mr-1 rounded'><%= item.name %></span>
+                    <span class='tooltip-text text-sm text-white bg-blue-500 mt-8 -ml-20 mr-1 rounded'><%= item.name %></span>
                   <% end %>
                 </h2>
                 <label class="tooltip cursor-pointer text-gray-600 font-bold text-sm block"><%= String.slice(item.code, 0, 70) %>

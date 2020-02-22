@@ -28,12 +28,12 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
         <div class="block text-white px-3 text-center">
           <h1 class="tooltip text-2xl font-medium text-gray-800"> <%= String.slice(@name, 0, 70) %>
             <%= if String.length(@name) > 70 do %>
-              <span class='tooltip-text text-base text-white bg-blue-700 mt-8 -ml-48 mr-1 rounded'><%= @name %></span>
+              <span class='tooltip-text text-sm text-white bg-blue-500 mt-8 -ml-48 mr-1 rounded'><%= @name %></span>
             <% end %>
           </h1>
           <label class="tooltip block text-gray-700 text-sm font-bold"><b><%= String.slice(@code, 0, 70) %></b>
             <%= if String.length(@code) > 70 do %>
-              <span class='tooltip-text text-base text-white bg-blue-700 mt-8 -ml-56 mr-1 rounded'><%= @code %></span>
+              <span class='tooltip-text text-sm text-white bg-blue-500 mt-8 -ml-56 rounded'><%= @code %></span>
             <% end %>
           </label>
           <br>
@@ -94,12 +94,12 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
           <div class="hover:bg-gray-300 border w-full block bg-gray-200 p-3 rounded relative">
             <h2 class="tooltip pt-4 text-gray-800 text-xl"> <%= String.slice(item.name, 0, 70) %>
               <%= if String.length(item.name) > 70 do %>
-                <span class='tooltip-text text-base text-white bg-blue-700 mt-8 -ml-24 mr-1 rounded'><%= item.name %></span>
+                <span class='tooltip-text text-sm text-white bg-blue-500 mt-8 -ml-24 mr-1 rounded'><%= item.name %></span>
               <% end %>
             </h2>
             <label class="tooltip cursor-pointer text-gray-600 font-bold text-sm"><%= String.slice(item.code,0 ,70) %>
               <%= if String.length(item.code) > 70 do %>
-                <span class='tooltip-text text-base text-white bg-blue-700 mt-8 -ml-20 rounded'><%= item.code %></span>
+                <span class='tooltip-text text-sm text-white bg-blue-500 mt-8 -ml-56 rounded'><%= item.code %></span>
               <% end %>
             </label>
             <br>
