@@ -45,7 +45,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
                 </h2>
                 <label class="tooltip cursor-pointer text-gray-600 font-bold text-sm block"><%= String.slice(item.code, 0, 70) %>
                 <%= if String.length(item.code) > 70 do %>
-                  <span class='tooltip-text text-base text-white bg-blue-700 mt-8 -ml-20 mr-1 rounded'><%= item.code %></span>
+                  <span class='tooltip-text text-sm text-white bg-blue-500 mt-8 -ml-56 mr-1 rounded'><%= item.code %></span>
                 <% end %>
                 </label>
                 <div class="block relative">
