@@ -26,8 +26,8 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
     <div id="sub_account-<%= @id %>" class="bg-white h-hoch-90 w-80 float-left ml-1 mt-16 block">
       <div class=" w-full pt-6 bg-gray-200">
         <div class="block text-white px-3 text-center">
-          <h1 class="tooltip text-2xl font-medium text-gray-800"> <%= String.slice(@name, 0, 70) %>
-            <%= if String.length(@name) > 70 do %>
+          <h1 class="tooltip text-2xl font-medium text-gray-800"> <%= if String.length(@name) > 32, do: String.slice(@name, 0, 32) <> "...", else: @name %>
+            <%= if String.length(@name) > 32 do %>
               <span class='tooltip-text text-sm text-white bg-blue-500 mt-8 -ml-48 mr-1 rounded'><%= @name %></span>
             <% end %>
           </h1>
@@ -92,8 +92,8 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
       <%= for item <- @subaccounts do %>
         <div class="w-full p-2 block cursor-pointer" phx-click="open_child" phx-value-origin="false" phx-value-level="<%= @level %>" phx-value-id="<%= item.id %>" phx-target="#one">
           <div class="hover:bg-gray-300 border w-full block bg-gray-200 p-3 rounded relative">
-            <h2 class="tooltip pt-4 text-gray-800 text-xl"> <%= String.slice(item.name, 0, 70) %>
-              <%= if String.length(item.name) > 70 do %>
+            <h2 class="tooltip pt-4 text-gray-800 text-xl"> <%= if String.length(item.name) > 38, do: String.slice(item.name, 0, 38) <> "...", else: item.name %>
+              <%= if String.length(item.name) > 38 do %>
                 <span class='tooltip-text text-sm text-white bg-blue-500 mt-8 -ml-24 mr-1 rounded'><%= item.name %></span>
               <% end %>
             </h2>

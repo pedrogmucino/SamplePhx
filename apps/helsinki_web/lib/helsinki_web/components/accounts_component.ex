@@ -38,8 +38,8 @@ defmodule AccountingSystemWeb.AccountsComponent do
           <%= for item <- @accounts do %>
             <div class="w-full px-2 block">
               <div phx-click="open_child" phx-value-id="<%= item.id %>" phx-value-level="0" phx-value-origin="true" phx-target="#one" class="border cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
-                <h2 class="tooltip text-gray-800 text-xl block"><%= String.slice(item.name, 0, 70) %>
-                  <%= if String.length(item.name) > 70 do %>
+                <h2 class="tooltip text-gray-800 text-xl block"><%= if String.length(item.name) > 38, do: String.slice(item.name, 0, 38) <> "...", else: item.name %>
+                  <%= if String.length(item.name) > 38 do %>
                     <span class='tooltip-text text-sm text-white bg-blue-500 mt-8 -ml-20 mr-1 rounded'><%= item.name %></span>
                   <% end %>
                 </h2>
@@ -141,6 +141,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
   end
 
   def handle_event("edit_this", params, socket) do
+    IO.inspect(params, label: "+++++++++++++++++++++PARAMETROS A EDITAR")
     level = (params["level"] |> String.to_integer) - 1
     socket.assigns.child_components
       |> Enum.find(fn acc -> acc.level == level end)
@@ -154,7 +155,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
 
   def handle_event("action_account", params, socket) do
     id = params["id"] |> String.to_integer
-    level = params["level"] |> String.to_integer
+    level = params["level"] |> String.to_integer |> IO.inspect(label: "++++++++++++++++++LEVEL A EDITAR")
     action = params["action"]
 
     if action == "edit", do: edit(id, params, socket), else: save_new(params, socket)
