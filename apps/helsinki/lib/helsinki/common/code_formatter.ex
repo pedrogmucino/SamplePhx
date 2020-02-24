@@ -5,11 +5,12 @@ defmodule AccountingSystem.CodeFormatter do
 
   def add_in_position(string, position) do
     string
-      |>string_to_list
-      |>Enum.at(position)
-      |>plus_one
-      |>insert_value(string, position)
-      |>list_to_string()
+      |> string_to_list
+      |> Enum.at(position)
+      |> is_nil
+      |> plus_one(Enum.at(string |> string_to_list, position), string, position)
+      |> insert_value(string, position)
+      |> list_to_string()
   end
 
   defp add_line([head | tail]) do
@@ -36,13 +37,27 @@ defmodule AccountingSystem.CodeFormatter do
     add_line(code)
   end
 
-  defp plus_one(strCode) do
+  defp plus_one(false, strCode, _string, _position) do
     len = String.length(strCode)
     strCode
-      |>String.to_integer
-      |>Kernel.+(1)
-      |>Integer.to_string
-      |>addZero(len)
+    |> String.to_integer
+    |> Kernel.+(1)
+    |> Integer.to_string
+    |> addZero(len)
+  end
+
+  defp plus_one(true, nil, string, position) do
+    str_code =
+    string
+    |> string_to_list
+    |> Enum.at(position - 1)
+
+    len = String.length(str_code)
+    str_code
+    |> String.to_integer
+    |> Kernel.+(1)
+    |> Integer.to_string
+    |> addZero(len)
   end
 
   def try_quit_zeros(string, length) do
@@ -78,7 +93,7 @@ defmodule AccountingSystem.CodeFormatter do
 
   defp get_code_from_query([], codeschema) do
     #EN caso de que el query de Null osea que no tenga hijos aún
-    Map.get(codeschema, :code)
+    Map.get(codeschema, :code) #<> "-0"
   end
 
   defp add_line("-", [head | tail]) do
