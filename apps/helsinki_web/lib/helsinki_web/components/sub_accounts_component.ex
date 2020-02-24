@@ -2,12 +2,15 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
   use Phoenix.LiveComponent
   use Phoenix.HTML
 
+  alias AccountingSystem.StructureHandler
+
   def mount(socket) do
     {:ok, socket}
   end
 
   def update(attrs, socket) do
     #{:ok, socket}
+    max_level = StructureHandler.get_max_level()
     attrs |> IO.inspect(label: "  --> PARAMS IN UPDATE SUB ACC")
     {:ok, assign(socket,
       level: attrs.next_level,
@@ -17,7 +20,7 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
       code: attrs.code,
       type: attrs.type,
       description: attrs.description,
-      status_father: (if attrs.status_father == "A", do: true, else: false))
+      status_father: (if max_level >= attrs.next_level and attrs.status_father == "A", do: true, else: false))
     }
   end
 
@@ -121,9 +124,5 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
     IO.inspect(params, label: "params receive --->  ")
     {:noreply, assign(socket, child?: true, child_id: params["name"] )}
   end
-
-
-
-
 
 end

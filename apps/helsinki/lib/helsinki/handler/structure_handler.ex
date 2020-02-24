@@ -10,7 +10,8 @@ defmodule AccountingSystem.StructureHandler do
     StructureSchema,
     GetStructureList,
     CodeFormatter,
-    GetMostRecentStructureQuery
+    GetMostRecentStructureQuery,
+    GetMaxGeneralLevelQuery
   }
   alias AccountingSystem.GetSetAccountsCodes, as: AccountsGetSet
   # alias AccountingSystem.CodeFormatter
@@ -214,6 +215,11 @@ defmodule AccountingSystem.StructureHandler do
     code
       |> CodeFormatter.quit_zeros_from(level)
       |> AccountsGetSet.set_new_code(id)
+  end
+
+  def get_max_level() do
+    GetMaxGeneralLevelQuery.new
+    |> Repo.one!
   end
 
   @doc """

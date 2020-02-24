@@ -93,7 +93,7 @@ defmodule AccountingSystem.CodeFormatter do
 
   defp get_code_from_query([], codeschema) do
     #EN caso de que el query de Null osea que no tenga hijos aún
-    Map.get(codeschema, :code) #<> "-0"
+    Map.get(codeschema, :code)
   end
 
   defp add_line("-", [head | tail]) do
