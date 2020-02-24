@@ -26,7 +26,7 @@ defmodule AccountingSystemWeb.HeaderComponent do
               </path>
             </svg>
           </a>
-          <span class='tooltip-text text-white bg-blue-700 mt-8 -ml-20 rounded'>Configuración</span>
+          <span class='tooltip-text text-white bg-blue-500 mt-8 -ml-20 rounded'>Configuración</span>
         </div>
       </div>
     </div>

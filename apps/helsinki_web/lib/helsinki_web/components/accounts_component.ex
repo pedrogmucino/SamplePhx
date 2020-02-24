@@ -38,8 +38,16 @@ defmodule AccountingSystemWeb.AccountsComponent do
           <%= for item <- @accounts do %>
             <div class="w-full px-2 block">
               <div phx-click="open_child" phx-value-id="<%= item.id %>" phx-value-level="0" phx-value-origin="true" phx-target="#one" class="border cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
-                <h2 class="text-gray-800 text-xl block"><%= item.name %></h2>
-                <label class="cursor-pointer text-gray-600 font-bold text-sm block"><%= item.code %></label>
+                <h2 class="tooltip text-gray-800 text-xl block"><%= String.slice(item.name, 0, 70) %>
+                  <%= if String.length(item.name) > 70 do %>
+                    <span class='tooltip-text text-sm text-white bg-blue-500 mt-8 -ml-20 mr-1 rounded'><%= item.name %></span>
+                  <% end %>
+                </h2>
+                <label class="tooltip cursor-pointer text-gray-600 font-bold text-sm block"><%= String.slice(item.code, 0, 70) %>
+                <%= if String.length(item.code) > 70 do %>
+                  <span class='tooltip-text text-sm text-white bg-blue-500 mt-8 -ml-56 mr-1 rounded'><%= item.code %></span>
+                <% end %>
+                </label>
                 <div class="block relative">
                   <label class="cursor-pointer text-gray-600 font-bold text-sm">
                     <%= if item.type == "A", do: "Acumulativo", else: "Detalle" %>
