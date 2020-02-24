@@ -18,6 +18,7 @@ defmodule AccountingSystemWeb.FormAccountComponent do
   def update(attrs, socket) do
     attrs |> IO.inspect(label: "VALORES EN ATTRS EDIT ---> ")
     values = if attrs.level == 0, do: load_values(), else: load_values_with_id(attrs.id)
+    values |> IO.inspect(label: "Values in load --> ")
 
     {:ok, assign(socket,
       idx: attrs.id,
@@ -75,8 +76,8 @@ defmodule AccountingSystemWeb.FormAccountComponent do
 
                 <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Nombre</label>
                 <div class="inline-flex w-full">
-                  <input type="text" name="name" maxlength="32" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Nombre" value="<%= (if @actionx == "edit", do: @parent_editx.name, else: @namex) %>">
-                  <input type="text" <%= (if @parent_accountx == -1, do: "readonly") %> name="name2" maxlength="32" class="focus:outline-none focus:bg-white focus:border-blue-500 ml-4 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Nombre">
+                  <input type="text" <%= if @actionx == "edit", do: "readonly" %> name="name" maxlength="32" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Nombre" value="<%= (if @actionx == "edit", do: @parent_editx.name, else: @namex) %>">
+                  <input type="text" <%= if @actionx == "edit", do: "readonly" %> name="name2" maxlength="32" class="focus:outline-none focus:bg-white focus:border-blue-500 ml-4 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Nombre">
                 </div>
                 <label class="block tracking-wide text-gray-700 font-bold" for="grid-description">Descripción</label>
                 <input type="text" name="description" maxlength="128" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-description" placeholder="Descripción" value="<%= (if @actionx == "edit", do: @parent_editx.description) %>">
