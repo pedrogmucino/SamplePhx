@@ -11,7 +11,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     new?: false,
     edit?: false,
     actionx: "edit",
-    pollys: %{"audited" => "", "concept" => "", "fiscal_exercise" => "", "has_documents" => "", "period" => "", "policy_date" => "", "policy_type" => "0", "aux_concept" => "", "debit" => 0, "department" => "", "credit" => 0, "id" => "", "sum_haber" => 0, "sum_debe" => 0, "total" => 0, "focused" => 0, "account" => "", "name" => ""},
+    pollys: %{"id_account" => "", "audited" => "", "concept" => "", "fiscal_exercise" => "", "has_documents" => "", "period" => "", "policy_date" => "", "policy_type" => "0", "aux_concept" => "", "debit" => 0, "department" => "", "credit" => 0, "id" => "", "sum_haber" => 0, "sum_debe" => 0, "total" => 0, "focused" => 0, "account" => "", "name" => "", "policy_number" => 0},
     arr: []
     )}
   end
@@ -54,6 +54,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
               |> Map.put("id", id)
               |> Map.put("name", nombre)
               |> Map.put("account", cuenta)
+              |> Map.put("id_account", id)
     {:noreply, assign(socket, pollys: pollys, update_text: "")}
   end
 
@@ -70,6 +71,12 @@ defmodule AccountingSystemWeb.PolicyListComponent do
 
   def handle_event("action_account", params, socket) do
     IO.inspect(params, label: "PARAMS WHERE ACTION_ACCOUNT WORKS.........->")
+    case PolicyHandler.save_policy(params, socket) do
+      {:ok, _} ->
+        {:stop, redirect(socket, to: AccountingSystemWeb.Router.Helpers.policy_path(AccountingSystemWeb.Endpoint, :index, %{}))}
+      {:error, _} ->
+        {:noreply, socket |> put_flash(:error, "NO SE PUDO GUARDAR")}
+    end
     {:noreply, socket}
   end
 
@@ -152,7 +159,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     </div>
 
     <%= if @new? do %>
-      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: "new", update_text: @update_text, pollys: @pollys, arr: @arr) %>
+      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: 0, update_text: @update_text, pollys: @pollys, arr: @arr) %>
     <% end %>
 
     <%= if @edit? do %>
