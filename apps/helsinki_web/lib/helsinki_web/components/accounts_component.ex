@@ -155,13 +155,14 @@ defmodule AccountingSystemWeb.AccountsComponent do
 
   def handle_event("action_account", params, socket) do
     id = params["id"] |> String.to_integer
-    level = params["level"] |> String.to_integer |> IO.inspect(label: "++++++++++++++++++LEVEL A EDITAR")
+    level = params["level"] |> String.to_integer
     action = params["action"]
 
     if action == "edit", do: edit(id, params, socket), else: save_new(params, socket)
 
     child_index = socket.assigns.child_components
     |> Enum.find_index(fn chil -> chil.id == id end)
+    |> set_child_index()
 
     daddy = socket.assigns.child_components
     |> Enum.at(child_index - 1)
@@ -180,6 +181,9 @@ defmodule AccountingSystemWeb.AccountsComponent do
 
   end
 
+  defp set_child_index(index) do
+    if is_nil(index), do: 0, else: index
+  end
 
 
   def handle_event("delete_account", params, socket) do
