@@ -175,7 +175,7 @@ defmodule AccountingSystemWeb.FormAccountComponent do
 
         <div class="pt-32">
 
-        <button form="form1" class="ml-mar-120 py-2 w-32 bg-teal-500 text-white hover:bg-teal-400 items-center inline-flex font-bold rounded shadow focus:shadow-outline focus:outline-none rounded">
+        <button form="form1" class="ml-mar-120 py-2 w-32 bg-teal-500 text-white hover:bg-teal-400 items-center inline-flex font-bold rounded text-sm">
             <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="save" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
                 class="h-4 w-4 mr-2 ml-auto">
                 <g class="fa-group">
