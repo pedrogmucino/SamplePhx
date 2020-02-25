@@ -130,7 +130,7 @@ defmodule AccountingSystem.AuxiliaryHandler do
   #****************************************************************************************************
   def validate_auxiliar(params) do #Valida si los parametros de auxiliar estan completos
     case are_complete(params) do
-      4 ->
+      6 ->
         {:ok, params}
       _ ->
         {:error, params}

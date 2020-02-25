@@ -10,7 +10,9 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     policy_list: PolicyHandler.get_policy_list,
     new?: false,
     edit?: false,
-    actionx: "edit"
+    actionx: "edit",
+    pollys: %{"audited" => "", "concept" => "", "fiscal_exercise" => "", "has_documents" => "", "period" => "", "policy_date" => "", "policy_type" => "0", "aux_concept" => "", "debit" => 0, "department" => "", "credit" => 0, "id" => "", "sum_haber" => 0, "sum_debe" => 0, "total" => 0, "focused" => 0, "account" => "", "name" => ""},
+    arr: []
     )}
   end
 
@@ -32,12 +34,76 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def handle_event("create_new", _params, socket) do
-    IO.inspect(socket, label: "SOOOOCKKKKEETTTTT::::::::::::::::>>>>")
-    {:noreply, assign(socket, new?: true, edit?: false)}
+    {:noreply, assign(socket, new?: true, edit?: false, update_text: "", focused: 0)}
   end
 
   def handle_event("close", _params, socket) do
     {:noreply, assign(socket, new?: false, edit?: false)}
+  end
+
+  def handle_event("show_accounts", params, socket) do
+    {:noreply, assign(socket, update_text: params["value"])}
+  end
+
+  def handle_event("autocomplete", params, socket) do
+    id = params["id"]
+    nombre = params["name"]
+    cuenta = params["account"]
+    pollys = Map.put(socket.assigns.pollys, "focused", 0)
+    pollys = pollys
+              |> Map.put("id", id)
+              |> Map.put("name", nombre)
+              |> Map.put("account", cuenta)
+    {:noreply, assign(socket, pollys: pollys, update_text: "")}
+  end
+
+  def handle_event("account_focused", _params, socket) do
+    pollys = Map.put(socket.assigns.pollys, "focused", 1)
+    {:noreply, assign(socket, pollys: pollys)}
+  end
+
+  def handle_event("update_form", params, socket) do
+    IO.inspect(params, label: "UPDATE FORM WHEN SOMETHING HAPPENS!!!!!!!!!!!!!!!!!")
+    pollys = Map.merge(socket.assigns.pollys, params)
+    {:noreply, assign(socket, pollys: pollys)}
+  end
+
+  def handle_event("action_account", params, socket) do
+    IO.inspect(params, label: "PARAMS WHERE ACTION_ACCOUNT WORKS.........->")
+    {:noreply, socket}
+  end
+
+  def handle_event("save_aux", params, socket) do
+    IO.inspect(params, label: "PARAMS ON SAVE AUX!!!!!!!!!!!!!!!!!!!!!!->")
+    case AccountingSystem.AuxiliaryHandler.validate_auxiliar(params) do
+      {:ok, _} ->
+        totals(params, socket)
+      {:error, _} ->
+        {:noreply, socket}
+    end
+  end
+
+  defp totals(params, socket) do
+    sumh = socket.assigns.pollys["sum_haber"]
+    sumd = socket.assigns.pollys["sum_debe"]
+    sumhe = sumh + void(params["credit"])
+    sumde = sumd + void(params["debit"])
+    sumtot = sumhe - sumde
+    pollys = socket.assigns.pollys
+      |> Map.put("sum_haber", sumhe |> Float.round(2))
+      |> Map.put("sum_debe", sumde |> Float.round(2))
+      |> Map.put("total", sumtot |> Float.round(2))
+    {:noreply, assign(socket, arr: socket.assigns.arr ++ [params |> Map.put("id", length(socket.assigns.arr))], pollys: pollys)}
+  end
+
+  defp void(some) do
+    case some do
+      0 -> 0.0
+      _ -> some
+            |> Float.parse
+            |> Tuple.to_list
+            |> List.first
+    end
   end
 
   def render(assigns) do
@@ -86,7 +152,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     </div>
 
     <%= if @new? do %>
-      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: "new") %>
+      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: "new", update_text: @update_text, pollys: @pollys, arr: @arr) %>
     <% end %>
 
     <%= if @edit? do %>
