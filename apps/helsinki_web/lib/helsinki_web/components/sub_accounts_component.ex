@@ -26,7 +26,7 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
 
   def render(assigns) do
     ~L"""
-    <div id="sub_account-<%= @id %>" class="bg-white h-hoch-90 w-80 float-left ml-1 mt-16 block">
+    <div id="sub_account-<%= @id %>" phx-hook="scroll_x" class="bg-white h-hoch-90 w-80 float-left ml-1 mt-16 block">
       <div class=" w-full pt-6 bg-gray-200">
         <div class="block text-white px-3 text-center">
           <h1 class="tooltip text-2xl font-medium text-gray-800"> <%= if String.length(@name) > 32, do: String.slice(@name, 0, 32) <> "...", else: @name %>

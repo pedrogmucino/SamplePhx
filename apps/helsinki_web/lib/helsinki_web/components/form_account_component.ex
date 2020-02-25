@@ -46,7 +46,7 @@ defmodule AccountingSystemWeb.FormAccountComponent do
 
   def render(assigns) do
     ~L"""
-    <div id="x" class="bg-white mt-16 ml-1 w-240 rounded border">
+    <div id="x" phx-hook="scroll_x"  class="bg-white mt-16 ml-1 w-240 rounded border">
 
       <div class="inline-flex bg-blue-700 text-white px-6 py-3 w-full">
         <div class="inline-block">
