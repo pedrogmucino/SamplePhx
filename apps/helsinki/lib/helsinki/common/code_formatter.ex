@@ -104,6 +104,7 @@ defmodule AccountingSystem.CodeFormatter do
 
   def addZero(str, len) do
     size = String.length(str)
+    if len - size < 0, do: raise RuntimeError, message: "Configuración incorrecta, favor de revisar"
     String.duplicate("0",len - size) <> str
   end
 

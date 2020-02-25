@@ -16,11 +16,9 @@ defmodule AccountingSystemWeb.FormAccountComponent do
   end
 
   def update(attrs, socket) do
-    attrs |> IO.inspect(label: "VALORES EN ATTRS EDIT ---> ")
-    values = if attrs.level == 0, do: load_values(), else: load_values_with_id(attrs.id)
-    values |> IO.inspect(label: "Values in load --> ")
-
-    {:ok, assign(socket,
+    try do
+      values = if attrs.level == 0, do: load_values(), else: load_values_with_id(attrs.id)
+      {:ok, assign(socket,
       idx: attrs.id,
       levelx: attrs.level,
       codex: values.code,
@@ -29,8 +27,14 @@ defmodule AccountingSystemWeb.FormAccountComponent do
       namex: (if attrs.level == 0, do: "", else: values.name),
       actionx: (if attrs.edit, do: "edit", else: ""),
       parent_editx: (if attrs.edit, do: attrs.parent_edit, else: %{}),
-      bendiciones: attrs.bendiciones?
+      bendiciones: attrs.bendiciones?,
+      error: nil
       )}
+
+    rescue e in RuntimeError ->
+      {:ok, assign(socket,
+      error: e.message)}
+    end
   end
 
   def load_values() do
@@ -46,6 +50,9 @@ defmodule AccountingSystemWeb.FormAccountComponent do
 
   def render(assigns) do
     ~L"""
+    <%= if @error do %>
+      <%= live_component(@socket, AccountingSystemWeb.ErrorComponent, error: @error) %>
+    <%= else %>
     <div id="x" phx-hook="scroll_x"  class="bg-white mt-16 ml-1 w-240 rounded border">
 
       <div class="inline-flex bg-blue-700 text-white px-6 py-3 w-full">
@@ -208,11 +215,9 @@ defmodule AccountingSystemWeb.FormAccountComponent do
             <label class="cursor-pointer mr-auto text-white">Eliminar</label>
           </button>
         <% end %>
-
-
         </div>
       <div>
-
+      <% end %>
     </div>
     """
   end
