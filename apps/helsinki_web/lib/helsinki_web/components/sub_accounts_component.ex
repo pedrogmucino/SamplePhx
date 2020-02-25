@@ -31,7 +31,7 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
         <div class="block text-white px-3 text-center">
           <h1 class="tooltip text-2xl font-medium text-gray-800"> <%= if String.length(@name) > 32, do: String.slice(@name, 0, 32) <> "...", else: @name %>
             <%= if String.length(@name) > 32 do %>
-              <span class='tooltip-text text-sm text-white bg-blue-500 mt-8 -ml-48 mr-1 rounded'><%= @name %></span>
+              <span class='tooltip-text text-sm text-white bg-blue-500 mt-8 -ml-24 mr-1 rounded'><%= @name %></span>
             <% end %>
           </h1>
           <label class="tooltip block text-gray-700 text-sm font-bold"><b><%= String.slice(@code, 0, 70) %></b>
