@@ -16,7 +16,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
       <div class="inline-flex bg-blue-700 text-white px-6 py-3 w-full">
         <div class="inline-block w-full">
           <label class="text-2xl font-normal text-white block">Editar/Nueva</label>
-          <label class="block font-medium"><b>Póliza</b></label>
+          <label class="block font-medium"><b> <%= (if @edit, do: @policy_edit.concept, else: "Póliza") %> </b></label>
         </div>
 
         <button phx-click="close" phx-target="#x" class="ml-auto h-8 -mt-1 -mr-3">
@@ -242,13 +242,28 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
     policytypes = AccountingSystem.PolicyTipeHandler.get_all_as_list
     changeset = PolicyHandler.change_policy(%PolicySchema{})
     pollys = %{"audited" => "", "concept" => "", "fiscal_exercise" => "", "has_documents" => "", "period" => "", "policy_date" => "", "policy_type" => "0", "aux_concept" => "", "debit" => 0, "department" => "", "credit" => 0, "id" => "", "sum_haber" => 0, "sum_debe" => 0, "total" => 0, "focused" => 0, "account" => "", "name" => ""}
-    {:ok, assign(socket, dropdowns: dropdowns, arr: [], changeset: changeset, policytypes: policytypes, pollys: pollys)}
+
+    {:ok, assign(socket,
+      dropdowns: dropdowns,
+      arr: [],
+      changeset: changeset,
+      policytypes: policytypes,
+      pollys: pollys,
+      policy_edit: %{},
+      edit: false
+    )}
   end
 
   def update(params, socket) do
-    IO.inspect(socket, label: "UPDATE SOCKEEEEETTTTTT::::::::::::::::::::::::::>>>")
-    %{update_text: text} = params
-    dropdowns = AccountingSystem.AccountHandler.search_account(text)
-    {:ok, assign(socket, dropdowns: dropdowns, pollys: params.pollys, arr: params.arr)}
+    IO.inspect(params, label: "UPDATE SOCKEEEEETTTTTT::::::::::::::::::::::::::>>>")
+    policy = (if params.edit, do: params.id |> AccountingSystem.PolicyHandler.get_policy!, else: %{})
+    dropdowns = AccountingSystem.AccountHandler.search_account(params.update_text)
+    {:ok, assign(socket,
+      dropdowns: dropdowns,
+      pollys: (if params.edit, do: %{"policy_type" => Integer.to_string(policy.policy_type) }, else: params.pollys),
+      arr: params.arr,
+      policy_edit: policy,
+      edit: params.edit
+      )}
   end
 end

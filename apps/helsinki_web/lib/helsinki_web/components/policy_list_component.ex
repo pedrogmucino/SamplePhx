@@ -12,7 +12,8 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     edit?: false,
     actionx: "edit",
     pollys: %{"audited" => "", "concept" => "", "fiscal_exercise" => "", "has_documents" => "", "period" => "", "policy_date" => "", "policy_type" => "0", "aux_concept" => "", "debit" => 0, "department" => "", "credit" => 0, "id" => "", "sum_haber" => 0, "sum_debe" => 0, "total" => 0, "focused" => 0, "account" => "", "name" => ""},
-    arr: []
+    arr: [],
+    policy_id: 0
     )}
   end
 
@@ -25,12 +26,15 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def handle_event("open_policy", params, socket) do
-    assign(socket, policy: params["id"])
-    id =
-    params
-    |> Map.get("id")
-
+    id = params["id"] |> String.to_integer()
     {:noreply, assign(socket, new?: false, edit?: true, policy_id: id)}
+  end
+
+  def handle_event("edit_and_save_this", params, socket) do
+    edit_policy = %{concept: params["concept"]}
+    current_policy = params["id"] |> String.to_integer |> PolicyHandler.get_policy!
+    PolicyHandler.update_policy(current_policy, edit_policy)
+    {:noreply, socket}
   end
 
   def handle_event("create_new", _params, socket) do
@@ -152,12 +156,11 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     </div>
 
     <%= if @new? do %>
-      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: "new", update_text: @update_text, pollys: @pollys, arr: @arr) %>
+      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: 0, update_text: @update_text, pollys: @pollys, arr: @arr, edit: false) %>
     <% end %>
 
     <%= if @edit? do %>
-
-      <%= live_component(@socket, AccountingSystemWeb.PolicyEditComponent, id: @policy_id) %>
+      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: @policy_id, update_text: "", pollys: %{}, arr: [], edit: @edit?) %>
     <% end %>
     """
   end
