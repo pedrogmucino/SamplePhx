@@ -2,7 +2,8 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   use Phoenix.LiveComponent
   use Phoenix.HTML
   alias AccountingSystem.{
-    PolicyHandler
+    PolicyHandler,
+    GenericFunctions
   }
 
   def mount(socket) do
@@ -11,7 +12,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     new?: false,
     edit?: false,
     actionx: "edit",
-    pollys: %{"audited" => "", "concept" => "", "fiscal_exercise" => "", "has_documents" => "", "period" => "", "policy_date" => "", "policy_type" => "0", "aux_concept" => "", "debit" => 0, "department" => "", "credit" => 0, "id" => "", "sum_haber" => 0, "sum_debe" => 0, "total" => 0, "focused" => 0, "account" => "", "name" => ""},
+    pollys: %{audited: "", concept: "", fiscal_exercise: "", has_documents: "", period: "", policy_date: "", policy_type: "0", aux_concept: "", debit: 0, department: "", credit: 0, id: "", sum_haber: 0, sum_debe: 0, total: 0, focused: 0, account: "", name: "", id_account: ""},
     arr: [],
     policy_id: 0
     )}
@@ -53,22 +54,22 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     id = params["id"]
     nombre = params["name"]
     cuenta = params["account"]
-    pollys = Map.put(socket.assigns.pollys, "focused", 0)
+    pollys = Map.put(socket.assigns.pollys, :focused, 0)
     pollys = pollys
-              |> Map.put("id", id)
-              |> Map.put("name", nombre)
-              |> Map.put("account", cuenta)
-              |> Map.put("id_account", id)
+              |> Map.put(:id, id)
+              |> Map.put(:name, nombre)
+              |> Map.put(:account, cuenta)
+              |> Map.put(:id_account, id)
     {:noreply, assign(socket, pollys: pollys, update_text: "")}
   end
 
   def handle_event("account_focused", _params, socket) do
-    pollys = Map.put(socket.assigns.pollys, "focused", 1)
+    pollys = Map.put(socket.assigns.pollys, :focused, 1)
     {:noreply, assign(socket, pollys: pollys)}
   end
 
   def handle_event("update_form", params, socket) do
-    pollys = Map.merge(socket.assigns.pollys, params)
+    pollys = Map.merge(socket.assigns.pollys, GenericFunctions.string_map_to_atom(params))
     {:noreply, assign(socket, pollys: pollys)}
   end
 
@@ -92,18 +93,19 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   defp totals(params, socket) do
-    sumh = socket.assigns.pollys["sum_haber"]
-    sumd = socket.assigns.pollys["sum_debe"]
-    sumhe = sumh + void(params["credit"])
-    sumde = sumd + void(params["debit"])
+    params = GenericFunctions.string_map_to_atom(params)
+    sumh = socket.assigns.pollys.sum_haber
+    sumd = socket.assigns.pollys.sum_debe
+    sumhe = sumh + void(params.credit)
+    sumde = sumd + void(params.debit)
     sumtot = sumhe - sumde
-    clean = %{"account" => "", "aux_concept" => "", "credit" => "0", "debit" => "0", "department" => "", "id_account" => "", "name" => ""}
+    clean = %{account: "", aux_concept: "", credit: "0", debit: "0", department: "", id_account: "", name: ""}
     pollys = socket.assigns.pollys
-      |> Map.put("sum_haber", sumhe |> Float.round(2))
-      |> Map.put("sum_debe", sumde |> Float.round(2))
-      |> Map.put("total", sumtot |> Float.round(2))
+      |> Map.put(:sum_haber, sumhe |> Float.round(2))
+      |> Map.put(:sum_debe, sumde |> Float.round(2))
+      |> Map.put(:total, sumtot |> Float.round(2))
       |> Map.merge(clean)
-    {:noreply, assign(socket, arr: socket.assigns.arr ++ [params |> Map.put("id", length(socket.assigns.arr))], pollys: pollys)}
+    {:noreply, assign(socket, arr: socket.assigns.arr ++ [params |> Map.put(:id, length(socket.assigns.arr))], pollys: pollys)}
   end
 
   defp void(some) do

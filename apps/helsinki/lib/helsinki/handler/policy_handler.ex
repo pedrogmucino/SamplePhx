@@ -75,6 +75,7 @@ defmodule AccountingSystem.PolicyHandler do
   end
 
   def create_policy(attrs \\ %{}, year, month, serial) do
+    IO.inspect(attrs, label: "ATTTRSRRSSRSRSRSRSRSR::::::::::::::::::>>>>>>>>>>>>>>>>>>")
     ps = Map.put(attrs, "serial", serial.serial)
           |> Map.put("policy_number", serial.number)
     %PolicySchema{}

@@ -38,16 +38,16 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                 <div class="inline-flex w-full">
                   <div class="inline-flex w-full">
                     <div class="inline-block w-full mr-2">
-                      <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Tipo de Póliza: <%=@pollys["policy_type"]%></label>
+                      <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Tipo de Póliza: <%=@pollys.policy_type%></label>
                       <select name="policy_type" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
                         <%= for item <- @policytypes do %>
-                          <option <%=if String.to_integer(@pollys["policy_type"]) == item[:value] do %> selected <% end %> value="<%= item[:value] %>"><%= item[:key] %></option>
+                          <option <%=if String.to_integer(@pollys.policy_type) == item[:value] do %> selected <% end %> value="<%= item[:value] %>"><%= item[:key] %></option>
                         <% end %>
                       </select>
                     </div>
                     <div class="inline-block w-full ml-2">
                       <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Fecha de póliza</label>
-                      <input type="date" name="policy_date" value="<%=@pollys["policy_date"]%>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
+                      <input type="date" name="policy_date" value="<%=@pollys.policy_date%>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
                     </div>
                   </div>
                   <div class="w-1/3 flex">
@@ -63,11 +63,11 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                   <div class="inline-flex w-full">
                     <div class="inline-block w-full mr-2">
                       <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Ejercicio Fiscal</label>
-                      <input type="number" name="fiscal_exercise" value="<%=@pollys["fiscal_exercise"]%>" min="1" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
+                      <input type="number" name="fiscal_exercise" value="<%=@pollys.fiscal_exercise%>" min="1" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
                     </div>
                     <div class="inline-block w-full ml-2">
                       <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Periodo</label>
-                      <input type="number" name="period" value="<%=@pollys["period"]%>" maxlength="2" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
+                      <input type="number" name="period" value="<%=@pollys.period%>" maxlength="2" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
                     </div>
                   </div>
                   <div class="w-1/3 flex">
@@ -79,16 +79,16 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                   </div>
                 </div>
                 <label class="block tracking-wide text-gray-700 font-bold" for="grid-code">Concepto</label>
-                <input type="text" name="concept" value="<%=@pollys["concept"]%>" maxlength="128" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code">
-                <input type="hidden" name="id" value="<%=@pollys["id"]%>">
+                <input type="text" name="concept" value="<%=@pollys.concept%>" maxlength="128" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code">
+                <input type="hidden" name="id" value="<%=@pollys.id%>">
               </form>
               <form id="form2" phx-submit="save_aux" phx-target="#one" phx-change="update_form">
-                <label class="block pt-32 tracking-wide text-gray-700 font-bold" for="grid-name">Cuenta(<%= @pollys["focused"] %>)</label>
+                <label class="block pt-32 tracking-wide text-gray-700 font-bold" for="grid-name">Cuenta(<%= @pollys.focused %>)</label>
                 <div class="inline-flex w-full">
                   <div class="w-2/3 relative">
-                    <input class="hidden" name="id_account" value="<%= @pollys["id_account"] %>">
-                    <input autocomplete="off" type="text" phx-target="#one" phx-keyup="show_accounts" phx-focus="account_focused" name="account" value="<%=@pollys["account"]%>" maxlength="256" class="focus:outline-none focus:bg-white focus:border-blue-500 w-full appearance-none  bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
-                    <%= if length(@dropdowns) > 0 and @pollys["focused"] == 1 do %>
+                    <input class="hidden" name="id_account" value="<%= @pollys.id_account %>">
+                    <input autocomplete="off" type="text" phx-target="#one" phx-keyup="show_accounts" phx-focus="account_focused" name="account" value="<%=@pollys.account%>" maxlength="256" class="focus:outline-none focus:bg-white focus:border-blue-500 w-full appearance-none  bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
+                    <%= if length(@dropdowns) > 0 and @pollys.focused == 1 do %>
                       <div class="w-full block absolute top-0 left-0 z-10 mt-10 bg-gray-100 overflow-y-scroll h-64">
                         <%= for item <- @dropdowns do %>
                           <div phx-target="#one" phx-click="autocomplete" phx-value-id="<%= item.value %>" phx-value-account="<%=List.first(item.key)%>" phx-value-name="<%=List.last(item.key)%>" class="block py-1 px-3 hover:bg-gray-500 hover:text-white cursor-pointer">
@@ -98,25 +98,25 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                       </div>
                     <% end %>
                     </div>
-                  <input type="text" name="name" maxlength="128" value="<%=@pollys["name"]%>" class="focus:outline-none focus:bg-white focus:border-blue-500 ml-4 appearance-none w-1/3 bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
+                  <input type="text" name="name" maxlength="128" value="<%=@pollys.name%>" class="focus:outline-none focus:bg-white focus:border-blue-500 ml-4 appearance-none w-1/3 bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
                 </div>
 
                 <label class="block tracking-wide text-gray-700 font-bold" for="grid-code">Concepto</label>
-                <input type="text" name="aux_concept" value="<%=@pollys["aux_concept"]%>" maxlength="128" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code">
+                <input type="text" name="aux_concept" value="<%=@pollys.aux_concept%>" maxlength="128" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code">
 
                 <div class="inline-flex w-full">
                   <div class="inline-flex w-full flex">
                     <div class="inline-block mr-2 w-1/6">
                       <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Departamento</label>
-                      <input type="number" name="department" value="<%=@pollys["department"]%>" min="1" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" value="">
+                      <input type="number" name="department" value="<%=@pollys.department%>" min="1" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" value="">
                     </div>
                     <div class="inline-block ml-2 w-2/6">
                       <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Debe</label>
-                      <input type="number" step="0.01" name="debit" value="<%=@pollys["debit"]%>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
+                      <input type="number" step="0.01" name="debit" value="<%=@pollys.debit%>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
                     </div>
                     <div class="inline-block ml-2 w-2/6">
                       <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Haber</label>
-                      <input type="number" name="credit" step="0.01" value="<%=@pollys["credit"]%>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
+                      <input type="number" name="credit" step="0.01" value="<%=@pollys.credit%>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
                     </div>
                     <div class="inline-block mt-6 ml-2 text-right w-1/6">
                       <button name="save_aux" class="bg-teal-500 text-white text-center hover:bg-teal-400 phx-target="#one" border rounded">
@@ -177,26 +177,26 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                     <%= for item <- Enum.reverse(@arr) do %>
                       <div class="w-full inline-flex items-center gap-4"> <!-------Este es el div que se va a dividir en 3---->
                         <div class="w-1/12">
-                          <%= item["id"] %>
+                          <%= item.id %>
                         </div>
                         <!---------------------------INFO AQUI---------------------------------------->
                         <div class="w-full gap-4">
                           <div phx-click="edit_aux" phx-value-id="" phx-target="#policy" class="border cursor-pointer bg-gray-200 p-2 mt-2 rounded relative hover:bg-gray-300">
                             <div class="text-right">
-                              <label class="text-gray-700 text-x text-right">Cta: <b><%= item["account"] %></b></label><br>
+                              <label class="text-gray-700 text-x text-right">Cta: <b><%= item.account %></b></label><br>
                             </div>
                             <div>
-                              <label class="inline-block cursor-pointer text-gray-600 text-sm">Concepto: <b><%= item["aux_concept"] %></b></label><br>
+                              <label class="inline-block cursor-pointer text-gray-600 text-sm">Concepto: <b><%= item.aux_concept %></b></label><br>
                             </div>
                             <div class="flex mb-2">
                               <div class="w-2/6">
-                                <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Departamento: <b> <%= item["department"] %></b></label>
+                                <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Departamento: <b> <%= item.department %></b></label>
                               </div>
                               <div class="w-2/6 text-right">
-                                <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Debe: <b> <%= item["debit"] %></b></label>
+                                <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Debe: <b> <%= item.debit %></b></label>
                               </div>
                               <div class="w-2/6 text-right">
-                                <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Haber: <b> <%= item["credit"] %></b></label>
+                                <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Haber: <b> <%= item.credit %></b></label>
                               </div>
                             </div>
                           </div>
@@ -220,15 +220,15 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                     <div class="inline-flex w-full">
                       <div class="inline-block w-full mr-2">
                         <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Total</label>
-                        <input type="number" name="total" value="<%= @pollys["total"] %>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" value="">
+                        <input type="number" name="total" value="<%= @pollys.total %>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" value="">
                       </div>
                       <div class="inline-block w-full ml-2">
                         <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Debe</label>
-                        <input type="text" name="sum_debe" value="<%= @pollys["sum_debe"] %>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
+                        <input type="text" name="sum_debe" value="<%= @pollys.sum_debe %>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
                       </div>
                       <div class="inline-block w-full ml-2">
                         <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Haber</label>
-                        <input type="text" name="sum_haber" value="<%= @pollys["sum_haber"] %>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
+                        <input type="text" name="sum_haber" value="<%= @pollys.sum_haber %>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
                       </div>
                     </div>
                   </div>
@@ -240,11 +240,10 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
     """
   end
   def mount(socket) do
-    IO.inspect(socket.id, label: "MOOOOOOOOOOOOOOOOOOOUUUUNNTTTT ID::::::::::::::::::::::::::>>>")
     dropdowns = []
     policytypes = AccountingSystem.PolicyTipeHandler.get_all_as_list
     changeset = PolicyHandler.change_policy(%PolicySchema{})
-    pollys = %{"audited" => "", "concept" => "", "fiscal_exercise" => "", "has_documents" => "", "period" => "", "policy_date" => "", "policy_type" => "0", "aux_concept" => "", "debit" => 0, "department" => "", "credit" => 0, "id" => "", "sum_haber" => 0, "sum_debe" => 0, "total" => 0, "focused" => 0, "account" => "", "name" => ""}
+    pollys = %{audited: "", concept: "", fiscal_exercise: "", has_documents: "", period: "", policy_date: "", policy_type: "0", aux_concept: "", debit: 0, department: "", credit: 0, id: "", sum_haber: 0, sum_debe: 0, total: 0, focused: 0, account: "", name: "", id_account: ""}
 
     {:ok, assign(socket,
       dropdowns: dropdowns,
@@ -258,13 +257,11 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
   end
 
   def preload(list) do
-    IO.inspect(list, label: "QUE ME LLEGA EN PRELOAD::::>")
     fill(List.first(list).edit, list)
       #|> IO.inspect(label: "WHAT FILL RETURNS!!!!!")
   end
 
   def update(params, socket) do
-    IO.inspect(params, label: "UPDATE SOCKEEEEETTTTTT::::::::::::::::::::::::::>>>")
     dropdowns = AccountingSystem.AccountHandler.search_account(params.update_text)
     {:ok, assign(socket,
       dropdowns: dropdowns,
