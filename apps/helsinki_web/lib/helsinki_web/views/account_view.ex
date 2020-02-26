@@ -13,8 +13,12 @@ defmodule AccountingSystemWeb.AccountLiveView do
     {:ok, assign(socket, child?: false)}
   end
 
-  def handle_info(params, socket) do
+  def handle_info({_reference, %{error: _params}}, socket) do
     send_update(AccountingSystemWeb.ErrorComponent, id: "error_comp", show: false)
-    {:noreply, assign(socket, error: nil)}
+    {:noreply, socket}
+  end
+
+  def handle_info({:DOWN, _reference, _process, _pid, _normal}, socket) do
+    {:noreply, socket}
   end
 end
