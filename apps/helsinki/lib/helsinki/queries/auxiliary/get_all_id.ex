@@ -24,7 +24,7 @@ defmodule AccountingSystem.GetAllId do
       id: aux.id,
       policy_number: aux.policy_number,
       id_account: aux.id_account,
-      concept: aux.concept,
+      aux_concept: aux.concept,
       debit_credit: aux.debit_credit,
       mxn_amount: aux.mxn_amount,
       amount: aux.amount,
@@ -37,7 +37,7 @@ defmodule AccountingSystem.GetAllId do
       inserted_at: aux.inserted_at,
       updated_at: aux.updated_at,
       policy_id: aux.policy_id,
-      code: ac.code
+      account: ac.code
     }
   end
 

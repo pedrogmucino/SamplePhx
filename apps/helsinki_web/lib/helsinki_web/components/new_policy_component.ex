@@ -193,10 +193,10 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                                 <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Departamento: <b> <%= item.department %></b></label>
                               </div>
                               <div class="w-2/6 text-right">
-                                <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Debe: <b> <%= item.debit %></b></label>
+                                <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Debe: <b> <%= if(item.debit_credit == "D", do: item.mxn_amount, else: 0) %></b></label>
                               </div>
                               <div class="w-2/6 text-right">
-                                <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Haber: <b> <%= item.credit %></b></label>
+                                <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Haber: <b> <%= if(item.debit_credit == "H", do: item.mxn_amount, else: 0) %></b></label>
                               </div>
                             </div>
                           </div>
@@ -282,24 +282,25 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
       edit: true,
       id: List.first(list).id,
       pollys: %{
-            "audited" => policy.audited,
-            "concept" => policy.concept,
-            "fiscal_exercise" => policy.fiscal_exercise,
-            "has_documents" => policy.has_documents,
-            "period" => policy.period,
-            "policy_date" => policy.policy_date,
-            "policy_type" => Integer.to_string(policy.policy_type),
-            "aux_concept" => "",
-            "debit" => 0,
-            "department" => "",
-            "credit" => 0,
-            "id" => policy.id,
-            "sum_haber" => 0,
-            "sum_debe" => 0,
-            "total" => 0,
-            "focused" => 0,
-            "account" => "",
-            "name" => ""
+            audited: policy.audited,
+            concept: policy.concept,
+            fiscal_exercise: policy.fiscal_exercise,
+            has_documents: policy.has_documents,
+            period: policy.period,
+            policy_date: policy.policy_date,
+            policy_type: Integer.to_string(policy.policy_type),
+            aux_concept: "",
+            debit: 0,
+            department: "",
+            credit: 0,
+            id: policy.id,
+            sum_haber: 0,
+            sum_debe: 0,
+            total: 0,
+            focused: 0,
+            account: "",
+            name: "",
+            id_account: ""
       },
       update_text: ""
     }]
