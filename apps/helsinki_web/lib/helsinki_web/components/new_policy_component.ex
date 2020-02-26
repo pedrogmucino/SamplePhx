@@ -85,6 +85,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                 <label class="block pt-32 tracking-wide text-gray-700 font-bold" for="grid-name">Cuenta(<%= @pollys["focused"] %>)</label>
                 <div class="inline-flex w-full">
                   <div class="w-2/3 relative">
+                    <input class="hidden" name="id_account" value="<%= @pollys["id_account"] %>">
                     <input autocomplete="off" type="text" phx-target="#one" phx-keyup="show_accounts" phx-focus="account_focused" name="account" value="<%=@pollys["account"]%>" maxlength="256" class="focus:outline-none focus:bg-white focus:border-blue-500 w-full appearance-none  bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
                     <%= if length(@dropdowns) > 0 and @pollys["focused"] == 1 do %>
                       <div class="w-full block absolute top-0 left-0 z-10 mt-10 bg-gray-100 overflow-y-scroll h-64">

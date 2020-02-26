@@ -6,30 +6,25 @@ defmodule AccountingSystem.PolicyFormatter do
       |> Map.put(:id_account1, AccountingSystem.AccountHandler.get_all_as_list)
   end
 
-  def get_month(policy) do
+  def get_month(%{"policy_date" => policy}) do
     policy
-
-      |> Map.get("policy_schema")
-      |> Map.get("policy_date")
-      |> Map.get("month")
+      |> String.split("-")
+      |> Enum.at(1)
       |> String.to_integer
   end
 
-  def get_year(policy) do
+  def get_year(%{"policy_date" => policy}) do
     policy
-
-      |> Map.get("policy_schema")
-      |> Map.get("policy_date")
-      |> Map.get("year")
-      |> String.to_integer
+    |> String.split("-")
+    |> Enum.at(0)
+    |> String.to_integer
   end
 
-  def get_day(policy) do
+  def get_day(%{"policy_date" => policy}) do
     policy
-      |> Map.get("policy_schema")
-      |> Map.get("policy_date")
-      |> Map.get("day")
-      |> String.to_integer
+    |> String.split("-")
+    |> Enum.at(2)
+    |> String.to_integer
   end
 
   def date_format(params) do

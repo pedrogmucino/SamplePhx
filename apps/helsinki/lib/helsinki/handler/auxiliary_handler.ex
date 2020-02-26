@@ -65,9 +65,12 @@ defmodule AccountingSystem.AuxiliaryHandler do
   end
 
   def create_auxiliary(attrs \\ %{}, year, month) do
+    IO.inspect(attrs, label: "AAAATTTRRRSSSS::::::::::::::::::::::::::::::::::::::::::::::::::::>>>")
     %AuxiliarySchema{}
-    |> AuxiliarySchema.changeset(attrs)
+    |> AuxiliarySchema.changeset(attrs |> Map.put(:concept, attrs.aux_concept))
+    |> IO.inspect(label: "CHANGOSEEEEETTTTTT:::::::::::::>>")
     |> Repo.insert(prefix: PrefixFormatter.get_prefix(year, month))
+    |> IO.inspect(label: "REPO INSEEEEERRRRRTTTTTT:::::::::::::>>")
   end
 
   @doc """
@@ -130,7 +133,7 @@ defmodule AccountingSystem.AuxiliaryHandler do
   #****************************************************************************************************
   def validate_auxiliar(params) do #Valida si los parametros de auxiliar estan completos
     case are_complete(params) do
-      6 ->
+      7 ->
         {:ok, params}
       _ ->
         {:error, params}
@@ -152,13 +155,13 @@ defmodule AccountingSystem.AuxiliaryHandler do
     params = Map.merge(params, %{"exchange_rate" => 1})
     params = Map.merge(params, %{"policy_id" => policy_id})
     params = Map.merge(params, %{"policy_number" => policy_number})
-    params = Map.delete(params, "haber")
-    params = Map.delete(params, "debe")
+    params = Map.delete(params, "credit")
+    params = Map.delete(params, "debit")
     params = Map.delete(params, "id")
     GenericFunctions.string_map_to_atom(params)
   end
 
-  def h_or_d(%{"haber" => hab}) do
+  def h_or_d(%{"credit" => hab}) do
     case hab do
       "" ->
         "D"
@@ -167,11 +170,11 @@ defmodule AccountingSystem.AuxiliaryHandler do
     end
   end
 
-  def amount(%{"haber" => hab}) when hab != "" do
+  def amount(%{"credit" => hab}) when hab != 0 do
     hab
   end
 
-  def amount(%{"debe" => deb}) when deb != "" do
+  def amount(%{"debit" => deb}) when deb != 0 do
     deb
   end
 end

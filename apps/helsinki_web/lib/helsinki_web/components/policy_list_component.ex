@@ -58,6 +58,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
               |> Map.put("id", id)
               |> Map.put("name", nombre)
               |> Map.put("account", cuenta)
+              |> Map.put("id_account", id)
     {:noreply, assign(socket, pollys: pollys, update_text: "")}
   end
 
@@ -74,6 +75,12 @@ defmodule AccountingSystemWeb.PolicyListComponent do
 
   def handle_event("action_account", params, socket) do
     IO.inspect(params, label: "PARAMS WHERE ACTION_ACCOUNT WORKS.........->")
+    case PolicyHandler.save_policy(params, socket) do
+      {:ok, _} ->
+        {:stop, redirect(socket, to: AccountingSystemWeb.Router.Helpers.policy_path(AccountingSystemWeb.Endpoint, :index, %{}))}
+      {:error, _} ->
+        {:noreply, socket |> put_flash(:error, "NO SE PUDO GUARDAR")}
+    end
     {:noreply, socket}
   end
 

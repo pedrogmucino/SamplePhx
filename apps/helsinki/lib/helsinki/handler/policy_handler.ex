@@ -75,9 +75,8 @@ defmodule AccountingSystem.PolicyHandler do
   end
 
   def create_policy(attrs \\ %{}, year, month, serial) do
-    %{"policy_schema" => ps} = attrs
-    ps = Map.put(ps, "serial", serial.serial)
-    |> Map.put("policy_number", serial.number)
+    ps = Map.put(attrs, "serial", serial.serial)
+          |> Map.put("policy_number", serial.number)
     %PolicySchema{}
     |> PolicySchema.changeset(GenericFunctions.string_map_to_atom(ps))
     |> Repo.insert(prefix: PrefixFormatter.get_prefix(year, month))
@@ -154,13 +153,13 @@ defmodule AccountingSystem.PolicyHandler do
   end
 
   defp save_all(params, auxiliaries) do
-    %{"policy_schema" => policy_schema} = params
-    serial = SeriesHandler.get_serial(Map.get(policy_schema, "fiscal_exercise"), Map.get(policy_schema, "policy_type"))
-
+    IO.inspect(params, label: "PARAAAAAAAMMMMSSSSSS!!!!!!::::::::>>>")
+    IO.inspect(auxiliaries, label: "AUXILIARIEEEEESSSSSS!!!!!!::::::::>>>")
+    serial = SeriesHandler.get_serial(Map.get(params, "fiscal_exercise"), Map.get(params, "policy_type"))
     case AccountingSystem.PolicyHandler.create_policy(params, PolicyFormatter.get_year(params), PolicyFormatter.get_month(params), serial) do
       {:ok, policy} ->
         Enum.each(auxiliaries, fn x ->
-          AuxiliaryHandler.create_auxiliary(AuxiliaryHandler.format_to_save(x, policy_schema["policy_number"], policy.id),
+          AuxiliaryHandler.create_auxiliary(AuxiliaryHandler.format_to_save(x, policy.policy_number, policy.id),
           PolicyFormatter.get_year(params),
           PolicyFormatter.get_month(params))
         end)
