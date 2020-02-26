@@ -68,16 +68,14 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def handle_event("update_form", params, socket) do
-    IO.inspect(params, label: "UPDATE FORM WHEN SOMETHING HAPPENS!!!!!!!!!!!!!!!!!")
     pollys = Map.merge(socket.assigns.pollys, params)
     {:noreply, assign(socket, pollys: pollys)}
   end
 
   def handle_event("action_account", params, socket) do
-    IO.inspect(params, label: "PARAMS WHERE ACTION_ACCOUNT WORKS.........->")
     case PolicyHandler.save_policy(params, socket) do
       {:ok, _} ->
-        {:stop, redirect(socket, to: AccountingSystemWeb.Router.Helpers.policy_path(AccountingSystemWeb.Endpoint, :index, %{}))}
+        {:stop, redirect(socket, to: AccountingSystemWeb.Router.Helpers.policies_path(AccountingSystemWeb.Endpoint, :index, %{})) }
       {:error, _} ->
         {:noreply, socket |> put_flash(:error, "NO SE PUDO GUARDAR")}
     end
@@ -85,7 +83,6 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def handle_event("save_aux", params, socket) do
-    IO.inspect(params, label: "PARAMS ON SAVE AUX!!!!!!!!!!!!!!!!!!!!!!->")
     case AccountingSystem.AuxiliaryHandler.validate_auxiliar(params) do
       {:ok, _} ->
         totals(params, socket)
@@ -100,10 +97,12 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     sumhe = sumh + void(params["credit"])
     sumde = sumd + void(params["debit"])
     sumtot = sumhe - sumde
+    clean = %{"account" => "", "aux_concept" => "", "credit" => "0", "debit" => "0", "department" => "", "id_account" => "", "name" => ""}
     pollys = socket.assigns.pollys
       |> Map.put("sum_haber", sumhe |> Float.round(2))
       |> Map.put("sum_debe", sumde |> Float.round(2))
       |> Map.put("total", sumtot |> Float.round(2))
+      |> Map.merge(clean)
     {:noreply, assign(socket, arr: socket.assigns.arr ++ [params |> Map.put("id", length(socket.assigns.arr))], pollys: pollys)}
   end
 

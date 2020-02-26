@@ -19,7 +19,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
           <label class="block font-medium"><b> <%= (if @edit, do: @policy_edit.concept, else: "Póliza") %> </b></label>
         </div>
 
-        <button phx-click="close" phx-target="#x" class="ml-auto h-8 -mt-1 -mr-3">
+        <button phx-click="close" phx-target="#policy" class="ml-auto h-8 -mt-1 -mr-3">
           <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
           class="h-5 w-5 ml-auto">
           <path fill="currentColor"
@@ -173,10 +173,10 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
 
                 <!---------------------DIV DE TODA LA INFO------------------------->
                   <div class="overflow-y-auto h-hoch-70 block">
-                    <%= for item <- @arr do %>
+                    <%= for item <- Enum.reverse(@arr) do %>
                       <div class="w-full inline-flex items-center gap-4"> <!-------Este es el div que se va a dividir en 3---->
                         <div class="w-1/12">
-                          1
+                          <%= item["id"] %>
                         </div>
                         <!---------------------------INFO AQUI---------------------------------------->
                         <div class="w-full gap-4">
@@ -239,6 +239,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
     """
   end
   def mount(socket) do
+    IO.inspect(socket.id, label: "MOOOOOOOOOOOOOOOOOOOUUUUNNTTTT ID::::::::::::::::::::::::::>>>")
     dropdowns = []
     policytypes = AccountingSystem.PolicyTipeHandler.get_all_as_list
     changeset = PolicyHandler.change_policy(%PolicySchema{})
@@ -255,16 +256,37 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
     )}
   end
 
+  def preload(list) do
+    IO.inspect(list, label: "QUE ME LLEGA EN PRELOAD::::>")
+    fill(List.first(list).edit, list)
+      #|> IO.inspect(label: "WHAT FILL RETURNS!!!!!")
+  end
+
   def update(params, socket) do
     IO.inspect(params, label: "UPDATE SOCKEEEEETTTTTT::::::::::::::::::::::::::>>>")
-    policy = (if params.edit, do: params.id |> AccountingSystem.PolicyHandler.get_policy!, else: %{})
     dropdowns = AccountingSystem.AccountHandler.search_account(params.update_text)
     {:ok, assign(socket,
       dropdowns: dropdowns,
-      pollys: (if params.edit, do: %{"policy_type" => Integer.to_string(policy.policy_type) }, else: params.pollys),
+      pollys: params.pollys,
       arr: params.arr,
-      policy_edit: policy,
       edit: params.edit
       )}
+  end
+
+  defp fill(true, list) do
+    policy = List.first(list).id |> AccountingSystem.PolicyHandler.get_policy!
+    dropdowns = AccountingSystem.AccountHandler.search_account("")
+    [%{
+      dropdowns: dropdowns,
+      arr: [],
+      edit: true,
+      id: List.first(list).id,
+      pollys: policy,
+      update_text: ""
+    }]
+  end
+
+  defp fill(false, list) do
+    list
   end
 end
