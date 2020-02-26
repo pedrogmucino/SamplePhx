@@ -141,7 +141,6 @@ defmodule AccountingSystemWeb.AccountsComponent do
   end
 
   def handle_event("edit_this", params, socket) do
-    IO.inspect(params, label: "+++++++++++++++++++++PARAMETROS A EDITAR")
     level = (params["level"] |> String.to_integer) - 1
     socket.assigns.child_components
       |> Enum.find(fn acc -> acc.level == level end)
