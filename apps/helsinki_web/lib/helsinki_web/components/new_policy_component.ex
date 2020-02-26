@@ -275,11 +275,13 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
   end
 
   defp fill(true, list) do
-    policy = List.first(list).id |> AccountingSystem.PolicyHandler.get_policy!
+    id = List.first(list).id
+    policy = id |> AccountingSystem.PolicyHandler.get_policy!
+    aux = id |> AccountingSystem.AuxiliaryHandler.get_auxiliary_by_policy_number
     dropdowns = AccountingSystem.AccountHandler.search_account("")
     [%{
       dropdowns: dropdowns,
-      arr: [],
+      arr: aux,
       edit: true,
       id: List.first(list).id,
       pollys: %{
