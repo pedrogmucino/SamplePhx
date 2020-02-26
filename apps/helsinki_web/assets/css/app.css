@@ -35,6 +35,28 @@
 .transition-menu:hover label{
     @apply text-base relative opacity-100 ml-3 visible;
 }
+.notification {
+    -webkit-animation-name: notification_start;
+    animation-name: notification_start;
+    -webkit-animation-duration: 6s;
+    animation-duration: 6s;
+    -webkit-animation-iteration-count: inherit;
+    animation-iteration-count: inherit;
+  }
+  
+  @-webkit-keyframes notification_start {   
+    0%  { bottom: -30rem;} 
+    10%  { bottom: 0rem;}   
+    80%  { bottom: 0rem;}  
+    100% { bottom: -30rem; }   
+   } 
+   @keyframes notification_start {   
+    0%  { bottom: -30rem;} 
+    10%  { bottom: 0rem;}   
+    80%  { bottom: 0rem;}  
+    100% { bottom: -30rem; }   
+   }
+  
 /* For Slide toggle*/
 .modern-checkbox label::before,
 .modern-checkbox label::after {

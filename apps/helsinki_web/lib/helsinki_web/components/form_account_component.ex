@@ -3,7 +3,6 @@ defmodule AccountingSystemWeb.FormAccountComponent do
   use Phoenix.HTML
 
   def mount(socket) do
-    #{:ok, socket}
     {:ok, assign(socket,
     levelx: 0,
     codex: "",
@@ -11,7 +10,8 @@ defmodule AccountingSystemWeb.FormAccountComponent do
     namex: "",
     actionx: "",
     parent_editx: %{},
-    idx: 0
+    idx: 0,
+    error: nil
     )}
   end
 
@@ -31,16 +31,22 @@ defmodule AccountingSystemWeb.FormAccountComponent do
       error: nil
       )}
 
-    rescue e in RuntimeError ->
-      {:ok, assign(socket,
-      error: e.message)}
-    end
+    rescue e in RuntimeError -> error(e, socket) end
+  end
+
+  def error(e, socket) do
+    Task.async(fn ->
+      :timer.sleep(5500)
+
+      assign(socket, error: nil)
+      %{error: "close"}
+    end)
+    {:ok, assign(socket, error: e.message)}
   end
 
   def load_values() do
     AccountingSystem.AccountHandler.get_principal_account!()
     |> AccountingSystem.SchemaFormatter.get_root_account()
-    #|> AccountingSystem.AccountHandler.change_account_code()
   end
 
   def load_values_with_id(id) do
@@ -50,9 +56,10 @@ defmodule AccountingSystemWeb.FormAccountComponent do
 
   def render(assigns) do
     ~L"""
-    <%= if @error do %>
-      <%= live_component(@socket, AccountingSystemWeb.ErrorComponent, error: @error) %>
-    <%= else %>
+    <div>
+      <%= if @error do %>
+        phx-target="#new_account"<%=live_component(@socket, AccountingSystemWeb.ErrorComponent, id: "error_comp", error: @error, show: true) %>
+      <%= else %>
     <div id="x" phx-hook="scroll_x"  class="bg-white mt-16 ml-1 w-240 rounded border">
 
       <div class="inline-flex bg-blue-700 text-white px-6 py-3 w-full">
@@ -218,6 +225,7 @@ defmodule AccountingSystemWeb.FormAccountComponent do
         </div>
       <div>
       <% end %>
+      </div>
     </div>
     """
   end
