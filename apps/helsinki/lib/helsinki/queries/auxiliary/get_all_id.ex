@@ -2,6 +2,10 @@ defmodule AccountingSystem.GetAllId do
   import Ecto.Query, warn: false
   alias AccountingSystem.Repo
   alias AccountingSystem.PrefixFormatter
+  alias AccountingSystem.{
+    AuxiliarySchema,
+    AccountSchema
+  }
 
   def from_policy(policy_number) do
     from aux in "auxiliaries",
@@ -11,8 +15,10 @@ defmodule AccountingSystem.GetAllId do
   end
 
   def get_auxiliary_by_policy_number(policy_number) do
-    from aux in "auxiliaries",
+    from aux in AuxiliarySchema,
     prefix: "p_2020_2",
+    join: ac in AccountSchema,
+    on: aux.id_account == ac.id,
     where: aux.policy_number == ^policy_number,
     select: %{
       id: aux.id,
@@ -30,7 +36,8 @@ defmodule AccountingSystem.GetAllId do
       exchange_rate: aux.exchange_rate,
       inserted_at: aux.inserted_at,
       updated_at: aux.updated_at,
-      policy_id: aux.policy_id
+      policy_id: aux.policy_id,
+      code: ac.code
     }
   end
 
