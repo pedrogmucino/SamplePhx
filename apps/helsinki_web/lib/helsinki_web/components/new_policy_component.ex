@@ -80,7 +80,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                 </div>
                 <label class="block tracking-wide text-gray-700 font-bold" for="grid-code">Concepto</label>
                 <input type="text" name="concept" value="<%=@pollys.concept%>" maxlength="128" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code">
-                <input type="hidden" name="id" value="<%=@pollys.id%>">
+
               </form>
               <form id="form2" phx-submit="save_aux" phx-target="#one" phx-change="update_form">
                 <label class="block pt-32 tracking-wide text-gray-700 font-bold" for="grid-name">Cuenta(<%= @pollys.focused %>)</label>
@@ -274,7 +274,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
   defp fill(true, list) do
     id = List.first(list).id
     policy = id |> AccountingSystem.PolicyHandler.get_policy!
-    aux = id |> AccountingSystem.AuxiliaryHandler.get_auxiliary_by_policy_number
+    aux = policy.policy_number |> AccountingSystem.AuxiliaryHandler.get_auxiliary_by_policy_number
     dropdowns = AccountingSystem.AccountHandler.search_account("")
     [%{
       dropdowns: dropdowns,
