@@ -16,7 +16,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
       <div class="inline-flex bg-blue-700 text-white px-6 py-3 w-full">
         <div class="inline-block w-full">
           <label class="text-2xl font-normal text-white block">Editar/Nueva</label>
-          <label class="block font-medium"><b> <%= (if @edit, do: @policy_edit.concept, else: "Póliza") %> </b></label>
+          <label class="block font-medium"><b> "Póliza" </b></label>
         </div>
 
         <button phx-click="close" phx-target="#policy" class="ml-auto h-8 -mt-1 -mr-3">
@@ -34,7 +34,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
           <div class="inline-block w-full">
             <div class="inline-flex w-full">
               <div class="px-8 py-6 flex flex-col my-2 w-6/12">
-              <form id="form1" phx-submit="action_account" phx-target="#one" phx-change="update_form">
+              <form id="form1" phx-submit= <%= (if @edit, do: "edit_and_save_this", else: "action_account")%> phx-target="#one" phx-change="update_form">
                 <div class="inline-flex w-full">
                   <div class="inline-flex w-full">
                     <div class="inline-block w-full mr-2">
@@ -80,6 +80,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                 </div>
                 <label class="block tracking-wide text-gray-700 font-bold" for="grid-code">Concepto</label>
                 <input type="text" name="concept" value="<%=@pollys["concept"]%>" maxlength="128" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code">
+                <input type="hidden" name="id" value="<%=@pollys["id"]%>">
               </form>
               <form id="form2" phx-submit="save_aux" phx-target="#one" phx-change="update_form">
                 <label class="block pt-32 tracking-wide text-gray-700 font-bold" for="grid-name">Cuenta(<%= @pollys["focused"] %>)</label>
@@ -281,7 +282,26 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
       arr: [],
       edit: true,
       id: List.first(list).id,
-      pollys: policy,
+      pollys: %{
+            "audited" => policy.audited,
+            "concept" => policy.concept,
+            "fiscal_exercise" => policy.fiscal_exercise,
+            "has_documents" => policy.has_documents,
+            "period" => policy.period,
+            "policy_date" => policy.policy_date,
+            "policy_type" => Integer.to_string(policy.policy_type),
+            "aux_concept" => "",
+            "debit" => 0,
+            "department" => "",
+            "credit" => 0,
+            "id" => policy.id,
+            "sum_haber" => 0,
+            "sum_debe" => 0,
+            "total" => 0,
+            "focused" => 0,
+            "account" => "",
+            "name" => ""
+      },
       update_text: ""
     }]
   end

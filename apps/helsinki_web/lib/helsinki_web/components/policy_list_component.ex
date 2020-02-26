@@ -31,9 +31,9 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def handle_event("edit_and_save_this", params, socket) do
-    edit_policy = %{concept: params["concept"]}
-    current_policy = params["id"] |> String.to_integer |> PolicyHandler.get_policy!
-    PolicyHandler.update_policy(current_policy, edit_policy)
+    params |> IO.inspect(label: " ->  ->  ->  PARAMS")
+    current_policy = params["id"] |> String.to_integer |> PolicyHandler.get_policy! |> IO.inspect(label: " -> -> -> ")
+    PolicyHandler.update_policy(current_policy, params)
     {:noreply, socket}
   end
 
