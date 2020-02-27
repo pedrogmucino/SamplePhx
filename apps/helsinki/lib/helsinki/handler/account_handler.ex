@@ -235,4 +235,9 @@ defmodule AccountingSystem.AccountHandler do
     AccountingSystem.SearchAccount.search(word)
         |> AccountingSystem.Repo.all
   end
+
+  def search_detail_account(word) do
+    AccountingSystem.SearchAccount.search_detail_account(word)
+    |> Repo.all
+  end
 end

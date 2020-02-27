@@ -21,4 +21,12 @@ defmodule AccountingSystem.SearchAccount do
     "%("<>new_text<>")%"
   end
 
+  def search_detail_account(text) do
+    search = format(text)
+    from acc in AccountingSystem.AccountSchema,
+      select: %{key: [acc.code, " ", acc.description], value: acc.id},
+      where: acc.type == "D" and acc.status == "A" and
+      (fragment("a0.code SIMILAR TO (?)", ^search) or fragment("a0.description SIMILAR TO (?)", ^search) or fragment("a0.name SIMILAR TO (?)", ^search))
+  end
+
 end
