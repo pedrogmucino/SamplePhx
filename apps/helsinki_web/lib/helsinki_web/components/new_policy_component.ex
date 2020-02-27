@@ -72,9 +72,9 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                   </div>
                   <div class="w-1/3 flex">
                     <div class="modern-checkbox flex h-6 w-full">
-                      <input type="checkbox" name="has_documents" class="hidden" value="<%=@pollys.has_documents %>" <%=@pollys.has_documents %> >
-                      <label class="relative inline bg-transparent w-10" for="has_documents"></label>
-                      <label class="ml-2 font-bold text-gray-700">Documentos?</label>
+                      <input type="checkbox" name="has_documents" class="hidden" id="checkbox-act2" value="<%=@pollys.has_documents %>" <%=@pollys.has_documents %> >
+                      <label class="relative inline bg-transparent w-10" for="checkbox-act2"></label>
+                      <label class="ml-2 font-bold text-gray-700">Documentos? <%=@pollys.has_documents %></label>
                     </div>
                   </div>
                 </div>
@@ -128,8 +128,12 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
               </form>
                 <!---------------------------------GUARDAR - ELIMINAR -------------------------------------->
                 <div class="pt-32 grid grid-cols-2 flex">
-                  <div class="flex-1">
-                    <button form="form1" <%=if @pollys.total != 0 or length(@arr) == 0, do: " disabled ", else: "" %> class="disabled:opacity-75 disabled:hover:bg-teal-500 py-2 w-1/2 bg-teal-500 text-white hover:bg-teal-400 items-center inline-flex font-bold rounded shadow focus:shadow-outline focus:outline-none rounded">
+                  <div class="flex-1 text-center">
+                  <%=if @pollys.total != 0 or length(@arr) == 0 do %>
+                    <button form="form1" disabled class="opacity-50 cursor-not-allowed py-2 w-1/2 bg-teal-500 text-white items-center inline-flex font-bold rounded shadow focus:shadow-outline focus:outline-none rounded">
+                  <% else %>
+                    <button form="form1" class="py-2 w-1/2 bg-teal-500 text-white hover:bg-teal-400 items-center inline-flex font-bold rounded shadow focus:shadow-outline focus:outline-none rounded">
+                  <% end %>
                       <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="save" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
                         class="h-4 w-4 mr-2 ml-auto">
                         <g class="fa-group">
@@ -141,10 +145,11 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                           </path>
                         </g>
                       </svg>
-                      <label class="cursor-pointer mr-auto text-white">Guardar</label>
+                        <label class="<%=if @pollys.total != 0 or length(@arr) == 0, do: "cursor-not-allowed", else: "cursor-pointer" %> mr-auto text-white">Guardar</label>
                     </button>
                   </div>
-                  <div class="flex-1">
+                  <div class="flex-1 text-center">
+                  <%= if @edit do %>
                       <button phx-click="delete_policy" phx-target="#policy" phx-value-id="<%=@pollys.id%>" phx-value-delete="true"
                         class="py-2 w-1/2 bg-red-500 text-white hover:bg-red-400 items-center inline-flex font-bold rounded shadow focus:shadow-outline focus:outline-none rounded">
                         <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="trash-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
@@ -160,6 +165,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                         </svg>
                         <label class="cursor-pointer mr-auto text-white">Eliminar</label>
                       </button>
+                    <% end %>
                   </div>
                 </div>
                 <!---------------------------------------------END GUARDAR - ELIMINAR --------------------->
@@ -192,10 +198,10 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                               </div>
                               <%= if @edit do %>
                                 <div class="w-2/6 text-right">
-                                  <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Debe: <b> <%= if(item.debit_credit == "D", do: item.mxn_amount, else: 0) %></b></label>
+                                  <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Debe: <b> <%= if(item.debit_credit == "D", do: item.mxn_amount, else: 0.0) %></b></label>
                                 </div>
                                 <div class="w-2/6 text-right">
-                                  <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Haber: <b> <%= if(item.debit_credit == "H", do: item.mxn_amount, else: 0) %></b></label>
+                                  <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Haber: <b> <%= if(item.debit_credit == "H", do: item.mxn_amount, else: 0.0) %></b></label>
                                 </div>
                               <% else %>
                                 <div class="w-2/6 text-right">
@@ -289,10 +295,10 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
       edit: true,
       id: List.first(list).id,
       pollys: %{
-            audited: policy.audited,
+            audited: (if policy.audited == true, do: "checked", else: "unchecked"),
             concept: policy.concept,
             fiscal_exercise: policy.fiscal_exercise,
-            has_documents: policy.has_documents,
+            has_documents: (if policy.has_documents == true, do: "checked", else: "unchecked"),
             period: policy.period,
             policy_date: policy.policy_date,
             policy_type: Integer.to_string(policy.policy_type),

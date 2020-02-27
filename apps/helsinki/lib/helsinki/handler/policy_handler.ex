@@ -78,6 +78,9 @@ defmodule AccountingSystem.PolicyHandler do
     IO.inspect(attrs, label: "ATTTRSRRSSRSRSRSRSRSR::::::::::::::::::>>>>>>>>>>>>>>>>>>")
     ps = Map.put(attrs, "serial", serial.serial)
           |> Map.put("policy_number", serial.number)
+          |> Map.put("audited", check_to_bool(attrs, "audited"))
+          |> Map.put("has_documents", check_to_bool(attrs, "has_documents"))
+          |> IO.inspect(label: "PPPPPPPPPPPSSSSSSSSSSSSSSSS:::::::::::::::>>>>>>>>>>>>>>>")
     %PolicySchema{}
     |> PolicySchema.changeset(GenericFunctions.string_map_to_atom(ps))
     |> Repo.insert(prefix: PrefixFormatter.get_prefix(year, month))
@@ -142,7 +145,11 @@ defmodule AccountingSystem.PolicyHandler do
 
   #************************************************************************************************************************************
 
-  def save_policy(params, arr) do
+  defp check_to_bool(params, where) do
+    if(params[where] == "checked" , do: "true", else: "false")
+  end
+
+  def save_policy(params, socket) do
     Repo.transaction(fn() ->
       case save_all(params, arr) do
         {:ok, policy} ->

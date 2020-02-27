@@ -81,9 +81,9 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def handle_event("update_form", params, socket) do
-    IO.inspect(params, label: "PAAAAAAAAAAAAAAAAAARAAAAAAMSSSSS:::::>>>")
-    params = if(params["audited"] == "unchecked", do: params |> Map.put("audited", "checked"), else: params |> Map.put("audited", "unchecked"))
-    params = if(params["has_documents"] == "unchecked", do: params |> Map.put("audited", "checked"), else: params |> Map.put("audited", "unchecked"))
+    IO.inspect(params, label: "PAAAAAAAAAAAAAAAAAARAAAAAAMSSSSS TARGEEEETTTT:::::>>>")
+
+    params = check(params, params)
     pollys = Map.merge(socket.assigns.pollys, GenericFunctions.string_map_to_atom(params))
     {:noreply, assign(socket, pollys: pollys)}
   end
@@ -147,6 +147,18 @@ defmodule AccountingSystemWeb.PolicyListComponent do
             |> Tuple.to_list
             |> List.first
     end
+  end
+
+  def check(params, %{"_target" => ["audited"]}) do
+    if(params["audited"] == "unchecked", do: params |> Map.put("audited", "checked"), else: params |> Map.put("audited", "unchecked"))
+  end
+
+  def check(params, %{"_target" => ["has_documents"]}) do
+    if(params["has_documents"] == "unchecked" , do: params |> Map.put("has_documents", "checked"), else: params |> Map.put("has_documents", "unchecked"))
+  end
+
+  def check(params, _) do
+    params
   end
 
   def render(assigns) do
