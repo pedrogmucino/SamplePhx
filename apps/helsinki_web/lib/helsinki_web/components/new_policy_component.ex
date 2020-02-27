@@ -15,8 +15,8 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
 
       <div class="inline-flex bg-blue-700 text-white px-6 py-3 w-full">
         <div class="inline-block w-full">
-          <label class="text-2xl font-normal text-white block">Editar/Nueva</label>
-          <label class="block font-medium"><b> "Póliza" </b></label>
+          <label class="text-2xl font-normal text-white block"> <%= (if @edit, do: "Editar", else: "Nueva") %></label>
+          <label class="block font-medium"><b> <%= (if @edit, do: "#{@pollys.serial}#{"-"}#{@pollys.id}") %> </b></label>
         </div>
 
         <button phx-click="close" phx-target="#policy" class="ml-auto h-8 -mt-1 -mr-3">
@@ -269,6 +269,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
   end
 
   def update(params, socket) do
+    params |> IO.inspect(label: " -- - - - - - - - -                          -------------------------------------------------- - Update >-")
     dropdowns = AccountingSystem.AccountHandler.search_account(params.update_text)
     {:ok, assign(socket,
       dropdowns: dropdowns,
@@ -307,7 +308,8 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
             focused: 0,
             account: "",
             name: "",
-            id_account: ""
+            id_account: "",
+            serial: policy.serial
       },
       update_text: ""
     }]
