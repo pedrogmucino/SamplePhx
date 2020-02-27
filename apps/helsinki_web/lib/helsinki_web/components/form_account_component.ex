@@ -56,9 +56,8 @@ defmodule AccountingSystemWeb.FormAccountComponent do
 
   def render(assigns) do
     ~L"""
-    <div>
       <%= if @error do %>
-        phx-target="#new_account"<%=live_component(@socket, AccountingSystemWeb.ErrorComponent, id: "error_comp", error: @error, show: true) %>
+        <%=live_component(@socket, AccountingSystemWeb.ErrorComponent, id: "error_comp", error: @error, show: true) %>
       <%= else %>
     <div id="x" phx-hook="scroll_x"  class="bg-white mt-16 ml-1 w-240 rounded border">
 
