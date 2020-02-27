@@ -79,11 +79,18 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   def handle_event("action_account", params, socket) do
     case PolicyHandler.save_policy(params, socket) do
       {:ok, _} ->
-        {:stop, redirect(socket, to: AccountingSystemWeb.Router.Helpers.policies_path(AccountingSystemWeb.Endpoint, :index, %{})) }
+        {:noreply, assign(socket,
+        new?: false,
+        edit?: false,
+        policy_list: PolicyHandler.get_policy_list,
+        pollys: %{audited: "unchecked", concept: "", fiscal_exercise: "", has_documents: "unchecked", period: "", policy_date: "", policy_type: "0", aux_concept: "", debit: 0, department: "", credit: 0, id: "", sum_haber: 0, sum_debe: 0, total: 0, focused: 0, account: "", name: "", id_account: ""},
+        arr: [],
+        policy_id: 0)}
+        # {:stop, redirect(socket, to: AccountingSystemWeb.Router.Helpers.policies_path(AccountingSystemWeb.Endpoint, :index, %{})) }
       {:error, _} ->
         {:noreply, socket |> put_flash(:error, "NO SE PUDO GUARDAR")}
     end
-    {:noreply, socket}
+    # {:noreply, socket}
   end
 
   def handle_event("save_aux", params, socket) do

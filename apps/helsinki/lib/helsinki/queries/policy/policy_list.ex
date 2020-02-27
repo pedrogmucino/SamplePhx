@@ -23,6 +23,7 @@ defmodule AccountingSystem.PolicyListQuery do
       has_documents: p.has_documents,
       serial: p.serial,
       type_description: t.name
-    }
+    },
+    order_by: [desc: p.inserted_at]
   end
 end

@@ -129,7 +129,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                 <!---------------------------------GUARDAR - ELIMINAR -------------------------------------->
                 <div class="pt-32 grid grid-cols-2 flex">
                   <div class="flex-1">
-                    <button form="form1" class=" py-2 w-1/2 bg-teal-500 text-white hover:bg-teal-400 items-center inline-flex font-bold rounded shadow focus:shadow-outline focus:outline-none rounded">
+                    <button form="form1" <%=if @pollys.total != 0 or length(@arr) == 0, do: " disabled ", else: "" %> class="disabled:opacity-75 disabled:hover:bg-teal-500 py-2 w-1/2 bg-teal-500 text-white hover:bg-teal-400 items-center inline-flex font-bold rounded shadow focus:shadow-outline focus:outline-none rounded">
                       <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="save" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
                         class="h-4 w-4 mr-2 ml-auto">
                         <g class="fa-group">
@@ -141,7 +141,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                           </path>
                         </g>
                       </svg>
-                      <label class="mr-auto text-white">Guardar</label>
+                      <label class="cursor-pointer mr-auto text-white">Guardar</label>
                     </button>
                   </div>
                   <div class="flex-1">
