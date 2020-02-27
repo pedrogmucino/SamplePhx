@@ -34,7 +34,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def handle_event("edit_and_save_this", params, socket) do
-    current_policy = params["id"] |> String.to_integer |> PolicyHandler.get_policy! |> IO.inspect(label: " -> -> -> ")
+    current_policy = params["id"] |> String.to_integer |> PolicyHandler.get_policy!
     params = params
               |> Map.put("audited", checked(params["audited"]))
               |> Map.put("has_documents", checked(params["has_documents"]))
@@ -51,9 +51,13 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def handle_event("delete_policy", params, socket) do
-    params |> IO.inspect(label: " -> -> Params Delete Policy -> -> -> ")
-    params["id"] |> AccountingSystem.PolicyHandler.delete_policy_with_aux
-    {:noreply, assign(socket, edit?: false, policy_list: PolicyHandler.get_policy_list, message: nil)}
+    {:ok, policy} = params["id"] |> AccountingSystem.PolicyHandler.delete_policy_with_aux
+    notification()
+    {:noreply, assign(socket,
+      edit?: false,
+      policy_list: PolicyHandler.get_policy_list,
+      message: "Póliza " <> policy.serial <> "-" <> Integer.to_string(policy.policy_number) <> " eliminada correctamente"
+    )}
   end
 
   def handle_event("create_new", _params, socket) do
