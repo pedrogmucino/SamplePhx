@@ -149,7 +149,7 @@ defmodule AccountingSystem.PolicyHandler do
     if(params[where] == "checked" , do: "true", else: "false")
   end
 
-  def save_policy(params, socket) do
+  def save_policy(params, arr) do
     Repo.transaction(fn() ->
       case save_all(params, arr) do
         {:ok, policy} ->
