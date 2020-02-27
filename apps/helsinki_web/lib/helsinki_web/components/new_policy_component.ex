@@ -80,7 +80,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                 </div>
                 <label class="block tracking-wide text-gray-700 font-bold" for="grid-code">Concepto</label>
                 <input type="text" name="concept" value="<%=@pollys.concept%>" maxlength="128" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code">
-
+                <input type="hidden" name="id" value="<%=@pollys.id%>">
               </form>
               <form id="form2" phx-submit="save_aux" phx-target="#one" phx-change="update_form">
                 <label class="block pt-32 tracking-wide text-gray-700 font-bold" for="grid-name">Cuenta(<%= @pollys.focused %>)</label>
@@ -145,7 +145,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                     </button>
                   </div>
                   <div class="flex-1">
-                      <button phx-click="delete_account" phx-target="#x" phx-value-id=1 phx-value-delete="true"
+                      <button phx-click="delete_policy" phx-target="#policy" phx-value-id="<%=@pollys.id%>" phx-value-delete="true"
                         class="py-2 w-1/2 bg-red-500 text-white hover:bg-red-400 items-center inline-flex font-bold rounded shadow focus:shadow-outline focus:outline-none rounded">
                         <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="trash-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
                           class="h-4 w-4 mr-2 ml-auto">
