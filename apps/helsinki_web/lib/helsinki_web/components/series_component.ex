@@ -49,9 +49,20 @@ defmodule AccountingSystemWeb.SeriesComponent do
           </select>
           <input type="hidden" name="fiscal_exercise" value=0>
           <input type="hidden" name="current_number" value=0>
-          <div class="inline-flex w-full py-16 absolute bottom-0 right-0 pr-0">
-            <button class= "ml-auto mr-6 w-24 py-2 bg-teal-500 text-teal-100 text-center font-bold rounded shadow hover:bg-teal-400 focus:shadow-outline focus:outline-none rounded">
-              Guardar
+          <div class="inline-flex w-48 py-8 absolute bottom-0 right-0 pr-8 pt-2">
+            <button class= "ml-5 py-2 w-32 bg-teal-500 text-white hover:bg-teal-400 items-center inline-flex font-bold rounded shadow focus:shadow-outline focus:outline-none rounded">
+              <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="save" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+              class="h-4 w-4 mr-2 ml-auto">
+                <g class="fa-group">
+                  <path fill="currentColor" d="M288 352a64 64 0 1 1-64-64 64 64 0 0 1 64 64z"
+                    class="text-white">
+                  </path>
+                  <path fill="currentColor" d="M433.94 129.94l-83.88-83.88A48 48 0 0 0 316.12 32H48A48 48 0 0 0 0 80v352a48 48 0 0 0 48 48h352a48 48 0 0 0 48-48V163.88a48 48 0 0 0-14.06-33.94zM224 416a64 64 0 1 1 64-64 64 64 0 0 1-64 64zm96-204a12 12 0 0 1-12 12H76a12 12 0 0 1-12-12V108a12 12 0 0 1 12-12h228.52a12 12 0 0 1 8.48 3.52l3.48 3.48a12 12 0 0 1 3.52 8.48z"
+                    class="text-white">
+                  </path>
+                </g>
+              </svg>
+              <label class="cursor-pointer mr-auto text-white">Guardar</label>
             </button>
           </div>
         </form>

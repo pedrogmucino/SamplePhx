@@ -12,7 +12,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     new?: false,
     edit?: false,
     actionx: "edit",
-    pollys: %{audited: "", concept: "", fiscal_exercise: "", has_documents: "", period: "", policy_date: "", policy_type: "0", aux_concept: "", debit: 0, department: "", credit: 0, id: "", sum_haber: 0, sum_debe: 0, total: 0, focused: 0, account: "", name: "", id_account: ""},
+    pollys: %{audited: "unchecked", concept: "", fiscal_exercise: "", has_documents: "unchecked", period: "", policy_date: "", policy_type: "0", aux_concept: "", debit: 0, department: "", credit: 0, id: "", sum_haber: 0, sum_debe: 0, total: 0, focused: 0, account: "", name: "", id_account: ""},
     arr: [],
     policy_id: 0
     )}
@@ -69,6 +69,9 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def handle_event("update_form", params, socket) do
+    IO.inspect(params, label: "PAAAAAAAAAAAAAAAAAARAAAAAAMSSSSS:::::>>>")
+    params = if(params["audited"] == "unchecked", do: params |> Map.put("audited", "checked"), else: params |> Map.put("audited", "unchecked"))
+    params = if(params["has_documents"] == "unchecked", do: params |> Map.put("audited", "checked"), else: params |> Map.put("audited", "unchecked"))
     pollys = Map.merge(socket.assigns.pollys, GenericFunctions.string_map_to_atom(params))
     {:noreply, assign(socket, pollys: pollys)}
   end
