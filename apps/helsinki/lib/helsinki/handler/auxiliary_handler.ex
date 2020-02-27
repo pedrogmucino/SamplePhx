@@ -46,7 +46,7 @@ defmodule AccountingSystem.AuxiliaryHandler do
 
   def get_auxiliary!(id, year, month), do: Repo.get!(AuxiliarySchema, id, prefix: PrefixFormatter.get_prefix(year, month))
 
-  def get_auxiliary_by_policy_number(policy_number), do: Repo.all(AccountingSystem.GetAllId.get_auxiliary_by_policy_number(policy_number))
+  def get_auxiliary_by_policy_id(id), do: Repo.all(AccountingSystem.GetAllId.get_auxiliary_by_policy_id(id))
 
   @doc """
   Creates a auxiliary.

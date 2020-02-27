@@ -14,12 +14,12 @@ defmodule AccountingSystem.GetAllId do
     select: aux.id
   end
 
-  def get_auxiliary_by_policy_number(policy_number) do
+  def get_auxiliary_by_policy_id(id) do
     from aux in AuxiliarySchema,
     prefix: "p_2020_2",
     join: ac in AccountSchema,
     on: aux.id_account == ac.id,
-    where: aux.policy_number == ^policy_number,
+    where: aux.policy_id == ^id,
     select: %{
       id: aux.id,
       policy_number: aux.policy_number,

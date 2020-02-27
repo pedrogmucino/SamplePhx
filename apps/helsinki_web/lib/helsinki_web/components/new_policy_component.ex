@@ -287,7 +287,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
   defp fill(true, list) do
     id = List.first(list).id
     policy = id |> AccountingSystem.PolicyHandler.get_policy!
-    aux = policy.policy_number |> AccountingSystem.AuxiliaryHandler.get_auxiliary_by_policy_number
+    aux = policy.id |> AccountingSystem.AuxiliaryHandler.get_auxiliary_by_policy_id
     dropdowns = AccountingSystem.AccountHandler.search_account("")
     [%{
       dropdowns: dropdowns,
