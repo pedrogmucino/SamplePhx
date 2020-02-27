@@ -89,4 +89,13 @@ defmodule AccountingSystemWeb.PolicyListLiveView do
   def mount(_params, _session, socket) do
     {:ok, socket}
   end
+
+  def handle_info({_reference, %{message: _params}}, socket) do
+    send_update(AccountingSystemWeb.NotificationComponent, id: "notification", show: false)
+    {:noreply, socket}
+  end
+
+  def handle_info({:DOWN, _reference, _process, _pid, _normal}, socket) do
+    {:noreply, socket}
+  end
 end

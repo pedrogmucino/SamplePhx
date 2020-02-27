@@ -15,8 +15,8 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
 
       <div class="inline-flex bg-blue-700 text-white px-6 py-3 w-full">
         <div class="inline-block w-full">
-          <label class="text-2xl font-normal text-white block">Editar/Nueva</label>
-          <label class="block font-medium"><b> "Póliza" </b></label>
+          <label class="text-2xl font-normal text-white block"> <%= (if @edit, do: "Editar", else: "Nueva") %></label>
+          <label class="block font-medium"><b> <%= (if @edit, do: "#{@pollys.serial}#{"-"}#{@pollys.id}") %> </b></label>
         </div>
 
         <button phx-click="close" phx-target="#policy" class="ml-auto h-8 -mt-1 -mr-3">
@@ -198,10 +198,10 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                               </div>
                               <%= if @edit do %>
                                 <div class="w-2/6 text-right">
-                                  <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Debe: <b> <%= if(item.debit_credit == "D", do: item.mxn_amount, else: 0) %></b></label>
+                                  <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Debe: <b> <%= if(item.debit_credit == "D", do: item.mxn_amount, else: 0.0) %></b></label>
                                 </div>
                                 <div class="w-2/6 text-right">
-                                  <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Haber: <b> <%= if(item.debit_credit == "H", do: item.mxn_amount, else: 0) %></b></label>
+                                  <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Haber: <b> <%= if(item.debit_credit == "H", do: item.mxn_amount, else: 0.0) %></b></label>
                                 </div>
                               <% else %>
                                 <div class="w-2/6 text-right">
@@ -313,7 +313,8 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
             focused: 0,
             account: "",
             name: "",
-            id_account: ""
+            id_account: "",
+            serial: policy.serial
       },
       update_text: ""
     }]
