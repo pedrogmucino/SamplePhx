@@ -52,7 +52,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                   </div>
                   <div class="w-1/3 flex">
                     <div class="modern-checkbox flex h-6 w-full">
-                      <input type="checkbox" name="audited" class="hidden" id="checkbox-act">
+                      <input type="checkbox" name="audited" class="hidden" id="checkbox-act" value="<%=@pollys.audited %>" <%=@pollys.audited %>>
                       <label class="relative inline bg-transparent w-10" for="checkbox-act"></label>
                       <label class="ml-2 font-bold text-gray-700">Auditada</label>
                     </div>
@@ -63,7 +63,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                   <div class="inline-flex w-full">
                     <div class="inline-block w-full mr-2">
                       <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Ejercicio Fiscal</label>
-                      <input type="number" name="fiscal_exercise" value="<%=@pollys.fiscal_exercise%>" min="1" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
+                      <input type="number" name="fiscal_exercise" value="<%= @pollys.fiscal_exercise %>" min="1" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
                     </div>
                     <div class="inline-block w-full ml-2">
                       <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Periodo</label>
@@ -72,7 +72,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                   </div>
                   <div class="w-1/3 flex">
                     <div class="modern-checkbox flex h-6 w-full">
-                      <input type="checkbox" name="has_documents" class="hidden" id="has_documents" unchecked >
+                      <input type="checkbox" name="has_documents" class="hidden" value="<%=@pollys.has_documents %>" <%=@pollys.has_documents %> >
                       <label class="relative inline bg-transparent w-10" for="has_documents"></label>
                       <label class="ml-2 font-bold text-gray-700">Documentos?</label>
                     </div>
@@ -129,7 +129,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                 <!---------------------------------GUARDAR - ELIMINAR -------------------------------------->
                 <div class="pt-32 grid grid-cols-2 flex">
                   <div class="flex-1">
-                    <button form="form1" class="py-2 w-1/2 bg-teal-500 text-white hover:bg-teal-400 items-center inline-flex font-bold rounded shadow focus:shadow-outline focus:outline-none rounded">
+                    <button form="form1" class=" py-2 w-1/2 bg-teal-500 text-white hover:bg-teal-400 items-center inline-flex font-bold rounded shadow focus:shadow-outline focus:outline-none rounded">
                       <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="save" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
                         class="h-4 w-4 mr-2 ml-auto">
                         <g class="fa-group">
@@ -141,11 +141,10 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                           </path>
                         </g>
                       </svg>
-                      <label class="cursor-pointer mr-auto text-white">Guardar</label>
+                      <label class="mr-auto text-white">Guardar</label>
                     </button>
                   </div>
                   <div class="flex-1">
-                    <%= if "edit" == "edit" do %>
                       <button phx-click="delete_account" phx-target="#x" phx-value-id=1 phx-value-delete="true"
                         class="py-2 w-1/2 bg-red-500 text-white hover:bg-red-400 items-center inline-flex font-bold rounded shadow focus:shadow-outline focus:outline-none rounded">
                         <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="trash-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
@@ -161,7 +160,6 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                         </svg>
                         <label class="cursor-pointer mr-auto text-white">Eliminar</label>
                       </button>
-                    <% end %>
                   </div>
                 </div>
                 <!---------------------------------------------END GUARDAR - ELIMINAR --------------------->
@@ -192,12 +190,21 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                               <div class="w-2/6">
                                 <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Departamento: <b> <%= item.department %></b></label>
                               </div>
-                              <div class="w-2/6 text-right">
-                                <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Debe: <b> <%= if(item.debit_credit == "D", do: item.mxn_amount, else: 0) %></b></label>
-                              </div>
-                              <div class="w-2/6 text-right">
-                                <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Haber: <b> <%= if(item.debit_credit == "H", do: item.mxn_amount, else: 0) %></b></label>
-                              </div>
+                              <%= if @edit do %>
+                                <div class="w-2/6 text-right">
+                                  <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Debe: <b> <%= if(item.debit_credit == "D", do: item.mxn_amount, else: 0) %></b></label>
+                                </div>
+                                <div class="w-2/6 text-right">
+                                  <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Haber: <b> <%= if(item.debit_credit == "H", do: item.mxn_amount, else: 0) %></b></label>
+                                </div>
+                              <% else %>
+                                <div class="w-2/6 text-right">
+                                  <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Debe: <b> <%= item.debit %></b></label>
+                                </div>
+                                <div class="w-2/6 text-right">
+                                  <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Haber: <b> <%= item.credit %></b></label>
+                                </div>
+                              <% end %>
                             </div>
                           </div>
                         </div>
