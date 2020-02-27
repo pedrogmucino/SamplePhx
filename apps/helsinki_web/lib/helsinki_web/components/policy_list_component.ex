@@ -14,42 +14,48 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     actionx: "edit",
     pollys: %{audited: "unchecked", concept: "", fiscal_exercise: "", has_documents: "unchecked", period: "", policy_date: "", policy_type: "0", aux_concept: "", debit: 0, department: "", credit: 0, id: "", sum_haber: 0, sum_debe: 0, total: 0, focused: 0, account: "", name: "", id_account: ""},
     arr: [],
-    policy_id: 0
+    policy_id: 0,
+    message: nil
     )}
   end
 
   def update(attrs, socket) do
-      {:ok, assign(socket, id: attrs.id)}
+      {:ok, assign(socket, id: attrs.id, message: nil)}
   end
 
   def handle_event("create_policy", params, socket) do
-    {:noreply, assign(socket, new?: true, edit?: false, actionx: "edit")}
+    {:noreply, assign(socket, new?: true, edit?: false, actionx: "edit", message: nil)}
   end
 
   def handle_event("open_policy", params, socket) do
     id = params["id"] |> String.to_integer()
-    {:noreply, assign(socket, new?: false, edit?: true, policy_id: id)}
+    {:noreply, assign(socket, new?: false, edit?: true, policy_id: id, message: nil)}
   end
 
   def handle_event("edit_and_save_this", params, socket) do
     params |> IO.inspect(label: " ->  ->  ->  PARAMS")
     current_policy = params["id"] |> String.to_integer |> PolicyHandler.get_policy! |> IO.inspect(label: " -> -> -> ")
-    PolicyHandler.update_policy(current_policy, params)
-    {:noreply, assign(socket, edit?: false, policy_list: PolicyHandler.get_policy_list)}
+    {:ok, policy} = PolicyHandler.update_policy(current_policy, params)
+    notification()
+    {:noreply, assign(socket,
+    edit?: false,
+    policy_list: PolicyHandler.get_policy_list,
+    message: "Póliza " <> policy.serial <> "-" <> Integer.to_string(policy.policy_number) <> " actualizada correctamente"
+    )}
   end
 
   def handle_event("delete_policy", params, socket) do
     params |> IO.inspect(label: " -> -> Params Delete Policy -> -> -> ")
     params["id"] |> AccountingSystem.PolicyHandler.delete_policy_with_aux
-    {:noreply, assign(socket, edit?: false, policy_list: PolicyHandler.get_policy_list)}
+    {:noreply, assign(socket, edit?: false, policy_list: PolicyHandler.get_policy_list, message: nil)}
   end
 
   def handle_event("create_new", _params, socket) do
-    {:noreply, assign(socket, new?: true, edit?: false, update_text: "", focused: 0)}
+    {:noreply, assign(socket, new?: true, edit?: false, update_text: "", focused: 0, message: nil)}
   end
 
   def handle_event("close", _params, socket) do
-    {:noreply, assign(socket, new?: false, edit?: false)}
+    {:noreply, assign(socket, new?: false, edit?: false, message: nil)}
   end
 
   def handle_event("show_accounts", params, socket) do
@@ -83,20 +89,29 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def handle_event("action_account", params, socket) do
-    case PolicyHandler.save_policy(params, socket) do
-      {:ok, _} ->
+    case PolicyHandler.save_policy(params, socket.assigns.arr) do
+      {:ok, policy} ->
+        notification()
         {:noreply, assign(socket,
         new?: false,
         edit?: false,
         policy_list: PolicyHandler.get_policy_list,
         pollys: %{audited: "unchecked", concept: "", fiscal_exercise: "", has_documents: "unchecked", period: "", policy_date: "", policy_type: "0", aux_concept: "", debit: 0, department: "", credit: 0, id: "", sum_haber: 0, sum_debe: 0, total: 0, focused: 0, account: "", name: "", id_account: ""},
         arr: [],
-        policy_id: 0)}
-        # {:stop, redirect(socket, to: AccountingSystemWeb.Router.Helpers.policies_path(AccountingSystemWeb.Endpoint, :index, %{})) }
+        policy_id: 0,
+        message: "Póliza guardada con éxito: " <>policy.serial <> "-" <> Integer.to_string(policy.policy_number)
+        )}
       {:error, _} ->
         {:noreply, socket |> put_flash(:error, "NO SE PUDO GUARDAR")}
     end
-    # {:noreply, socket}
+  end
+
+  defp notification() do
+    Task.async(fn ->
+      :timer.sleep(5500)
+      %{message: "close"}
+    end)
+    :ok
   end
 
   def handle_event("save_aux", params, socket) do
@@ -136,7 +151,9 @@ defmodule AccountingSystemWeb.PolicyListComponent do
 
   def render(assigns) do
     ~L"""
-
+    <%= if @message do %>
+      <%= live_component(@socket, AccountingSystemWeb.NotificationComponent, id: "notification", message: @message, show: true) %>
+      <% end %>
     <div id="one" class="bg-white h-hoch-93 w-80 mt-16 ml-16 block float-left">
     <div class="relative w-full px-2 mt-4">
       <input class="focus:outline-none focus:bg-white focus:border-blue-500 h-8 w-full rounded border bg-gray-300 pl-2" placeholder="Buscar Póliza" >
