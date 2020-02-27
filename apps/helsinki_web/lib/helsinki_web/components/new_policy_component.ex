@@ -192,10 +192,10 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                               </div>
                               <%= if @edit do %>
                                 <div class="w-2/6 text-right">
-                                  <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Debe: <b> <%= if(item.debit_credit == "D", do: item.mxn_amount, else: 0) %></b></label>
+                                  <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Debe: <b> <%= if(item.debit_credit == "D", do: item.mxn_amount, else: 0.0) %></b></label>
                                 </div>
                                 <div class="w-2/6 text-right">
-                                  <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Haber: <b> <%= if(item.debit_credit == "H", do: item.mxn_amount, else: 0) %></b></label>
+                                  <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Haber: <b> <%= if(item.debit_credit == "H", do: item.mxn_amount, else: 0.0) %></b></label>
                                 </div>
                               <% else %>
                                 <div class="w-2/6 text-right">
