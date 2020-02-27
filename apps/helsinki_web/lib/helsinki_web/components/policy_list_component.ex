@@ -35,7 +35,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     params |> IO.inspect(label: " ->  ->  ->  PARAMS")
     current_policy = params["id"] |> String.to_integer |> PolicyHandler.get_policy! |> IO.inspect(label: " -> -> -> ")
     PolicyHandler.update_policy(current_policy, params)
-    {:noreply, socket}
+    {:noreply, assign(socket, edit?: false, policy_list: PolicyHandler.get_policy_list)}
   end
 
   def handle_event("create_new", _params, socket) do
