@@ -16,7 +16,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
       <div class="inline-flex bg-blue-700 text-white px-6 py-3 w-full">
         <div class="inline-block w-full">
           <label class="text-2xl font-normal text-white block"> <%= (if @edit, do: "Editar", else: "Nueva") %></label>
-          <label class="block font-medium"><b> <%= (if @edit, do: "#{@pollys.serial}#{"-"}#{@pollys.id}") %> </b></label>
+          <label class="block font-medium"><b> <%= (if @edit, do: "#{@pollys.serial}#{"-"}#{@pollys.policy_number}") %> </b></label>
         </div>
 
         <button phx-click="close" phx-target="#policy" class="ml-auto h-8 -mt-1 -mr-3">
@@ -286,7 +286,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
 
   defp fill(true, list) do
     id = List.first(list).id
-    policy = id |> AccountingSystem.PolicyHandler.get_policy!
+    policy = id |> AccountingSystem.PolicyHandler.get_policy! |> IO.inspect(label: " --<> ")
     aux = policy.id |> AccountingSystem.AuxiliaryHandler.get_auxiliary_by_policy_id
     dropdowns = AccountingSystem.AccountHandler.search_account("")
     [%{
@@ -314,7 +314,8 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
             account: "",
             name: "",
             id_account: "",
-            serial: policy.serial
+            serial: policy.serial,
+            policy_number: policy.policy_number
       },
       update_text: ""
     }]
