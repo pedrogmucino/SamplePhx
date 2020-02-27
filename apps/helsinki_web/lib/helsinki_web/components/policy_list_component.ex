@@ -38,6 +38,12 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     {:noreply, assign(socket, edit?: false, policy_list: PolicyHandler.get_policy_list)}
   end
 
+  def handle_event("delete_policy", params, socket) do
+    params |> IO.inspect(label: " -> -> Params Delete Policy -> -> -> ")
+    params["id"] |> AccountingSystem.PolicyHandler.delete_policy_with_aux
+    {:noreply, assign(socket, edit?: false, policy_list: PolicyHandler.get_policy_list)}
+  end
+
   def handle_event("create_new", _params, socket) do
     {:noreply, assign(socket, new?: true, edit?: false, update_text: "", focused: 0)}
   end
