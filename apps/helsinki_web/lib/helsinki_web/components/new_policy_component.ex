@@ -275,7 +275,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
   end
 
   def update(params, socket) do
-    dropdowns = AccountingSystem.AccountHandler.search_account(params.update_text)
+    dropdowns = AccountingSystem.AccountHandler.search_detail_account(params.update_text)
     {:ok, assign(socket,
       dropdowns: dropdowns,
       pollys: params.pollys,
@@ -288,7 +288,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
     id = List.first(list).id
     policy = id |> AccountingSystem.PolicyHandler.get_policy!
     aux = policy.id |> AccountingSystem.AuxiliaryHandler.get_auxiliary_by_policy_id
-    dropdowns = AccountingSystem.AccountHandler.search_account("")
+    dropdowns = AccountingSystem.AccountHandler.search_detail_account("")
     [%{
       dropdowns: dropdowns,
       arr: aux,
