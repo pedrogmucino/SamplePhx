@@ -35,13 +35,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     params |> IO.inspect(label: " ->  ->  ->  PARAMS")
     current_policy = params["id"] |> String.to_integer |> PolicyHandler.get_policy! |> IO.inspect(label: " -> -> -> ")
     PolicyHandler.update_policy(current_policy, params)
-    {:noreply, assign(socket, edit?: false, policy_list: PolicyHandler.get_policy_list)}
-  end
-
-  def handle_event("delete_policy", params, socket) do
-    params |> IO.inspect(label: " -> -> Params Delete Policy -> -> -> ")
-    params["id"] |> AccountingSystem.PolicyHandler.delete_policy_with_aux
-    {:noreply, assign(socket, edit?: false, policy_list: PolicyHandler.get_policy_list)}
+    {:noreply, socket}
   end
 
   def handle_event("create_new", _params, socket) do
@@ -75,9 +69,9 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def handle_event("update_form", params, socket) do
-    IO.inspect(params, label: "PAAAAAAAAAAAAAAAAAARAAAAAAMSSSSS:::::>>>")
-    params = if(params["audited"] == "unchecked", do: params |> Map.put("audited", "checked"), else: params |> Map.put("audited", "unchecked"))
-    params = if(params["has_documents"] == "unchecked", do: params |> Map.put("audited", "checked"), else: params |> Map.put("audited", "unchecked"))
+    IO.inspect(params, label: "PAAAAAAAAAAAAAAAAAARAAAAAAMSSSSS TARGEEEETTTT:::::>>>")
+
+    params = check(params, params)
     pollys = Map.merge(socket.assigns.pollys, GenericFunctions.string_map_to_atom(params))
     {:noreply, assign(socket, pollys: pollys)}
   end
@@ -132,6 +126,18 @@ defmodule AccountingSystemWeb.PolicyListComponent do
             |> Tuple.to_list
             |> List.first
     end
+  end
+
+  def check(params, %{"_target" => ["audited"]}) do
+    if(params["audited"] == "unchecked", do: params |> Map.put("audited", "checked"), else: params |> Map.put("audited", "unchecked"))
+  end
+
+  def check(params, %{"_target" => ["has_documents"]}) do
+    if(params["has_documents"] == "unchecked" , do: params |> Map.put("has_documents", "checked"), else: params |> Map.put("has_documents", "unchecked"))
+  end
+
+  def check(params, _) do
+    params
   end
 
   def render(assigns) do

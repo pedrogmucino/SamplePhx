@@ -177,4 +177,8 @@ defmodule AccountingSystem.AuxiliaryHandler do
   def amount(%{debit: deb}) when deb != "0" do
     deb
   end
+
+  def amount(%{debit: "0"}) do
+    "0"
+  end
 end
