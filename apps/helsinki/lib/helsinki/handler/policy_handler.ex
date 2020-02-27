@@ -142,11 +142,11 @@ defmodule AccountingSystem.PolicyHandler do
 
   #************************************************************************************************************************************
 
-  def save_policy(params, socket) do
+  def save_policy(params, arr) do
     Repo.transaction(fn() ->
-      case save_all(params, socket.assigns.arr) do
-        :ok ->
-          {:ok, socket}
+      case save_all(params, arr) do
+        {:ok, policy} ->
+          policy
         {:error, reason} ->
           {Repo.rollback({:error, reason})}
       end
@@ -154,8 +154,6 @@ defmodule AccountingSystem.PolicyHandler do
   end
 
   defp save_all(params, auxiliaries) do
-    IO.inspect(params, label: "PARAAAAAAAMMMMSSSSSS!!!!!!::::::::>>>")
-    IO.inspect(auxiliaries, label: "AUXILIARIEEEEESSSSSS!!!!!!::::::::>>>")
     serial = SeriesHandler.get_serial(Map.get(params, "fiscal_exercise"), Map.get(params, "policy_type"))
     case AccountingSystem.PolicyHandler.create_policy(params, PolicyFormatter.get_year(params), PolicyFormatter.get_month(params), serial) do
       {:ok, policy} ->
@@ -164,6 +162,7 @@ defmodule AccountingSystem.PolicyHandler do
           PolicyFormatter.get_year(params),
           PolicyFormatter.get_month(params))
         end)
+        {:ok, policy}
       {:error, reason} ->
         {:error, reason}
     end
