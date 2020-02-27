@@ -269,7 +269,6 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
   end
 
   def update(params, socket) do
-    params |> IO.inspect(label: " -- - - - - - - - -                          -------------------------------------------------- - Update >-")
     dropdowns = AccountingSystem.AccountHandler.search_account(params.update_text)
     {:ok, assign(socket,
       dropdowns: dropdowns,
