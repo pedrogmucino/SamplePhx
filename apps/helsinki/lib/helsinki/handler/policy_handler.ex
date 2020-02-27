@@ -180,20 +180,19 @@ defmodule AccountingSystem.PolicyHandler do
     auxiliaries = AccountingSystem.GetAllId.from_policy(String.to_integer(id)) |> Repo.all(prefix: PrefixFormatter.get_current_prefix)
     Repo.transaction(fn() ->
       case delete_all(polly, auxiliaries) do
-        :ok ->
-          :ok
-        _ ->
-          {Repo.rollback(:error)}
+        {:ok, policy} -> policy
+        _ -> {Repo.rollback(:error)}
       end
     end)
   end
 
   defp delete_all(polly, auxiliaries) do
-    case delete_policy(polly)  do
-      {:ok, _} ->
-        Enum.each(auxiliaries, fn id_aux -> AccountingSystem.AuxiliaryHandler.get_auxiliary!(Integer.to_string(id_aux)) |> AccountingSystem.AuxiliaryHandler.delete_auxiliary end)
-      _ ->
-        :error
-    end
+    delete_aux(auxiliaries)
+    delete_policy(polly)
+  end
+
+  defp delete_aux(auxiliaries) do
+    Enum.each(auxiliaries, fn id_aux -> AccountingSystem.AuxiliaryHandler.get_auxiliary!(Integer.to_string(id_aux))
+                                        |> AccountingSystem.AuxiliaryHandler.delete_auxiliary end)
   end
 end
