@@ -15,7 +15,8 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     pollys: %{audited: "unchecked", concept: "", fiscal_exercise: "", has_documents: "unchecked", period: "", policy_date: "", policy_type: "0", aux_concept: "", debit: 0, department: "", credit: 0, id: "", sum_haber: 0, sum_debe: 0, total: 0, focused: 0, account: "", name: "", id_account: ""},
     arr: [],
     policy_id: 0,
-    message: nil
+    message: nil,
+    update: false
     )}
   end
 
@@ -29,12 +30,14 @@ defmodule AccountingSystemWeb.PolicyListComponent do
 
   def handle_event("open_policy", params, socket) do
     id = params["id"] |> String.to_integer()
-    {:noreply, assign(socket, new?: false, edit?: true, policy_id: id, message: nil)}
+    {:noreply, assign(socket, new?: false, edit?: true, policy_id: id, message: nil, update: true)}
   end
 
   def handle_event("edit_and_save_this", params, socket) do
-    params |> IO.inspect(label: " ->  ->  ->  PARAMS")
     current_policy = params["id"] |> String.to_integer |> PolicyHandler.get_policy! |> IO.inspect(label: " -> -> -> ")
+    params = params
+              |> Map.put("audited", checked(params["audited"]))
+              |> Map.put("has_documents", checked(params["has_documents"]))
     {:ok, policy} = PolicyHandler.update_policy(current_policy, params)
     notification()
     {:noreply, assign(socket,
@@ -84,11 +87,9 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def handle_event("update_form", params, socket) do
-    IO.inspect(params, label: "PAAAAAAAAAAAAAAAAAARAAAAAAMSSSSS TARGEEEETTTT:::::>>>")
-
     params = check(params, params)
     pollys = Map.merge(socket.assigns.pollys, GenericFunctions.string_map_to_atom(params))
-    {:noreply, assign(socket, pollys: pollys)}
+    {:noreply, assign(socket, pollys: pollys, update: false)}
   end
 
   def handle_event("action_account", params, socket) do
@@ -109,14 +110,6 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     end
   end
 
-  defp notification() do
-    Task.async(fn ->
-      :timer.sleep(5500)
-      %{message: "close"}
-    end)
-    :ok
-  end
-
   def handle_event("save_aux", params, socket) do
     case AccountingSystem.AuxiliaryHandler.validate_auxiliar(params) do
       {:ok, _} ->
@@ -124,6 +117,14 @@ defmodule AccountingSystemWeb.PolicyListComponent do
       {:error, _} ->
         {:noreply, socket}
     end
+  end
+
+  defp notification() do
+    Task.async(fn ->
+      :timer.sleep(5500)
+      %{message: "close"}
+    end)
+    :ok
   end
 
   defp totals(params, socket) do
@@ -163,6 +164,10 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   def check(params, _) do
     params
   end
+
+  defp checked("checked"), do: true
+  defp checked("unchecked"), do: false
+  defp checked(nil), do: false
 
   def render(assigns) do
     ~L"""
@@ -212,11 +217,11 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     </div>
 
     <%= if @new? do %>
-      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: 0, update_text: @update_text, pollys: @pollys, arr: @arr, edit: false) %>
+      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: 0, update_text: @update_text, pollys: @pollys, arr: @arr, edit: false, update: @update) %>
     <% end %>
 
     <%= if @edit? do %>
-      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: @policy_id, update_text: "", pollys: %{}, arr: [], edit: @edit?) %>
+      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: @policy_id, update_text: "", pollys: @pollys, arr: [], edit: true, update: @update) %>
     <% end %>
     """
   end
