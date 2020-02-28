@@ -265,7 +265,8 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
       policytypes: policytypes,
       pollys: pollys,
       policy_edit: %{},
-      edit: false
+      edit: false,
+      update_text: ""
     )}
   end
 
