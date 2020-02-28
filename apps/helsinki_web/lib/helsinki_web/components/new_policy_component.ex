@@ -181,80 +181,83 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
               </div>
               <!-------------------------------------------AUXILIARES DIV PART 2---------------------------------------------------->
               <div class="px-8 flex flex-col my-2 w-6/12">
-                <div class="block text-left pl-12">
+                <div class="block text-left pl-16">
                   <label class="tracking-wide text-gray-700 font-bold" for="grid-name">Detalle</label>
                 </div>
 
                 <!---------------------DIV DE TODA LA INFO------------------------->
-                  <div class="overflow-y-auto h-hoch-70 block">
-                    <%= for item <- Enum.reverse(@arr) do %>
-                      <div class="w-full inline-flex items-center gap-4"> <!-------Este es el div que se va a dividir en 3---->
-                        <div class="w-1/12">
-                          <%= item.id %>
-                        </div>
-                        <!---------------------------INFO AQUI---------------------------------------->
-                        <div class="w-full gap-4">
-                          <div phx-click="edit_aux" phx-value-id="" phx-target="#policy" class="border cursor-pointer bg-gray-200 p-2 mt-2 rounded relative hover:bg-gray-300">
-                            <div class="text-right">
-                              <label class="text-gray-600 text-right">Cta: <b><%= item.account %></b></label><br>
-                            </div>
-                            <div>
-                              <label class="inline-block cursor-pointer text-gray-600 text-sm">Concepto: <b><%= item.aux_concept %></b></label><br>
-                            </div>
-                            <div class="flex mb-2">
-                              <div class="w-2/6">
-                                <label class="inline-block cursor-pointer text-gray-600 text-sm">Departamento: <b> <%= item.department %></b></label>
+                  <div class="inline-flex">
+                    <div class="mr-4 border-l-2 border-gray-300"></div>
+                    <div class="overflow-y-auto h-hoch-70 block">
+                      <%= for item <- Enum.reverse(@arr) do %>
+                        <div class="w-full inline-flex items-center gap-4"> <!-------Este es el div que se va a dividir en 3---->
+                          <div class="w-1/12">
+                            <%= item.id %>
+                          </div>
+                          <!---------------------------INFO AQUI---------------------------------------->
+                          <div class="w-full gap-4">
+                            <div phx-click="edit_aux" phx-value-id="" phx-target="#policy" class="border cursor-pointer bg-gray-200 p-2 mt-2 rounded relative hover:bg-gray-300">
+                              <div class="text-right">
+                                <label class="text-gray-600 text-right">Cta: <b><%= item.account %></b></label><br>
                               </div>
-                              <%= if @edit do %>
-                                <div class="w-2/6 text-right inline-flex">
-                                  <div>
-                                    <label class="inline-block cursor-pointer text-gray-600  text-sm")">Debe: </label>
-                                  </div>
-                                  <div class="ml-2 w-32">
-                                    <label class="inline-block cursor-pointer text-gray-600  text-sm")"><b phx-hook="format_number"> <%= if(item.debit_credit == "D", do: item.mxn_amount, else: 0.0) %></b></label>
-                                  </div>
+                              <div>
+                                <label class="inline-block cursor-pointer text-gray-600 text-sm">Concepto: <b><%= item.aux_concept %></b></label><br>
+                              </div>
+                              <div class="flex mb-2">
+                                <div class="w-2/6">
+                                  <label class="inline-block cursor-pointer text-gray-600 text-sm">Departamento: <b> <%= item.department %></b></label>
                                 </div>
-                                <div class="w-2/6 text-right inline-flex">
-                                  <div>
-                                    <label class="inline-block cursor-pointer text-gray-600 text-sm">Haber: </label>
+                                <%= if @edit do %>
+                                  <div class="w-2/6 text-right inline-flex">
+                                    <div>
+                                      <label class="inline-block cursor-pointer text-gray-600  text-sm")">Debe: </label>
+                                    </div>
+                                    <div class="ml-2 w-32">
+                                      <label class="inline-block cursor-pointer text-gray-600  text-sm")"><b phx-hook="format_number"> <%= if(item.debit_credit == "D", do: item.mxn_amount, else: 0.0) %></b></label>
+                                    </div>
                                   </div>
-                                  <div class="ml-2 w-32">
-                                    <label class="inline-block cursor-pointer text-gray-600 text-sm"><b phx-hook="format_number"> <%= if(item.debit_credit == "H", do: item.mxn_amount, else: 0.0) %></b></label>
+                                  <div class="w-2/6 text-right inline-flex">
+                                    <div>
+                                      <label class="inline-block cursor-pointer text-gray-600 text-sm">Haber: </label>
+                                    </div>
+                                    <div class="ml-2 w-32">
+                                      <label class="inline-block cursor-pointer text-gray-600 text-sm"><b phx-hook="format_number"> <%= if(item.debit_credit == "H", do: item.mxn_amount, else: 0.0) %></b></label>
+                                    </div>
                                   </div>
-                                </div>
-                              <% else %>
-                                <div class="w-2/6 text-right inline-flex">
-                                  <div>
-                                    <label class="inline-block cursor-pointer text-gray-600 text-sm">Debe: </label>
+                                <% else %>
+                                  <div class="w-2/6 text-right inline-flex">
+                                    <div>
+                                      <label class="inline-block cursor-pointer text-gray-600 text-sm">Debe: </label>
+                                    </div>
+                                    <div class="ml-2 w-32">
+                                      <label class="inline-block cursor-pointer text-gray-600 text-sm"><b phx-hook="format_number"> <%= item.debit %></b></label>
+                                    </div>
                                   </div>
-                                  <div class="ml-2 w-32">
-                                    <label class="inline-block cursor-pointer text-gray-600 text-sm"><b phx-hook="format_number"> <%= item.debit %></b></label>
+                                  <div class="w-2/6 text-right inline-flex">
+                                    <div>
+                                      <label class="inline-block cursor-pointer text-gray-600 text-sm">Haber: </label>
+                                    </div>
+                                    <div class="ml-2 w-32">
+                                      <label class="inline-block cursor-pointer text-gray-600 text-sm"> <b phx-hook="format_number"> <%= item.credit %></b></label>
+                                    </div>
                                   </div>
-                                </div>
-                                <div class="w-2/6 text-right inline-flex">
-                                  <div>
-                                    <label class="inline-block cursor-pointer text-gray-600 text-sm">Haber: </label>
-                                  </div>
-                                  <div class="ml-2 w-32">
-                                    <label class="inline-block cursor-pointer text-gray-600 text-sm"> <b phx-hook="format_number"> <%= item.credit %></b></label>
-                                  </div>
-                                </div>
-                              <% end %>
+                                <% end %>
+                              </div>
                             </div>
                           </div>
+                          <!-----------------------------------END INFO--------------------------------->
+                          <div class="w-1/6 text-right">
+                            <button class="bg-teal-500 text-white text-center hover:bg-teal-400 border rounded">
+                              <svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="edit" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="h-6 w-6 m-1"><path fill="currentColor" d="M402.3 344.9l32-32c5-5 13.7-1.5 13.7 5.7V464c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h273.5c7.1 0 10.7 8.6 5.7 13.7l-32 32c-1.5 1.5-3.5 2.3-5.7 2.3H48v352h352V350.5c0-2.1.8-4.1 2.3-5.6zm156.6-201.8L296.3 405.7l-90.4 10c-26.2 2.9-48.5-19.2-45.6-45.6l10-90.4L432.9 17.1c22.9-22.9 59.9-22.9 82.7 0l43.2 43.2c22.9 22.9 22.9 60 .1 82.8zM460.1 174L402 115.9 216.2 301.8l-7.3 65.3 65.3-7.3L460.1 174zm64.8-79.7l-43.2-43.2c-4.1-4.1-10.8-4.1-14.8 0L436 82l58.1 58.1 30.9-30.9c4-4.2 4-10.8-.1-14.9z" class=""></path></svg>
+                            </button>
+                            <button class="bg-red-500 text-white text-left hover:bg-red-400 border rounded">
+                              <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="minus" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="h-6 w-6 m-1"><path fill="currentColor" d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" class=""></path></svg>
+                            </button>
+                          </div>
                         </div>
-                        <!-----------------------------------END INFO--------------------------------->
-                        <div class="w-1/6 text-right">
-                          <button class="bg-teal-500 text-white text-center hover:bg-teal-400 border rounded">
-                            <svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="edit" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="h-6 w-6 m-1"><path fill="currentColor" d="M402.3 344.9l32-32c5-5 13.7-1.5 13.7 5.7V464c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h273.5c7.1 0 10.7 8.6 5.7 13.7l-32 32c-1.5 1.5-3.5 2.3-5.7 2.3H48v352h352V350.5c0-2.1.8-4.1 2.3-5.6zm156.6-201.8L296.3 405.7l-90.4 10c-26.2 2.9-48.5-19.2-45.6-45.6l10-90.4L432.9 17.1c22.9-22.9 59.9-22.9 82.7 0l43.2 43.2c22.9 22.9 22.9 60 .1 82.8zM460.1 174L402 115.9 216.2 301.8l-7.3 65.3 65.3-7.3L460.1 174zm64.8-79.7l-43.2-43.2c-4.1-4.1-10.8-4.1-14.8 0L436 82l58.1 58.1 30.9-30.9c4-4.2 4-10.8-.1-14.9z" class=""></path></svg>
-                          </button>
-                          <button class="bg-red-500 text-white text-left hover:bg-red-400 border rounded">
-                            <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="minus" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="h-6 w-6 m-1"><path fill="currentColor" d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" class=""></path></svg>
-                          </button>
-                        </div>
-                      </div>
-                    <% end %>
-                    <!---------------------END DIV DE TODA LA INFO------------------------->
+                      <% end %>
+                      <!---------------------END DIV DE TODA LA INFO------------------------->
+                    </div>
                   </div>
                   <!----END DIV OVERFLOW -->
 
