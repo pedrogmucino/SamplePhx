@@ -83,7 +83,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                 <input type="hidden" name="id" value="<%=@pollys.id%>">
               </form>
               <form id="form2" phx-submit="save_aux" phx-target="#one" phx-change="update_form">
-                <label class="block pt-32 tracking-wide text-gray-700 font-bold" for="grid-name">Cuenta(<%= @pollys.focused %>)</label>
+                <label class="block pt-32 tracking-wide text-gray-700 font-bold" for="grid-name">Cuenta</label>
                 <div class="inline-flex w-full">
                   <div class="w-2/3 relative">
                     <input class="hidden" name="id_account" value="<%= @pollys.id_account %>">
@@ -187,28 +187,28 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                         <div class="w-full gap-4">
                           <div phx-click="edit_aux" phx-value-id="" phx-target="#policy" class="border cursor-pointer bg-gray-200 p-2 mt-2 rounded relative hover:bg-gray-300">
                             <div class="text-right">
-                              <label class="text-gray-700 text-x text-right">Cta: <b><%= item.account %></b></label><br>
+                              <label class="text-gray-600 text-right">Cta: <b><%= item.account %></b></label><br>
                             </div>
                             <div>
                               <label class="inline-block cursor-pointer text-gray-600 text-sm">Concepto: <b><%= item.aux_concept %></b></label><br>
                             </div>
                             <div class="flex mb-2">
                               <div class="w-2/6">
-                                <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Departamento: <b> <%= item.department %></b></label>
+                                <label class="inline-block cursor-pointer text-gray-600 text-sm">Departamento: <b> <%= item.department %></b></label>
                               </div>
                               <%= if @edit do %>
                                 <div class="w-2/6 text-right">
                                   <label  class="inline-block cursor-pointer text-gray-600  text-sm")">Debe: <b phx-hook="format_number"> <%= if(item.debit_credit == "D", do: item.mxn_amount, else: 0.0) %></b></label>
                                 </div>
                                 <div class="w-2/6 text-right">
-                                  <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Haber: <b phx-hook="format_number"> <%= if(item.debit_credit == "H", do: item.mxn_amount, else: 0.0) %></b></label>
+                                  <label class="inline-block cursor-pointer text-gray-600 text-sm">Haber: <b phx-hook="format_number"> <%= if(item.debit_credit == "H", do: item.mxn_amount, else: 0.0) %></b></label>
                                 </div>
                               <% else %>
                                 <div class="w-2/6 text-right">
-                                  <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Debe: <b phx-hook="format_number"> <%= item.debit %></b></label>
+                                  <label class="inline-block cursor-pointer text-gray-600 text-sm">Debe: <b phx-hook="format_number"> <%= item.debit %></b></label>
                                 </div>
                                 <div class="w-2/6 text-right">
-                                  <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Haber: <b phx-hook="format_number"> <%= item.credit %></b></label>
+                                  <label class="inline-block cursor-pointer text-gray-600 text-sm">Haber: <b phx-hook="format_number"> <%= item.credit %></b></label>
                                 </div>
                               <% end %>
                             </div>
