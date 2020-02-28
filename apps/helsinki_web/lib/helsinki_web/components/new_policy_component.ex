@@ -197,18 +197,38 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                                 <label class="inline-block cursor-pointer text-gray-600 text-sm">Departamento: <b> <%= item.department %></b></label>
                               </div>
                               <%= if @edit do %>
-                                <div class="w-2/6 text-right">
-                                  <label  class="inline-block cursor-pointer text-gray-600  text-sm")">Debe: <b phx-hook="format_number"> <%= if(item.debit_credit == "D", do: item.mxn_amount, else: 0.0) %></b></label>
+                                <div class="w-2/6 text-right inline-flex">
+                                  <div>
+                                    <label class="inline-block cursor-pointer text-gray-600  text-sm")">Debe: </label>
+                                  </div>
+                                  <div class="ml-2 w-32">
+                                    <label class="inline-block cursor-pointer text-gray-600  text-sm")"><b phx-hook="format_number"> <%= if(item.debit_credit == "D", do: item.mxn_amount, else: 0.0) %></b></label>
+                                  </div>
                                 </div>
-                                <div class="w-2/6 text-right">
-                                  <label class="inline-block cursor-pointer text-gray-600 text-sm">Haber: <b phx-hook="format_number"> <%= if(item.debit_credit == "H", do: item.mxn_amount, else: 0.0) %></b></label>
+                                <div class="w-2/6 text-right inline-flex">
+                                  <div>
+                                    <label class="inline-block cursor-pointer text-gray-600 text-sm">Haber: </label>
+                                  </div>
+                                  <div class="ml-2 w-32">
+                                    <label class="inline-block cursor-pointer text-gray-600 text-sm"><b phx-hook="format_number"> <%= if(item.debit_credit == "H", do: item.mxn_amount, else: 0.0) %></b></label>
+                                  </div>
                                 </div>
                               <% else %>
-                                <div class="w-2/6 text-right">
-                                  <label class="inline-block cursor-pointer text-gray-600 text-sm">Debe: <b phx-hook="format_number"> <%= item.debit %></b></label>
+                                <div class="w-2/6 text-right inline-flex">
+                                  <div>
+                                    <label class="inline-block cursor-pointer text-gray-600 text-sm">Debe: </label>
+                                  </div>
+                                  <div class="ml-2 w-32">
+                                    <label class="inline-block cursor-pointer text-gray-600 text-sm"><b phx-hook="format_number"> <%= item.debit %></b></label>
+                                  </div>
                                 </div>
-                                <div class="w-2/6 text-right">
-                                  <label class="inline-block cursor-pointer text-gray-600 text-sm">Haber: <b phx-hook="format_number"> <%= item.credit %></b></label>
+                                <div class="w-2/6 text-right inline-flex">
+                                  <div>
+                                    <label class="inline-block cursor-pointer text-gray-600 text-sm">Haber: </label>
+                                  </div>
+                                  <div class="ml-2 w-32">
+                                    <label class="inline-block cursor-pointer text-gray-600 text-sm"> <b phx-hook="format_number"> <%= item.credit %></b></label>
+                                  </div>
                                 </div>
                               <% end %>
                             </div>
