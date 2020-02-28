@@ -269,31 +269,47 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
     )}
   end
 
-  def preload(list) do
-    fill(List.first(list).edit, list)
-      #|> IO.inspect(label: "WHAT FILL RETURNS!!!!!")
-  end
+  # def preload(attrs) do
+  #   case List.first(attrs).update do
+  #     true -> fill(List.first(attrs).edit, attrs)
+  #     false -> attrs
+  #   end
+  # end
 
   def update(params, socket) do
+    pollys = params.pollys
+    params = case params.update do
+      true -> fill(params.edit, params)
+      false -> socket.assigns |> Map.put(:pollys, pollys)
+    end
+    params = params
+    |> Map.put(:pollys,
+    case socket.assigns.edit do
+      true -> socket.assigns.pollys |> Map.merge(params.pollys)
+      false -> params.pollys
+    end
+    )
+
     dropdowns = AccountingSystem.AccountHandler.search_detail_account(params.update_text)
     {:ok, assign(socket,
       dropdowns: dropdowns,
       pollys: params.pollys,
       arr: params.arr,
-      edit: params.edit
+      edit: params.edit,
+      update_text: params.update_text
       )}
   end
 
-  defp fill(true, list) do
-    id = List.first(list).id
+  defp fill(true, params) do
+    id = params.id
     policy = id |> AccountingSystem.PolicyHandler.get_policy!
     aux = policy.id |> AccountingSystem.AuxiliaryHandler.get_auxiliary_by_policy_id
     dropdowns = AccountingSystem.AccountHandler.search_detail_account("")
-    [%{
+    %{
       dropdowns: dropdowns,
       arr: aux,
       edit: true,
-      id: List.first(list).id,
+      id: params.id,
       pollys: %{
             audited: (if policy.audited == true, do: "checked", else: "unchecked"),
             concept: policy.concept,
@@ -318,10 +334,8 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
             policy_number: policy.policy_number
       },
       update_text: ""
-    }]
+    }
   end
 
-  defp fill(false, list) do
-    list
-  end
+  defp fill(false, list), do: list
 end
