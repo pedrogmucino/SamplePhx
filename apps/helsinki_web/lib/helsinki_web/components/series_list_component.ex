@@ -81,6 +81,9 @@ defmodule AccountingSystemWeb.SeriesListComponent do
     ~L"""
 
     <div id="one" class="bg-white h-hoch-93 w-80 mt-16 ml-16 block float-left">
+      <div class="w-full py-2 bg-blue-700">
+        <p class="ml-2 font-bold text-lg text-white">Series</p>
+      </div>
     <div class="relative w-full px-2 mt-4">
       <input class="focus:outline-none focus:bg-white focus:border-blue-500 h-8 w-full rounded border bg-gray-300 pl-2" placeholder="Buscar Serie" >
       <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="search" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
@@ -108,7 +111,7 @@ defmodule AccountingSystemWeb.SeriesListComponent do
       </button>
     </div>
 
-    <div class="h-hoch-80 overflow-y-scroll pb-16">
+    <div class="h-hoch-75 overflow-y-scroll pb-16">
       <%= for item <- @series_list do %>
         <div class="w-full px-2 block">
           <div phx-click="open_series" phx-value-id="<%= item.id %>" phx-target="#one" class="border cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
