@@ -112,11 +112,11 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                     </div>
                     <div class="inline-block ml-2 w-2/6">
                       <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Debe</label>
-                      <input type="number" name="debit" step="0.01" min="0" phx-hook="format_number" value="<%=@pollys.debit%>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
+                      <input type="number" name="debit" step="0.01" min="0" max="999999.99" phx-hook="format_number" value="<%=@pollys.debit%>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
                     </div>
                     <div class="inline-block ml-2 w-2/6">
                       <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Haber</label>
-                      <input type="number" name="credit" step="0.01" min="0" phx-hook="format_number" value="<%=@pollys.credit%>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
+                      <input type="number" name="credit" step="0.01" min="0" max="999999.99" phx-hook="format_number" value="<%=@pollys.credit%>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
                     </div>
                     <div class="inline-block mt-6 ml-2 text-right w-1/6">
                       <button name="save_aux" class="bg-teal-500 text-white text-center hover:bg-teal-400 phx-target="#one" border rounded">
