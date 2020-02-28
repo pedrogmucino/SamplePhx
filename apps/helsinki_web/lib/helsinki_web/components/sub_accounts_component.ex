@@ -87,13 +87,13 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
                 <span class='tooltip-text text-sm text-white bg-blue-500 mt-8 -ml-24 mr-1 rounded'><%= item.name %></span>
               <% end %>
             </h2>
-            <label class="tooltip cursor-pointer text-gray-600 font-bold text-sm"><%= String.slice(item.code,0 ,70) %>
+            <label class="tooltip cursor-pointer text-gray-600 font-bold text-sm"> Código: <b><%= String.slice(item.code,0 ,70) %></b>
               <%= if String.length(item.code) > 70 do %>
                 <span class='tooltip-text text-sm text-white bg-blue-500 mt-8 -ml-56 rounded'><%= item.code %></span>
               <% end %>
             </label>
             <br>
-            <label class="cursor-pointer text-gray-600 font-bold text-sm"><%= if item.type == "A", do: "Acumulativo", else: "Detalle" %></label>
+            <label class="cursor-pointer text-gray-600 font-bold text-sm"> Tipo: <b><%= if item.type == "A", do: "Acumulativo", else: "Detalle" %></b></label>
             <div class="absolute bg-<%= if item.status == "A", do: "green", else: "red" %>-200 px-3 text-sm font-bold top-0 right-0 rounded-full text-<%= if item.status == "A", do: "green", else: "red" %>-700 mt-2 mr-2">
             <%= if item.status == "A", do: "Activo", else: "Inactivo" %>
             </div>
