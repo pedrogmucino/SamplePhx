@@ -317,8 +317,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
       false -> params.pollys
     end
     )
-
-    dropdowns = AccountingSystem.AccountHandler.search_detail_account(params.update_text)
+    dropdowns = AccountingSystem.AccountHandler.search_detail_account(params.pollys.account)
     {:ok, assign(socket,
       dropdowns: dropdowns,
       pollys: params.pollys,
