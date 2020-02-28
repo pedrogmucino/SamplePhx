@@ -16,7 +16,8 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     arr: [],
     policy_id: 0,
     message: nil,
-    update: false
+    update: false,
+    update_text: ""
     )}
   end
 
@@ -93,7 +94,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   def handle_event("update_form", params, socket) do
     params = check(params, params)
     pollys = Map.merge(socket.assigns.pollys, GenericFunctions.string_map_to_atom(params))
-    {:noreply, assign(socket, pollys: pollys, update: false)}
+    {:noreply, assign(socket, pollys: pollys, update: false, arr: socket.assigns.arr)}
   end
 
   def handle_event("action_account", params, socket) do

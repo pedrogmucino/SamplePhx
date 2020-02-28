@@ -265,7 +265,8 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
       policytypes: policytypes,
       pollys: pollys,
       policy_edit: %{},
-      edit: false
+      edit: false,
+      update_text: ""
     )}
   end
 
@@ -280,7 +281,10 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
     pollys = params.pollys
     params = case params.update do
       true -> fill(params.edit, params)
-      false -> socket.assigns |> Map.put(:pollys, pollys)
+      false -> socket.assigns |> Map.put(:pollys, pollys) |> Map.put(:arr, case length(params.arr) do
+                                                                                    0 -> socket.assigns.arr
+                                                                                    _ -> params.arr
+                                                                            end)
     end
     params = params
     |> Map.put(:pollys,
