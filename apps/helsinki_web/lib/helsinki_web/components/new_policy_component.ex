@@ -230,18 +230,22 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
 
                 <div class="block">
                   <div class="inline-flex w-full">
-                    <div class="inline-flex w-full">
-                      <div class="inline-block w-full mr-2">
-                        <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Total</label>
-                        <input type="number" name="total" phx-hook="format_number" value="<%= @pollys.total %>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" value="">
+                    <div class="w-1/3 inline-block mr-2 p-3">
+                      <div class=" rounded bg-gray-200 w-full py-2 px-4">
+                        <label class="block tracking-wide text-gray-700 font-medium" for="in_debe">Debe</label>
+                        <label class="text-lg text-right block"><b phx-hook="format_number"><%= @pollys.sum_debe %> </b></label>
                       </div>
-                      <div class="inline-block w-full ml-2">
-                        <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Debe</label>
-                        <input type="text" name="sum_debe" phx-hook="format_number" value="<%= @pollys.sum_debe %>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
+                    </div>
+                    <div class="w-1/3 inline-block mr-2 p-3">
+                      <div class=" rounded bg-gray-200 w-full py-2 px-4">
+                        <label class="block tracking-wide text-gray-700 font-medium" for="in_haber">Haber</label>
+                        <label class="text-lg text-right block"><b phx-hook="format_number"><%= @pollys.sum_haber %> </b></label>
                       </div>
-                      <div class="inline-block w-full ml-2">
-                        <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Haber</label>
-                        <input type="text" name="sum_haber" phx-hook="format_number" value="<%= @pollys.sum_haber %>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
+                    </div>
+                    <div class="w-1/3 inline-block mr-2 p-3">
+                      <div class=" rounded bg-gray-200 w-full py-2 px-4">
+                        <label class="block tracking-wide text-gray-700 font-medium" for="in_debe">Total</label>
+                        <label class="text-lg text-right block"><b phx-hook="format_number"><%= @pollys.total %> </b></label>
                       </div>
                     </div>
                   </div>
