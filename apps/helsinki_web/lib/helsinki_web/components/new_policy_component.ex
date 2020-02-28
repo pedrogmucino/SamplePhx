@@ -127,7 +127,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                 </div>
               </form>
                 <!---------------------------------GUARDAR - ELIMINAR -------------------------------------->
-                <div class="pt-32 grid grid-cols-2 flex">
+                <div class="pt-24 grid grid-cols-2 flex">
                   <div class="flex-1 text-center">
                   <%=if @pollys.total != 0 or length(@arr) == 0 do %>
                     <button form="form1" disabled class="opacity-50 cursor-not-allowed py-2 w-1/2 bg-teal-500 text-white items-center inline-flex font-bold rounded shadow focus:shadow-outline focus:outline-none rounded">
@@ -351,8 +351,8 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
             department: "",
             credit: 0,
             id: policy.id,
-            sum_haber: 0,
-            sum_debe: 0,
+            sum_haber: sum_list(aux, "H"),
+            sum_debe: sum_list(aux, "D"),
             total: 0,
             focused: 0,
             account: "",
@@ -363,6 +363,14 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
       },
       update_text: ""
     }
+  end
+
+  defp sum_list([], _type) do
+    0
+  end
+
+  defp sum_list([h|t], type) do
+    if h.debit_credit == type, do: h.amount + sum_list(t, type), else: sum_list(t, type)
   end
 
   defp fill(false, list), do: list
