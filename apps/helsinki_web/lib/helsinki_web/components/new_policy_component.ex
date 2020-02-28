@@ -15,7 +15,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
 
       <div class="inline-flex bg-blue-700 text-white px-6 py-3 w-full">
         <div class="inline-block w-full">
-          <label class="text-2xl font-normal text-white block"> <%= (if @edit, do: "Editar", else: "Nueva") %></label>
+          <label class="text-2xl font-normal text-white block"> <%= (if @edit, do: "Editar", else: "Nueva Póliza") %></label>
           <label class="block font-medium"><b> <%= (if @edit, do: "#{@pollys.serial}#{"-"}#{@pollys.policy_number}") %> </b></label>
         </div>
 
@@ -82,50 +82,59 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                 <input type="text" name="concept" value="<%=@pollys.concept%>" phx-target="#one" phx-keyup="focused_concept" maxlength="128" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code">
                 <input type="hidden" name="id" value="<%=@pollys.id%>">
               </form>
-              <form id="form2" phx-submit="save_aux" phx-target="#one" phx-change="update_form">
-                <label class="block pt-32 tracking-wide text-gray-700 font-bold" for="grid-name">Cuenta</label>
-                <div class="inline-flex w-full">
-                  <div class="w-2/3 relative">
-                    <input class="hidden" name="id_account" value="<%= @pollys.id_account %>">
-                    <input autocomplete="off" type="text" phx-target="#one" phx-keyup="show_accounts" phx-focus="account_focused" name="account" value="<%=@pollys.account%>" maxlength="256" class="focus:outline-none focus:bg-white focus:border-blue-500 w-full appearance-none  bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
-                    <%= if length(@dropdowns) > 0 and @pollys.focused == 1 do %>
-                      <div class="w-full block absolute top-0 left-0 z-10 mt-10 bg-gray-100 overflow-y-scroll h-64">
-                        <%= for item <- @dropdowns do %>
-                          <div phx-target="#one" phx-click="autocomplete" phx-value-id="<%= item.value %>" phx-value-account="<%=List.first(item.key)%>" phx-value-name="<%=List.last(item.key)%>" class="block py-1 px-3 hover:bg-gray-500 hover:text-white cursor-pointer">
-                              <%= List.to_string(item.key) %>
-                          </div>
-                        <% end %>
-                      </div>
-                    <% end %>
-                    </div>
-                  <input type="text" name="name" maxlength="128" value="<%=@pollys.name%>" class="focus:outline-none focus:bg-white focus:border-blue-500 ml-4 appearance-none w-1/3 bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
+
+              <div class="mt-10 py-6">
+                <div class="py-2">
+                  <label><b>Captura de Auxiliares</b></label>
                 </div>
+                <div class="border-solid border-2 border-gray-300 p-2">
+                <form id="form2" phx-submit="save_aux" phx-target="#one" phx-change="update_form" class="-mt-32">
+                  <label class="block pt-32 tracking-wide text-gray-700 font-bold" for="grid-name">Cuenta</label>
+                  <div class="inline-flex w-full">
+                    <div class="w-2/3 relative">
+                      <input class="hidden" name="id_account" value="<%= @pollys.id_account %>">
+                      <input autocomplete="off" type="text" phx-target="#one" phx-keyup="show_accounts" phx-focus="account_focused" name="account" value="<%=@pollys.account%>" maxlength="256" class="focus:outline-none focus:bg-white focus:border-blue-500 w-full appearance-none  bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
+                      <%= if length(@dropdowns) > 0 and @pollys.focused == 1 do %>
+                        <div class="w-full block absolute top-0 left-0 z-10 mt-10 bg-gray-100 overflow-y-scroll h-64">
+                          <%= for item <- @dropdowns do %>
+                            <div phx-target="#one" phx-click="autocomplete" phx-value-id="<%= item.value %>" phx-value-account="<%=List.first(item.key)%>" phx-value-name="<%=List.last(item.key)%>" class="block py-1 px-3 hover:bg-gray-500 hover:text-white cursor-pointer">
+                                <%= List.to_string(item.key) %>
+                            </div>
+                          <% end %>
+                        </div>
+                      <% end %>
+                      </div>
+                    <input type="text" name="name" maxlength="128" value="<%=@pollys.name%>" class="focus:outline-none focus:bg-white focus:border-blue-500 ml-4 appearance-none w-1/3 bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
+                  </div>
 
-                <label class="block tracking-wide text-gray-700 font-bold" for="grid-code">Concepto</label>
-                <input type="text" name="aux_concept" value="<%=@pollys.aux_concept%>" maxlength="128" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code">
+                  <label class="block tracking-wide text-gray-700 font-bold" for="grid-code">Concepto</label>
+                  <input type="text" name="aux_concept" value="<%=@pollys.aux_concept%>" maxlength="128" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code">
 
-                <div class="inline-flex w-full">
-                  <div class="inline-flex w-full flex">
-                    <div class="inline-block mr-2 w-1/6">
-                      <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Departamento</label>
-                      <input type="number" name="department" value="<%=@pollys.department%>" min="1" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" value="">
-                    </div>
-                    <div class="inline-block ml-2 w-2/6">
-                      <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Debe</label>
-                      <input type="number" name="debit" step="0.01" min="0" max="999999.99" phx-hook="format_number" value="<%=@pollys.debit%>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
-                    </div>
-                    <div class="inline-block ml-2 w-2/6">
-                      <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Haber</label>
-                      <input type="number" name="credit" step="0.01" min="0" max="999999.99" phx-hook="format_number" value="<%=@pollys.credit%>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
-                    </div>
-                    <div class="inline-block mt-6 ml-2 text-right w-1/6">
-                      <button name="save_aux" class="bg-teal-500 text-white text-center hover:bg-teal-400 phx-target="#one" border rounded">
-                      <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="share-square" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="h-6 w-6 m-1"><path fill="currentColor" d="M568.482 177.448L424.479 313.433C409.3 327.768 384 317.14 384 295.985v-71.963c-144.575.97-205.566 35.113-164.775 171.353 4.483 14.973-12.846 26.567-25.006 17.33C155.252 383.105 120 326.488 120 269.339c0-143.937 117.599-172.5 264-173.312V24.012c0-21.174 25.317-31.768 40.479-17.448l144.003 135.988c10.02 9.463 10.028 25.425 0 34.896zM384 379.128V448H64V128h50.916a11.99 11.99 0 0 0 8.648-3.693c14.953-15.568 32.237-27.89 51.014-37.676C185.708 80.83 181.584 64 169.033 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48v-88.806c0-8.288-8.197-14.066-16.011-11.302a71.83 71.83 0 0 1-34.189 3.377c-7.27-1.046-13.8 4.514-13.8 11.859z" class=""></path></svg>
-                      </button>
+                  <div class="inline-flex w-full">
+                    <div class="inline-flex w-full flex">
+                      <div class="inline-block mr-2 w-1/6">
+                        <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Departamento</label>
+                        <input type="number" name="department" value="<%=@pollys.department%>" min="1" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" value="">
+                      </div>
+                      <div class="inline-block ml-2 w-2/6">
+                        <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Debe</label>
+                        <input type="number" name="debit" step="0.01" min="0" max="999999.99" phx-hook="format_number" value="<%=@pollys.debit%>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
+                      </div>
+                      <div class="inline-block ml-2 w-2/6">
+                        <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Haber</label>
+                        <input type="number" name="credit" step="0.01" min="0" max="999999.99" phx-hook="format_number" value="<%=@pollys.credit%>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
+                      </div>
+                      <div class="inline-block mt-6 ml-2 text-right w-1/6">
+                        <button name="save_aux" class="bg-teal-500 text-white text-center hover:bg-teal-400 phx-target="#one" border rounded">
+                        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="share-square" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="h-6 w-6 m-1"><path fill="currentColor" d="M568.482 177.448L424.479 313.433C409.3 327.768 384 317.14 384 295.985v-71.963c-144.575.97-205.566 35.113-164.775 171.353 4.483 14.973-12.846 26.567-25.006 17.33C155.252 383.105 120 326.488 120 269.339c0-143.937 117.599-172.5 264-173.312V24.012c0-21.174 25.317-31.768 40.479-17.448l144.003 135.988c10.02 9.463 10.028 25.425 0 34.896zM384 379.128V448H64V128h50.916a11.99 11.99 0 0 0 8.648-3.693c14.953-15.568 32.237-27.89 51.014-37.676C185.708 80.83 181.584 64 169.033 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48v-88.806c0-8.288-8.197-14.066-16.011-11.302a71.83 71.83 0 0 1-34.189 3.377c-7.27-1.046-13.8 4.514-13.8 11.859z" class=""></path></svg>
+                        </button>
+                      </div>
                     </div>
                   </div>
+                </form>
                 </div>
-              </form>
+              </div>
+
                 <!---------------------------------GUARDAR - ELIMINAR -------------------------------------->
                 <div class="pt-24 grid grid-cols-2 flex">
                   <div class="flex-1 text-center">
@@ -172,7 +181,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
               </div>
               <!-------------------------------------------AUXILIARES DIV PART 2---------------------------------------------------->
               <div class="px-8 flex flex-col my-2 w-6/12">
-                <div class="block text-center">
+                <div class="block text-left pl-12">
                   <label class="tracking-wide text-gray-700 font-bold" for="grid-name">Detalle</label>
                 </div>
 
@@ -246,7 +255,8 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                       </div>
                     <% end %>
                     <!---------------------END DIV DE TODA LA INFO------------------------->
-                  </div>  <!----END DIV OVERFLOW -->
+                  </div>
+                  <!----END DIV OVERFLOW -->
 
                 <div class="block">
                   <div class="inline-flex w-full">
