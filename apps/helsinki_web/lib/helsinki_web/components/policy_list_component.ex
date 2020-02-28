@@ -124,6 +124,13 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     end
   end
 
+  def handle_event("focused_concept", _params, socket) do
+    pollys = socket.assigns.pollys
+    pollys = pollys
+              |> Map.put(:aux_concept, pollys.concept)
+    {:noreply, assign(socket, pollys: pollys)}
+  end
+
   defp notification() do
     Task.async(fn ->
       :timer.sleep(5500)
@@ -139,7 +146,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     sumhe = sumh + void(params.credit)
     sumde = sumd + void(params.debit)
     sumtot = sumhe - sumde
-    clean = %{account: "", aux_concept: "", credit: "0", debit: "0", department: "", id_account: "", name: ""}
+    clean = %{account: "", aux_concept: socket.assigns.pollys.concept, credit: "0", debit: "0", department: "", id_account: "", name: ""}
     pollys = socket.assigns.pollys
       |> Map.put(:sum_haber, sumhe |> Float.round(2))
       |> Map.put(:sum_debe, sumde |> Float.round(2))

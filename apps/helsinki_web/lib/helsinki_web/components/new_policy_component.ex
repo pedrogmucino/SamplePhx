@@ -74,12 +74,12 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                     <div class="modern-checkbox flex h-6 w-full">
                       <input type="checkbox" name="has_documents" class="hidden" id="checkbox-act2" value="<%=@pollys.has_documents %>" <%=@pollys.has_documents %> >
                       <label class="relative inline bg-transparent w-10" for="checkbox-act2"></label>
-                      <label class="ml-2 font-bold text-gray-700">Documentos? <%=@pollys.has_documents %></label>
+                      <label class="ml-2 font-bold text-gray-700">Documentos?</label>
                     </div>
                   </div>
                 </div>
                 <label class="block tracking-wide text-gray-700 font-bold" for="grid-code">Concepto</label>
-                <input type="text" name="concept" value="<%=@pollys.concept%>" maxlength="128" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code">
+                <input type="text" name="concept" value="<%=@pollys.concept%>" phx-target="#one" phx-keyup="focused_concept" maxlength="128" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code">
                 <input type="hidden" name="id" value="<%=@pollys.id%>">
               </form>
               <form id="form2" phx-submit="save_aux" phx-target="#one" phx-change="update_form">
