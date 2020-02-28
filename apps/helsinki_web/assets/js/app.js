@@ -11,8 +11,22 @@ Hooks.scroll_x = {
             window.scrollTo(left + 100, 0)
         }, 100);
     }
-}
+};
+Hooks.format_number = {
+    mounted() {
+        var val = this.el.textContent;
+        this.el.innerHTML = formatNumber(parseFloat(val).toFixed(2));
+    },
+    updated() {
 
+        var val = this.el.textContent;
+        this.el.innerHTML = formatNumber(parseFloat(val).toFixed(2));
+    }
+
+};
+function formatNumber(num) {
+    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+}
 import {Socket} from "phoenix"
 import LiveSocket from "phoenix_live_view"
 
