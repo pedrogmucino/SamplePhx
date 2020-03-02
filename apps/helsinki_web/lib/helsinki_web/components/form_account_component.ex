@@ -180,6 +180,7 @@ defmodule AccountingSystemWeb.FormAccountComponent do
                 <input type="hidden" name="level" value="<%= @levelx %>">
                 <input type="hidden" name="action" value="<%= @actionx %>">
                 <input type="hidden" name="id" value="<%= @idx %>">
+                <input type="hidden" name="rfc" value="">
               </div>
 
             </div>
