@@ -55,6 +55,8 @@ defmodule AccountingSystemWeb.AccountController do
 
   def update(conn, %{"id" => id, "account_schema" => account_params}) do
     account = AccountHandler.get_account!(id)
+    IO.inspect(account_params, label: "ACCOUNT_PARAMS********")
+    IO.inspect(account, label: "ACCOUNT****************")
 
     case AccountHandler.update_account(account, account_params) do
       {:ok, account} ->

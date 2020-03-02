@@ -11,16 +11,17 @@ defmodule AccountingSystem.PolicySchema do
     field :policy_date, :date
     field :policy_number, :integer
     field :policy_type, :integer
+    field :serial, :string
 
     timestamps()
 
-    #has_many :auxiliaries, AccountingSystem.AuxiliarySchema, foreign_key: :policy_number
+    has_many :auxiliaries, AccountingSystem.AuxiliarySchema, foreign_key: :id
   end
 
   @doc false
   def changeset(policy, attrs) do
     policy
-    |> cast(attrs, [:policy_number, :policy_type, :period, :fiscal_exercise, :policy_date, :concept, :audited, :has_documents])
-    |> validate_required([:policy_number, :policy_type, :period, :fiscal_exercise, :policy_date, :concept, :audited, :has_documents])
+    |> cast(attrs, [:policy_number, :policy_type, :period, :fiscal_exercise, :policy_date, :concept, :audited, :has_documents, :serial])
+    |> validate_required([:policy_number, :policy_type, :period, :fiscal_exercise, :policy_date, :concept, :audited, :has_documents, :serial])
   end
 end

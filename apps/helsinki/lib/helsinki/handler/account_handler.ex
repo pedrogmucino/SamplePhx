@@ -225,4 +225,19 @@ defmodule AccountingSystem.AccountHandler do
     AccountingSystem.GetChilds.of(id_account, level + 1)
       |> Repo.all
   end
+
+  def get_from_strings(words) do
+    AccountingSystem.SearchAccount.search_from_text(words)
+      |>Repo.all
+  end
+
+  def search_account(word) do
+    AccountingSystem.SearchAccount.search(word)
+        |> AccountingSystem.Repo.all
+  end
+
+  def search_detail_account(word) do
+    AccountingSystem.SearchAccount.search_detail_account(word)
+    |> Repo.all
+  end
 end

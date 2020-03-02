@@ -46,6 +46,8 @@ defmodule AccountingSystem.AuxiliaryHandler do
 
   def get_auxiliary!(id, year, month), do: Repo.get!(AuxiliarySchema, id, prefix: PrefixFormatter.get_prefix(year, month))
 
+  def get_auxiliary_by_policy_id(id), do: Repo.all(AccountingSystem.GetAllId.get_auxiliary_by_policy_id(id), prefix: PrefixFormatter.get_current_prefix)
+
   @doc """
   Creates a auxiliary.
 
@@ -66,7 +68,7 @@ defmodule AccountingSystem.AuxiliaryHandler do
 
   def create_auxiliary(attrs \\ %{}, year, month) do
     %AuxiliarySchema{}
-    |> AuxiliarySchema.changeset(attrs)
+    |> AuxiliarySchema.changeset(attrs |> Map.put(:concept, attrs.aux_concept))
     |> Repo.insert(prefix: PrefixFormatter.get_prefix(year, month))
   end
 
@@ -130,7 +132,7 @@ defmodule AccountingSystem.AuxiliaryHandler do
   #****************************************************************************************************
   def validate_auxiliar(params) do #Valida si los parametros de auxiliar estan completos
     case are_complete(params) do
-      4 ->
+      7 ->
         {:ok, params}
       _ ->
         {:error, params}
@@ -145,32 +147,38 @@ defmodule AccountingSystem.AuxiliaryHandler do
       |> Enum.count
   end
 
-  def format_to_save(params, policy_number) do
-    params = Map.merge(params, %{"debit_credit" => h_or_d(params)})
-    params = Map.merge(params, %{"mxn_amount" => amount(params)})
-    params = Map.merge(params, %{"amount" => amount(params)})
-    params = Map.merge(params, %{"exchange_rate" => 1})
-    params = Map.merge(params, %{"policy_number" => policy_number})
-    params = Map.delete(params, "haber")
-    params = Map.delete(params, "debe")
-    params = Map.delete(params, "id")
-    GenericFunctions.string_map_to_atom(params)
+  def format_to_save(params, policy_number, policy_id) do
+    IO.inspect(params, label: "PARAMS EN FORMAT TO SAVEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE:::::::::::>>>>>>>>>>")
+    params = Map.merge(params, %{debit_credit: h_or_d(params)})
+    params = Map.merge(params, %{mxn_amount: amount(params)})
+    params = Map.merge(params, %{amount: amount(params)})
+    params = Map.merge(params, %{exchange_rate: 1})
+    params = Map.merge(params, %{policy_id: policy_id})
+    params = Map.merge(params, %{policy_number: policy_number})
+    params = Map.delete(params, :credit)
+    params = Map.delete(params, :debit)
+    params = Map.delete(params, :id)
+    params |> IO.inspect(label: "PARAMS FINAAAAAAAAAAAAAAAAAAAALLLLLLLLLLLLLLLLLLLLLLLLLLL")
   end
 
-  def h_or_d(%{"haber" => hab}) do
+  def h_or_d(%{credit: hab}) do
     case hab do
-      "" ->
+      "0" ->
         "D"
       _ ->
         "H"
     end
   end
 
-  def amount(%{"haber" => hab}) when hab != "" do
+  def amount(%{credit: hab}) when hab != "0" do
     hab
   end
 
-  def amount(%{"debe" => deb}) when deb != "" do
+  def amount(%{debit: deb}) when deb != "0" do
     deb
+  end
+
+  def amount(%{debit: "0"}) do
+    "0"
   end
 end

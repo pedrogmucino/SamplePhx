@@ -142,4 +142,67 @@ defmodule AccountingSystem.AccountsTest do
       assert %Ecto.Changeset{} = AccountHandler.change_account_code(codeschema)
     end
   end
+
+  describe "series" do
+    alias AccountingSystem.Accounts.Series
+
+    @valid_attrs %{current_number: 42, number: 42, serial: "some serial"}
+    @update_attrs %{current_number: 43, number: 43, serial: "some updated serial"}
+    @invalid_attrs %{current_number: nil, number: nil, serial: nil}
+
+    def series_fixture(attrs \\ %{}) do
+      {:ok, series} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Accounts.create_series()
+
+      series
+    end
+
+    test "list_series/0 returns all series" do
+      series = series_fixture()
+      assert Accounts.list_series() == [series]
+    end
+
+    test "get_series!/1 returns the series with given id" do
+      series = series_fixture()
+      assert Accounts.get_series!(series.id) == series
+    end
+
+    test "create_series/1 with valid data creates a series" do
+      assert {:ok, %Series{} = series} = Accounts.create_series(@valid_attrs)
+      assert series.current_number == 42
+      assert series.number == 42
+      assert series.serial == "some serial"
+    end
+
+    test "create_series/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Accounts.create_series(@invalid_attrs)
+    end
+
+    test "update_series/2 with valid data updates the series" do
+      series = series_fixture()
+      assert {:ok, %Series{} = series} = Accounts.update_series(series, @update_attrs)
+      assert series.current_number == 43
+      assert series.number == 43
+      assert series.serial == "some updated serial"
+    end
+
+    test "update_series/2 with invalid data returns error changeset" do
+      series = series_fixture()
+      assert {:error, %Ecto.Changeset{}} = Accounts.update_series(series, @invalid_attrs)
+      assert series == Accounts.get_series!(series.id)
+    end
+
+    test "delete_series/1 deletes the series" do
+      series = series_fixture()
+      assert {:ok, %Series{}} = Accounts.delete_series(series)
+      assert_raise Ecto.NoResultsError, fn -> Accounts.get_series!(series.id) end
+    end
+
+    test "change_series/1 returns a series changeset" do
+      series = series_fixture()
+      assert %Ecto.Changeset{} = Accounts.change_series(series)
+    end
+  end
 end

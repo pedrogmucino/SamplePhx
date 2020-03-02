@@ -6,7 +6,9 @@ module.exports = {
       extend: {
         height: {
             'hoch-93': '93vh',
-            'hoch-80': '80vh'
+            'hoch-80': '80vh',
+            'hoch-75': '75vh',
+            'hoch-70': '70vh'
         },
         width: {
           '80': '20rem',
@@ -18,7 +20,8 @@ module.exports = {
           'mar-80': '20rem',
           'mar-100': '25rem',
           'mar-110': '27.5rem',
-          'mar-16.5': '16.5rem'
+          'mar-16.5': '16.5rem',
+          'mar-35rem': '35rem'
         }
       }
     }

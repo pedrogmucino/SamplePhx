@@ -3,12 +3,12 @@ defmodule AccountingSystem.PrefixFormatter do
     current_date =
     Date.utc_today
 
-    "p_" <> Integer.to_string(current_date.year) <> "_" <> Integer.to_string(current_date.month)
+    "period_" <> Integer.to_string(current_date.year) <> "_" <> Integer.to_string(current_date.month)
 
   end
 
   def get_prefix(year, month) do
-    "p_" <> Integer.to_string(year) <> "_" <> Integer.to_string(month)
+    "period_" <> Integer.to_string(year) <> "_" <> Integer.to_string(month)
   end
 
 end

@@ -3,7 +3,7 @@ defmodule AccountingSystem.GetAllIdCode do
 
   def id_code() do
     from x in "accounts",
-      select: %{key: x.code, value: x.id},
+      select: %{key: [x.code, " ", x.description], value: x.id},
       order_by: [x.code]
   end
 end

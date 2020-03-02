@@ -5,11 +5,14 @@ defmodule AccountingSystem.PolicyHandler do
 
   import Ecto.Query, warn: false
   alias AccountingSystem.{
+    AuxiliaryHandler,
     PolicySchema,
     PrefixFormatter,
     Repo,
     PolicyFormatter,
-    GenericFunctions
+    GenericFunctions,
+    SeriesHandler,
+    PolicyListQuery
   }
 
   @doc """
@@ -27,6 +30,11 @@ defmodule AccountingSystem.PolicyHandler do
 
   def list_policies(year, month) do
     Repo.all(PolicySchema, prefix: PrefixFormatter.get_prefix(year, month))
+  end
+
+  def get_policy_list() do
+    PolicyListQuery.new
+    |> Repo.all(prefix: PrefixFormatter.get_current_prefix)
   end
 
   @doc """
@@ -66,8 +74,13 @@ defmodule AccountingSystem.PolicyHandler do
     |> Repo.insert(prefix: PrefixFormatter.get_current_prefix)
   end
 
-  def create_policy(attrs \\ %{}, year, month) do
-    %{"policy_schema" => ps} = attrs
+  def create_policy(attrs \\ %{}, year, month, serial) do
+    IO.inspect(attrs, label: "ATTTRSRRSSRSRSRSRSRSR::::::::::::::::::>>>>>>>>>>>>>>>>>>")
+    ps = Map.put(attrs, "serial", serial.serial)
+          |> Map.put("policy_number", serial.number)
+          |> Map.put("audited", check_to_bool(attrs, "audited"))
+          |> Map.put("has_documents", check_to_bool(attrs, "has_documents"))
+          |> IO.inspect(label: "PPPPPPPPPPPSSSSSSSSSSSSSSSS:::::::::::::::>>>>>>>>>>>>>>>")
     %PolicySchema{}
     |> PolicySchema.changeset(GenericFunctions.string_map_to_atom(ps))
     |> Repo.insert(prefix: PrefixFormatter.get_prefix(year, month))
@@ -132,11 +145,15 @@ defmodule AccountingSystem.PolicyHandler do
 
   #************************************************************************************************************************************
 
-  def save_policy(params, socket) do
+  defp check_to_bool(params, where) do
+    if(params[where] == "checked" , do: "true", else: "false")
+  end
+
+  def save_policy(params, arr) do
     Repo.transaction(fn() ->
-      case save_all(params, socket.assigns.arr) do
-        :ok ->
-          {:ok, socket}
+      case save_all(params, arr) do
+        {:ok, policy} ->
+          policy
         {:error, reason} ->
           {Repo.rollback({:error, reason})}
       end
@@ -144,10 +161,15 @@ defmodule AccountingSystem.PolicyHandler do
   end
 
   defp save_all(params, auxiliaries) do
-    %{"policy_schema" => policy_schema} = params
-    case AccountingSystem.PolicyHandler.create_policy(params, PolicyFormatter.get_year(params), PolicyFormatter.get_month(params)) do
-      {:ok, _} ->
-        Enum.each(auxiliaries, fn x -> AccountingSystemWeb.AuxiliaryController.create(x, policy_schema["policy_number"], PolicyFormatter.get_year(params), PolicyFormatter.get_month(params)) end)
+    serial = SeriesHandler.get_serial(Map.get(params, "fiscal_exercise"), Map.get(params, "policy_type"))
+    case AccountingSystem.PolicyHandler.create_policy(params, PolicyFormatter.get_year(params), PolicyFormatter.get_month(params), serial) do
+      {:ok, policy} ->
+        Enum.each(auxiliaries, fn x ->
+          AuxiliaryHandler.create_auxiliary(AuxiliaryHandler.format_to_save(x, policy.policy_number, policy.id),
+          PolicyFormatter.get_year(params),
+          PolicyFormatter.get_month(params))
+        end)
+        {:ok, policy}
       {:error, reason} ->
         {:error, reason}
     end
@@ -158,29 +180,19 @@ defmodule AccountingSystem.PolicyHandler do
     auxiliaries = AccountingSystem.GetAllId.from_policy(String.to_integer(id)) |> Repo.all(prefix: PrefixFormatter.get_current_prefix)
     Repo.transaction(fn() ->
       case delete_all(polly, auxiliaries) do
-        :ok ->
-          :ok
-        _ ->
-          {Repo.rollback(:error)}
+        {:ok, policy} -> policy
+        _ -> {Repo.rollback(:error)}
       end
     end)
   end
 
   defp delete_all(polly, auxiliaries) do
-    case delete_policy(polly)  do
-      {:ok, _} ->
-        Enum.each(auxiliaries, fn id_aux -> AccountingSystem.AuxiliaryHandler.get_auxiliary!(Integer.to_string(id_aux)) |> AccountingSystem.AuxiliaryHandler.delete_auxiliary end)
-      _ ->
-        :error
-    end
+    delete_aux(auxiliaries)
+    delete_policy(polly)
   end
 
-  def last_policy() do
-    AccountingSystem.GetLastNumber.of_policy()
-      |> Repo.one(prefix: PrefixFormatter.get_current_prefix)
-      |> get_number
+  defp delete_aux(auxiliaries) do
+    Enum.each(auxiliaries, fn id_aux -> AccountingSystem.AuxiliaryHandler.get_auxiliary!(Integer.to_string(id_aux))
+                                        |> AccountingSystem.AuxiliaryHandler.delete_auxiliary end)
   end
-
-  defp get_number(nil), do: 1
-  defp get_number(number), do: (number + 1)
 end
