@@ -178,7 +178,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                             </path>
                           </g>
                         </svg>
-                        <label class="cursor-pointer mr-auto text-white">Eliminar</label>
+                        <label class="cursor-pointer mr-auto text-white">Cancelar</label>
                       </button>
                     <% end %>
                   </div>
