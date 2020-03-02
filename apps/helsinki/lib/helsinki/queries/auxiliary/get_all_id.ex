@@ -16,8 +16,8 @@ defmodule AccountingSystem.GetAllId do
 
   def get_auxiliary_by_policy_id(id) do
     from aux in AuxiliarySchema,
-    prefix: "p_2020_2",
     join: ac in AccountSchema,
+    prefix: "public",
     on: aux.id_account == ac.id,
     where: aux.policy_id == ^id,
     select: %{
