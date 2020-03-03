@@ -81,9 +81,14 @@ defmodule AccountingSystemWeb.FormAccountComponent do
       <div class="inline-block">
         <form id="form1" phx-submit="action_account" phx-target="#x">
           <div class="inline-block">
+
             <div class="inline-flex w-full">
 
               <div class="px-8 py-6 flex flex-col my-2 w-160">
+              <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Generales</label>
+
+              <div class="border-solid border-2 border-gray-300 p-2">
+
                 <label class="block tracking-wide text-gray-700 font-bold" for="grid-code">Código</label>
                 <input type="text" name="code" maxlength="128" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code" placeholder="Código" value="<%= (if @actionx == "edit", do: @parent_editx.code, else: @codex) %>">
 
@@ -105,6 +110,24 @@ defmodule AccountingSystemWeb.FormAccountComponent do
                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                   </div>
                 </div>
+              </div>
+
+              <br>
+              <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Fiscales</label>
+              <div class="border-solid border-2 border-gray-300 p-2">
+                <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">RFC</label>
+                <div class="inline-flex w-full">
+                  <div class="inline-block w-full mr-2">
+                    <input type="text" name="rfc_literals" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Literales" value="<%= (if @actionx == "edit", do: @parent_editx.rfc_literals) %>">
+                  </div>
+                  <div class="inline-block w-full mr-2">
+                    <input type="text" name="rfc_numeric" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Numéricos" value="<%= (if @actionx == "edit", do: @parent_editx.rfc_numeric) %>">
+                  </div>
+                  <div class="inline-block w-full mr-2">
+                    <input type="text" name="rfc_key" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Homoclave" value="<%= (if @actionx == "edit", do: @parent_editx.rfc_key) %>">
+                  </div>
+                </div>
+
                 <label class="block tracking-wide text-gray-700 font-bold" for="uuid-voucher">
                   Vale Uuid
                 </label>
@@ -132,6 +155,7 @@ defmodule AccountingSystemWeb.FormAccountComponent do
                   </div>
                 </div>
 
+              </div>
               </div>
 
               <div class="px-8 py-6 flex flex-col my-2 w-80">
@@ -180,34 +204,18 @@ defmodule AccountingSystemWeb.FormAccountComponent do
                 <input type="hidden" name="level" value="<%= @levelx %>">
                 <input type="hidden" name="action" value="<%= @actionx %>">
                 <input type="hidden" name="id" value="<%= @idx %>">
-                <input type="hidden" name="rfc" value="">
               </div>
 
             </div>
           </div>
         </form>
 
-        <div class="pt-32">
-
-        <button form="form1" class="ml-mar-120 py-2 w-32 bg-teal-500 text-white hover:bg-teal-400 items-center inline-flex font-bold rounded text-sm">
-            <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="save" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
-                class="h-4 w-4 mr-2 ml-auto">
-                <g class="fa-group">
-                  <path fill="currentColor" d="M288 352a64 64 0 1 1-64-64 64 64 0 0 1 64 64z"
-                  class="text-white">
-                  </path>
-                  <path fill="currentColor" d="M433.94 129.94l-83.88-83.88A48 48 0 0 0 316.12 32H48A48 48 0 0 0 0 80v352a48 48 0 0 0 48 48h352a48 48 0 0 0 48-48V163.88a48 48 0 0 0-14.06-33.94zM224 416a64 64 0 1 1 64-64 64 64 0 0 1-64 64zm96-204a12 12 0 0 1-12 12H76a12 12 0 0 1-12-12V108a12 12 0 0 1 12-12h228.52a12 12 0 0 1 8.48 3.52l3.48 3.48a12 12 0 0 1 3.52 8.48z"
-                  class="text-white">
-                  </path>
-                </g>
-              </svg>
-              <label class="cursor-pointer mr-auto text-white">Guardar</label>
-          </button>
-
+        <div class="pt-0 inline-flex -mt-8 ml-mar-150">
 
         <%= if @actionx == "edit" && !@bendiciones do %>
+        <div class="inline-block">
           <button phx-click="delete_account" phx-target="#x" phx-value-id=<%= @idx%> phx-value-delete="true" phx-value-level=<%= @levelx %>
-            class="ml-10 py-2 w-32 bg-red-500 text-white hover:bg-red-400 items-center inline-flex font-bold rounded shadow focus:shadow-outline focus:outline-none rounded">
+            class="py-2 w-32 bg-red-500 text-white hover:bg-red-400 items-center inline-flex font-bold rounded shadow focus:shadow-outline focus:outline-none rounded">
             <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="trash-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
               class="h-4 w-4 mr-2 ml-auto">
               <g class="fa-group">
@@ -221,7 +229,28 @@ defmodule AccountingSystemWeb.FormAccountComponent do
             </svg>
             <label class="cursor-pointer mr-auto text-white">Eliminar</label>
           </button>
+          </div>
         <% end %>
+
+        <div class="inline-block">
+        <button form="form1" class="ml-16 py-2 w-32 bg-teal-500 text-white hover:bg-teal-400 items-center inline-flex font-bold rounded text-sm">
+            <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="save" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+                class="h-4 w-4 mr-2 ml-auto">
+                <g class="fa-group">
+                  <path fill="currentColor" d="M288 352a64 64 0 1 1-64-64 64 64 0 0 1 64 64z"
+                  class="text-white">
+                  </path>
+                  <path fill="currentColor" d="M433.94 129.94l-83.88-83.88A48 48 0 0 0 316.12 32H48A48 48 0 0 0 0 80v352a48 48 0 0 0 48 48h352a48 48 0 0 0 48-48V163.88a48 48 0 0 0-14.06-33.94zM224 416a64 64 0 1 1 64-64 64 64 0 0 1-64 64zm96-204a12 12 0 0 1-12 12H76a12 12 0 0 1-12-12V108a12 12 0 0 1 12-12h228.52a12 12 0 0 1 8.48 3.52l3.48 3.48a12 12 0 0 1 3.52 8.48z"
+                  class="text-white">
+                  </path>
+                </g>
+              </svg>
+              <label class="cursor-pointer mr-auto text-white">Guardar</label>
+          </button>
+          </div>
+
+
+
         </div>
       <div>
       <% end %>
