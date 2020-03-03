@@ -16,6 +16,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     arr: [],
     policy_id: 0,
     message: nil,
+    message_confirm: nil,
     update: false,
     update_text: "",
     cancel?: false
@@ -51,29 +52,19 @@ defmodule AccountingSystemWeb.PolicyListComponent do
 
   def handle_event("delete_policy", params, socket) do
     policy = params["id"] |> String.to_integer |> PolicyHandler.get_policy!
-
     {:noreply, assign(socket,
       cancel?: true,
-      message: "¿Desea cancelar la póliza " <> policy.serial <> "-" <> Integer.to_string(policy.policy_number) <> " ?"
+      message_confirm: "¿Desea cancelar la póliza " <> policy.serial <> "-" <> Integer.to_string(policy.policy_number) <> " ?"
     )}
-
-    # {:ok, policy} = params["id"] |> AccountingSystem.PolicyHandler.delete_policy_with_aux
-    # notification()
-    # {:noreply, assign(socket,
-    #   edit?: false,
-    #   policy_list: PolicyHandler.get_policy_list,
-    #   message: "Póliza " <> policy.serial <> "-" <> Integer.to_string(policy.policy_number) <> " eliminada correctamente"
-    # )}
   end
 
   def handle_event("si_", params, socket) do
-    params |> IO.inspect(label: " --> Params to cancel -> ")
+    params |> IO.inspect(label: " --> --> SI --> -->")
     {:noreply, socket}
   end
 
-  def handle_event("no_", params, socket) do
-    params |> IO.inspect(label: " --> Close this msj -> ")
-    {:noreply, socket}
+  def handle_event("no_", _params, socket) do
+    {:noreply, assign(socket, cancel?: false)}
   end
 
   def handle_event("create_new", _params, socket) do
@@ -259,9 +250,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     <%= if @message do %>
       <%= live_component(@socket, AccountingSystemWeb.NotificationComponent, id: "notification", message: @message, show: true) %>
     <% end %>
-    <%= if @cancel? do %>
-      <%= live_component(@socket, AccountingSystemWeb.ConfirmationComponent, id: "confirmation", message: @message, show: true) %>
-    <% end %>
+
     <div id="one" class="bg-white h-hoch-93 w-80 mt-16 ml-16 block float-left">
       <div class="w-full py-2 bg-blue-700">
         <p class="ml-2 font-bold text-lg text-white">Pólizas</p>
@@ -308,11 +297,11 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     </div>
 
     <%= if @new? do %>
-      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: 0, update_text: @update_text, pollys: @pollys, arr: @arr, edit: false, update: @update) %>
+      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: 0, update_text: @update_text, pollys: @pollys, arr: @arr, edit: false, update: @update, cancel?: false, message_confirm: nil) %>
     <% end %>
 
     <%= if @edit? do %>
-      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: @policy_id, update_text: "", pollys: @pollys, arr: [], edit: true, update: @update) %>
+      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: @policy_id, update_text: "", pollys: @pollys, arr: [], edit: true, update: @update, cancel?: @cancel?, message_confirm: @message_confirm) %>
     <% end %>
     """
   end

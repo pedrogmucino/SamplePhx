@@ -11,6 +11,9 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
 
   def render(assigns) do
     ~L"""
+    <%= if @cancel? do %>
+      <%= live_component(@socket, AccountingSystemWeb.ConfirmationComponent, id: "confirmation", message: @message_confirm, show: true) %>
+    <% end %>
     <div id="policy" class="bg-white mt-16 ml-1 w-full rounded border">
 
       <div class="inline-flex bg-blue-700 text-white px-6 py-3 w-full">
@@ -165,7 +168,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                   </div>
                   <div class="flex-1 text-center">
                   <%= if @edit do %>
-                      <button phx-click="delete_policy" phx-target="#policy" phx-value-id="<%=@pollys.id%>" phx-value-delete="true"
+                      <button phx-click="delete_policy" phx-target="#policy" phx-value-id="<%=@pollys.id%>"
                         class="py-2 w-1/2 bg-red-500 text-white hover:bg-red-400 items-center inline-flex font-bold rounded shadow focus:shadow-outline focus:outline-none rounded">
                         <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="trash-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
                           class="h-4 w-4 mr-2 ml-auto">
@@ -310,7 +313,9 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
       pollys: pollys,
       policy_edit: %{},
       edit: false,
-      update_text: ""
+      update_text: "",
+      cancel?: false,
+      message_confirm: nil
     )}
   end
 
@@ -323,7 +328,9 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
 
   def update(params, socket) do
     IO.inspect(params, label: "PARAAAAMS---------------------------------------------------------->")
-    IO.inspect(socket.assigns, label: "SOCKET ASSSSSS---------------------------------------------------------->")
+    cancel? = params.cancel?
+    message_confirm = params.message_confirm
+    #IO.inspect(socket.assigns, label: "SOCKET ASSSSSS---------------------------------------------------------->")
     pollys = params.pollys
     params = case params.update do
       true -> fill(params.edit, params)
@@ -345,12 +352,14 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
       pollys: params.pollys,
       arr: params.arr,
       edit: params.edit,
-      update_text: params.update_text
+      update_text: params.update_text,
+      cancel?: cancel?,
+      message_confirm: message_confirm
       )}
   end
 
   defp fill(true, params) do
-    IO.inspect(params, label: "PARAMS DENTRO DE FILL------------------------------------>")
+    #IO.inspect(params, label: "PARAMS DENTRO DE FILL------------------------------------>")
     id = params.id
     policy = id |> AccountingSystem.PolicyHandler.get_policy!
     aux = policy.id |> AccountingSystem.AuxiliaryHandler.get_auxiliary_by_policy_id
