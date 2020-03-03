@@ -11,7 +11,8 @@ defmodule AccountingSystemWeb.FormAccountComponent do
     actionx: "",
     parent_editx: %{},
     idx: 0,
-    error: nil
+    error: nil,
+    valid_literals: true
     )}
   end
 
@@ -28,20 +29,31 @@ defmodule AccountingSystemWeb.FormAccountComponent do
       actionx: (if attrs.edit, do: "edit", else: ""),
       parent_editx: (if attrs.edit, do: attrs.parent_edit, else: %{}),
       bendiciones: attrs.bendiciones?,
-      error: nil
+      error: nil,
+      change: false
       )}
 
-    rescue e in RuntimeError -> error(e, socket) end
+    rescue e in RuntimeError -> error(e.message, socket) end
   end
 
-  def error(e, socket) do
+  def error(message, socket) do
     Task.async(fn ->
       :timer.sleep(5500)
 
       assign(socket, error: nil)
       %{error: "close"}
     end)
-    {:ok, assign(socket, error: e.message)}
+    {:ok, assign(socket, error: message)}
+  end
+
+  def error_message(message, socket) do
+    Task.async(fn ->
+      :timer.sleep(5500)
+
+      assign(socket, error: nil)
+      %{error: "close"}
+    end)
+    {:noreply, assign(socket, error: message, change: !socket.assigns.change)}
   end
 
   def load_values() do
@@ -57,7 +69,9 @@ defmodule AccountingSystemWeb.FormAccountComponent do
   def render(assigns) do
     ~L"""
       <%= if @error do %>
-        <%=live_component(@socket, AccountingSystemWeb.ErrorComponent, id: "error_comp", error: @error, show: true) %>
+      <div class="z-40">
+        <%=live_component(@socket, AccountingSystemWeb.ErrorComponent, id: "error_comp", error: @error, show: true, change: @change) %>
+      </div>
       <%= else %>
     <div id="x" phx-hook="scroll_x"  class="bg-white mt-16 ml-1 w-240 rounded border">
 
