@@ -202,7 +202,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                           </div>
                           <!---------------------------INFO AQUI---------------------------------------->
                           <div class="w-full gap-4">
-                            <div phx-click="edit_aux" phx-value-id="" phx-target="#policy" class="border cursor-pointer bg-gray-200 p-2 mt-2 rounded relative hover:bg-gray-300">
+                            <div phx-value-id="" phx-target="#policy" class="border cursor-pointer bg-gray-200 p-2 mt-2 rounded relative hover:bg-gray-300">
                               <div class="text-right">
                                 <label class="text-gray-600 text-right">Cta: <b><%= item.account %></b></label><br>
                               </div>
@@ -253,7 +253,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                           </div>
                           <!-----------------------------------END INFO--------------------------------->
                           <div class="w-1/6 text-right">
-                            <button class="bg-teal-500 text-white text-center hover:bg-teal-400 border rounded">
+                            <button phx-click="edit_aux" value="<%=item.id%>" phx-target="#one" class="bg-teal-500 text-white text-center hover:bg-teal-400 border rounded">
                               <svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="edit" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="h-6 w-6 m-1"><path fill="currentColor" d="M402.3 344.9l32-32c5-5 13.7-1.5 13.7 5.7V464c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h273.5c7.1 0 10.7 8.6 5.7 13.7l-32 32c-1.5 1.5-3.5 2.3-5.7 2.3H48v352h352V350.5c0-2.1.8-4.1 2.3-5.6zm156.6-201.8L296.3 405.7l-90.4 10c-26.2 2.9-48.5-19.2-45.6-45.6l10-90.4L432.9 17.1c22.9-22.9 59.9-22.9 82.7 0l43.2 43.2c22.9 22.9 22.9 60 .1 82.8zM460.1 174L402 115.9 216.2 301.8l-7.3 65.3 65.3-7.3L460.1 174zm64.8-79.7l-43.2-43.2c-4.1-4.1-10.8-4.1-14.8 0L436 82l58.1 58.1 30.9-30.9c4-4.2 4-10.8-.1-14.9z" class=""></path></svg>
                             </button>
                             <button class="bg-red-500 text-white text-left hover:bg-red-400 border rounded">
@@ -293,6 +293,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
             </div>  <!-----------------END DIV 2 PART 2------------------------------>
           </div>
       </div>
+    </div>
     """
   end
   def mount(socket) do
@@ -321,6 +322,8 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
   # end
 
   def update(params, socket) do
+    IO.inspect(params, label: "PARAAAAMS---------------------------------------------------------->")
+    IO.inspect(socket.assigns, label: "SOCKET ASSSSSS---------------------------------------------------------->")
     pollys = params.pollys
     params = case params.update do
       true -> fill(params.edit, params)
@@ -347,6 +350,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
   end
 
   defp fill(true, params) do
+    IO.inspect(params, label: "PARAMS DENTRO DE FILL------------------------------------>")
     id = params.id
     policy = id |> AccountingSystem.PolicyHandler.get_policy!
     aux = policy.id |> AccountingSystem.AuxiliaryHandler.get_auxiliary_by_policy_id
@@ -383,6 +387,8 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
     }
   end
 
+  defp fill(false, list), do: list
+
   defp sum_list([], _type) do
     0
   end
@@ -390,6 +396,4 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
   defp sum_list([h|t], type) do
     if h.debit_credit == type, do: h.amount + sum_list(t, type), else: sum_list(t, type)
   end
-
-  defp fill(false, list), do: list
 end

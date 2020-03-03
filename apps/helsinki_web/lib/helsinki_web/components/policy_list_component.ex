@@ -26,13 +26,10 @@ defmodule AccountingSystemWeb.PolicyListComponent do
       {:ok, assign(socket, id: attrs.id, message: nil)}
   end
 
-  def handle_event("create_policy", params, socket) do
-    {:noreply, assign(socket, new?: true, edit?: false, actionx: "edit", message: nil)}
-  end
-
   def handle_event("open_policy", params, socket) do
+    all_info = fill(params)
     id = params["id"] |> String.to_integer()
-    {:noreply, assign(socket, new?: false, edit?: true, policy_id: id, message: nil, update: true)}
+    {:noreply, assign(socket, new?: false, edit?: true, policy_id: id, message: nil, update: true, arr: all_info.arr, dropdowns: all_info.dropdowns, id: all_info.id, pollys: all_info.pollys, update_text: all_info.update_text)}
   end
 
   def handle_event("edit_and_save_this", params, socket) do
@@ -149,6 +146,19 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     {:noreply, assign(socket, pollys: pollys)}
   end
 
+  def handle_event("edit_aux", %{"value" => id}, socket) do
+    actual = socket.assigns.arr |> Enum.find(fn elto -> elto.id == id |> String.to_integer end)
+    map = Map.new()
+            |> Map.put(:id_account, actual.id_account)
+            |> Map.put(:account, actual.account)
+            |> Map.put(:name, AccountingSystem.AccountHandler.get_description_by_id(actual.id_account))
+            |> Map.put(:aux_concept, actual.aux_concept)
+            |> Map.put(:department, actual.department)
+            |> Map.put(:debit, (if actual.debit_credit == "D", do: actual.amount, else: 0))
+            |> Map.put(:credit, (if actual.debit_credit == "D", do: 0, else: actual.amount))
+    {:noreply, assign(socket, pollys: Map.merge(socket.assigns.pollys, map), update: false)}
+  end
+
   defp notification() do
     Task.async(fn ->
       :timer.sleep(5500)
@@ -198,6 +208,51 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   defp checked("checked"), do: true
   defp checked("unchecked"), do: false
   defp checked(nil), do: false
+
+  defp fill(params) do
+    id = params["id"]
+    policy = id |> AccountingSystem.PolicyHandler.get_policy!
+    aux = policy.id |> AccountingSystem.AuxiliaryHandler.get_auxiliary_by_policy_id
+    dropdowns = AccountingSystem.AccountHandler.search_detail_account("")
+    %{
+      dropdowns: dropdowns,
+      arr: aux,
+      edit: true,
+      id: params["id"],
+      pollys: %{
+            audited: (if policy.audited == true, do: "checked", else: "unchecked"),
+            concept: policy.concept,
+            fiscal_exercise: policy.fiscal_exercise,
+            has_documents: (if policy.has_documents == true, do: "checked", else: "unchecked"),
+            period: policy.period,
+            policy_date: policy.policy_date,
+            policy_type: Integer.to_string(policy.policy_type),
+            aux_concept: "",
+            debit: 0,
+            department: "",
+            credit: 0,
+            id: policy.id,
+            sum_haber: sum_list(aux, "H"),
+            sum_debe: sum_list(aux, "D"),
+            total: 0,
+            focused: 0,
+            account: "",
+            name: "",
+            id_account: "",
+            serial: policy.serial,
+            policy_number: policy.policy_number
+      },
+      update_text: ""
+    }
+  end
+
+  defp sum_list([h|t], type) do
+    if h.debit_credit == type, do: h.amount + sum_list(t, type), else: sum_list(t, type)
+  end
+
+  defp sum_list([], _type) do
+    0
+  end
 
   def render(assigns) do
     ~L"""
