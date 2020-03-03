@@ -132,7 +132,7 @@ defmodule AccountingSystem.AuxiliaryHandler do
   #****************************************************************************************************
   def validate_auxiliar(params) do #Valida si los parametros de auxiliar estan completos
     case are_complete(params) do
-      7 ->
+      8 ->
         {:ok, params}
       _ ->
         {:error, params}
@@ -143,7 +143,7 @@ defmodule AccountingSystem.AuxiliaryHandler do
   defp are_complete(params) do #regresa la cantidad de valores no vacios de un mapa
     params
       |> Map.values
-      |> Enum.reject(fn x -> x == "" end)
+      #|> Enum.reject(fn x -> x == "" end)
       |> Enum.count
   end
 

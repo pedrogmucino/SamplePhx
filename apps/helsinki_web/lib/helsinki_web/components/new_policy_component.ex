@@ -93,6 +93,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                   <div class="inline-flex w-full">
                     <div class="w-2/3 relative">
                       <input class="hidden" name="id_account" value="<%= @pollys.id_account %>">
+                      <input class="hidden" name="id_aux" value="<%= @pollys.id_aux %>">
                       <input autocomplete="off" type="text" phx-target="#one" phx-keyup="show_accounts" phx-focus="account_focused" name="account" value="<%=@pollys.account%>" maxlength="256" class="focus:outline-none focus:bg-white focus:border-blue-500 w-full appearance-none  bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
                       <%= if length(@dropdowns) > 0 and @pollys.focused == 1 do %>
                         <div class="w-full block absolute top-0 left-0 z-10 mt-10 bg-gray-100 overflow-y-scroll h-64">
@@ -213,24 +214,6 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                                 <div class="w-2/6">
                                   <label class="inline-block cursor-pointer text-gray-600 text-sm">Departamento: <b> <%= item.department %></b></label>
                                 </div>
-                                <%= if @edit do %>
-                                  <div class="w-2/6 text-right inline-flex">
-                                    <div>
-                                      <label class="inline-block cursor-pointer text-gray-600  text-sm")">Debe: </label>
-                                    </div>
-                                    <div class="ml-2 w-32">
-                                      <label class="inline-block cursor-pointer text-gray-600  text-sm")"><b phx-hook="format_number"> <%= if(item.debit_credit == "D", do: item.mxn_amount, else: 0.0) %></b></label>
-                                    </div>
-                                  </div>
-                                  <div class="w-2/6 text-right inline-flex">
-                                    <div>
-                                      <label class="inline-block cursor-pointer text-gray-600 text-sm">Haber: </label>
-                                    </div>
-                                    <div class="ml-2 w-32">
-                                      <label class="inline-block cursor-pointer text-gray-600 text-sm"><b phx-hook="format_number"> <%= if(item.debit_credit == "H", do: item.mxn_amount, else: 0.0) %></b></label>
-                                    </div>
-                                  </div>
-                                <% else %>
                                   <div class="w-2/6 text-right inline-flex">
                                     <div>
                                       <label class="inline-block cursor-pointer text-gray-600 text-sm">Debe: </label>
@@ -247,7 +230,6 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                                       <label class="inline-block cursor-pointer text-gray-600 text-sm"> <b phx-hook="format_number"> <%= item.credit %></b></label>
                                     </div>
                                   </div>
-                                <% end %>
                               </div>
                             </div>
                           </div>
@@ -300,7 +282,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
     dropdowns = []
     policytypes = AccountingSystem.PolicyTipeHandler.get_all_as_list
     changeset = PolicyHandler.change_policy(%PolicySchema{})
-    pollys = %{audited: "", concept: "", fiscal_exercise: "", has_documents: "", period: "", policy_date: "", policy_type: "0", aux_concept: "", debit: 0, department: "", credit: 0, id: "", sum_haber: 0, sum_debe: 0, total: 0, focused: 0, account: "", name: "", id_account: ""}
+    pollys = %{audited: "", concept: "", fiscal_exercise: "", has_documents: "", period: "", policy_date: "", policy_type: "0", aux_concept: "", debit: 0, department: "", credit: 0, id: "", sum_haber: 0, sum_debe: 0, total: 0, focused: 0, account: "", name: "", id_account: "", id_aux: ""}
 
     {:ok, assign(socket,
       dropdowns: dropdowns,
@@ -322,16 +304,13 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
   # end
 
   def update(params, socket) do
-    IO.inspect(params, label: "PARAAAAMS---------------------------------------------------------->")
-    IO.inspect(socket.assigns, label: "SOCKET ASSSSSS---------------------------------------------------------->")
+    IO.inspect(params, label: "Luego pasa el update que trae---------------------------->")
+    IO.inspect(socket.assigns, label: "Luego pasa el update que trae en Assigns---------------------------->")
     pollys = params.pollys
-    params = case params.update do
-      true -> fill(params.edit, params)
-      false -> socket.assigns |> Map.put(:pollys, pollys) |> Map.put(:arr, case length(params.arr) do
+    params = socket.assigns |> Map.put(:pollys, pollys) |> Map.put(:arr, case length(params.arr) do
                                                                                     0 -> socket.assigns.arr
                                                                                     _ -> params.arr
-                                                                            end)
-    end
+                                                                            end) |> Map.put(:edit, params.edit)
     params = params
     |> Map.put(:pollys,
     case socket.assigns.edit do
@@ -339,6 +318,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
       false -> params.pollys
     end
     )
+
     dropdowns = AccountingSystem.AccountHandler.search_detail_account(params.pollys.account)
     {:ok, assign(socket,
       dropdowns: dropdowns,
@@ -350,7 +330,6 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
   end
 
   defp fill(true, params) do
-    IO.inspect(params, label: "PARAMS DENTRO DE FILL------------------------------------>")
     id = params.id
     policy = id |> AccountingSystem.PolicyHandler.get_policy!
     aux = policy.id |> AccountingSystem.AuxiliaryHandler.get_auxiliary_by_policy_id
@@ -381,7 +360,8 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
             name: "",
             id_account: "",
             serial: policy.serial,
-            policy_number: policy.policy_number
+            policy_number: policy.policy_number,
+            id_aux: ""
       },
       update_text: ""
     }
