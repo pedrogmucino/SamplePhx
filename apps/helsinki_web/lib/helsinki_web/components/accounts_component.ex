@@ -6,6 +6,9 @@ defmodule AccountingSystemWeb.AccountsComponent do
 
   def render(assigns) do
     ~L"""
+    <%= if @error do %>
+        <%=live_component(@socket, AccountingSystemWeb.ErrorComponent, id: "error_comp", error: @error, show: true, change: @change) %>
+      <% end %>
       <div id="one" class="bg-white h-hoch-93 w-80 mt-16 ml-16 block float-left">
       <div class="w-full py-2 bg-blue-700">
         <p class="ml-2 font-bold text-lg text-white">Cuentas</p>
@@ -91,7 +94,9 @@ defmodule AccountingSystemWeb.AccountsComponent do
     idx: 0,
     edit?: false,
     parent_editx: %{},
-    bendiciones: false
+    bendiciones: false,
+    error: nil,
+    change: false
     )}
   end
 
@@ -147,7 +152,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
     level = (params["level"] |> String.to_integer) - 1
     socket.assigns.child_components
       |> Enum.find(fn acc -> acc.level == level end)
-      |> IO.inspect(label: "-------------------------- > > > ")
+
       |> case do
         nil -> {:noreply, assign(socket, child_components: [], level_form_account: level, edit?: true, new?: false, parent_editx: params["id"] |> String.to_integer |> get_account_by_id())}
         acc -> {:noreply, assign(socket, child_components: get_childs(false, socket.assigns.child_components, acc, level), level_form_account: level, edit?: true, new?: false, parent_editx: params["id"] |> String.to_integer |> get_account_by_id())}
@@ -155,42 +160,50 @@ defmodule AccountingSystemWeb.AccountsComponent do
 
   end
 
+  def error_message(message, socket) do
+    Task.async(fn ->
+      :timer.sleep(5500)
+
+      assign(socket, error: nil)
+      %{error: "close"}
+    end)
+    {:noreply, assign(socket, error: message, change: !socket.assigns.change)}
+  end
+
   def handle_event("action_account", params, socket) do
-    id = params["id"] |> String.to_integer
-    level = params["level"] |> String.to_integer
-    action = params["action"]
+    rfc = params["rfc_literals"] <> params["rfc_numeric"] <> params["rfc_key"]
 
-    if action == "edit", do: edit(id, params, socket), else: save_new(params, socket)
+    if String.trim(rfc) == "" or AccountingSystem.AccountHandler.validation(rfc) do
+      id = params["id"] |> String.to_integer
+      level = params["level"] |> String.to_integer
+      action = params["action"]
+      if action == "edit", do: edit(id, params, socket), else: save_new(params, socket)
 
-    child_index = socket.assigns.child_components
-    |> Enum.find_index(fn chil -> chil.id == id end)
-    |> set_child_index()
+      child_index = socket.assigns.child_components
+      |> Enum.find_index(fn chil -> chil.id == id end)
+      |> set_child_index()
 
-    daddy = socket.assigns.child_components
-    |> Enum.at(child_index - 1)
-    |> IO.inspect(label: "daddy ---> ")
+      daddy = socket.assigns.child_components
+      |> Enum.at(child_index - 1)
 
-    child_components = socket.assigns.child_components
-      |> Enum.map(fn child -> update_family(child, daddy, id, level) end)
-      |> IO.inspect(label: "ARR  ------------------ -> ")
+      child_components = socket.assigns.child_components
+        |> Enum.map(fn child -> update_family(child, daddy, id, level) end)
 
-    {:noreply, assign(socket,
-      child_components: child_components,
-      edit?: false,
-      new?: false,
-      accounts: get_accounts_t(-1, -1)
-      )}
-
+      {:noreply, assign(socket,
+        child_components: child_components,
+        edit?: false,
+        new?: false,
+        accounts: get_accounts_t(-1, -1)
+        )}
+    else
+      error_message("RFC Inválido", socket)
+    end
   end
 
   def handle_event("delete_account", params, socket) do
-    IO.inspect(value: params, label: " --------------------------------------- DELETE Params > ")
-    IO.inspect(value: socket, label: " --------------------------------------- DELETE Socket > ")
-
     case Account.delete_account(get_account_by_id(params["id"])) do
     {:ok, _account} ->
       {:noreply, assign(socket, accounts: get_accounts_t(-1, -1), edit?: false, new?: false)}
-      #{:noreply, socket |> put_flash(:info, "Eliminado")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
@@ -211,7 +224,6 @@ defmodule AccountingSystemWeb.AccountsComponent do
   end
 
   def edit(id, params, socket) do
-    IO.inspect(value: params, label: " --------------------------------------- EDIT > ")
     account = get_account_by_id(id)
     params = load_params(params)
     |> Map.put("parent_account", account.parent_account)
