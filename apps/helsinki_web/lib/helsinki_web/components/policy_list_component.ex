@@ -58,9 +58,12 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     )}
   end
 
-  def handle_event("si_", params, socket) do
-    params |> IO.inspect(label: " --> --> SI --> -->")
-    {:noreply, socket}
+  def handle_event("si_", _params, socket) do
+    #params |> IO.inspect(label: " --> --> SI --> -->")
+    socket.assigns.id
+    |> String.to_integer
+    |> PolicyHandler.cancel_policy
+    {:noreply, assign(socket, cancel?: false)}
   end
 
   def handle_event("no_", _params, socket) do
