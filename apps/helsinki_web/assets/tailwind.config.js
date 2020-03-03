@@ -8,7 +8,8 @@ module.exports = {
             'hoch-93': '93vh',
             'hoch-80': '80vh',
             'hoch-75': '75vh',
-            'hoch-70': '70vh'
+            'hoch-70': '70vh',
+            'hoch-2': '2.4rem'
         },
         width: {
           '80': '20rem',
