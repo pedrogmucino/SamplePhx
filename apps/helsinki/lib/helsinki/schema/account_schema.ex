@@ -20,7 +20,9 @@ defmodule AccountingSystem.AccountSchema do
     field :third_party_prosecutor, :integer
     field :type, :string
     field :uuid_voucher, :string
-    field :rfc, :string
+    field :rfc_literals, :string
+    field :rfc_numeric, :string
+    field :rfc_key, :string
 
     timestamps()
   end
@@ -28,7 +30,7 @@ defmodule AccountingSystem.AccountSchema do
   @doc false
   def changeset(account, attrs) do
     account
-    |> cast(attrs, [:code, :status, :type, :name, :description, :level, :is_departamental, :parent_account, :root_account, :character, :group_code, :uuid_voucher, :payment_method, :apply_to, :third_party_prosecutor, :third_party_op, :apply_third_party_to, :rfc])
+    |> cast(attrs, [:code, :status, :type, :name, :description, :level, :is_departamental, :parent_account, :root_account, :character, :group_code, :uuid_voucher, :payment_method, :apply_to, :third_party_prosecutor, :third_party_op, :apply_third_party_to, :rfc_literals, :rfc_numeric, :rfc_key])
     |> validate_required([:code, :status, :type, :name, :description, :is_departamental, :parent_account, :root_account, :character, :group_code, :uuid_voucher, :payment_method, :apply_to, :third_party_prosecutor, :third_party_op, :apply_third_party_to])
   end
 end

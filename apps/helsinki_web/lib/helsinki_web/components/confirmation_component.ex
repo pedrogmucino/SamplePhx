@@ -10,7 +10,7 @@ defmodule AccountingSystemWeb.ConfirmationComponent do
   def render(assigns) do
     ~L"""
     <%= if @show do %>
-    <div class="fixed w-full flex bottom-0 left-0 notification">
+    <div id="x" class="fixed w-full flex bottom-0 left-0">
       <div class="top-12 py-16 ml-auto mr-auto " role="alert" >
         <div class="flex items-center bg-yellow-400 text-black font-bold rounded-t px-4 py-2">
           <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="exclamation-triangle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"
@@ -19,10 +19,10 @@ defmodule AccountingSystemWeb.ConfirmationComponent do
         <div class="border border-t-0 border-yellow-500 rounded-b bg-yellow-100 px-4 py-3 text-black">
           <b><p><%= @message %></p></b>
           <div class="inline-flex w-full mt-4 py-4">
-            <button class="h-10 px-2 w-1/2 bg-teal-500 hover:bg-teal-400 text-white font-bold py-2 px-4 border border-teal-500 rounded">
+            <button phx-click="si_" phx-target="#x" class="h-10 px-2 w-1/2 bg-teal-500 hover:bg-teal-400 text-white font-bold py-2 px-4 border border-teal-500 rounded">
               Sí
             </button>
-            <button class="h-10 ml-5 px-2 w-1/2 bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 border border-red-500 rounded">
+            <button phx-click="no_" phx-target="#x" class="h-10 ml-5 px-2 w-1/2 bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 border border-red-500 rounded">
               No
             </button>
           <div>
@@ -34,6 +34,7 @@ defmodule AccountingSystemWeb.ConfirmationComponent do
   end
 
   def update(attrs, socket) do
+    attrs |> IO.inspect(label: " --> --> Params confirmation -> ")
     {:ok, assign(socket, message: Map.get(attrs, :message), show: Map.get(attrs, :show))}
   end
 end

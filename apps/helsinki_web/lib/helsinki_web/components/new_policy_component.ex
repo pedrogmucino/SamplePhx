@@ -11,6 +11,9 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
 
   def render(assigns) do
     ~L"""
+    <%= if @cancel? do %>
+      <%= live_component(@socket, AccountingSystemWeb.ConfirmationComponent, id: "confirmation", message: @message_confirm, show: true) %>
+    <% end %>
     <div id="policy" class="bg-white mt-16 ml-1 w-full rounded border">
 
       <div class="inline-flex bg-blue-700 text-white px-6 py-3 w-full">
@@ -106,7 +109,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                       <% end %>
                     </div>
                     <input type="text" name="name" maxlength="128" value="<%=@pollys.name%>" class="focus:outline-none focus:bg-white focus:border-blue-500 ml-4 appearance-none w-1/3 bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
-                    <a href="/account" target="_blank" class="tooltip w-10 h-10 px-4 ml-2 bg-teal-500 text-white text-center hover:bg-teal-400 border rounded">
+                    <a href="/account" target="_blank" class="tooltip w-10 h-hoch-2 px-4 ml-2 bg-teal-500 text-white text-center hover:bg-teal-400 border rounded">
                       <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="layer-plus" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
                         class="h-6 w-6 mr-auto -ml-2 mt-1"><path fill="currentColor" d="M492.88 354.58L413.19 320l79.68-34.58c12.16-5.28 17.72-19.41 12.47-31.56-5.28-12.17-19.38-17.67-31.59-12.47l-217.22 94.72L71.91 256l170.5-73.98c12.16-5.28 17.72-19.41 12.47-31.56-5.28-12.19-19.38-17.67-31.59-12.47L19.16 226.56C7.53 231.59 0 243.16 0 256s7.53 24.41 19.12 29.42L98.82 320l-79.67 34.56C7.53 359.59 0 371.16 0 384.02c0 12.84 7.53 24.41 19.12 29.42l218.28 94.69a46.488 46.488 0 0 0 18.59 3.88c6.34-.02 12.69-1.3 18.59-3.86l218.25-94.69c11.62-5.03 19.16-16.59 19.16-29.44.01-12.86-7.52-24.43-19.11-29.44zM256.53 464.11L71.91 384l87.22-37.84 78.28 33.96c5.91 2.58 12.25 3.86 18.59 3.86s12.69-1.28 18.59-3.84l78.3-33.98 87.29 37.88-183.65 80.07zM496 88h-72V16c0-8.84-7.16-16-16-16h-16c-8.84 0-16 7.16-16 16v72h-72c-8.84 0-16 7.16-16 16v16c0 8.84 7.16 16 16 16h72v72c0 8.84 7.16 16 16 16h16c8.84 0 16-7.16 16-16v-72h72c8.84 0 16-7.16 16-16v-16c0-8.84-7.16-16-16-16z" class=""></path>
                       </svg>
@@ -166,7 +169,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                   </div>
                   <div class="flex-1 text-center">
                   <%= if @edit do %>
-                      <button phx-click="delete_policy" phx-target="#policy" phx-value-id="<%=@pollys.id%>" phx-value-delete="true"
+                      <button phx-click="delete_policy" phx-target="#policy" phx-value-id="<%=@pollys.id%>"
                         class="py-2 w-1/2 bg-red-500 text-white hover:bg-red-400 items-center inline-flex font-bold rounded shadow focus:shadow-outline focus:outline-none rounded">
                         <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="trash-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
                           class="h-4 w-4 mr-2 ml-auto">
@@ -292,7 +295,9 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
       pollys: pollys,
       policy_edit: %{},
       edit: false,
-      update_text: ""
+      update_text: "",
+      cancel?: false,
+      message_confirm: nil
     )}
   end
 
@@ -304,8 +309,10 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
   # end
 
   def update(params, socket) do
-    IO.inspect(params, label: "Luego pasa el update que trae---------------------------->")
-    IO.inspect(socket.assigns, label: "Luego pasa el update que trae en Assigns---------------------------->")
+    IO.inspect(params, label: "PARAAAAMS---------------------------------------------------------->")
+    cancel? = params.cancel?
+    message_confirm = params.message_confirm
+    #IO.inspect(socket.assigns, label: "SOCKET ASSSSSS---------------------------------------------------------->")
     pollys = params.pollys
     params = socket.assigns |> Map.put(:pollys, pollys) |> Map.put(:arr, case length(params.arr) do
                                                                                     0 -> socket.assigns.arr
@@ -325,11 +332,14 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
       pollys: params.pollys,
       arr: params.arr,
       edit: params.edit,
-      update_text: params.update_text
+      update_text: params.update_text,
+      cancel?: cancel?,
+      message_confirm: message_confirm
       )}
   end
 
   defp fill(true, params) do
+    #IO.inspect(params, label: "PARAMS DENTRO DE FILL------------------------------------>")
     id = params.id
     policy = id |> AccountingSystem.PolicyHandler.get_policy!
     aux = policy.id |> AccountingSystem.AuxiliaryHandler.get_auxiliary_by_policy_id
