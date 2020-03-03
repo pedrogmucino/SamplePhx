@@ -10,17 +10,22 @@ defmodule AccountingSystemWeb.ErrorComponent do
   def render(assigns) do
     ~L"""
     <%= if @show do %>
-    <div class="fixed z-40 w-full flex bottom-0 left-0 notification">
-      <div class="z-40 top-12 py-16 ml-auto mr-auto " role="alert" >
-      <div class="flex items-center bg-red-500 text-black font-bold rounded-t px-4 py-2">
-      <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="siren-on" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"
-      class="flex-1 text-center h-6 w-6"><path fill="currentColor" d="M512,320h-1.88L486.88,134.07A80.13,80.13,0,0,0,407.5,64h-175a80.13,80.13,0,0,0-79.38,70.08L129.88,320H128a32,32,0,0,0-32,32v64a32,32,0,0,0,32,32H512a32,32,0,0,0,32-32V352A32,32,0,0,0,512,320ZM184.88,138A48.07,48.07,0,0,1,232.5,96h175A48.07,48.07,0,0,1,455.12,138l22.76,182H231.82l24.11-180.83a8,8,0,0,0-6.87-9l-15.86-2.13a8,8,0,0,0-9,6.87L199.54,320H162.12ZM512,416H128V352H512ZM80,160H16a16,16,0,0,0,0,32H80a16,16,0,0,0,0-32Zm544,0H560a16,16,0,0,0,0,32h64a16,16,0,0,0,0-32ZM40.84,30.3l64,32a16,16,0,0,0,14.32-28.63l-64-32A16,16,0,0,0,40.84,30.3ZM528,64a16.17,16.17,0,0,0,7.16-1.69l64-32A16,16,0,0,0,584.84,1.67l-64,32A16,16,0,0,0,528,64Z" class=""></path></svg>
-    </div>
-        <div class="border border-t-0 border-red-400 rounded-b bg-red-100 px-4 py-3 text-red-700">
-          <p><%= @error %></p>
-        </div>
+    <div class="fixed z-40 w-full flex bottom-12 left-0 notification">
+    <div class="z-40 top-12 py-6 px-12 ml-auto mr-auto bg-red-100 border-t-4 border-red-500 rounded-b text-red-900  shadow-md role="alert">
+    <div class="flex" items-center>
+      <div class="py-1">
+      <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="bomb" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+      class="w-8 h-5 mr-1"><path fill="currentColor" d="M184 160c13.24 0 24-10.76 24-24s-10.76-24-24-24-24 10.76-24 24 10.76 24 24 24zm80 0c13.24 0 24-10.76 24-24s-10.76-24-24-24-24 10.76-24 24 10.76 24 24 24zm-128.15 68.54l-7.33 34.61c-2.67 12.62 5.42 24.85 16.45 24.85h158.08c11.03 0 19.12-12.23 16.45-24.85l-7.33-34.61C345.91 205.11 368 169.01 368 128 368 57.31 303.53 0 224 0S80 57.31 80 128c0 41.01 22.09 77.11 55.85 100.54zM224 48c52.94 0 96 35.89 96 80 0 23.3-12.84 45.57-35.21 61.1l-26.2 18.18 6.61 31.2.32 1.52h-83.03l.32-1.52 6.61-31.2-26.2-18.18C140.84 173.57 128 151.3 128 128c0-44.11 43.07-80 96-80zm214.7 418.95L284.31 400l154.39-66.95c8.03-3.71 11.53-13.21 7.82-21.24l-6.71-14.52c-3.71-8.02-13.21-11.52-21.23-7.82L224 373.85 29.42 289.48c-8.02-3.7-17.53-.2-21.23 7.82l-6.71 14.52c-3.71 8.02-.21 17.53 7.82 21.24L163.69 400 9.3 466.95c-8.03 3.7-11.53 13.21-7.82 21.24l6.71 14.52c3.71 8.02 13.21 11.52 21.23 7.82L224 426.15l194.58 84.37c8.02 3.7 17.53.2 21.23-7.82l6.71-14.52c3.71-8.02.21-17.53-7.82-21.23z"></path></svg>
+      </div>
+      <div>
+        <p class="font-bold">Ha ocurrido un error</p>
+        <p class="text-sm"><%= @error %></p>
       </div>
     </div>
+  </div>
+    </div>
+
+
     <% end %>
     """
   end
