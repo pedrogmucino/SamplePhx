@@ -17,7 +17,8 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     policy_id: 0,
     message: nil,
     update: false,
-    update_text: ""
+    update_text: "",
+    cancel?: false
     )}
   end
 
@@ -52,13 +53,19 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def handle_event("delete_policy", params, socket) do
-    {:ok, policy} = params["id"] |> AccountingSystem.PolicyHandler.delete_policy_with_aux
-    notification()
+    policy = params["id"] |> String.to_integer |> PolicyHandler.get_policy!
     {:noreply, assign(socket,
-      edit?: false,
-      policy_list: PolicyHandler.get_policy_list,
-      message: "Póliza " <> policy.serial <> "-" <> Integer.to_string(policy.policy_number) <> " eliminada correctamente"
+      cancel?: true,
+      message: "¿Desea cancelar la póliza " <> policy.serial <> "-" <> Integer.to_string(policy.policy_number) <> " ?"
     )}
+
+    # {:ok, policy} = params["id"] |> AccountingSystem.PolicyHandler.delete_policy_with_aux
+    # notification()
+    # {:noreply, assign(socket,
+    #   edit?: false,
+    #   policy_list: PolicyHandler.get_policy_list,
+    #   message: "Póliza " <> policy.serial <> "-" <> Integer.to_string(policy.policy_number) <> " eliminada correctamente"
+    # )}
   end
 
   def handle_event("create_new", _params, socket) do
@@ -185,7 +192,10 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     ~L"""
     <%= if @message do %>
       <%= live_component(@socket, AccountingSystemWeb.NotificationComponent, id: "notification", message: @message, show: true) %>
-      <% end %>
+    <% end %>
+    <%= if @cancel? do %>
+      <%= live_component(@socket, AccountingSystemWeb.ConfirmationComponent, id: "notification", message: @message, show: true) %>
+    <% end %>
     <div id="one" class="bg-white h-hoch-93 w-80 mt-16 ml-16 block float-left">
       <div class="w-full py-2 bg-blue-700">
         <p class="ml-2 font-bold text-lg text-white">Pólizas</p>
