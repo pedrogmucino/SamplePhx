@@ -240,4 +240,10 @@ defmodule AccountingSystem.AccountHandler do
     AccountingSystem.SearchAccount.search_detail_account(word)
     |> Repo.all
   end
+
+  def get_description_by_id(id) do
+    AccountingSystem.GetDescription.get_by_id(id)
+      |> Repo.all
+      |> List.first
+  end
 end
