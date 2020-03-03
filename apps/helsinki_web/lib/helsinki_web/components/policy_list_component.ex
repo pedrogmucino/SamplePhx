@@ -263,7 +263,8 @@ defmodule AccountingSystemWeb.PolicyListComponent do
             policy_number: policy.policy_number,
             id_aux: ""
       },
-      update_text: ""
+      update_text: "",
+      cancel?: false
     }
   end
 
@@ -352,11 +353,11 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     </div>
 
     <%= if @new? do %>
-      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: 0, update_text: @update_text, pollys: @pollys, arr: @arr, edit: false, update: @update) %>
+      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: 0, update_text: @update_text, pollys: @pollys, arr: @arr, edit: false, update: @update, cancel?: false, message_confirm: nil) %>
     <% end %>
 
     <%= if @edit? do %>
-      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: @policy_id, update_text: "", pollys: @pollys, arr: @arr, edit: true, update: @update) %>
+      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: @policy_id, update_text: "", pollys: @pollys, arr: [], edit: true, update: @update, cancel?: @cancel?, message_confirm: @message_confirm) %>
     <% end %>
     """
   end
