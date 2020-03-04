@@ -10,7 +10,7 @@ defmodule AccountingSystemWeb.ErrorComponent do
     ~L"""
     <%= if @show do %>
       <div class="fixed z-40 w-full flex bottom-12 left-0 notification">
-        <div class="z-40 top-12 py-6 px-12 ml-auto mr-auto bg-red-100 border-t-4 border-red-500 rounded-b text-red-900  shadow-md role="alert">
+        <div class="z-40 w-120 top-12 py-6 px-12 ml-auto mr-auto bg-red-100 border-t-4 border-red-500 rounded-b text-red-900 shadow-md role="alert">
           <div class="flex" items-center>
             <div class="py-1">
               <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="bomb" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
