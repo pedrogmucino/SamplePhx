@@ -65,7 +65,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     socket.assigns.id
     |> String.to_integer
     |> PolicyHandler.cancel_policy
-    {:noreply, assign(socket, cancel?: false)}
+    {:noreply, assign(socket, cancel?: false, new?: false, edit?: false, policy_list: PolicyHandler.get_policy_list)}
   end
 
   def handle_event("no_", _params, socket) do
