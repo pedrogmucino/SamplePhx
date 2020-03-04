@@ -29,7 +29,7 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
       :timer.sleep(5500)
 
       assign(socket, error: nil)
-      %{error: "close"}
+      %{error: "close_error"}
     end)
     {:noreply, assign(socket, error: message, change: !socket.assigns.change)}
   end

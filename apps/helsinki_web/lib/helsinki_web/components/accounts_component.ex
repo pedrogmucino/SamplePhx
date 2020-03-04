@@ -7,7 +7,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
   def render(assigns) do
     ~L"""
     <%= if @error do %>
-        <%=live_component(@socket, AccountingSystemWeb.ErrorComponent, id: "error_comp", error: @error, show: true, change: @change) %>
+        <%=live_component(@socket, AccountingSystemWeb.NotificationComponent, id: "error_comp", message: @error, show: true, change: @change, notification_type: "error") %>
       <% end %>
       <div id="one" class="bg-white h-hoch-93 w-80 mt-16 ml-16 block float-left">
       <div class="w-full py-2 bg-blue-700">
@@ -96,7 +96,8 @@ defmodule AccountingSystemWeb.AccountsComponent do
     parent_editx: %{},
     bendiciones: false,
     error: nil,
-    change: false
+    change: false,
+    notification_type: "error"
     )}
   end
 
@@ -165,7 +166,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
       :timer.sleep(5500)
 
       assign(socket, error: nil)
-      %{error: "close"}
+      %{error: "close_error"}
     end)
     {:noreply, assign(socket, error: message, change: !socket.assigns.change)}
   end
