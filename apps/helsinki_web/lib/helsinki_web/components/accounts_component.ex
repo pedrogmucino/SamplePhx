@@ -40,7 +40,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
           </button>
         </div>
 
-        <div class="h-hoch-75 overflow-y-scroll pb-16">
+        <div class="h-hoch-75 overflow-y-scroll pb-16 mt-2">
           <%= for item <- @accounts do %>
             <div class="w-full px-2 block">
               <div phx-click="open_child" phx-value-id="<%= item.id %>" phx-value-level="0" phx-value-origin="true" phx-target="#one" class="border cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
