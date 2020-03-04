@@ -359,7 +359,12 @@ defmodule AccountingSystemWeb.PolicyListComponent do
           <div phx-click="open_policy" phx-value-id="<%= item.id %>" phx-target="#one" class="border cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
             <h2 class="text-gray-700 text-xl"><%= item.serial  %>-<%= item.policy_number %></h2>
             <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Concepto: <b><%= item.concept %></b></label></br>
-            <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Tipo: <b><%= item.type_description %></b></label>
+            <div class="block relative">
+              <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Tipo: <b><%= item.type_description %></b></label>
+              <div class="absolute bg-<%= if item.status == true, do: "green", else: "red" %>-200 px-3 text-sm font-bold top-0 right-0 rounded-full text-<%= if item.status == true, do: "green", else: "red" %>-700">
+                <%= if item.status == true, do: "Activa", else: "Cancelada" %>
+              </div>
+            </div>
           </div>
         </div>
 
