@@ -56,7 +56,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     policy = params["id"] |> String.to_integer |> PolicyHandler.get_policy!
     {:noreply, assign(socket,
       cancel?: true,
-      message_confirm: "¿Desea cancelar la póliza " <> policy.serial <> "-" <> Integer.to_string(policy.policy_number) <> " ?"
+      message_confirm: "¿Desea cancelar la póliza " <> policy.serial <> "-" <> Integer.to_string(policy.policy_number) <> "?"
     )}
   end
 

@@ -12,20 +12,26 @@ defmodule AccountingSystemWeb.ConfirmationComponent do
     <%= if @show do %>
     <div id="x" class="fixed w-full flex bottom-0 left-0">
       <div class="top-12 py-16 ml-auto mr-auto " role="alert" >
-        <div class="flex items-center bg-yellow-400 text-black font-bold rounded-t px-4 py-2">
-          <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="exclamation-triangle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"
-            class="flex-1 text-center h-6 w-6"><path fill="currentColor" d="M248.747 204.705l6.588 112c.373 6.343 5.626 11.295 11.979 11.295h41.37a12 12 0 0 0 11.979-11.295l6.588-112c.405-6.893-5.075-12.705-11.979-12.705h-54.547c-6.903 0-12.383 5.812-11.978 12.705zM330 384c0 23.196-18.804 42-42 42s-42-18.804-42-42 18.804-42 42-42 42 18.804 42 42zm-.423-360.015c-18.433-31.951-64.687-32.009-83.154 0L6.477 440.013C-11.945 471.946 11.118 512 48.054 512H527.94c36.865 0 60.035-39.993 41.577-71.987L329.577 23.985zM53.191 455.002L282.803 57.008c2.309-4.002 8.085-4.002 10.394 0l229.612 397.993c2.308 4-.579 8.998-5.197 8.998H58.388c-4.617.001-7.504-4.997-5.197-8.997z" class=""></path></svg>
-        </div>
-        <div class="border border-t-0 border-yellow-500 rounded-b bg-yellow-100 px-4 py-3 text-black">
-          <b><p><%= @message %></p></b>
-          <div class="inline-flex w-full mt-4 py-4">
-            <button phx-click="si_" phx-target="#x" class="h-10 px-2 w-1/2 bg-teal-500 hover:bg-teal-400 text-white font-bold py-2 px-4 border border-teal-500 rounded">
-              Sí
-            </button>
-            <button phx-click="no_" phx-target="#x" class="h-10 ml-5 px-2 w-1/2 bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 border border-red-500 rounded">
-              No
-            </button>
-          <div>
+        <div class="w-160 bg-yellow-100 border-t-4 border-yellow-500 rounded-b text-yellow-900 px-4 py-3 shadow-md" role="alert">
+          <div class="flex">
+            <div class="py-1"><svg class="fill-current h-6 w-6 text-yellow-500 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z"/></svg></div>
+            <div>
+              <p class="font-bold">Advertencia</p>
+              <p class="text-sm w-80"><%= @message %></p>
+            </div>
+            <div class="inline-flex py-4">
+              <button phx-click="si_" phx-target="#x" class="ml-20 h-10 px-2 w-24 bg-yellow-500 hover:bg-yellow-400 text-yellow-900 font-bold py-2 px-4 border border-yellow-900 rounded">
+                Sí
+              </button>
+              <button phx-click="no_" phx-target="#x" class="ml-8 inline-flex items-center rounded-full h-8 w-8 mt-1 -mr-2 hover:bg-yellow-400">
+                <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"
+                class="h-6 w-6 ml-auto mr-auto text-yellow-900">
+                  <path fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z" class="">
+                  </path>
+                </svg>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
