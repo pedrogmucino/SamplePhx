@@ -198,8 +198,9 @@ defmodule AccountingSystem.PolicyHandler do
 
   def cancel_policy(id_to_cancel) do
     id_to_cancel
-    |> AccountingSystem.AuxiliaryHandler.get_auxiliary_by_policy_id
-    |> Enum.each(fn aux -> AccountingSystem.AuxiliaryHandler.update_auxiliary(aux.id |> AccountingSystem.AuxiliaryHandler.get_auxiliary!, %{"mxn_amount" => "0.0", "amount" => "0.0"}) end)
+    |> get_policy!()
+    |> update_policy(%{"status" => "false"})
+    AccountingSystem.AuxiliaryHandler.cancel_auxiliary(id_to_cancel)
   end
 
 end

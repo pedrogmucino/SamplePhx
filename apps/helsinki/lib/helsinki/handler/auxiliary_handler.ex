@@ -181,4 +181,11 @@ defmodule AccountingSystem.AuxiliaryHandler do
   def amount(%{debit: "0"}) do
     "0"
   end
+
+  def cancel_auxiliary(id_to_cancel) do
+    id_to_cancel
+    |> get_auxiliary_by_policy_id
+    |> Enum.each(fn aux -> update_auxiliary(aux.id |> get_auxiliary!, %{"mxn_amount" => "0.0", "amount" => "0.0"}) end)
+  end
+
 end
