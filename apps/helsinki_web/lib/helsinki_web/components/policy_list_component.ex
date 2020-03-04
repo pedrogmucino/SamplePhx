@@ -20,7 +20,8 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     message_confirm: nil,
     update: false,
     update_text: "",
-    cancel?: false
+    cancel?: false,
+    policytypes: AccountingSystem.PolicyTipeHandler.get_all_as_list
     )}
   end
 
@@ -322,10 +323,25 @@ defmodule AccountingSystemWeb.PolicyListComponent do
       <%= live_component(@socket, AccountingSystemWeb.NotificationComponent, id: "notification_comp", message: @message, show: true, notification_type: "notification") %>
     <% end %>
 
-    <div id="one" class="bg-white h-hoch-93 w-80 mt-16 ml-16 block float-left">
+    <div id="one" class="bg-white h-hoch-90 w-80 mt-16 ml-16 block float-left">
       <div class="w-full py-2 bg-blue-700">
         <p class="ml-2 font-bold text-lg text-white">Pólizas</p>
       </div>
+
+      <div class="relative w-full px-2 mt-2">
+        <label><b> Tipo de póliza </b></label>
+        <div class="inline-block relative w-full">
+          <select class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+            <%= for item <- @policytypes do %>
+              <option <%=if String.to_integer(@pollys.policy_type) == item[:value] do %> selected <% end %> value="<%= item[:value] %>"><%= item[:key] %></option>
+            <% end %>
+          </select>
+          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+          </div>
+        </div>
+      </div>
+
     <div class="relative w-full px-2 mt-4">
       <input class="focus:outline-none focus:bg-white focus:border-blue-500 h-8 w-full rounded border bg-gray-300 pl-2" placeholder="Buscar Póliza" >
       <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="search" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
@@ -353,13 +369,18 @@ defmodule AccountingSystemWeb.PolicyListComponent do
       </button>
     </div>
 
-    <div class="h-hoch-75 overflow-y-scroll pb-16">
+    <div class="h-hoch-68 overflow-y-scroll pb-16">
       <%= for item <- @policy_list do %>
         <div class="w-full px-2 block">
           <div phx-click="open_policy" phx-value-id="<%= item.id %>" phx-target="#one" class="border cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
             <h2 class="text-gray-700 text-xl"><%= item.serial  %>-<%= item.policy_number %></h2>
             <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Concepto: <b><%= item.concept %></b></label></br>
-            <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Tipo: <b><%= item.type_description %></b></label>
+            <div class="block relative">
+              <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Tipo: <b><%= item.type_description %></b></label>
+              <div class="absolute bg-<%= if item.status == true, do: "green", else: "red" %>-200 px-3 text-sm font-bold top-0 right-0 rounded-full text-<%= if item.status == true, do: "green", else: "red" %>-700">
+                <%= if item.status == true, do: "Activa", else: "Cancelada" %>
+              </div>
+            </div>
           </div>
         </div>
 
