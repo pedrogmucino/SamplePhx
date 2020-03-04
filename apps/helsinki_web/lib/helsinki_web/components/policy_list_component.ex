@@ -173,7 +173,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   defp notification() do
     Task.async(fn ->
       :timer.sleep(5500)
-      %{message: "close"}
+      %{message: "close_notification"}
     end)
     :ok
   end
@@ -319,7 +319,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   def render(assigns) do
     ~L"""
     <%= if @message do %>
-      <%= live_component(@socket, AccountingSystemWeb.NotificationComponent, id: "notification", message: @message, show: true) %>
+      <%= live_component(@socket, AccountingSystemWeb.NotificationComponent, id: "notification_comp", message: @message, show: true, notification_type: "notification") %>
     <% end %>
 
     <div id="one" class="bg-white h-hoch-93 w-80 mt-16 ml-16 block float-left">

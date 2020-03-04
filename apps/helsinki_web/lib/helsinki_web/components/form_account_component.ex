@@ -42,7 +42,7 @@ defmodule AccountingSystemWeb.FormAccountComponent do
       :timer.sleep(5500)
 
       assign(socket, error: nil)
-      %{error: "close"}
+      %{error: "close_error"}
     end)
     {:ok, assign(socket, error: message)}
   end
@@ -52,7 +52,7 @@ defmodule AccountingSystemWeb.FormAccountComponent do
       :timer.sleep(5500)
 
       assign(socket, error: nil)
-      %{error: "close"}
+      %{error: "close_error"}
     end)
     {:noreply, assign(socket, error: message, change: !socket.assigns.change)}
   end
@@ -71,7 +71,7 @@ defmodule AccountingSystemWeb.FormAccountComponent do
     ~L"""
       <%= if @error do %>
       <div class="z-40">
-        <%=live_component(@socket, AccountingSystemWeb.ErrorComponent, id: "error_comp", error: @error, show: true, change: @change) %>
+        <%=live_component(@socket, AccountingSystemWeb.NotificationComponent, id: "error_comp", message: @error, show: true, change: @change, notification_type: "error") %>
       </div>
       <%= else %>
     <div id="x" phx-hook="scroll_x"  class="bg-white mt-16 ml-1 w-240 rounded border">
