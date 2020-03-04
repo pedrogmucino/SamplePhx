@@ -139,8 +139,8 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   def handle_event("delete_aux", %{"value" => id}, socket) do
     IO.inspect(socket.assigns, label: "ASSIGNS------------------------------------------------------------->")
     IO.inspect(id, label: "ID------------------------------>")
-    sum_debe = socket.assigns.pollys.sum_debe - Enum.find(socket.assigns.arr, fn aux -> aux.id == String.to_integer(id) end).debit
-    sum_haber = socket.assigns.pollys.sum_haber - Enum.find(socket.assigns.arr, fn aux -> aux.id == String.to_integer(id) end).credit
+    sum_debe = socket.assigns.pollys.sum_debe - to_float(Enum.find(socket.assigns.arr, fn aux -> aux.id == String.to_integer(id) end).debit)
+    sum_haber = socket.assigns.pollys.sum_haber - to_float(Enum.find(socket.assigns.arr, fn aux -> aux.id == String.to_integer(id) end).credit)
     total = sum_haber - sum_debe
     new_polly = Map.merge(socket.assigns.pollys, %{sum_debe: sum_debe, sum_haber: sum_haber, total: total})
     new_list = socket.assigns.arr
