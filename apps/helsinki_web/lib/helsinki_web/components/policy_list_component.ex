@@ -360,7 +360,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     <% end %>
 
     <%= if @edit? do %>
-      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: @policy_id, update_text: "", pollys: @pollys, arr: [], edit: true, update: @update, cancel?: @cancel?, message_confirm: @message_confirm) %>
+      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: @policy_id, update_text: "", pollys: @pollys, arr: @arr, edit: true, update: @update, cancel?: @cancel?, message_confirm: @message_confirm) %>
     <% end %>
     """
   end
