@@ -12,7 +12,8 @@ defmodule AccountingSystemWeb.FormAccountComponent do
     parent_editx: %{},
     idx: 0,
     error: nil,
-    valid_literals: true
+    valid_literals: true,
+    change: false
     )}
   end
 
