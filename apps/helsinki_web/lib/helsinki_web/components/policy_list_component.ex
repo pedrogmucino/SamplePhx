@@ -65,7 +65,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     socket.assigns.id
     |> String.to_integer
     |> PolicyHandler.cancel_policy
-    {:noreply, assign(socket, cancel?: false)}
+    {:noreply, assign(socket, cancel?: false, new?: false, edit?: false, policy_list: PolicyHandler.get_policy_list)}
   end
 
   def handle_event("no_", _params, socket) do
@@ -134,6 +134,18 @@ defmodule AccountingSystemWeb.PolicyListComponent do
       {:error, _} ->
         {:noreply, socket}
     end
+  end
+
+  def handle_event("delete_aux", %{"value" => id}, socket) do
+    IO.inspect(socket.assigns, label: "ASSIGNS------------------------------------------------------------->")
+    IO.inspect(id, label: "ID------------------------------>")
+    sum_debe = socket.assigns.pollys.sum_debe - to_float(Enum.find(socket.assigns.arr, fn aux -> aux.id == String.to_integer(id) end).debit)
+    sum_haber = socket.assigns.pollys.sum_haber - to_float(Enum.find(socket.assigns.arr, fn aux -> aux.id == String.to_integer(id) end).credit)
+    total = sum_haber - sum_debe
+    new_polly = Map.merge(socket.assigns.pollys, %{sum_debe: sum_debe, sum_haber: sum_haber, total: total})
+    new_list = socket.assigns.arr
+                |> Enum.filter(fn aux -> aux.id != String.to_integer(id) end)
+    {:noreply, assign(socket, arr: new_list, pollys: new_polly)}
   end
 
   def handle_event("focused_concept", _params, socket) do
