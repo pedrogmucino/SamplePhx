@@ -4,7 +4,7 @@
 import css from "../css/app.css"
 let Hooks = {};
 Hooks.scroll_x = {
-    mounted() {
+    mounted() {        
         var max = document.getElementById("scrolleable").offsetWidth
         var left = max - screen.width;
         setTimeout(() => {
@@ -20,6 +20,28 @@ Hooks.format_number = {
         setFormat(this.el);
     }
 
+};
+Hooks.scroll_y = {
+    mounted(){
+        setTimeout(() => {
+            var myDiv = document.getElementById('scrollableDiv');
+            myDiv.scrollTo({
+                'behavior': 'smooth',
+                'left': 0,
+                'top': document.getElementById('scrollableDiv').scrollHeight
+            });               
+        }, 100);
+    },
+    updated(){
+        setTimeout(() => {            
+            var myDiv = document.getElementById('scrollableDiv');
+            myDiv.scrollTo({
+                'behavior': 'smooth',
+                'left': 0,
+                'top': document.getElementById('scrollableDiv').scrollHeight
+            });            
+        }, 100);
+    }
 };
 function setFormat(el){
     el.innerHTML = formatNumber(parseFloat(el.textContent).toFixed(2));
