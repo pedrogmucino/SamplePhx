@@ -157,7 +157,9 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     sum_debe = socket.assigns.pollys.sum_debe - to_float(Enum.find(socket.assigns.arr, fn aux -> aux.id == String.to_integer(id) end).debit)
     sum_haber = socket.assigns.pollys.sum_haber - to_float(Enum.find(socket.assigns.arr, fn aux -> aux.id == String.to_integer(id) end).credit)
     total = sum_haber - sum_debe
+    clean = %{account: "", aux_concept: socket.assigns.pollys.concept, credit: "0", debit: "0", department: "", id_account: "", name: "", id_aux: ""}
     new_polly = Map.merge(socket.assigns.pollys, %{sum_debe: sum_debe, sum_haber: sum_haber, total: total})
+                  |> Map.merge(clean)
     new_list = socket.assigns.arr
                 |> Enum.filter(fn aux -> aux.id != String.to_integer(id) end)
     {:noreply, assign(socket, arr: new_list, pollys: new_polly)}
