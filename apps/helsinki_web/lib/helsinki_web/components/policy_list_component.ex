@@ -9,6 +9,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
 
 
   def mount(socket) do
+    label_todos = add_todos(AccountingSystem.PolicyTipeHandler.list_policytypes)
     {:ok, assign(socket,
     policy_list: PolicyHandler.get_policy_list,
     new?: false,
@@ -22,12 +23,22 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     update: false,
     update_text: "",
     cancel?: false,
-    policytypes: AccountingSystem.PolicyTipeHandler.get_all_as_list
+    policytypes: label_todos,
+    type_id_selected: 0
     )}
   end
 
   def update(attrs, socket) do
       {:ok, assign(socket, id: attrs.id, message: nil)}
+  end
+
+  def add_todos(types) do
+    todos = %AccountingSystem.PolicyTypeSchema{
+      id: 0,
+      name: "Todos"
+    }
+    List.flatten(types, [todos])
+    |> (Enum.sort_by & &1.id)
   end
 
   def handle_event("open_policy", params, socket) do
@@ -172,6 +183,17 @@ defmodule AccountingSystemWeb.PolicyListComponent do
             |> Map.put(:credit, actual.credit)
             |> Map.put(:id_aux, actual.id)
     {:noreply, assign(socket, pollys: Map.merge(socket.assigns.pollys, map), update: false)}
+  end
+
+  def handle_event("type_selected", params, socket) do
+    params |> IO.inspect(label: " - > PARAMS IN OPTIONS - >")
+    type_id = params["policy_type_selected"] |> String.to_integer
+    all_policy = PolicyHandler.get_policy_list
+
+    {:noreply, assign(socket,
+      type_id_selected: type_id,
+      policy_list: (if type_id == 0, do: all_policy, else: Enum.filter(all_policy, fn x -> x.policy_type == type_id end))
+    )}
   end
 
   defp notification() do
@@ -386,11 +408,15 @@ defmodule AccountingSystemWeb.PolicyListComponent do
       <div class="relative w-full px-2 mt-2">
         <label><b> Tipo de póliza </b></label>
         <div class="inline-block relative w-full">
-          <select class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+        <form phx-change="type_selected" phx-target="#one">
+          <select name="policy_type_selected" class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
             <%= for item <- @policytypes do %>
-              <option <%=if String.to_integer(@pollys.policy_type) == item[:value] do %> selected <% end %> value="<%= item[:value] %>"><%= item[:key] %></option>
+              <option  value="<%= item.id %>" <%= if @type_id_selected == item.id, do: 'selected' %> >
+                <%= item.name %>
+              </option>
             <% end %>
           </select>
+          </form>
           <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
             <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
           </div>
