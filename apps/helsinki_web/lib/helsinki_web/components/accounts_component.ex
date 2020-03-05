@@ -7,7 +7,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
   def render(assigns) do
     ~L"""
     <%= if @error do %>
-        <%=live_component(@socket, AccountingSystemWeb.ErrorComponent, id: "error_comp", error: @error, show: true, change: @change) %>
+        <%=live_component(@socket, AccountingSystemWeb.NotificationComponent, id: "error_comp", message: @error, show: true, change: @change, notification_type: "error") %>
       <% end %>
       <div id="one" class="bg-white h-hoch-93 w-80 mt-16 ml-16 block float-left">
       <div class="w-full py-2 bg-blue-700">
@@ -40,7 +40,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
           </button>
         </div>
 
-        <div class="h-hoch-75 overflow-y-scroll pb-16">
+        <div class="h-hoch-75 overflow-y-scroll pb-16 mt-2">
           <%= for item <- @accounts do %>
             <div class="w-full px-2 block">
               <div phx-click="open_child" phx-value-id="<%= item.id %>" phx-value-level="0" phx-value-origin="true" phx-target="#one" class="border cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
@@ -96,7 +96,8 @@ defmodule AccountingSystemWeb.AccountsComponent do
     parent_editx: %{},
     bendiciones: false,
     error: nil,
-    change: false
+    change: false,
+    notification_type: "error"
     )}
   end
 
@@ -165,7 +166,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
       :timer.sleep(5500)
 
       assign(socket, error: nil)
-      %{error: "close"}
+      %{error: "close_error"}
     end)
     {:noreply, assign(socket, error: message, change: !socket.assigns.change)}
   end
@@ -173,7 +174,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
   def handle_event("action_account", params, socket) do
     rfc = params["rfc_literals"] <> params["rfc_numeric"] <> params["rfc_key"]
 
-    if String.trim(rfc) == "" or AccountingSystem.AccountHandler.validation(rfc) do
+    if String.trim(rfc) == "" or AccountingSystem.AccountHandler.rfc_validation(rfc) do
       id = params["id"] |> String.to_integer
       level = params["level"] |> String.to_integer
       action = params["action"]

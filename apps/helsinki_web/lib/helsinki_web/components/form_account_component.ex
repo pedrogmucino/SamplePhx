@@ -42,7 +42,7 @@ defmodule AccountingSystemWeb.FormAccountComponent do
       :timer.sleep(5500)
 
       assign(socket, error: nil)
-      %{error: "close"}
+      %{error: "close_error"}
     end)
     {:ok, assign(socket, error: message)}
   end
@@ -52,7 +52,7 @@ defmodule AccountingSystemWeb.FormAccountComponent do
       :timer.sleep(5500)
 
       assign(socket, error: nil)
-      %{error: "close"}
+      %{error: "close_error"}
     end)
     {:noreply, assign(socket, error: message, change: !socket.assigns.change)}
   end
@@ -71,7 +71,7 @@ defmodule AccountingSystemWeb.FormAccountComponent do
     ~L"""
       <%= if @error do %>
       <div class="z-40">
-        <%=live_component(@socket, AccountingSystemWeb.ErrorComponent, id: "error_comp", error: @error, show: true, change: @change) %>
+        <%=live_component(@socket, AccountingSystemWeb.NotificationComponent, id: "error_comp", message: @error, show: true, change: @change, notification_type: "error") %>
       </div>
       <%= else %>
     <div id="x" phx-hook="scroll_x"  class="bg-white mt-16 ml-1 w-240 rounded border">
@@ -248,7 +248,8 @@ defmodule AccountingSystemWeb.FormAccountComponent do
         <% end %>
 
         <div class="inline-block">
-        <button form="form1" class="ml-16 py-2 w-32 bg-teal-500 text-white hover:bg-teal-400 items-center inline-flex font-bold rounded text-sm">
+        <button form="form1"
+        class="ml-16 py-2 w-32 bg-teal-500 text-white hover:bg-teal-400 items-center inline-flex font-bold rounded shadow focus:shadow-outline focus:outline-none rounded">
             <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="save" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
                 class="h-4 w-4 mr-2 ml-auto">
                 <g class="fa-group">
@@ -263,9 +264,6 @@ defmodule AccountingSystemWeb.FormAccountComponent do
               <label class="cursor-pointer mr-auto text-white">Guardar</label>
           </button>
           </div>
-
-
-
         </div>
       <div>
       <% end %>
