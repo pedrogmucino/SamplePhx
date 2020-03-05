@@ -12,7 +12,8 @@ defmodule AccountingSystem.AccountHandler do
     GetAccountList,
     GetStructureByLevel,
     StructureSchema,
-    GetLastAccount
+    GetLastAccount,
+    GetMaxAccountByLevel
   }
 
   @doc """
@@ -249,5 +250,15 @@ defmodule AccountingSystem.AccountHandler do
 
   def rfc_validation(rfc) do
     String.match?(rfc, ~r/^[[:alpha:]]{3,4}[[:digit:]]{6}[[:alnum:]]{3}+$/)
+  end
+
+  def get_max_code(level) do
+    GetMaxAccountByLevel.root_level(level)
+    |> Repo.one!
+  end
+
+  def get_max_code(level, id) do
+    GetMaxAccountByLevel.child_level(level, id)
+    |> Repo.one!
   end
 end
