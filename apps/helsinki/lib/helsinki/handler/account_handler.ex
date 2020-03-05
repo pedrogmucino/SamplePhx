@@ -247,7 +247,7 @@ defmodule AccountingSystem.AccountHandler do
       |> List.first
   end
 
-  def validation(rfc) do
+  def rfc_validation(rfc) do
     String.match?(rfc, ~r/^[[:alpha:]]{3,4}[[:digit:]]{6}[[:alnum:]]{3}+$/)
   end
 end

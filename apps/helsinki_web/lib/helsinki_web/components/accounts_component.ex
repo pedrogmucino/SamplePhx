@@ -174,7 +174,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
   def handle_event("action_account", params, socket) do
     rfc = params["rfc_literals"] <> params["rfc_numeric"] <> params["rfc_key"]
 
-    if String.trim(rfc) == "" or AccountingSystem.AccountHandler.validation(rfc) do
+    if String.trim(rfc) == "" or AccountingSystem.AccountHandler.rfc_validation(rfc) do
       id = params["id"] |> String.to_integer
       level = params["level"] |> String.to_integer
       action = params["action"]

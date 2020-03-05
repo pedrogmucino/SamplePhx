@@ -41,13 +41,15 @@ defmodule AccountingSystemWeb.PolicyListComponent do
 
   def handle_event("open_policy", params, socket) do
     all_info = fill(params)
-    |> IO.inspect(label: "All INFO ----------------------------------------------------------------->")
     id = params["id"] |> String.to_integer()
     {:noreply, assign(socket, new?: false, edit?: true, policy_id: id, message: nil, update: true, arr: all_info.arr, dropdowns: all_info.dropdowns, id: all_info.id, pollys: all_info.pollys, update_text: all_info.update_text)}
   end
 
   def handle_event("edit_and_save_this", params, socket) do
     current_policy = params["id"] |> String.to_integer |> PolicyHandler.get_policy!
+    IO.puts("********************************ACTUALIZAR********************************************")
+    save_auxiliaries(params["id"] |> String.to_integer, socket.assigns.arr)
+    IO.puts("********************************END ACTUALIZAR********************************************")
     params = params
               |> Map.put("audited", checked(params["audited"]))
               |> Map.put("has_documents", checked(params["has_documents"]))
@@ -236,6 +238,49 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     new_arr = Enum.filter(socket.assigns.arr, fn x -> x.id != String.to_integer(params.id_aux) end)
       |> IO.inspect(label: "Asi va a quedar new_arr -------------------->>>>")
     {:noreply, assign(socket, arr: new_arr ++ [params |> Map.put(:id, String.to_integer(params.id_aux))], pollys: pollys)}
+  end
+
+  defp save_auxiliaries(policy_id, auxiliaries) do
+    IO.inspect(auxiliaries, label: "AUXILIARES EN SAVE AUXILIARES QUE EN TEORIA DEBERIA TRAER LO NUEVITO---------->>>>")
+    db_aux = AccountingSystem.AuxiliaryHandler.get_auxiliary_by_policy_id(policy_id)
+      |> IO.inspect(label: "DB AUX HAVE THIS--------------------------------------->")
+    Enum.each(auxiliaries, fn aux -> create_aux(aux, auxiliaries) end)
+      |> IO.inspect(label: "Lo que regreso el enum each del CREATE --------------->")
+    Enum.reject(db_aux, fn aux -> update_auxiliar(aux, auxiliaries) end)
+      |> IO.inspect(label: "REJECT IS RETURNING THIS----------------------------------->")
+      |> Enum.each(fn aux-> delete_aux(aux) end)
+      |> IO.inspect(label: "LO QUE REGRESA EL DILIT------------------------------>")
+
+  end
+
+  defp create_aux(aux_one, aux_list) do
+    case Enum.find(aux_list, fn aux -> aux.id == aux_one.id end) do
+      nil ->
+        AccountingSystem.AuxiliaryHandler.create_auxiliary(aux_one) |> IO.inspect(label: "ESTO ES LO QUE REGRESA AL CREAR UNA POLIZA-------------->")
+      _ ->
+      :nothing |> IO.inspect(label: "AQUI DICE NOTHING PORQUE NO CREO ESTA CUENTA: #{aux_one.id} ---->")
+    end
+  end
+
+  defp update_auxiliar(auxiliar, auxiliaries) do
+    #REGRESA LOS AUXILIARES QUE NO FUERON ACTUALIZADOS
+    case Enum.find(auxiliaries, fn aux -> aux.id == auxiliar.id end) do
+      nil ->
+        false
+      finded ->
+        case (AccountingSystem.AuxiliaryHandler.update_auxiliary(auxiliar.id |> AccountingSystem.AuxiliaryHandler.get_auxiliary!, AccountingSystem.AuxiliaryHandler.format_to_update(finded) )) do
+          {:ok, _} -> true |> IO.inspect(label: "true because hizo el Update---------->")
+          _ -> :error
+        end
+    end
+  end
+
+  defp delete_aux([]) do
+    :void
+  end
+
+  defp delete_aux(auxiliaries) do
+    Enum.each(auxiliaries, fn x -> AccountingSystem.AuxiliaryHandler.delete_auxiliary(x) end)
   end
 
   defp void(some) do

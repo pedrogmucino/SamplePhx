@@ -85,9 +85,12 @@ defmodule AccountingSystem.AuxiliaryHandler do
 
   """
   def update_auxiliary(%AuxiliarySchema{} = auxiliary, attrs) do
+    IO.inspect(attrs, label: "ATTRS Del updateeeeeeeeeeeeeee-------------->>>>>>>>>>>>>")
     auxiliary
     |> AuxiliarySchema.changeset(attrs)
+    |> IO.inspect(label: "Changeset de Update Aux ----------------------------------->")
     |> Repo.update(prefix: PrefixFormatter.get_current_prefix)
+    |> IO.inspect(label: "Respuesta de REPO UPdate ----------------------------------->")
   end
 
   def update_auxiliary(%AuxiliarySchema{} = auxiliary, attrs, year, month) do
@@ -148,38 +151,63 @@ defmodule AccountingSystem.AuxiliaryHandler do
   end
 
   def format_to_save(params, policy_number, policy_id) do
-    IO.inspect(params, label: "PARAMS EN FORMAT TO SAVEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE:::::::::::>>>>>>>>>>")
     params = Map.merge(params, %{debit_credit: h_or_d(params)})
-    params = Map.merge(params, %{mxn_amount: amount(params)})
-    params = Map.merge(params, %{amount: amount(params)})
-    params = Map.merge(params, %{exchange_rate: 1})
-    params = Map.merge(params, %{policy_id: policy_id})
-    params = Map.merge(params, %{policy_number: policy_number})
-    params = Map.delete(params, :credit)
-    params = Map.delete(params, :debit)
-    params = Map.delete(params, :id)
-    params |> IO.inspect(label: "PARAMS FINAAAAAAAAAAAAAAAAAAAALLLLLLLLLLLLLLLLLLLLLLLLLLL")
+              |> Map.merge(%{mxn_amount: amount(params)})
+              |> Map.merge(%{amount: amount(params)})
+              |> Map.merge(%{exchange_rate: 1})
+              |> Map.merge(%{policy_id: policy_id})
+              |> Map.merge(%{policy_number: policy_number})
+              |> Map.delete(:credit)
+              |> Map.delete(:debit)
+              |> Map.delete(:id)
+    params
+  end
+
+  def format_to_update(params) do
+    params = Map.merge(params, %{debit_credit: h_or_d(params)})
+              |> Map.merge(%{mxn_amount: amount(params)})
+              |> Map.merge(%{amount: amount(params)})
+              |> Map.merge(%{concept: params.aux_concept})
+              |> Map.delete(:credit)
+              |> Map.delete(:debit)
+    params
   end
 
   def h_or_d(%{credit: hab}) do
-    case hab do
-      "0" ->
+    case to_float(hab) do
+      0.0 ->
         "D"
       _ ->
         "H"
     end
   end
 
-  def amount(%{credit: hab}) when hab != "0" do
-    hab
+  def amount(%{credit: hab}) when hab != "0" and hab != 0 and hab != "0.0" and hab != 0.0 do
+    IO.inspect(hab, label: "AMOUNT CREDIT ---------------------------------------->")
+    to_float(hab)
   end
 
-  def amount(%{debit: deb}) when deb != "0" do
-    deb
+  def amount(%{debit: deb}) when deb != "0" and deb != 0 and deb != "0.0" and deb != 0.0 do
+    IO.inspect(deb, label: "AMOUNT DEBIT ---------------------------------------->")
+    to_float(deb)
   end
 
-  def amount(%{debit: "0"}) do
-    "0"
+  def amount(_) do
+    0.0
+  end
+
+  def to_float(x) when is_bitstring(x), do: void(x)
+  def to_float(x) when is_integer(x), do: x/1
+  def to_float(x) when is_float(x), do: x
+
+  def void(some) do
+    case some do
+      0 -> 0.0
+      _ -> some
+            |> Float.parse
+            |> Tuple.to_list
+            |> List.first
+    end
   end
 
   def cancel_auxiliary(id_to_cancel) do
