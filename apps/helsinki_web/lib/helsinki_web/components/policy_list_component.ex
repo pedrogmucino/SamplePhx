@@ -1,6 +1,7 @@
 defmodule AccountingSystemWeb.PolicyListComponent do
   use Phoenix.LiveComponent
   use Phoenix.HTML
+  alias AccountingSystem.AuxiliaryHandler, as: Auxiliar
   alias AccountingSystem.{
     PolicyHandler,
     GenericFunctions
@@ -47,9 +48,10 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def handle_event("edit_and_save_this", params, socket) do
+    IO.inspect(params, label: "PARAMS EN HANDLE EVENT------------------------------>")
     current_policy = params["id"] |> String.to_integer |> PolicyHandler.get_policy!
     IO.puts("********************************ACTUALIZAR********************************************")
-    save_auxiliaries(params["id"] |> String.to_integer, socket.assigns.arr)
+    save_auxiliaries(socket.assigns.pollys.policy_number, params["id"] |> String.to_integer, socket.assigns.arr)
     IO.puts("********************************END ACTUALIZAR********************************************")
     params = params
               |> Map.put("audited", checked(params["audited"]))
@@ -104,7 +106,6 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     cuenta = params["account"]
     pollys = Map.put(socket.assigns.pollys, :focused, 0)
     pollys = pollys
-              |> Map.put(:id, id)
               |> Map.put(:name, nombre)
               |> Map.put(:account, cuenta)
               |> Map.put(:id_account, id)
@@ -217,7 +218,9 @@ defmodule AccountingSystemWeb.PolicyListComponent do
       |> Map.put(:sum_debe, sumde |> Float.round(2))
       |> Map.put(:total, sumtot |> Float.round(2))
       |> Map.merge(clean)
-    {:noreply, assign(socket, arr: socket.assigns.arr ++ [params |> Map.put(:id, get_max_id(socket.assigns.arr))], pollys: pollys)}
+    params = params
+                |> Map.put(:id, get_max_id(socket.assigns.arr, socket.assigns.id))
+    {:noreply, assign(socket, arr: socket.assigns.arr ++ [params], pollys: pollys)}
   end
 
   defp totals(_, params, socket) do
@@ -242,11 +245,12 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     {:noreply, assign(socket, arr: new_arr ++ [params |> Map.put(:id, String.to_integer(params.id_aux))], pollys: pollys)}
   end
 
-  defp save_auxiliaries(policy_id, auxiliaries) do
+  defp save_auxiliaries(policy_number, policy_id, auxiliaries) do
     IO.inspect(auxiliaries, label: "AUXILIARES EN SAVE AUXILIARES QUE EN TEORIA DEBERIA TRAER LO NUEVITO---------->>>>")
+    IO.inspect(policy_id, label: "ID EN SAVE AUXILIARES QUE EN TEORIA DEBERIA TRAER el correcto---------->>>>")
     db_aux = AccountingSystem.AuxiliaryHandler.get_auxiliary_by_policy_id(policy_id)
       |> IO.inspect(label: "DB AUX HAVE THIS--------------------------------------->")
-    Enum.each(auxiliaries, fn aux -> create_aux(aux, auxiliaries) end)
+    Enum.each(auxiliaries, fn aux -> create_aux(aux, db_aux, policy_id, policy_number) end)
       |> IO.inspect(label: "Lo que regreso el enum each del CREATE --------------->")
     Enum.reject(db_aux, fn aux -> update_auxiliar(aux, auxiliaries) end)
       |> IO.inspect(label: "REJECT IS RETURNING THIS----------------------------------->")
@@ -255,22 +259,24 @@ defmodule AccountingSystemWeb.PolicyListComponent do
 
   end
 
-  defp create_aux(aux_one, aux_list) do
+  defp create_aux(aux_one, aux_list, policy_id, policy_number) do
+    aux_one = Auxiliar.format_to_save(aux_one, policy_number, policy_id)
+    IO.inspect(aux_one, label: "El valor de Aux One es--------------------------------------->")
     case Enum.find(aux_list, fn aux -> aux.id == aux_one.id end) do
       nil ->
-        AccountingSystem.AuxiliaryHandler.create_auxiliary(aux_one) |> IO.inspect(label: "ESTO ES LO QUE REGRESA AL CREAR UNA POLIZA-------------->")
+        AccountingSystem.AuxiliaryHandler.create_auxiliary(aux_one) |> IO.inspect(label: "CREANDO AUX EN: --------------------------------->")
       _ ->
-      :nothing |> IO.inspect(label: "AQUI DICE NOTHING PORQUE NO CREO ESTA CUENTA: #{aux_one.id} ---->")
+        :error |> IO.inspect(label: "AQUI DICE ERROR PORQUE NO CREO ESTA CUENTA: #{aux_one.id} ---->")
     end
   end
 
-  defp update_auxiliar(auxiliar, auxiliaries) do
+  defp update_auxiliar(auxiliar_db, auxiliaries) do
     #REGRESA LOS AUXILIARES QUE NO FUERON ACTUALIZADOS
-    case Enum.find(auxiliaries, fn aux -> aux.id == auxiliar.id end) do
+    case Enum.find(auxiliaries, fn aux -> aux.id == auxiliar_db.id end) do
       nil ->
-        false
+        false |> IO.inspect(label: "FALSE porque Va a Eliminar esta cuenta: #{auxiliar_db.id}:#{auxiliar_db.aux_concept}")
       finded ->
-        case (AccountingSystem.AuxiliaryHandler.update_auxiliary(auxiliar.id |> AccountingSystem.AuxiliaryHandler.get_auxiliary!, AccountingSystem.AuxiliaryHandler.format_to_update(finded) )) do
+        case (AccountingSystem.AuxiliaryHandler.update_auxiliary(auxiliar_db.id |> AccountingSystem.AuxiliaryHandler.get_auxiliary!, AccountingSystem.AuxiliaryHandler.format_to_update(finded) )) do
           {:ok, _} -> true |> IO.inspect(label: "true because hizo el Update---------->")
           _ -> :error
         end
@@ -282,7 +288,11 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   defp delete_aux(auxiliaries) do
-    Enum.each(auxiliaries, fn x -> AccountingSystem.AuxiliaryHandler.delete_auxiliary(x) end)
+    AccountingSystem.AuxiliaryHandler.delete_auxiliary(Map.merge(%AccountingSystem.AuxiliarySchema{}, auxiliaries))
+  end
+
+  defp convert_to_aux_schema(params, policy_number, policy_id) do
+    Map.merge(%AccountingSystem.AuxiliarySchema{},Auxiliar.format_to_save(params, policy_number, policy_id))
   end
 
   defp void(some) do
@@ -373,12 +383,12 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     0
   end
 
-  defp get_max_id([]) do
+  defp get_max_id([], _) do
     0
   end
 
-  defp get_max_id(arr) do
-    Enum.max_by(arr, fn x -> x.id end).id + 1
+  defp get_max_id(arr, polly_id) do
+    max(Enum.max_by(arr, fn x -> x.id end).id + 1,  Auxiliar.get_max_id_by_policy(polly_id) + 1)
   end
 
   defp to_float(x) when is_bitstring(x), do: void(x)

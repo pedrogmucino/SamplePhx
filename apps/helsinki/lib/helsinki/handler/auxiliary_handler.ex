@@ -68,7 +68,7 @@ defmodule AccountingSystem.AuxiliaryHandler do
 
   def create_auxiliary(attrs \\ %{}, year, month) do
     %AuxiliarySchema{}
-    |> AuxiliarySchema.changeset(attrs |> Map.put(:concept, attrs.aux_concept))
+    |> AuxiliarySchema.changeset(attrs)
     |> Repo.insert(prefix: PrefixFormatter.get_prefix(year, month))
   end
 
@@ -157,9 +157,9 @@ defmodule AccountingSystem.AuxiliaryHandler do
               |> Map.merge(%{exchange_rate: 1})
               |> Map.merge(%{policy_id: policy_id})
               |> Map.merge(%{policy_number: policy_number})
+              |> Map.merge(%{concept: params.aux_concept})
               |> Map.delete(:credit)
               |> Map.delete(:debit)
-              |> Map.delete(:id)
     params
   end
 
@@ -216,4 +216,9 @@ defmodule AccountingSystem.AuxiliaryHandler do
     |> Enum.each(fn aux -> update_auxiliary(aux.id |> get_auxiliary!, %{"mxn_amount" => "0.0", "amount" => "0.0"}) end)
   end
 
+  def get_max_id_by_policy(policy_id) do
+    AccountingSystem.GetMaxId.by_policy_id(policy_id)
+      |> Repo.all(prefix: PrefixFormatter.get_current_prefix)
+      |> List.first
+  end
 end
