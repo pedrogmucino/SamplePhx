@@ -344,7 +344,8 @@ defmodule AccountingSystemWeb.PolicyListComponent do
             id_account: "",
             serial: policy.serial,
             policy_number: policy.policy_number,
-            id_aux: ""
+            id_aux: "",
+            status: policy.status
       },
       update_text: "",
       cancel?: false
