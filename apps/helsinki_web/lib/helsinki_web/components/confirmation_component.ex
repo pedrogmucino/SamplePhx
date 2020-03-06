@@ -10,7 +10,7 @@ defmodule AccountingSystemWeb.ConfirmationComponent do
   def render(assigns) do
     ~L"""
     <%= if @show do %>
-    <div id="x" class="fixed w-full flex bottom-0 left-0">
+    <div id="x" class="z-10 fixed w-full flex bottom-0 left-0">
       <div class="top-12 py-16 ml-auto mr-auto " role="alert" >
         <div class="w-160 bg-yellow-100 border-t-4 border-yellow-500 rounded-b text-yellow-900 px-4 py-3 shadow-md" role="alert">
           <div class="flex">
