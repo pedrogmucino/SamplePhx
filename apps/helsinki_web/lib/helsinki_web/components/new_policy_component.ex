@@ -179,22 +179,40 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                     </button>
                   </div>
                   <div class="flex-1 text-center">
-                  <%= if @edit do %>
-                      <button <%= if !@status, do: 'disabled' %> phx-click="delete_policy" phx-target="#policy" phx-value-id="<%=@pollys.id%>" phx-value-delete="true"
-                        class=" <%= if !@status, do: 'opacity-50 cursor-not-allowed' %> py-2 w-1/2 bg-red-500 text-white hover:bg-red-400 items-center inline-flex font-bold rounded shadow focus:shadow-outline focus:outline-none rounded">
-                        <svg <%= if !@status, do: 'disabled' %> aria-hidden="true" focusable="false" data-prefix="fad" data-icon="trash-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
-                          class="h-4 w-4 mr-2 ml-auto">
-                          <g <%= if !@status, do: 'disabled' %> class="fa-group">
-                            <path <%= if !@status, do: 'disabled' %> fill="currentColor" d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V96H32zm272-288a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0z"
-                              class="fa-secondary">
-                            </path>
-                            <path <%= if !@status, do: 'disabled' %> fill="currentColor" d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM128 160a16 16 0 0 0-16 16v224a16 16 0 0 0 32 0V176a16 16 0 0 0-16-16zm96 0a16 16 0 0 0-16 16v224a16 16 0 0 0 32 0V176a16 16 0 0 0-16-16zm96 0a16 16 0 0 0-16 16v224a16 16 0 0 0 32 0V176a16 16 0 0 0-16-16z"
-                              class="fa-primary">
-                            </path>
-                          </g>
-                        </svg>
-                        <label <%= if !@status, do: 'disabled' %> class=" <%= if !@status, do: 'cursor-not-allowed', else: 'cursor-pointer' %> mr-auto text-white">Cancelar</label>
-                      </button>
+                    <%= if @edit do %>
+                      <%= if !@status do %>
+                        <button disabled
+                          class="opacity-50 cursor-not-allowed py-2 w-1/2 bg-red-500 text-white hover:bg-red-400 items-center inline-flex font-bold rounded shadow focus:shadow-outline focus:outline-none rounded">
+                          <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="trash-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+                            class="h-4 w-4 mr-2 ml-auto">
+                              <g class="fa-group">
+                                <path fill="currentColor" d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V96H32zm272-288a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0z"
+                                  class="fa-secondary">
+                                </path>
+                                <path fill="currentColor" d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM128 160a16 16 0 0 0-16 16v224a16 16 0 0 0 32 0V176a16 16 0 0 0-16-16zm96 0a16 16 0 0 0-16 16v224a16 16 0 0 0 32 0V176a16 16 0 0 0-16-16zm96 0a16 16 0 0 0-16 16v224a16 16 0 0 0 32 0V176a16 16 0 0 0-16-16z"
+                                  class="fa-primary">
+                                </path>
+                              </g>
+                          </svg>
+                          <label class="cursor-not-allowed mr-auto text-white">Cancelar</label>
+                        </button>
+                      <% else %>
+                        <button phx-click="delete_policy" phx-target="#policy" phx-value-id="<%=@pollys.id%>" phx-value-delete="true"
+                          class="py-2 w-1/2 bg-red-500 text-white hover:bg-red-400 items-center inline-flex font-bold rounded shadow focus:shadow-outline focus:outline-none rounded">
+                          <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="trash-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+                            class="h-4 w-4 mr-2 ml-auto">
+                            <g class="fa-group">
+                              <path fill="currentColor" d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V96H32zm272-288a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0z"
+                                class="fa-secondary">
+                              </path>
+                              <path fill="currentColor" d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM128 160a16 16 0 0 0-16 16v224a16 16 0 0 0 32 0V176a16 16 0 0 0-16-16zm96 0a16 16 0 0 0-16 16v224a16 16 0 0 0 32 0V176a16 16 0 0 0-16-16zm96 0a16 16 0 0 0-16 16v224a16 16 0 0 0 32 0V176a16 16 0 0 0-16-16z"
+                                class="fa-primary">
+                              </path>
+                            </g>
+                          </svg>
+                          <label class="cursor-pointer mr-auto text-white">Cancelar</label>
+                        </button>
+                      <% end %>
                     <% end %>
                   </div>
                 </div>
