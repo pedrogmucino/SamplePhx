@@ -254,11 +254,26 @@ defmodule AccountingSystem.AccountHandler do
 
   def get_max_code(level) do
     GetMaxAccountByLevel.root_level(level)
-    |> Repo.one!
+    |> get_consult_result
   end
 
   def get_max_code(level, id) do
     GetMaxAccountByLevel.child_level(level, id)
+    |> get_consult_result
+  end
+
+  defp get_consult_result(query) do
+    query
     |> Repo.one!
+    |> avoid_nil()
+  end
+
+  defp avoid_nil(code) do
+    case code do
+      nil ->
+        "0"
+      _ ->
+        code
+    end
   end
 end
