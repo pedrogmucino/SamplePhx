@@ -34,7 +34,7 @@ defmodule AccountingSystemWeb.FormAccountComponent do
       change: false
       )}
 
-    rescue e in RuntimeError -> error(e.message, socket) end
+    rescue _e in RuntimeError -> {:ok, socket} end
   end
 
   def error(message, socket) do
@@ -44,7 +44,7 @@ defmodule AccountingSystemWeb.FormAccountComponent do
       assign(socket, error: nil)
       %{error: "close_error"}
     end)
-    {:ok, assign(socket, error: message)}
+    {:ok, assign(socket, error: message, change: !socket.assigns.change)}
   end
 
   def error_message(message, socket) do
