@@ -91,3 +91,8 @@
   .tooltip:hover .tooltip-text {
     visibility: visible;
   }
+  
+  .zum:active {
+    transform: translateY(4px);
+  }
+  
