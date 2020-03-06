@@ -89,7 +89,22 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def handle_event("create_new", _params, socket) do
-    {:noreply, assign(socket, new?: true, edit?: false, update_text: "", focused: 0, message: nil)}
+    {:noreply, assign(socket,
+    policy_list: PolicyHandler.get_policy_list,
+    new?: true,
+    edit?: false,
+    actionx: "new",
+    pollys: %{audited: "unchecked", concept: "", fiscal_exercise: "", has_documents: "unchecked", period: "", policy_date: "", policy_type: "0", aux_concept: "", debit: 0, department: "", credit: 0, id: "", sum_haber: 0, sum_debe: 0, total: 0, focused: 0, account: "", name: "", id_account: "", id_aux: "", status: true},
+    arr: [],
+    policy_id: 0,
+    message: nil,
+    message_confirm: nil,
+    update: false,
+    update_text: "",
+    cancel?: false,
+    type_id_selected: 0,
+    status: true
+    )}
   end
 
   def handle_event("close", _params, socket) do
@@ -143,6 +158,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
 
   def handle_event("save_aux", params, socket) do
     IO.inspect(params, label: "PARAMS IN SAVE AUX------------------------------------------>")
+    IO.inspect(socket.assigns, label: "SOCKET ASSIGSNHDSB EN SAVE_AUX------------------------->")
     case AccountingSystem.AuxiliaryHandler.validate_auxiliar(params) do
       {:ok, _} ->
         totals(params["id_aux"], params, socket)
@@ -207,6 +223,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   defp totals("", params, socket) do
+    IO.inspect(socket.assigns, label: "SOCKETY ASSIGNS EM TOTALS------------------------------->")
     params = GenericFunctions.string_map_to_atom(params)
       |> IO.inspect(label: "Params in TOTALs func --------------------------------------------------->")
     sumh = socket.assigns.pollys.sum_haber
@@ -387,6 +404,10 @@ defmodule AccountingSystemWeb.PolicyListComponent do
 
   defp get_max_id([], _) do
     0
+  end
+
+  defp get_max_id(arr, 0) do
+    Enum.max_by(arr, fn x -> x.id end).id + 1
   end
 
   defp get_max_id(arr, polly_id) do
