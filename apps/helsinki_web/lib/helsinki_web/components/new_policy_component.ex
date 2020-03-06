@@ -18,7 +18,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
 
       <div class="inline-flex bg-blue-700 text-white px-6 py-3 w-full">
         <div class="inline-block w-full">
-          <label class="text-2xl font-normal text-white block"> <%= (if @edit, do: "Editar", else: "Nueva Póliza") %></label>
+          <label class="text-2xl font-normal text-white block"> <%= (if @edit, do: (if !@status, do: "Póliza Cancelada", else: "Editar"), else: "Nueva Póliza") %></label>
           <label class="block font-medium"><b> <%= (if @edit, do: "#{@pollys.serial}#{"-"}#{@pollys.policy_number}") %> </b></label>
         </div>
 

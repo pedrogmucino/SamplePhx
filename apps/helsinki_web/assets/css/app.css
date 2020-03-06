@@ -91,7 +91,7 @@
   .tooltip:hover .tooltip-text {
     visibility: visible;
   }
-  
+  /* For animate msg confirmation */
   .zum:active {
     transform: translateY(4px);
   }
