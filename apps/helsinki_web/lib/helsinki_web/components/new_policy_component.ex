@@ -227,8 +227,8 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                 <!---------------------DIV DE TODA LA INFO------------------------->
                   <div class="inline-flex">
                     <div class="mr-4 border-l-2 border-gray-300"></div>
-                    <div class="overflow-y-auto h-hoch-70 block w-full">
-                      <%= for item <- Enum.reverse(@arr) do %>
+                    <div id="scrollableDiv" phx-hook="scroll_y" class="overflow-y-auto h-hoch-70 block w-full">
+                      <%= for item <- @arr do %>
                         <div class="w-full inline-flex items-center gap-4"> <!-------Este es el div que se va a dividir en 3---->
                           <div class="w-1/12">
                             <%= item.id %>
