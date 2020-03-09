@@ -108,7 +108,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                         </div>
                       <% end %>
                     </div>
-                    <input <%= if !@status, do: 'disabled' %> type="text" name="name" maxlength="128" value="<%=@pollys.name%>" class="focus:outline-none focus:bg-white focus:border-blue-500 ml-4 appearance-none w-1/3 bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
+                    <input <%= if !@status, do: 'disabled' %> type="text" name="name" maxlength="128" value="<%=@pollys.name%>" class="focus:outline-none focus:bg-white focus:border-blue-500 ml-4 appearance-none w-1/3 bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" readonly>
 
                     <div class=" <%= if !@status, do: 'opacity-50 cursor-not-allowed' %> tooltip w-10 h-hoch-2 px-4 ml-2 bg-teal-500 text-white text-center hover:bg-teal-400 border rounded">
                       <%= if !@status do %>
@@ -135,11 +135,11 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                     <div class="inline-flex w-full flex">
                       <div class="inline-block mr-2 w-1/6">
                         <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Departamento</label>
-                        <input <%= if !@status, do: 'disabled' %> type="number" name="department" value="<%=@pollys.department%>" min="1" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" value="">
+                        <input <%= if !@status, do: 'disabled' %> type="number" name="department" value="<%=@pollys.department%>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" value="">
                       </div>
                       <div class="inline-block ml-2 w-2/6">
                         <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Debe</label>
-                        <input <%= if !@status, do: 'disabled' %> type="number" name="debit" step="0.01" min="0" max="999999.99" phx-hook="format_number" value="<%=@pollys.debit%>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
+                        <input <%= if !@status, do: 'disabled' %> type="number" name="debit" min="0" max="999999.99" step="0.01" phx-hook="format_number" value="<%=@pollys.debit%>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
                       </div>
                       <div class="inline-block ml-2 w-2/6">
                         <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Haber</label>
@@ -228,10 +228,10 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                   <div class="inline-flex">
                     <div class="mr-4 border-l-2 border-gray-300"></div>
                     <div id="scrollableDiv" phx-hook="scroll_y" class="overflow-y-auto h-hoch-70 block w-full">
-                      <%= for item <- @arr do %>
+                      <%=for item <- @arr |> Enum.sort_by(&(&1.id)) do %>
                         <div class="w-full inline-flex items-center gap-4"> <!-------Este es el div que se va a dividir en 3---->
                           <div class="w-1/12">
-                            <%= item.id %>
+                            <%= item.id - Enum.min_by(@arr, fn x -> x.id end).id + 1%>
                           </div>
                           <!---------------------------INFO AQUI---------------------------------------->
                           <div class="w-full gap-4">
@@ -339,11 +339,9 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
   # end
 
   def update(params, socket) do
-    IO.inspect(params, label: "PARAAAAMS---------------------------------------------------------->")
     cancel? = params.cancel?
     message_confirm = params.message_confirm
     status = params.pollys.status
-    #IO.inspect(socket.assigns, label: "SOCKET ASSSSSS---------------------------------------------------------->")
     pollys = params.pollys
     params = socket.assigns |> Map.put(:pollys, pollys) |> Map.put(:arr, params.arr) |> Map.put(:edit, params.edit)
     params = params

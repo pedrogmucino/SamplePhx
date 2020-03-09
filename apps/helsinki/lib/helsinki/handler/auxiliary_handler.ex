@@ -85,12 +85,9 @@ defmodule AccountingSystem.AuxiliaryHandler do
 
   """
   def update_auxiliary(%AuxiliarySchema{} = auxiliary, attrs) do
-    IO.inspect(attrs, label: "ATTRS Del updateeeeeeeeeeeeeee-------------->>>>>>>>>>>>>")
     auxiliary
     |> AuxiliarySchema.changeset(attrs)
-    |> IO.inspect(label: "Changeset de Update Aux ----------------------------------->")
     |> Repo.update(prefix: PrefixFormatter.get_current_prefix)
-    |> IO.inspect(label: "Respuesta de REPO UPdate ----------------------------------->")
   end
 
   def update_auxiliary(%AuxiliarySchema{} = auxiliary, attrs, year, month) do
@@ -134,21 +131,37 @@ defmodule AccountingSystem.AuxiliaryHandler do
 
   #****************************************************************************************************
   def validate_auxiliar(params) do #Valida si los parametros de auxiliar estan completos
+    IO.inspect(params, label: "Esto es lo que me llega para validar el AUXILIAR------------------------------------->")
     case are_complete(params) do
-      8 ->
+      false ->
         {:ok, params}
-      _ ->
+      true ->
         {:error, params}
-
     end
   end
 
-  defp are_complete(params) do #regresa la cantidad de valores no vacios de un mapa
+  defp are_complete(params) do #Revisa que todos los valorews estén OKAYYYY
     params
-      |> Map.values
-      #|> Enum.reject(fn x -> x == "" end)
-      |> Enum.count
+      |> Enum.map(fn data -> check(data, params) |> IO.inspect(label: "LO QUE REGRESA CADA ITERACION---------------------------------->") end)
+      |> IO.inspect(label: "Termina enum map y regresa::::::::::::::::::>>>>>>")
+      |> Enum.any?(fn report ->
+                {some, _} = report
+                some == :error
+              end)
   end
+
+  defp check(:error, params), do: {:error, params}
+  defp check({"account" , ""}, params), do: {:error, params}
+  defp check({"aux_concept" , ""}, params), do: {:error, params}
+  defp check({"credit" , ""}, params), do: {:error, params}
+  defp check({"debit" , ""}, params), do: {:error, params}
+  defp check({"id_account" , ""}, params), do: {:error, params}
+  defp check({"account" , _}, params), do: {:ok, params}
+  defp check({"aux_concept" , _}, params), do: {:ok, params}
+  defp check({"credit" , _}, params), do: {:ok, params}
+  defp check({"debit" , _}, params), do: {:ok, params}
+  defp check({"id_account" , _}, params), do: {:ok, params}
+  defp check({_, _}, params), do: {:ok, params}
 
   def format_to_save(params, policy_number, policy_id) do
     params = Map.merge(params, %{debit_credit: h_or_d(params)})
@@ -183,12 +196,10 @@ defmodule AccountingSystem.AuxiliaryHandler do
   end
 
   def amount(%{credit: hab}) when hab != "0" and hab != 0 and hab != "0.0" and hab != 0.0 do
-    IO.inspect(hab, label: "AMOUNT CREDIT ---------------------------------------->")
     to_float(hab)
   end
 
   def amount(%{debit: deb}) when deb != "0" and deb != 0 and deb != "0.0" and deb != 0.0 do
-    IO.inspect(deb, label: "AMOUNT DEBIT ---------------------------------------->")
     to_float(deb)
   end
 

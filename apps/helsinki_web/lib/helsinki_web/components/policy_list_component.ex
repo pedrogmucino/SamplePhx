@@ -15,7 +15,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     new?: false,
     edit?: false,
     actionx: "edit",
-    pollys: %{audited: "unchecked", concept: "", fiscal_exercise: "", has_documents: "unchecked", period: "", policy_date: "", policy_type: "0", aux_concept: "", debit: 0, department: "", credit: 0, id: "", sum_haber: 0, sum_debe: 0, total: 0, focused: 0, account: "", name: "", id_account: "", id_aux: ""},
+    pollys: %{audited: "unchecked", concept: "", fiscal_exercise: "", has_documents: "unchecked", period: "", policy_date: "", policy_type: "0", aux_concept: "", debit: 0, department: "", credit: 0, id: "0", sum_haber: 0, sum_debe: 0, total: 0, focused: 0, account: "", name: "", id_account: "", id_aux: ""},
     arr: [],
     policy_id: 0,
     message: nil,
@@ -48,11 +48,8 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def handle_event("edit_and_save_this", params, socket) do
-    IO.inspect(params, label: "PARAMS EN HANDLE EVENT------------------------------>")
     current_policy = params["id"] |> String.to_integer |> PolicyHandler.get_policy!
-    IO.puts("********************************ACTUALIZAR********************************************")
     save_auxiliaries(socket.assigns.pollys.policy_number, params["id"] |> String.to_integer, socket.assigns.arr)
-    IO.puts("********************************END ACTUALIZAR********************************************")
     params = params
               |> Map.put("audited", checked(params["audited"]))
               |> Map.put("has_documents", checked(params["has_documents"]))
@@ -77,7 +74,6 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def handle_event("si_", _params, socket) do
-    #params |> IO.inspect(label: " --> --> SI --> -->")
     socket.assigns.id
     |> String.to_integer
     |> PolicyHandler.cancel_policy
@@ -94,7 +90,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     new?: true,
     edit?: false,
     actionx: "new",
-    pollys: %{audited: "unchecked", concept: "", fiscal_exercise: "", has_documents: "unchecked", period: "", policy_date: "", policy_type: "0", aux_concept: "", debit: 0, department: "", credit: 0, id: "", sum_haber: 0, sum_debe: 0, total: 0, focused: 0, account: "", name: "", id_account: "", id_aux: "", status: true},
+    pollys: %{audited: "unchecked", concept: "", fiscal_exercise: "", has_documents: "unchecked", period: "", policy_date: "", policy_type: "0", aux_concept: "", debit: 0, department: "", credit: 0, id: "0", sum_haber: 0, sum_debe: 0, total: 0, focused: 0, account: "", name: "", id_account: "", id_aux: "", status: true},
     arr: [],
     policy_id: 0,
     message: nil,
@@ -103,7 +99,8 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     update_text: "",
     cancel?: false,
     type_id_selected: 0,
-    status: true
+    status: true,
+    id: 0
     )}
   end
 
@@ -134,6 +131,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
 
   def handle_event("update_form", params, socket) do
     params = check(params, params)
+    params = debit_credit_values(params, params)
     pollys = Map.merge(socket.assigns.pollys, GenericFunctions.string_map_to_atom(params))
     {:noreply, assign(socket, pollys: pollys, update: false, arr: socket.assigns.arr)}
   end
@@ -157,8 +155,6 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def handle_event("save_aux", params, socket) do
-    IO.inspect(params, label: "PARAMS IN SAVE AUX------------------------------------------>")
-    IO.inspect(socket.assigns, label: "SOCKET ASSIGSNHDSB EN SAVE_AUX------------------------->")
     case AccountingSystem.AuxiliaryHandler.validate_auxiliar(params) do
       {:ok, _} ->
         totals(params["id_aux"], params, socket)
@@ -168,8 +164,6 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def handle_event("delete_aux", %{"value" => id}, socket) do
-    IO.inspect(socket.assigns, label: "ASSIGNS------------------------------------------------------------->")
-    IO.inspect(id, label: "ID------------------------------>")
     sum_debe = socket.assigns.pollys.sum_debe - to_float(Enum.find(socket.assigns.arr, fn aux -> aux.id == String.to_integer(id) end).debit)
     sum_haber = socket.assigns.pollys.sum_haber - to_float(Enum.find(socket.assigns.arr, fn aux -> aux.id == String.to_integer(id) end).credit)
     total = sum_haber - sum_debe
@@ -190,7 +184,6 @@ defmodule AccountingSystemWeb.PolicyListComponent do
 
   def handle_event("edit_aux", %{"value" => id}, socket) do
     actual = socket.assigns.arr |> Enum.find(fn elto -> elto.id == id |> String.to_integer end)
-      |> IO.inspect(label: "ACTUAL--------------------------------------------->")
     map = Map.new()
             |> Map.put(:id_account, actual.id_account)
             |> Map.put(:account, actual.account)
@@ -204,7 +197,6 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def handle_event("type_selected", params, socket) do
-    params |> IO.inspect(label: " - > PARAMS IN OPTIONS - >")
     type_id = params["policy_type_selected"] |> String.to_integer
     all_policy = PolicyHandler.get_policy_list
 
@@ -223,9 +215,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   defp totals("", params, socket) do
-    IO.inspect(socket.assigns, label: "SOCKETY ASSIGNS EM TOTALS------------------------------->")
     params = GenericFunctions.string_map_to_atom(params)
-      |> IO.inspect(label: "Params in TOTALs func --------------------------------------------------->")
     sumh = socket.assigns.pollys.sum_haber
     sumd = socket.assigns.pollys.sum_debe
     sumhe = sumh + void(params.credit)
@@ -244,12 +234,9 @@ defmodule AccountingSystemWeb.PolicyListComponent do
 
   defp totals(_, params, socket) do
     params = GenericFunctions.string_map_to_atom(params)
-      |> IO.inspect(label: "Params in TOTALs WHEN id_aux IS NUMBER --------------------------------------------------->")
-    IO.inspect(socket.assigns, label: "SOCKET ASSIGNS IN TOTALS WHEN YOU AAAAA----------------->")
     sumh = socket.assigns.pollys.sum_haber
     sumd = socket.assigns.pollys.sum_debe
     old_aux = Enum.find(socket.assigns.arr, fn x -> x.id == String.to_integer(params.id_aux) end)
-      |> IO.inspect(label: "OLD AUX---------------------------------------------------------->")
     sumhe = sumh + to_float(void(params.credit)) - to_float(old_aux.credit)
     sumde = sumd + to_float(void(params.debit)) - to_float(old_aux.debit)
     sumtot = sumhe - sumde
@@ -260,32 +247,26 @@ defmodule AccountingSystemWeb.PolicyListComponent do
       |> Map.put(:total, sumtot |> Float.round(2))
       |> Map.merge(clean)
     new_arr = Enum.filter(socket.assigns.arr, fn x -> x.id != String.to_integer(params.id_aux) end)
-      |> IO.inspect(label: "Asi va a quedar new_arr -------------------->>>>")
-    {:noreply, assign(socket, arr: new_arr ++ [params |> Map.put(:id, String.to_integer(params.id_aux))], pollys: pollys)}
+    params = params
+              |> Map.put(:id, String.to_integer(params.id_aux))
+    {:noreply, assign(socket, arr: new_arr ++ [params], pollys: pollys)}
   end
 
   defp save_auxiliaries(policy_number, policy_id, auxiliaries) do
-    IO.inspect(auxiliaries, label: "AUXILIARES EN SAVE AUXILIARES QUE EN TEORIA DEBERIA TRAER LO NUEVITO---------->>>>")
-    IO.inspect(policy_id, label: "ID EN SAVE AUXILIARES QUE EN TEORIA DEBERIA TRAER el correcto---------->>>>")
     db_aux = AccountingSystem.AuxiliaryHandler.get_auxiliary_by_policy_id(policy_id)
-      |> IO.inspect(label: "DB AUX HAVE THIS--------------------------------------->")
     Enum.each(auxiliaries, fn aux -> create_aux(aux, db_aux, policy_id, policy_number) end)
-      |> IO.inspect(label: "Lo que regreso el enum each del CREATE --------------->")
     Enum.reject(db_aux, fn aux -> update_auxiliar(aux, auxiliaries) end)
-      |> IO.inspect(label: "REJECT IS RETURNING THIS----------------------------------->")
       |> Enum.each(fn aux-> delete_aux(aux) end)
-      |> IO.inspect(label: "LO QUE REGRESA EL DILIT------------------------------>")
 
   end
 
   defp create_aux(aux_one, aux_list, policy_id, policy_number) do
     aux_one = Auxiliar.format_to_save(aux_one, policy_number, policy_id)
-    IO.inspect(aux_one, label: "El valor de Aux One es--------------------------------------->")
     case Enum.find(aux_list, fn aux -> aux.id == aux_one.id end) do
       nil ->
-        AccountingSystem.AuxiliaryHandler.create_auxiliary(aux_one) |> IO.inspect(label: "CREANDO AUX EN: --------------------------------->")
+        AccountingSystem.AuxiliaryHandler.create_auxiliary(aux_one)
       _ ->
-        :error |> IO.inspect(label: "AQUI DICE ERROR PORQUE NO CREO ESTA CUENTA: #{aux_one.id} ---->")
+        :error
     end
   end
 
@@ -293,10 +274,10 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     #REGRESA LOS AUXILIARES QUE NO FUERON ACTUALIZADOS
     case Enum.find(auxiliaries, fn aux -> aux.id == auxiliar_db.id end) do
       nil ->
-        false |> IO.inspect(label: "FALSE porque Va a Eliminar esta cuenta: #{auxiliar_db.id}:#{auxiliar_db.aux_concept}")
+        false
       finded ->
         case (AccountingSystem.AuxiliaryHandler.update_auxiliary(auxiliar_db.id |> AccountingSystem.AuxiliaryHandler.get_auxiliary!, AccountingSystem.AuxiliaryHandler.format_to_update(finded) )) do
-          {:ok, _} -> true |> IO.inspect(label: "true because hizo el Update---------->")
+          {:ok, _} -> true
           _ -> :error
         end
     end
@@ -333,6 +314,18 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   defp check(params, _) do
+    params
+  end
+
+  defp debit_credit_values(params, %{"_target" => ["debit"]}) do
+    Map.merge(params, %{"credit" => "0"} )
+  end
+
+  defp debit_credit_values(params, %{"_target" => ["credit"]}) do
+    Map.merge(params, %{"debit" => "0"} )
+  end
+
+  defp debit_credit_values(params, _) do
     params
   end
 
