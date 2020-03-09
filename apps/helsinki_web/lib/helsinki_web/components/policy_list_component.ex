@@ -417,7 +417,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
       <%= live_component(@socket, AccountingSystemWeb.NotificationComponent, id: "notification_comp", message: @message, show: true, notification_type: "notification") %>
     <% end %>
 
-    <div id="one" class="bg-white h-hoch-90 w-80 mt-16 ml-16 block float-left">
+    <div id="one" class="bg-white h-hoch-93 w-80 mt-16 ml-16 block float-left">
       <div class="w-full py-2 bg-blue-700">
         <p class="ml-2 font-bold text-lg text-white">Pólizas</p>
       </div>
@@ -467,7 +467,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
       </button>
     </div>
 
-    <div class="h-hoch-68 overflow-y-scroll pb-16 mt-2">
+    <div class="h-hoch-70 overflow-y-scroll pb-16 mt-2">
       <%= for item <- @policy_list do %>
         <div class="w-full px-2 block">
           <div phx-click="open_policy" phx-value-id="<%= item.id %>" phx-target="#one" class="border cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">

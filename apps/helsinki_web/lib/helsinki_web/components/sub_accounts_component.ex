@@ -41,7 +41,7 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
         <%=live_component(@socket, AccountingSystemWeb.ErrorComponent, id: "error_comp", error: @error, show: true, change: @change) %>
     <% end %>
     </div>
-    <div id="sub_account-<%= @id %>" phx-hook="scroll_x" class="bg-white h-hoch-90 w-80 float-left ml-1 mt-16 block">
+    <div id="sub_account-<%= @id %>" phx-hook="scroll_x" class="bg-white h-hoch-93 w-80 float-left ml-1 mt-16 block">
       <div class=" w-full pt-6 bg-gray-200">
         <div class="block text-white px-3 text-center">
           <h1 class="tooltip text-2xl font-medium text-gray-800"> <%= if String.length(@name) > 32, do: String.slice(@name, 0, 32) <> "...", else: @name %>
@@ -88,27 +88,29 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
         </div>
       </div>
 
-      <%= for item <- @subaccounts do %>
-        <div class="w-full p-2 block cursor-pointer" phx-click="open_child" phx-value-origin="false" phx-value-level="<%= @level %>" phx-value-id="<%= item.id %>" phx-target="#one">
-          <div class="hover:bg-gray-300 border w-full block bg-gray-200 p-3 rounded relative">
-            <h2 class="tooltip pt-4 text-gray-800 text-xl"> <%= if String.length(item.name) > 38, do: String.slice(item.name, 0, 38) <> "...", else: item.name %>
-              <%= if String.length(item.name) > 38 do %>
-                <span class='tooltip-text text-sm text-white bg-blue-500 mt-8 -ml-24 mr-1 rounded'><%= item.name %></span>
-              <% end %>
-            </h2>
-            <label class="tooltip cursor-pointer text-gray-600 font-bold text-sm"> Código: <b><%= String.slice(item.code,0 ,70) %></b>
-              <%= if String.length(item.code) > 70 do %>
-                <span class='tooltip-text text-sm text-white bg-blue-500 mt-8 -ml-56 rounded'><%= item.code %></span>
-              <% end %>
-            </label>
-            <br>
-            <label class="cursor-pointer text-gray-600 font-bold text-sm"> Tipo: <b><%= if item.type == "A", do: "Acumulativo", else: "Detalle" %></b></label>
-            <div class="absolute bg-<%= if item.status == "A", do: "green", else: "red" %>-200 px-3 text-sm font-bold top-0 right-0 rounded-full text-<%= if item.status == "A", do: "green", else: "red" %>-700 mt-2 mr-2">
-            <%= if item.status == "A", do: "Activo", else: "Inactivo" %>
+      <div class="h-hoch-70 overflow-y-scroll pb-16 mt-2">
+        <%= for item <- @subaccounts do %>
+          <div class="w-full p-2 block cursor-pointer" phx-click="open_child" phx-value-origin="false" phx-value-level="<%= @level %>" phx-value-id="<%= item.id %>" phx-target="#one">
+            <div class="hover:bg-gray-300 border w-full block bg-gray-200 p-3 rounded relative">
+              <h2 class="tooltip pt-4 text-gray-800 text-xl"> <%= if String.length(item.name) > 38, do: String.slice(item.name, 0, 38) <> "...", else: item.name %>
+                <%= if String.length(item.name) > 38 do %>
+                  <span class='tooltip-text text-sm text-white bg-blue-500 mt-8 -ml-24 mr-1 rounded'><%= item.name %></span>
+                <% end %>
+              </h2>
+              <label class="tooltip cursor-pointer text-gray-600 font-bold text-sm"> Código: <b><%= String.slice(item.code,0 ,70) %></b>
+                <%= if String.length(item.code) > 70 do %>
+                  <span class='tooltip-text text-sm text-white bg-blue-500 mt-8 -ml-56 rounded'><%= item.code %></span>
+                <% end %>
+              </label>
+              <br>
+              <label class="cursor-pointer text-gray-600 font-bold text-sm"> Tipo: <b><%= if item.type == "A", do: "Acumulativo", else: "Detalle" %></b></label>
+              <div class="absolute bg-<%= if item.status == "A", do: "green", else: "red" %>-200 px-3 text-sm font-bold top-0 right-0 rounded-full text-<%= if item.status == "A", do: "green", else: "red" %>-700 mt-2 mr-2">
+              <%= if item.status == "A", do: "Activo", else: "Inactivo" %>
+              </div>
             </div>
           </div>
-        </div>
-      <% end %>
+        <% end %>
+      </div>
     </div>
 
     """
