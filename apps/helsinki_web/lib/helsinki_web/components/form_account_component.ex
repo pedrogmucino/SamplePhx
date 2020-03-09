@@ -225,7 +225,7 @@ defmodule AccountingSystemWeb.FormAccountComponent do
           </div>
         </form>
 
-        <div class="pt-0 inline-flex -mt-8 ml-mar-150">
+        <div class="-mt-20 ml-mar-150">
 
         <%= if @actionx == "edit" && !@bendiciones do %>
         <div class="inline-block">
@@ -249,7 +249,7 @@ defmodule AccountingSystemWeb.FormAccountComponent do
 
         <div class="inline-block">
         <button form="form1"
-        class="ml-16 py-2 w-32 bg-teal-500 text-white hover:bg-teal-400 items-center inline-flex font-bold rounded shadow focus:shadow-outline focus:outline-none rounded">
+        class="ml-10 py-2 w-32 bg-teal-500 text-white hover:bg-teal-400 items-center inline-flex font-bold rounded shadow focus:shadow-outline focus:outline-none rounded">
             <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="save" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
                 class="h-4 w-4 mr-2 ml-auto">
                 <g class="fa-group">
