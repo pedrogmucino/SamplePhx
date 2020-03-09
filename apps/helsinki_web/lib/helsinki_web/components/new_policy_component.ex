@@ -53,8 +53,8 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                       <input <%= if !@status, do: 'disabled' %> type="date" name="policy_date" value="<%=@pollys.policy_date%>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
                     </div>
                   </div>
-                  <div class="w-1/3 flex">
-                    <div class="modern-checkbox flex h-6 w-full">
+                  <div class="w-1/3 flex ml-4">
+                    <div class="modern-checkbox flex h-6 w-full mt-8">
                       <input <%= if !@status, do: 'disabled' %> type="checkbox" name="audited" class="hidden" id="checkbox-act" value="<%=@pollys.audited %>" <%=@pollys.audited %>>
                       <label class="relative inline bg-transparent w-10" for="checkbox-act"></label>
                       <label class="ml-2 font-bold text-gray-700">Auditada</label>
@@ -73,8 +73,8 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                       <input <%= if !@status, do: 'disabled' %> type="number" name="period" value="<%=@pollys.period%>" maxlength="2" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
                     </div>
                   </div>
-                  <div class="w-1/3 flex">
-                    <div class="modern-checkbox flex h-6 w-full">
+                  <div class="w-1/3 flex ml-4">
+                    <div class="modern-checkbox flex h-6 w-full mt-8">
                       <input <%= if !@status, do: 'disabled' %> type="checkbox" name="has_documents" class="hidden" id="checkbox-act2" value="<%=@pollys.has_documents %>" <%=@pollys.has_documents %> >
                       <label class="relative inline bg-transparent w-10" for="checkbox-act2"></label>
                       <label class="ml-2 font-bold text-gray-700">Documentos?</label>
