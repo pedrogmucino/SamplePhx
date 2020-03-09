@@ -344,6 +344,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
   # end
 
   def update(params, socket) do
+    dropdowns = params.dropdowns
     cancel? = params.cancel?
     message_confirm = params.message_confirm
     status = params.pollys.status
@@ -357,7 +358,6 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
     end
     )
 
-    dropdowns = AccountingSystem.AccountHandler.search_detail_account(params.pollys.account)
     {:ok, assign(socket,
       dropdowns: dropdowns,
       pollys: params.pollys,

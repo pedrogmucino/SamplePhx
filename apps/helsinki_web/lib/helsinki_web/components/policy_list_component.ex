@@ -24,7 +24,8 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     update_text: "",
     cancel?: false,
     policytypes: label_todos,
-    type_id_selected: 0
+    type_id_selected: 0,
+    dropdowns: []
     )}
   end
 
@@ -100,7 +101,8 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     cancel?: false,
     type_id_selected: 0,
     status: true,
-    id: 0
+    id: 0,
+    dropdowns: []
     )}
   end
 
@@ -121,19 +123,21 @@ defmodule AccountingSystemWeb.PolicyListComponent do
               |> Map.put(:name, nombre)
               |> Map.put(:account, cuenta)
               |> Map.put(:id_account, id)
-    {:noreply, assign(socket, pollys: pollys, update_text: "")}
+    {:noreply, assign(socket, pollys: pollys, update_text: "", dropdowns: [])}
   end
 
   def handle_event("account_focused", _params, socket) do
+    dropdowns = AccountingSystem.AccountHandler.search_detail_account(socket.assigns.pollys.account)
     pollys = Map.put(socket.assigns.pollys, :focused, 1)
-    {:noreply, assign(socket, pollys: pollys)}
+    {:noreply, assign(socket, pollys: pollys, dropdowns: dropdowns)}
   end
 
   def handle_event("update_form", params, socket) do
     params = check(params, params)
     params = debit_credit_values(params, params)
+    dropdowns = search_account(params["account"], params)
     pollys = Map.merge(socket.assigns.pollys, GenericFunctions.string_map_to_atom(params))
-    {:noreply, assign(socket, pollys: pollys, update: false, arr: socket.assigns.arr)}
+    {:noreply, assign(socket, pollys: pollys, update: false, arr: socket.assigns.arr, dropdowns: dropdowns)}
   end
 
   def handle_event("action_account", params, socket) do
@@ -329,6 +333,14 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     params
   end
 
+  defp search_account(text, %{"_target" => ["account"]}) do
+    AccountingSystem.AccountHandler.search_detail_account(text)
+  end
+
+  defp search_account(_, _) do
+    []
+  end
+
   defp checked("checked"), do: true
   defp checked("unchecked"), do: false
   defp checked(nil), do: false
@@ -338,9 +350,8 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     policy = id |> AccountingSystem.PolicyHandler.get_policy!
     aux = policy.id |> AccountingSystem.AuxiliaryHandler.get_auxiliary_by_policy_id
       |> Enum.map(fn x -> add_necesaries_to_aux(x) end)
-    dropdowns = AccountingSystem.AccountHandler.search_detail_account("")
     %{
-      dropdowns: dropdowns,
+      dropdowns: [],
       arr: aux,
       edit: true,
       id: params["id"],
@@ -487,11 +498,11 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     </div>
 
     <%= if @new? do %>
-      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: 0, update_text: @update_text, pollys: @pollys, arr: @arr, edit: false, update: @update, cancel?: false, message_confirm: nil) %>
+      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: 0, update_text: @update_text, pollys: @pollys, arr: @arr, edit: false, update: @update, cancel?: false, message_confirm: nil, dropdowns: @dropdowns) %>
     <% end %>
 
     <%= if @edit? do %>
-      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: @policy_id, update_text: "", pollys: @pollys, arr: @arr, edit: true, update: @update, cancel?: @cancel?, message_confirm: @message_confirm) %>
+      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: @policy_id, update_text: "", pollys: @pollys, arr: @arr, edit: true, update: @update, cancel?: @cancel?, message_confirm: @message_confirm, dropdowns: @dropdowns) %>
     <% end %>
     """
   end
