@@ -53,13 +53,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                       <input <%= if !@status, do: 'disabled' %> type="date" name="policy_date" value="<%=@pollys.policy_date%>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
                     </div>
                   </div>
-                  <div class="w-1/3 flex ml-4">
-                    <div class="modern-checkbox flex h-6 w-full mt-8">
-                      <input <%= if !@status, do: 'disabled' %> type="checkbox" name="audited" class="hidden" id="checkbox-act" value="<%=@pollys.audited %>" <%=@pollys.audited %>>
-                      <label class="relative inline bg-transparent w-10" for="checkbox-act"></label>
-                      <label class="ml-2 font-bold text-gray-700">Auditada</label>
-                    </div>
-                  </div>
+
                 </div>
 
                 <div class="inline-flex w-full">
@@ -73,24 +67,31 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                       <input <%= if !@status, do: 'disabled' %> type="number" name="period" value="<%=@pollys.period%>" maxlength="2" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
                     </div>
                   </div>
-                  <div class="w-1/3 flex ml-4">
-                    <div class="modern-checkbox flex h-6 w-full mt-8">
-                      <input <%= if !@status, do: 'disabled' %> type="checkbox" name="has_documents" class="hidden" id="checkbox-act2" value="<%=@pollys.has_documents %>" <%=@pollys.has_documents %> >
-                      <label class="relative inline bg-transparent w-10" for="checkbox-act2"></label>
-                      <label class="ml-2 font-bold text-gray-700">Documentos?</label>
-                    </div>
-                  </div>
+
                 </div>
                 <label class="block tracking-wide text-gray-700 font-bold" for="grid-code">Concepto</label>
                 <input <%= if !@status, do: 'disabled' %> type="text" name="concept" value="<%=@pollys.concept%>" phx-target="#one" phx-keyup="focused_concept" maxlength="128" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code">
                 <input type="hidden" name="id" value="<%=@pollys.id%>">
+
+                <div class="flex py-2">
+                  <div class="modern-checkbox flex h-6 w-full">
+                    <input <%= if !@status, do: 'disabled' %> type="checkbox" name="audited" class="hidden" id="checkbox-act" value="<%=@pollys.audited %>" <%=@pollys.audited %>>
+                    <label class="relative inline bg-transparent w-10" for="checkbox-act"></label>
+                    <label class="ml-4 font-bold text-gray-700">Auditada</label>
+                  </div>
+                  <div class="modern-checkbox flex h-6 w-full">
+                    <input <%= if !@status, do: 'disabled' %> type="checkbox" name="has_documents" class="hidden" id="checkbox-act2" value="<%=@pollys.has_documents %>" <%=@pollys.has_documents %> >
+                    <label class="relative inline bg-transparent w-10" for="checkbox-act2"></label>
+                    <label class="ml-4 font-bold text-gray-700">Tiene Documentos</label>
+                  </div>
+                </div>
               </form>
 
               <div class="mt-10 py-6">
                 <div class="py-2">
                   <label><b>Captura de Auxiliares</b></label>
                 </div>
-                <div class="border-solid border-2 border-gray-300 p-2">
+                <div class="border-solid border-2 border-gray-300 p-4 rounded">
                 <form id="form2" phx-submit="save_aux" phx-target="#one" phx-change="update_form" class="-mt-32">
                   <label class="block pt-32 tracking-wide text-gray-700 font-bold" for="grid-name">Cuenta</label>
                   <div class="inline-flex w-full">
