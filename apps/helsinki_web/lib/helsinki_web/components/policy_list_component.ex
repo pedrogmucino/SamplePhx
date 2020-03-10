@@ -248,6 +248,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
       |> Map.merge(clean)
     params = params
                 |> Map.put(:id, get_max_id(socket.assigns.arr, socket.assigns.id))
+                |> Map.put(:number, arr_max_number(socket.assigns.arr))
     {:noreply, assign(socket, arr: socket.assigns.arr ++ [params], pollys: pollys)}
   end
 
@@ -268,7 +269,16 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     new_arr = Enum.filter(socket.assigns.arr, fn x -> x.id != String.to_integer(params.id_aux) end)
     params = params
               |> Map.put(:id, String.to_integer(params.id_aux))
+              |> Map.put(:number, Enum.find(socket.assigns.arr, fn aux -> aux.id == String.to_integer(params.id_aux) end).number)
     {:noreply, assign(socket, arr: new_arr ++ [params], pollys: pollys)}
+  end
+
+  defp arr_max_number([]) do
+    0
+  end
+
+  defp arr_max_number(arr) do
+    Enum.max_by(arr, fn number -> number.number end).number + 1
   end
 
   defp save_auxiliaries(policy_number, policy_id, auxiliaries) do
