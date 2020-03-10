@@ -91,7 +91,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                 <div class="py-2">
                   <label><b>Captura de Auxiliares</b></label>
                 </div>
-                <div class="border-solid border-2 border-gray-300 p-2">
+                <div class="border-solid border-2 border-gray-300 p-4 rounded">
                 <form id="form2" phx-submit="save_aux" phx-target="#one" phx-change="update_form" class="-mt-32">
                   <label class="block pt-32 tracking-wide text-gray-700 font-bold" for="grid-name">Cuenta</label>
                   <div class="inline-flex w-full">
