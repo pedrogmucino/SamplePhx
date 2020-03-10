@@ -24,5 +24,6 @@ defmodule AccountingSystem.PolicySchema do
     policy
     |> cast(attrs, [:policy_number, :policy_type, :period, :fiscal_exercise, :policy_date, :concept, :audited, :has_documents, :serial, :status])
     |> validate_required([:policy_number, :policy_type, :period, :fiscal_exercise, :policy_date, :concept, :audited, :has_documents, :serial])
+    |> unique_constraint(:serial, name: :policies_serial_policy_number_index)
   end
 end

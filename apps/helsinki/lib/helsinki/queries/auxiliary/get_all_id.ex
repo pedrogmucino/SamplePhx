@@ -1,7 +1,5 @@
 defmodule AccountingSystem.GetAllId do
   import Ecto.Query, warn: false
-  alias AccountingSystem.Repo
-  alias AccountingSystem.PrefixFormatter
   alias AccountingSystem.{
     AuxiliarySchema,
     AccountSchema
@@ -37,7 +35,8 @@ defmodule AccountingSystem.GetAllId do
       inserted_at: aux.inserted_at,
       updated_at: aux.updated_at,
       policy_id: aux.policy_id,
-      account: ac.code
+      account: ac.code,
+      number: row_number() |> over(order_by: aux.id)
     }
   end
 

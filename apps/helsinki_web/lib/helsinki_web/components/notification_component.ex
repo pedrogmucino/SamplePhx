@@ -41,7 +41,7 @@ defmodule AccountingSystemWeb.NotificationComponent do
               </div>
               <div>
                 <p class="font-bold">Ha ocurrido un error</p>
-                <p class="text-sm"><%= @message %></p>
+                <p class="text-sm"><%= raw @message %></p>
               </div>
             </div>
           </div>

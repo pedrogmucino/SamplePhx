@@ -98,9 +98,9 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                     <div class="w-2/3 relative">
                       <input <%= if !@status, do: 'disabled' %> class="hidden" name="id_account" value="<%= @pollys.id_account %>">
                       <input <%= if !@status, do: 'disabled' %> class="hidden" name="id_aux" value="<%= @pollys.id_aux %>">
-                      <input <%= if !@status, do: 'disabled' %> autocomplete="off" type="text" phx-target="#one" phx-keyup="show_accounts" phx-focus="account_focused" name="account" value="<%=@pollys.account%>" maxlength="256" class="focus:outline-none focus:bg-white focus:border-blue-500 w-full appearance-none  bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
-                      <%= if length(@dropdowns) > 0 and @pollys.focused == 1 do %>
-                        <div class="w-full block absolute top-0 left-0 z-10 mt-10 bg-gray-100 overflow-y-scroll h-64">
+                      <input  <%= if !@status, do: 'disabled' %> autocomplete="off" type="text" phx-target="#one" phx-keyup="show_accounts" phx-focus="account_focused" phx-hook="hidden_account" name="account" value="<%=@pollys.account%>" maxlength="256" class="focus:outline-none focus:bg-white focus:border-blue-500 w-full appearance-none  bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
+                      <%= if length(@dropdowns) > 0 do %>
+                        <div id="account_list" class="w-full block absolute top-0 left-0 z-10 mt-10 bg-gray-100 overflow-y-scroll h-64">
                           <%= for item <- @dropdowns do %>
                             <div phx-target="#one" phx-click="autocomplete" phx-value-id="<%= item.value %>" phx-value-account="<%=List.first(item.key)%>" phx-value-name="<%=List.last(item.key)%>" class="block py-1 px-3 hover:bg-gray-500 hover:text-white cursor-pointer">
                                 <%= List.to_string(item.key) %>
@@ -239,7 +239,11 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                       <%=for item <- @arr |> Enum.sort_by(&(&1.id)) do %>
                         <div class="w-full inline-flex items-center gap-4"> <!-------Este es el div que se va a dividir en 3---->
                           <div class="w-1/12">
+                          <%= if @edit do %>
+                            <%= item.number%>
+                          <% else %>
                             <%= item.id - Enum.min_by(@arr, fn x -> x.id end).id + 1%>
+                          <% end %>
                           </div>
                           <!---------------------------INFO AQUI---------------------------------------->
                           <div class="w-full gap-4">

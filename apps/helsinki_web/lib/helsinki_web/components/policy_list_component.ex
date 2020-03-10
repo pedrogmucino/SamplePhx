@@ -4,7 +4,8 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   alias AccountingSystem.AuxiliaryHandler, as: Auxiliar
   alias AccountingSystem.{
     PolicyHandler,
-    GenericFunctions
+    GenericFunctions,
+    EctoUtil
   }
 
 
@@ -25,12 +26,14 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     cancel?: false,
     policytypes: label_todos,
     type_id_selected: 0,
-    dropdowns: []
+    dropdowns: [],
+    error: nil,
+    change: false
     )}
   end
 
   def update(attrs, socket) do
-      {:ok, assign(socket, id: attrs.id, message: nil)}
+      {:ok, assign(socket, id: attrs.id, message: nil, error: nil)}
   end
 
   def add_todos(types) do
@@ -153,8 +156,13 @@ defmodule AccountingSystemWeb.PolicyListComponent do
         policy_id: 0,
         message: "Póliza guardada con éxito: " <>policy.serial <> "-" <> Integer.to_string(policy.policy_number)
         )}
-      {:error, _} ->
-        {:noreply, socket |> put_flash(:error, "NO SE PUDO GUARDAR")}
+      {:error, changeset} ->
+        notification_error()
+        {:noreply, assign(socket,
+          changeset: changeset,
+          error: "No pudo registrarse la póliza. Validar lo siguiente:<br>" <> EctoUtil.get_errors(changeset),
+          change: !socket.assigns.change
+        )}
     end
   end
 
@@ -216,6 +224,13 @@ defmodule AccountingSystemWeb.PolicyListComponent do
       %{message: "close_notification"}
     end)
     :ok
+  end
+
+  defp notification_error() do
+    Task.async(fn ->
+      :timer.sleep(5500)
+      %{message: "close_error"}
+    end)
   end
 
   defp totals("", params, socket) do
@@ -426,6 +441,10 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     ~L"""
     <%= if @message do %>
       <%= live_component(@socket, AccountingSystemWeb.NotificationComponent, id: "notification_comp", message: @message, show: true, notification_type: "notification") %>
+    <% end %>
+
+    <%= if @error do %>
+      <%= live_component(@socket, AccountingSystemWeb.NotificationComponent, id: "error_comp", message: @error, show: true, notification_type: "error", change: @change) %>
     <% end %>
 
     <div id="one" class="bg-white h-hoch-93 w-80 mt-16 ml-16 block float-left">
