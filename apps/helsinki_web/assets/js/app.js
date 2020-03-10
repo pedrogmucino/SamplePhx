@@ -3,6 +3,21 @@
 // its own CSS file.
 import css from "../css/app.css"
 let Hooks = {};
+Hooks.hidden_account = {
+    mounted() {
+        this.el.addEventListener("blur", e => {
+            setTimeout(() => {
+                if(document.getElementById("account_list") != null)
+                    document.getElementById("account_list").style.display = "none";
+            }, 100);
+        })
+        this.el.addEventListener("focus", e => {
+            setTimeout(() => {
+                document.getElementById("account_list").style.display = "inline";
+            }, 150)
+        })
+    }
+};
 Hooks.scroll_x = {
     mounted() {        
         var max = document.getElementById("scrolleable").offsetWidth
