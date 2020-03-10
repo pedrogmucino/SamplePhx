@@ -30,7 +30,8 @@ module.exports = {
           'mar-150': '40rem',
           'mar-180': '45rem',
           'mar-200': '50rem',
-          'mar-240': '60rem'          
+          'mar-240': '60rem',
+          'mar-14': '3.5rem'     
         }
       }
     }
