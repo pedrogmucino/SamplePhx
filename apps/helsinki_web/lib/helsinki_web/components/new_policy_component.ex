@@ -238,7 +238,11 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                       <%=for item <- @arr |> Enum.sort_by(&(&1.id)) do %>
                         <div class="w-full inline-flex items-center gap-4"> <!-------Este es el div que se va a dividir en 3---->
                           <div class="w-1/12">
+                          <%= if @edit do %>
                             <%= item.number%>
+                          <% else %>
+                            <%= item.id - Enum.min_by(@arr, fn x -> x.id end).id + 1%>
+                          <% end %>
                           </div>
                           <!---------------------------INFO AQUI---------------------------------------->
                           <div class="w-full gap-4">
