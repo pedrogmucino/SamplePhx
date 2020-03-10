@@ -42,7 +42,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                   <div class="inline-flex w-full">
                     <div class="inline-block w-full mr-2">
                       <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Tipo de Póliza: <%=@pollys.policy_type%></label>
-                      <select <%= if !@status, do: 'disabled' %> name="policy_type" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
+                      <select <%= if !@status or @edit, do: 'disabled' %> name="policy_type" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
                         <%= for item <- @policytypes do %>
                           <option <%=if String.to_integer(@pollys.policy_type) == item[:value] do %> selected <% end %> value="<%= item[:value] %>"><%= item[:key] %></option>
                         <% end %>
