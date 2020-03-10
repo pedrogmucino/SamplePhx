@@ -155,7 +155,7 @@ defmodule AccountingSystem.PolicyHandler do
         {:ok, policy} ->
           policy
         {:error, reason} ->
-          {Repo.rollback({:error, reason})}
+          {Repo.rollback(reason)}
       end
     end)
   end
