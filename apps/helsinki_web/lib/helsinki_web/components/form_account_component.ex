@@ -127,8 +127,8 @@ defmodule AccountingSystemWeb.FormAccountComponent do
                 </div>
               </div>
 
-              <br>
-              <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Fiscales</label>
+
+              <label class="pt-5 block tracking-wide text-gray-700 font-bold" for="grid-name">Fiscales</label>
               <div class="border-solid border-2 border-gray-300 p-4 rounded">
                 <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">RFC</label>
                 <div class="inline-flex w-full">
