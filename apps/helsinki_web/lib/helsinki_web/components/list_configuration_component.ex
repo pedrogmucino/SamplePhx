@@ -23,13 +23,16 @@ defmodule AccountingSystemWeb.ListConfigurationComponent do
 
   def handle_event("create_structure", params, socket) do
     case StructureHandler.create_structure(params) do
-      {:ok, _structure} ->
+      {:ok, structure} ->
+        NotificationComponent.set_timer_notification()
         {:noreply,
           socket
-          |> put_flash(:info, "Estructura creada")
-          |> assign(list_configuration: StructureHandler.list_structures(), new?: false, edit?: false)
+          |> assign(
+            list_configuration: StructureHandler.list_structures(),
+            new?: false,
+            edit?: false,
+            message: "Estructura de nivel #{structure.level} creada satisfactoriamente")
         }
-
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
     end
@@ -89,8 +92,6 @@ defmodule AccountingSystemWeb.ListConfigurationComponent do
 
     params["id"]
     |> execute_delete(last_structure.id == String.to_integer(params["id"]), socket)
-
-    {:noreply, assign(socket, list_configuration: StructureHandler.list_structures(), edit?: false)}
   end
 
   def handle_event("create_new", _params, socket) do
@@ -102,16 +103,43 @@ defmodule AccountingSystemWeb.ListConfigurationComponent do
   end
 
   defp execute_delete(id, true, socket) do
+    structure =
     id
     |> StructureHandler.get_structure!
-    |> StructureHandler.delete_structure
-    socket
-    |> put_flash(:info, "Estructura eliminada")
+    case StructureHandler.delete_structure(structure) do
+      {:ok} ->
+        NotificationComponent.set_timer_notification()
+        {:noreply,
+        assign(socket,
+        list_configuration: StructureHandler.list_structures(),
+        edit?: false,
+        message: "Estructura de nivel #{structure.level} eliminada satisfactoriamente",
+        error: nil,
+        change: !socket.assigns.change
+        )}
+      {:error} ->
+        NotificationComponent.set_timer_notification_error()
+        {:noreply,
+        assign(socket,
+        list_configuration: StructureHandler.list_structures(),
+        edit?: false,
+        message: nil,
+        error: "Estructura de nivel #{structure.level} no pudo ser eliminada",
+        change: !socket.assigns.change
+        )}
+    end
   end
 
   defp execute_delete(_id, false, socket) do
-    socket
-    |> put_flash(:info, "No es posible eliminar estructura")
+    NotificationComponent.set_timer_notification_error()
+        {:noreply,
+        assign(socket,
+        list_configuration: StructureHandler.list_structures(),
+        edit?: false,
+        message: nil,
+        error: "Únicamente puede eliminar la Estructura del último nivel",
+        change: !socket.assigns.change
+        )}
   end
 
   def render(assigns) do
