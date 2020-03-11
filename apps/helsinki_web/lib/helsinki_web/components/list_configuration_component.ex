@@ -9,7 +9,10 @@ defmodule AccountingSystemWeb.ListConfigurationComponent do
     {:ok, assign(socket,
     list_configuration: StructureHandler.list_structures(),
     new?: false,
-    edit?: false
+    edit?: false,
+    message: nil,
+    error: nil,
+    change: false
     )}
   end
 
@@ -49,20 +52,34 @@ defmodule AccountingSystemWeb.ListConfigurationComponent do
 
       case StructureHandler.update_code_size(structure, attrs) do
         {:error} ->
-          socket
-          |> put_flash(:error, "No puede tener un tamaño menor al tamaño máximo actual")
+          notification_error()
+          {:noreply,
+          assign(socket,
+          list_configuration: StructureHandler.list_structures(),
+          new?: false,
+          edit?: false,
+          error: "El Nivel no puede tener un tamaño menor al tamaño máximo actual",
+          message: nil,
+          change: !socket.assigns.change
+          )}
         _ ->
+          notification()
           StructureHandler.update_structure(structure, attrs)
-          socket
-          |> put_flash(:info, "Estructura actualizada")
+          {:noreply,
+          assign(socket,
+          list_configuration: StructureHandler.list_structures(),
+          new?: false,
+          edit?: false,
+          error: nil,
+          message: "Configuración modificada correctamente",
+          change: !socket.assigns.change
+          )}
       end
     rescue
       Ecto.NoResultsError ->
         socket
         |> put_flash(:info, "Estructura eliminada")
     end
-
-    {:noreply, assign(socket, list_configuration: StructureHandler.list_structures(), new?: false, edit?: false)}
   end
 
   def handle_event("delete_structure", params, socket) do
@@ -96,10 +113,31 @@ defmodule AccountingSystemWeb.ListConfigurationComponent do
     |> put_flash(:info, "No es posible eliminar estructura")
   end
 
+  defp notification() do
+    Task.async(fn ->
+      :timer.sleep(5500)
+      %{message: "close_notification"}
+    end)
+    :ok
+  end
+
+  defp notification_error() do
+    Task.async(fn ->
+      :timer.sleep(5500)
+      %{message: "close_error"}
+    end)
+  end
 
 
   def render(assigns) do
     ~L"""
+    <%= if @message do %>
+      <%= live_component(@socket, AccountingSystemWeb.NotificationComponent, id: "notification_comp", message: @message, show: true, notification_type: "notification", change: @change) %>
+    <% end %>
+
+    <%= if @error do %>
+      <%= live_component(@socket, AccountingSystemWeb.NotificationComponent, id: "error_comp", message: @error, show: true, notification_type: "error", change: @change) %>
+    <% end %>
 
     <div id="one" class="bg-white h-hoch-93 w-80 mt-16 ml-16 block float-left">
       <div class="w-full py-2 bg-blue-700">
@@ -151,7 +189,6 @@ defmodule AccountingSystemWeb.ListConfigurationComponent do
     <% end %>
 
     <%= if @edit? do %>
-
       <%= live_component(@socket, AccountingSystemWeb.ConfigurationEditComponent, id: @structure_id) %>
     <% end %>
     """
