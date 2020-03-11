@@ -57,4 +57,20 @@ defmodule AccountingSystemWeb.NotificationComponent do
   def update(attrs, socket) do
     {:ok, assign(socket, message: Map.get(attrs, :message), show: Map.get(attrs, :show), notification_type: Map.get(attrs, :notification_type))}
   end
+
+  def set_timer_notification() do
+    Task.async(fn ->
+      :timer.sleep(5500)
+      %{message: "close_notification"}
+    end)
+    :ok
+  end
+
+  def set_timer_notification_error() do
+    Task.async(fn ->
+      :timer.sleep(5500)
+      %{message: "close_error"}
+    end)
+  end
+
 end
