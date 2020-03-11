@@ -4,6 +4,7 @@ defmodule AccountingSystemWeb.ListConfigurationComponent do
   alias AccountingSystem.{
     StructureHandler
   }
+  alias AccountingSystemWeb.NotificationComponent
 
   def mount(socket) do
     {:ok, assign(socket,
@@ -52,7 +53,7 @@ defmodule AccountingSystemWeb.ListConfigurationComponent do
 
       case StructureHandler.update_code_size(structure, attrs) do
         {:error} ->
-          notification_error()
+          NotificationComponent.set_timer_notification_error()
           {:noreply,
           assign(socket,
           list_configuration: StructureHandler.list_structures(),
@@ -63,7 +64,7 @@ defmodule AccountingSystemWeb.ListConfigurationComponent do
           change: !socket.assigns.change
           )}
         _ ->
-          notification()
+          NotificationComponent.set_timer_notification()
           StructureHandler.update_structure(structure, attrs)
           {:noreply,
           assign(socket,
@@ -112,22 +113,6 @@ defmodule AccountingSystemWeb.ListConfigurationComponent do
     socket
     |> put_flash(:info, "No es posible eliminar estructura")
   end
-
-  defp notification() do
-    Task.async(fn ->
-      :timer.sleep(5500)
-      %{message: "close_notification"}
-    end)
-    :ok
-  end
-
-  defp notification_error() do
-    Task.async(fn ->
-      :timer.sleep(5500)
-      %{message: "close_error"}
-    end)
-  end
-
 
   def render(assigns) do
     ~L"""
