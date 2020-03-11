@@ -102,7 +102,7 @@ defmodule AccountingSystemWeb.FormAccountComponent do
               <div class="px-8 py-6 flex flex-col my-2 w-160">
               <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Generales</label>
 
-              <div class="border-solid border-2 border-gray-300 p-2">
+              <div class="border-solid border-2 border-gray-300 p-4 rounded">
 
                 <label class="block tracking-wide text-gray-700 font-bold" for="grid-code">Código</label>
                 <input type="text" name="code" maxlength="128" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code" placeholder="Código" value="<%= (if @actionx == "edit", do: @parent_editx.code, else: @codex) %>">
@@ -129,7 +129,7 @@ defmodule AccountingSystemWeb.FormAccountComponent do
 
               <br>
               <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Fiscales</label>
-              <div class="border-solid border-2 border-gray-300 p-2">
+              <div class="border-solid border-2 border-gray-300 p-4 rounded">
                 <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">RFC</label>
                 <div class="inline-flex w-full">
                   <div class="inline-block w-full mr-2">
