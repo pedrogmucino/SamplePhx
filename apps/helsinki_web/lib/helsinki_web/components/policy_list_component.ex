@@ -156,7 +156,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
         policy_id: 0,
         message: "Póliza guardada con éxito: " <>policy.serial <> "-" <> Integer.to_string(policy.policy_number)
         )}
-      {:error, changeset} ->
+      {:error, %Ecto.Changeset{} = changeset} ->
         notification_error()
         {:noreply, assign(socket,
           changeset: changeset,
