@@ -18,6 +18,16 @@ Hooks.hidden_account = {
         })
     }
 };
+Hooks.return_to_account = {
+    mounted() {
+        this.el.addEventListener("click", e => {
+            setTimeout(() => {
+                document.getElementById("account_input").select();
+                document.getElementById("account_input").focus();
+            }, 100);
+        })
+    }
+};
 Hooks.scroll_x = {
     mounted() {        
         var max = document.getElementById("scrolleable").offsetWidth
