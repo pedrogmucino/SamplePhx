@@ -10,7 +10,7 @@ defmodule AccountingSystemWeb.NotificationComponent do
   def render(assigns) do
     ~L"""
     <%= if @show do %>
-    <div id="x" class="z-10 fixed flex inset-0 zum">
+    <div class="z-10 fixed flex inset-0 zum">
     <div class="mt-64 mb-64 py-64 ml-auto mr-auto">
       <%= case @notification_type do %>
       <%= "notification" -> %>
