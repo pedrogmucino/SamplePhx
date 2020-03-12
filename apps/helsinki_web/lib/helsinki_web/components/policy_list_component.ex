@@ -7,7 +7,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     GenericFunctions,
     EctoUtil
   }
-
+  alias AccountingSystemWeb.NotificationComponent
 
   def mount(socket) do
     label_todos = add_todos(AccountingSystem.PolicyTipeHandler.list_policytypes)
@@ -77,10 +77,27 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def handle_event("si_", _params, socket) do
-    socket.assigns.id
-    |> String.to_integer
-    |> PolicyHandler.cancel_policy
-    {:noreply, assign(socket, cancel?: false, new?: false, edit?: false, policy_list: PolicyHandler.get_policy_list)}
+    case PolicyHandler.cancel_policy(socket.assigns.id |> String.to_integer) do
+      {:error} ->
+        NotificationComponent.set_timer_notification_error()
+        {:noreply, assign(socket,
+        cancel?: false,
+        new?: false,
+        edit?: false,
+        policy_list: PolicyHandler.get_policy_list,
+        error: "Error al intentar cancelar la póliza.",
+        message: nil)
+        }
+      _ ->
+        NotificationComponent.set_timer_notification()
+        {:noreply, assign(socket,
+        cancel?: false,
+        new?: false,
+        edit?: false,
+        policy_list: PolicyHandler.get_policy_list,
+        message: "Póliza cancelada correctamente.")
+        }
+    end
   end
 
   def handle_event("no_", _params, socket) do
