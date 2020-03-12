@@ -51,7 +51,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                     </div>
                     <div class="inline-block w-full ml-2">
                       <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Fecha de póliza</label>
-                      <input <%= if !@status, do: 'disabled' %> type="date" name="policy_date" value="<%=@pollys.policy_date%>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
+                      <input <%= if !@status, do: 'disabled' %> type="date" name="policy_date" value="<%=@pollys.policy_date%>" phx-target="#one" phx-blur="date_fill" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
                     </div>
                   </div>
 

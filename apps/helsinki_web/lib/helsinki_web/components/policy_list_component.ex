@@ -255,6 +255,14 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     )}
   end
 
+  def handle_event("date_fill", %{"value" => date}, socket) do
+    date = String.split(date, "-")
+    new_pollys = socket.assigns.pollys
+      |> Map.put(:fiscal_exercise, Enum.at(date, 0))
+      |> Map.put(:period, String.to_integer(Enum.at(date, 1)))
+    {:noreply, assign(socket, pollys: new_pollys)}
+  end
+
   defp totals("", params, socket) do
     params = GenericFunctions.string_map_to_atom(params)
     sumh = socket.assigns.pollys.sum_haber
