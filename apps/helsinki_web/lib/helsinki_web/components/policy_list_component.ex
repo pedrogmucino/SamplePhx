@@ -79,24 +79,39 @@ defmodule AccountingSystemWeb.PolicyListComponent do
 
   def handle_event("si_", _params, socket) do
     case PolicyHandler.cancel_policy(socket.assigns.id |> String.to_integer) do
-      {:error} ->
+      {:ok, policy} ->
+        case AccountingSystem.AuxiliaryHandler.cancel_auxiliary(policy.id) do
+          {:error, %Ecto.Changeset{} = changeset} ->
+            NotificationComponent.set_timer_notification_error()
+            {:noreply, assign(socket,
+            cancel?: false,
+            new?: false,
+            edit?: false,
+            policy_list: PolicyHandler.get_policy_list,
+            error: "Error al intentar cancelar las partidas de la póliza. " <> EctoUtil.get_errors(changeset),
+            message: nil,
+            change: !socket.assigns.change)
+            }
+             _ ->
+            NotificationComponent.set_timer_notification()
+            {:noreply, assign(socket,
+            cancel?: false,
+            new?: false,
+            edit?: false,
+            policy_list: PolicyHandler.get_policy_list,
+            message: "Póliza cancelada correctamente.")
+          }
+        end
+      {:error, %Ecto.Changeset{} = changeset} ->
         NotificationComponent.set_timer_notification_error()
         {:noreply, assign(socket,
         cancel?: false,
         new?: false,
         edit?: false,
         policy_list: PolicyHandler.get_policy_list,
-        error: "Error al intentar cancelar la póliza.",
-        message: nil)
-        }
-      _ ->
-        NotificationComponent.set_timer_notification()
-        {:noreply, assign(socket,
-        cancel?: false,
-        new?: false,
-        edit?: false,
-        policy_list: PolicyHandler.get_policy_list,
-        message: "Póliza cancelada correctamente.")
+        error: "Error al intentar cancelar la póliza. " <> EctoUtil.get_errors(changeset),
+        message: nil,
+        change: !socket.assigns.change)
         }
     end
   end
