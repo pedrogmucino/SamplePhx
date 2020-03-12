@@ -37,26 +37,6 @@ defmodule AccountingSystemWeb.FormAccountComponent do
     rescue _e in RuntimeError -> {:ok, socket} end
   end
 
-  def error(message, socket) do
-    Task.async(fn ->
-      :timer.sleep(5500)
-
-      assign(socket, error: nil)
-      %{error: "close_error"}
-    end)
-    {:ok, assign(socket, error: message, change: !socket.assigns.change)}
-  end
-
-  def error_message(message, socket) do
-    Task.async(fn ->
-      :timer.sleep(5500)
-
-      assign(socket, error: nil)
-      %{error: "close_error"}
-    end)
-    {:noreply, assign(socket, error: message, change: !socket.assigns.change)}
-  end
-
   def load_values() do
     AccountingSystem.AccountHandler.get_principal_account!()
     |> AccountingSystem.SchemaFormatter.get_root_account()
@@ -69,11 +49,7 @@ defmodule AccountingSystemWeb.FormAccountComponent do
 
   def render(assigns) do
     ~L"""
-      <%= if @error do %>
-      <div class="z-40">
-        <%=live_component(@socket, AccountingSystemWeb.NotificationComponent, id: "error_comp", message: @error, show: true, change: @change, notification_type: "error") %>
-      </div>
-      <%= else %>
+
     <div id="x" phx-hook="scroll_x"  class="bg-white mt-16 ml-1 w-240 rounded border">
 
       <div class="inline-flex bg-blue-700 text-white px-6 py-3 w-full">
@@ -266,7 +242,7 @@ defmodule AccountingSystemWeb.FormAccountComponent do
           </div>
         </div>
       <div>
-      <% end %>
+
       </div>
     </div>
     """

@@ -320,7 +320,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
   end
   def mount(socket) do
     dropdowns = []
-    policytypes = AccountingSystem.PolicyTipeHandler.get_all_as_list
+    policytypes = AccountingSystem.PolicyTipeHandler.get_all_as_list(false)
     changeset = PolicyHandler.change_policy(%PolicySchema{})
     pollys = %{audited: "", concept: "", fiscal_exercise: "", has_documents: "", period: "", policy_date: "", policy_type: "0", aux_concept: "", debit: 0, department: "", credit: 0, id: "", sum_haber: 0, sum_debe: 0, total: 0, focused: 0, account: "", name: "", id_account: "", id_aux: ""}
 

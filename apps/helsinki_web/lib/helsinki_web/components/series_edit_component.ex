@@ -60,8 +60,8 @@ defmodule AccountingSystemWeb.SeriesEditComponent do
       </div>
 
       <div class="inline-flex w-1/2 h-10 mb-16 absolute bottom-0 right-0 pr-0">
-        <button phx-click="delete_series" phx-target="#one" phx-value-id=<%= @series.id %>
-          class= "ml-2 py-2 w-32 bg-red-500 text-white hover:bg-red-400 items-center inline-flex font-bold rounded shadow focus:shadow-outline focus:outline-none rounded">
+        <button <%= if @editable, do: 'disabled' %> phx-click="delete_series" phx-target="#one" phx-value-id=<%= @series.id %>
+          class= "<%= if @editable, do: 'opacity-50 cursor-not-allowed' %> ml-2 py-2 w-32 bg-red-500 text-white hover:bg-red-400 items-center inline-flex font-bold rounded shadow focus:shadow-outline focus:outline-none rounded">
             <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="trash-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
               class="h-4 w-4 mr-2 ml-auto">
               <g class="fa-group">
@@ -73,7 +73,7 @@ defmodule AccountingSystemWeb.SeriesEditComponent do
                 </path>
               </g>
             </svg>
-            <label class="cursor-pointer mr-auto text-white">Eliminar</label>
+            <label class="<%= if @editable, do: 'cursor-not-allowed', else: 'cursor-pointer' %> mr-auto text-white">Eliminar</label>
         </button>
         </div>
       </div>
@@ -84,7 +84,7 @@ defmodule AccountingSystemWeb.SeriesEditComponent do
     series =
     Map.get(params, :id)
     |> get_series
-    {:ok, assign(socket, series: series)}
+    {:ok, assign(socket, series: series, editable: (series.current_number > 0))}
   end
 
   def get_series(id) do
