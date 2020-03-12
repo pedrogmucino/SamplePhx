@@ -14,6 +14,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
     <%= if @cancel? do %>
       <%= live_component(@socket, AccountingSystemWeb.ConfirmationComponent, id: "confirmation", message: @message_confirm, show: true) %>
     <% end %>
+
     <div id="policy" class="bg-white mt-16 ml-1 w-full rounded border">
 
       <div class="inline-flex bg-blue-700 text-white px-6 py-3 w-full">
@@ -334,7 +335,8 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
       update_text: "",
       cancel?: false,
       message_confirm: nil,
-      status: false
+      status: false,
+      change: false
     )}
   end
 

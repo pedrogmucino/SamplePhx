@@ -3,33 +3,55 @@ defmodule AccountingSystemWeb.SeriesListComponent do
   use Phoenix.HTML
   alias AccountingSystem.{
     StructureHandler,
-    SeriesHandler
+    SeriesHandler,
+    EctoUtil
   }
+  alias AccountingSystemWeb.NotificationComponent
 
   def mount(socket) do
     {:ok, assign(socket,
     series_list: SeriesHandler.get_series,
     new?: false,
-    edit?: false
+    edit?: false,
+    message: nil,
+    error: nil,
+    change: false
     )}
   end
 
   def update(attrs, socket) do
-      {:ok, assign(socket, id: attrs.id)}
+    {:ok, assign(socket, id: attrs.id)}
   end
 
   def handle_event("create_series", params, socket) do
     params = Map.replace!(params, "fiscal_exercise", Integer.to_string(Date.utc_today.year))
     case SeriesHandler.create_series(params) do
-      {:ok, _series} ->
+      {:ok, series} ->
+        NotificationComponent.set_timer_notification()
         {:noreply,
           socket
-          |> put_flash(:info, "Serie creada")
-          |> assign(series_list: SeriesHandler.get_series(), new?: false, edit?: false)
+          |> assign(
+            series_list: SeriesHandler.get_series(),
+            new?: false,
+            edit?: false,
+            message: "Serie #{series.serial}-#{series.fiscal_exercise} creada satisfactoriamente",
+            error: nil,
+            change: !socket.assigns.change)
         }
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, changeset: changeset)}
+        NotificationComponent.set_timer_notification_error()
+        {:noreply,
+        socket
+        |> assign(
+          changeset: changeset,
+          series_list: SeriesHandler.get_series(),
+            new?: false,
+            edit?: false,
+            message: nil,
+            error: "No pudo crearse la serie. Validar lo siguiente:<br>" <> EctoUtil.get_errors(changeset),
+            change: !socket.assigns.change
+          )}
     end
   end
 
@@ -59,14 +81,39 @@ defmodule AccountingSystemWeb.SeriesListComponent do
   end
 
   def handle_event("delete_series", params, socket) do
-
     params["id"]
     |> SeriesHandler.get_series!
-    |> SeriesHandler.delete_series
-    socket
-    |> put_flash(:info, "Serie eliminada")
+    |> execute_delete(socket)
 
-    {:noreply, assign(socket, series_list: SeriesHandler.get_series, edit?: false)}
+  end
+
+  defp execute_delete(series, socket) do
+    case SeriesHandler.delete_series(series) do
+      {:ok, series} ->
+        NotificationComponent.set_timer_notification()
+        {:noreply,
+          socket
+          |> assign(
+            series_list: SeriesHandler.get_series(),
+            new?: false,
+            edit?: false,
+            message: "Serie #{series.serial}-#{series.fiscal_exercise} eliminada satisfactoriamente",
+            error: nil,
+            change: !socket.assigns.change)
+        }
+      {:error, %Ecto.Changeset{} = changeset} ->
+        NotificationComponent.set_timer_notification_error()
+        {:noreply,
+          socket
+          |> assign(
+            series_list: SeriesHandler.get_series(),
+            new?: false,
+            edit?: false,
+            message: "Serie #{series.serial}-#{series.fiscal_exercise} eliminada satisfactoriamente",
+            error: "Serie no pudo ser eliminada. Validar lo siguiente:<br>" <> EctoUtil.get_errors(changeset),
+            change: !socket.assigns.change)
+        }
+    end
   end
 
   def handle_event("create_new", _params, socket) do
@@ -79,6 +126,13 @@ defmodule AccountingSystemWeb.SeriesListComponent do
 
   def render(assigns) do
     ~L"""
+    <%= if @message do %>
+      <%= live_component(@socket, AccountingSystemWeb.NotificationComponent, id: "notification_comp", message: @message, show: true, notification_type: "notification", change: @change) %>
+    <% end %>
+
+    <%= if @error do %>
+      <%= live_component(@socket, AccountingSystemWeb.NotificationComponent, id: "error_comp", message: @error, show: true, notification_type: "error", change: @change) %>
+    <% end %>
 
     <div id="one" class="bg-white h-hoch-93 w-80 mt-16 ml-16 block float-left">
       <div class="w-full py-2 bg-blue-700">

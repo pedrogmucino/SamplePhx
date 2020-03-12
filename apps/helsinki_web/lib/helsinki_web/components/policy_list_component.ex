@@ -130,10 +130,10 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     arr: [],
     policy_id: 0,
     message: nil,
-    message_confirm: nil,
     update: false,
     update_text: "",
     cancel?: false,
+    message_confirm: nil,
     type_id_selected: 0,
     status: true,
     id: 0,
@@ -162,9 +162,14 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def handle_event("account_focused", _params, socket) do
-    dropdowns = AccountingSystem.AccountHandler.search_detail_account(socket.assigns.pollys.account)
-    pollys = Map.put(socket.assigns.pollys, :focused, 1)
-    {:noreply, assign(socket, pollys: pollys, dropdowns: dropdowns)}
+    case AccountingSystem.AccountHandler.search_detail_account(socket.assigns.pollys.account) |> IO.inspect(label: "WHAT DROPDAWNS RETURNS---------------------->") do
+      [] ->
+        AccountingSystemWeb.NotificationComponent.set_timer_notification_error()
+        {:noreply, assign(socket, dropdowns: [], error: "No existen cuentas de detalle", change: !socket.assigns.change)}
+      dropdowns ->
+        IO.puts("LA WEA Dropdowns")
+        {:noreply, assign(socket, dropdowns: dropdowns)}
+    end
   end
 
   def handle_event("update_form", params, socket) do
@@ -482,7 +487,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   def render(assigns) do
     ~L"""
     <%= if @message do %>
-      <%= live_component(@socket, AccountingSystemWeb.NotificationComponent, id: "notification_comp", message: @message, show: true, notification_type: "notification") %>
+      <%= live_component(@socket, AccountingSystemWeb.NotificationComponent, id: "notification_comp", message: @message, show: true, notification_type: "notification", change: @change) %>
     <% end %>
 
     <%= if @error do %>
@@ -559,11 +564,11 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     </div>
 
     <%= if @new? do %>
-      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: 0, update_text: @update_text, pollys: @pollys, arr: @arr, edit: false, update: @update, cancel?: false, message_confirm: nil, dropdowns: @dropdowns) %>
+      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: 0, update_text: @update_text, pollys: @pollys, arr: @arr, edit: false, update: @update, cancel?: false, dropdowns: @dropdowns, message_confirm: nil, change: @change) %>
     <% end %>
 
     <%= if @edit? do %>
-      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: @policy_id, update_text: "", pollys: @pollys, arr: @arr, edit: true, update: @update, cancel?: @cancel?, message_confirm: @message_confirm, dropdowns: @dropdowns) %>
+      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: @policy_id, update_text: "", pollys: @pollys, arr: @arr, edit: true, update: @update, cancel?: @cancel?, dropdowns: @dropdowns, message_confirm: @message_confirm, change: @change) %>
     <% end %>
     """
   end
