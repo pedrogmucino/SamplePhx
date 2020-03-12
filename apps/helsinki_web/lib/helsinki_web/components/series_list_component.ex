@@ -69,14 +69,27 @@ defmodule AccountingSystemWeb.SeriesListComponent do
     params["series_id"]
     |> SeriesHandler.get_series!()
     case SeriesHandler.update_series(series, %{"serial" => params["serial"]}) do
-      {:ok, _series} ->
+      {:ok, series} ->
+        NotificationComponent.set_timer_notification()
         {:noreply,
           socket
-          |> put_flash(:info, "Serie actualizada")
-          |> assign(series_list: SeriesHandler.get_series(), new?: false, edit?: false)
-        }
+          |> assign(
+            series_list: SeriesHandler.get_series(),
+            new?: false,
+            edit?: false,
+            message: "Serie #{series.serial}-#{series.fiscal_exercise} actualizada correctamente",
+            change: !socket.assigns.change,
+            error: nil
+            )}
       {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, changeset: changeset)}
+        NotificationComponent.set_timer_notification_error()
+        {:noreply, socket
+        |> assign(
+          changeset: changeset,
+          error: "Serie no puede ser actualizada",
+          message: nil,
+          change: !socket.assigns.change
+          )}
     end
   end
 
@@ -84,7 +97,6 @@ defmodule AccountingSystemWeb.SeriesListComponent do
     params["id"]
     |> SeriesHandler.get_series!
     |> execute_delete(socket)
-
   end
 
   defp execute_delete(series, socket) do
