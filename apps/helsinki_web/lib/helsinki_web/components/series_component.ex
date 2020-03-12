@@ -18,7 +18,7 @@ defmodule AccountingSystemWeb.SeriesComponent do
 
       <div class="inline-block bg-blue-700 text-white px-6 py-4 w-full">
       <div class="inline-flex top-0 right-0 bg-blue-700 text-white mt-2">
-          <button phx-click="close" phx-target="#comp" class="ml-mar-16.5 -mt-4 text-white font-bold rounded shadow">
+          <button phx-click="close" phx-target="#series_comp" class="ml-mar-16.5 -mt-4 text-white font-bold rounded shadow">
             <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
             class="h-5 w-5 ml-auto">
               <path fill="currentColor"
