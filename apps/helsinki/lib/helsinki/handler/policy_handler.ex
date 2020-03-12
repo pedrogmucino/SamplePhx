@@ -200,7 +200,6 @@ defmodule AccountingSystem.PolicyHandler do
     id_to_cancel
     |> get_policy!()
     |> update_policy(%{"status" => "false"})
-    AccountingSystem.AuxiliaryHandler.cancel_auxiliary(id_to_cancel)
   end
 
 end
