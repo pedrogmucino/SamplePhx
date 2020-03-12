@@ -18,28 +18,13 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
       code: attrs.code,
       type: attrs.type,
       description: attrs.description,
-      status_father: (if max_level >= attrs.next_level and attrs.status_father == "A" and attrs.type == "A", do: true, else: false),
-      error: nil,
-      change: false)
+      status_father: (if max_level >= attrs.next_level and attrs.status_father == "A" and attrs.type == "A", do: true, else: false))
     }
-  end
-
-  def error_message(message, socket) do
-    Task.async(fn ->
-      :timer.sleep(5500)
-
-      assign(socket, error: nil)
-      %{error: "close_error"}
-    end)
-    {:noreply, assign(socket, error: message, change: !socket.assigns.change)}
   end
 
   def render(assigns) do
     ~L"""
     <div class="z-40">
-    <%= if @error do %>
-        <%=live_component(@socket, AccountingSystemWeb.ErrorComponent, id: "error_comp", error: @error, show: true, change: @change) %>
-    <% end %>
     </div>
     <div id="sub_account-<%= @id %>" phx-hook="scroll_x" class="bg-white h-hoch-93 w-80 float-left ml-1 mt-16 block">
       <div class=" w-full pt-6 bg-gray-200">

@@ -2,10 +2,11 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   use Phoenix.LiveComponent
   use Phoenix.HTML
   alias AccountingSystem.AuxiliaryHandler, as: Auxiliar
+  alias AccountingSystem.CodeFormatter, as: Formatter
   alias AccountingSystem.{
     PolicyHandler,
     GenericFunctions,
-    EctoUtil
+    EctoUtil,
   }
   alias AccountingSystemWeb.NotificationComponent
 
@@ -121,12 +122,14 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def handle_event("create_new", _params, socket) do
+    now = Date.utc_today
+    today = "#{now.year}-#{Formatter.addZero(Integer.to_string(now.month), 2)}-#{Formatter.addZero(Integer.to_string(now.day), 2)}"
     {:noreply, assign(socket,
     policy_list: PolicyHandler.get_policy_list,
     new?: true,
     edit?: false,
     actionx: "new",
-    pollys: %{audited: "unchecked", concept: "", fiscal_exercise: "", has_documents: "unchecked", period: "", policy_date: "", policy_type: "0", aux_concept: "", debit: 0, department: "", credit: 0, id: "0", sum_haber: 0, sum_debe: 0, total: 0, focused: 0, account: "", name: "", id_account: "", id_aux: "", status: true},
+    pollys: %{audited: "unchecked", concept: "", fiscal_exercise: now.year, has_documents: "unchecked", period: now.month, policy_date: today, policy_type: "0", aux_concept: "", debit: 0, department: "", credit: 0, id: "0", sum_haber: 0, sum_debe: 0, total: 0, focused: 0, account: "", name: "", id_account: "", id_aux: "", status: true},
     arr: [],
     policy_id: 0,
     message: nil,
@@ -253,6 +256,22 @@ defmodule AccountingSystemWeb.PolicyListComponent do
       type_id_selected: type_id,
       policy_list: (if type_id == 0, do: all_policy, else: Enum.filter(all_policy, fn x -> x.policy_type == type_id end))
     )}
+  end
+
+  def handle_event("date_fill", %{"value" => ""}, socket) do
+    new_pollys = socket.assigns.pollys
+      |> Map.put(:fiscal_exercise, "")
+      |> Map.put(:period, "")
+    {:noreply, assign(socket, pollys: new_pollys)}
+  end
+
+  def handle_event("date_fill", %{"value" => date}, socket) do
+    IO.inspect(date, label: "When you aaaaaaaaaaaaa")
+    date = String.split(date, "-")
+    new_pollys = socket.assigns.pollys
+      |> Map.put(:fiscal_exercise, Enum.at(date, 0))
+      |> Map.put(:period, String.to_integer(Enum.at(date, 1)))
+    {:noreply, assign(socket, pollys: new_pollys)}
   end
 
   defp totals("", params, socket) do
