@@ -20,7 +20,6 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     arr: [],
     policy_id: 0,
     message: nil,
-    message_confirm: nil,
     update: false,
     update_text: "",
     cancel?: false,
@@ -98,7 +97,6 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     arr: [],
     policy_id: 0,
     message: nil,
-    message_confirm: nil,
     update: false,
     update_text: "",
     cancel?: false,
@@ -130,9 +128,14 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def handle_event("account_focused", _params, socket) do
-    dropdowns = AccountingSystem.AccountHandler.search_detail_account(socket.assigns.pollys.account)
-    pollys = Map.put(socket.assigns.pollys, :focused, 1)
-    {:noreply, assign(socket, pollys: pollys, dropdowns: dropdowns)}
+    case AccountingSystem.AccountHandler.search_detail_account(socket.assigns.pollys.account) |> IO.inspect(label: "WHAT DROPDAWNS RETURNS---------------------->") do
+      [] ->
+        AccountingSystemWeb.NotificationComponent.set_timer_notification_error()
+        {:noreply, assign(socket, dropdowns: [], error: "No existen cuentas de detalle", change: !socket.assigns.change)}
+      dropdowns ->
+        IO.puts("LA WEA Dropdowns")
+        {:noreply, assign(socket, dropdowns: dropdowns)}
+    end
   end
 
   def handle_event("update_form", params, socket) do
@@ -173,6 +176,11 @@ defmodule AccountingSystemWeb.PolicyListComponent do
       {:error, _} ->
         {:noreply, socket}
     end
+  end
+
+  def handle_event("delete_aux2", params, socket) do
+    IO.inspect(params, label: "DELETE AUX 2 is Flying")
+    {:noreply, socket}
   end
 
   def handle_event("delete_aux", %{"value" => id}, socket) do
@@ -216,6 +224,16 @@ defmodule AccountingSystemWeb.PolicyListComponent do
       type_id_selected: type_id,
       policy_list: (if type_id == 0, do: all_policy, else: Enum.filter(all_policy, fn x -> x.policy_type == type_id end))
     )}
+  end
+
+  def handle_event("delete_some", params, socket) do
+    IO.inspect(params, label: "PARAMS EN DELETE SOME----------------------------------->")
+    {:noreply, socket}
+  end
+
+  def handle_event("nodelete", params, socket) do
+    IO.inspect(params, label: "PARAMS EN NODELETE----------------------------------->")
+    {:noreply, socket}
   end
 
   defp notification() do
@@ -450,7 +468,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   def render(assigns) do
     ~L"""
     <%= if @message do %>
-      <%= live_component(@socket, AccountingSystemWeb.NotificationComponent, id: "notification_comp", message: @message, show: true, notification_type: "notification") %>
+      <%= live_component(@socket, AccountingSystemWeb.NotificationComponent, id: "notification_comp", message: @message, show: true, notification_type: "notification", change: @change) %>
     <% end %>
 
     <%= if @error do %>
@@ -527,11 +545,11 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     </div>
 
     <%= if @new? do %>
-      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: 0, update_text: @update_text, pollys: @pollys, arr: @arr, edit: false, update: @update, cancel?: false, message_confirm: nil, dropdowns: @dropdowns) %>
+      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: 0, update_text: @update_text, pollys: @pollys, arr: @arr, edit: false, update: @update, cancel?: false, dropdowns: @dropdowns, change: @change) %>
     <% end %>
 
     <%= if @edit? do %>
-      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: @policy_id, update_text: "", pollys: @pollys, arr: @arr, edit: true, update: @update, cancel?: @cancel?, message_confirm: @message_confirm, dropdowns: @dropdowns) %>
+      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: @policy_id, update_text: "", pollys: @pollys, arr: @arr, edit: true, update: @update, cancel?: @cancel?, dropdowns: @dropdowns, change: @change) %>
     <% end %>
     """
   end

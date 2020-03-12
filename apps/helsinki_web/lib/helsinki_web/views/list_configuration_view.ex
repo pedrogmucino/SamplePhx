@@ -17,11 +17,12 @@ defmodule AccountingSystemWeb.ListConfigurationLiveView do
   def handle_info({_reference, %{message: params}}, socket) do
     case params do
       "close_error" ->
-        send_update(AccountingSystemWeb.NotificationComponent, id: "error_comp", show: false)
+        send_update(AccountingSystemWeb.NotificationComponent, id: "error_comp", show: false, message: "")
 
       "close_notification" ->
-        send_update(AccountingSystemWeb.NotificationComponent, id: "notification_comp", show: false)
+        send_update(AccountingSystemWeb.NotificationComponent, id: "notification_comp", show: false, message: "")
     end
+
     {:noreply, socket}
   end
 
