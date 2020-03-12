@@ -10,14 +10,9 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
   #alias AccountingSystem.AccountHandler, as: Account
 
   def render(assigns) do
-    IO.inspect(assigns, label: "AAAAAAAAAASSSSSSSSIIIGNSSSS IN HTML SHIT.------------------------------------------------>")
     ~L"""
     <%= if @cancel? do %>
       <%= live_component(@socket, AccountingSystemWeb.ConfirmationComponent, id: "confirmation", message: @message_confirm, show: true) %>
-    <% end %>
-
-    <%= if @message_confirm do %>
-      <%= live_component(@socket, AccountingSystemWeb.GenericConfirmationComponent, id: "confirmation", message: @message_confirm, show: true, click_si: "delete_some", click_no: "nodelete") %>
     <% end %>
 
     <div id="policy" class="bg-white mt-16 ml-1 w-full rounded border">
@@ -355,6 +350,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
   def update(params, socket) do
     dropdowns = params.dropdowns
     cancel? = params.cancel?
+    message_confirm = params.message_confirm
     status = params.pollys.status
     pollys = params.pollys
     params = socket.assigns |> Map.put(:pollys, pollys) |> Map.put(:arr, params.arr) |> Map.put(:edit, params.edit)
@@ -373,6 +369,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
       edit: params.edit,
       update_text: params.update_text,
       cancel?: cancel?,
+      message_confirm: message_confirm,
       status: status
       )}
   end

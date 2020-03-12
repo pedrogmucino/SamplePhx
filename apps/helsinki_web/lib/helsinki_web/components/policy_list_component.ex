@@ -20,6 +20,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     arr: [],
     policy_id: 0,
     message: nil,
+    message_confirm: nil,
     update: false,
     update_text: "",
     cancel?: false,
@@ -117,6 +118,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     update: false,
     update_text: "",
     cancel?: false,
+    message_confirm: nil,
     type_id_selected: 0,
     status: true,
     id: 0,
@@ -195,11 +197,6 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     end
   end
 
-  def handle_event("delete_aux2", params, socket) do
-    IO.inspect(params, label: "DELETE AUX 2 is Flying")
-    {:noreply, socket}
-  end
-
   def handle_event("delete_aux", %{"value" => id}, socket) do
     sum_debe = socket.assigns.pollys.sum_debe - to_float(Enum.find(socket.assigns.arr, fn aux -> aux.id == String.to_integer(id) end).debit)
     sum_haber = socket.assigns.pollys.sum_haber - to_float(Enum.find(socket.assigns.arr, fn aux -> aux.id == String.to_integer(id) end).credit)
@@ -241,16 +238,6 @@ defmodule AccountingSystemWeb.PolicyListComponent do
       type_id_selected: type_id,
       policy_list: (if type_id == 0, do: all_policy, else: Enum.filter(all_policy, fn x -> x.policy_type == type_id end))
     )}
-  end
-
-  def handle_event("delete_some", params, socket) do
-    IO.inspect(params, label: "PARAMS EN DELETE SOME----------------------------------->")
-    {:noreply, socket}
-  end
-
-  def handle_event("nodelete", params, socket) do
-    IO.inspect(params, label: "PARAMS EN NODELETE----------------------------------->")
-    {:noreply, socket}
   end
 
   defp notification() do
@@ -562,11 +549,11 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     </div>
 
     <%= if @new? do %>
-      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: 0, update_text: @update_text, pollys: @pollys, arr: @arr, edit: false, update: @update, cancel?: false, dropdowns: @dropdowns, change: @change) %>
+      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: 0, update_text: @update_text, pollys: @pollys, arr: @arr, edit: false, update: @update, cancel?: false, dropdowns: @dropdowns, message_confirm: nil, change: @change) %>
     <% end %>
 
     <%= if @edit? do %>
-      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: @policy_id, update_text: "", pollys: @pollys, arr: @arr, edit: true, update: @update, cancel?: @cancel?, dropdowns: @dropdowns, change: @change) %>
+      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: @policy_id, update_text: "", pollys: @pollys, arr: @arr, edit: true, update: @update, cancel?: @cancel?, dropdowns: @dropdowns, message_confirm: @message_confirm, change: @change) %>
     <% end %>
     """
   end
