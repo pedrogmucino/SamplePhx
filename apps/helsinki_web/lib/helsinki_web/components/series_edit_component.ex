@@ -13,7 +13,6 @@ defmodule AccountingSystemWeb.SeriesEditComponent do
     ~L"""
     <div id="series_comp" class="bg-white mt-16 ml-1 w-80 h-hoch-93 rounded border">
 
-
       <div class="inline-block bg-blue-700 text-white px-6 py-4 w-full">
         <div class="inline-flex top-0 right-0 bg-blue-700 text-white mt-2">
           <button phx-click="close" phx-target="#series_comp" class="ml-mar-16.5 -mt-4 text-white font-bold rounded shadow">
@@ -28,14 +27,12 @@ defmodule AccountingSystemWeb.SeriesEditComponent do
         </div>
         <h1 class="text-2xl font-medium text-white block">Editar serie de póliza</h1>
 
-
         <div class="mt-2">
           <label class="block">Tipo: <b><%= @series.type%></b></label>
           <label class="block">Actual: <b><%= @series.current_number %></b></label>
         </div>
 
       </div>
-
 
       <div class="h-hoch-80 px-8 w-full py-6 inline-flex -mt-8 relative" >
         <form phx-submit="set_series" phx-target="#series_comp">
@@ -62,9 +59,9 @@ defmodule AccountingSystemWeb.SeriesEditComponent do
         </form>
       </div>
 
-      <div class="inline-flex w-full py-16 absolute bottom-0 right-0 pr-0">
+      <div class="inline-flex w-1/2 h-10 mb-16 absolute bottom-0 right-0 pr-0">
         <button phx-click="delete_series" phx-target="#one" phx-value-id=<%= @series.id %>
-          class= "ml-mar-44 py-2 w-32 bg-red-500 text-white hover:bg-red-400 items-center inline-flex font-bold rounded shadow focus:shadow-outline focus:outline-none rounded">
+          class= "ml-2 py-2 w-32 bg-red-500 text-white hover:bg-red-400 items-center inline-flex font-bold rounded shadow focus:shadow-outline focus:outline-none rounded">
             <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="trash-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
               class="h-4 w-4 mr-2 ml-auto">
               <g class="fa-group">
