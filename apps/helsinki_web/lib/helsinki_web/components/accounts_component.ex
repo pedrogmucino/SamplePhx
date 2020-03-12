@@ -3,7 +3,9 @@ defmodule AccountingSystemWeb.AccountsComponent do
   use Phoenix.HTML
 
   alias AccountingSystem.AccountHandler, as: Account
-  alias AccountingSystem.StructureHandler
+  alias AccountingSystem.{
+    StructureHandler,
+    EctoUtil}
   alias AccountingSystemWeb.NotificationComponent
 
   def render(assigns) do
@@ -173,6 +175,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
                level_form_account: level,
                edit?: false,
                change: !socket.assigns.change,
+               message: nil,
                error: nil
              )}
 
@@ -185,7 +188,8 @@ defmodule AccountingSystemWeb.AccountsComponent do
                level_form_account: level,
                edit?: false,
                idx: params["id"] |> String.to_integer(),
-               error: nil
+               error: nil,
+               message: nil
              )}
         end
     end
@@ -238,6 +242,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
            parent_editx: params["id"] |> String.to_integer() |> get_account_by_id(),
            error: nil,
            change: !socket.assigns.change,
+           message: nil
          )}
 
       acc ->
@@ -250,6 +255,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
            parent_editx: params["id"] |> String.to_integer() |> get_account_by_id(),
            error: nil,
            change: !socket.assigns.change,
+           message: nil
          )}
     end
   end
@@ -276,6 +282,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
         socket.assigns.child_components
         |> Enum.map(fn child -> update_family(child, daddy, id, level) end)
 
+      NotificationComponent.set_timer_notification()
       {:noreply,
        assign(socket,
          child_components: child_components,
@@ -283,13 +290,15 @@ defmodule AccountingSystemWeb.AccountsComponent do
          new?: false,
          accounts: get_accounts_t(-1, -1),
          error: nil,
+         message: (if action == "edit", do: "Cuenta modificada satisfactoriamente", else: "Cuenta creada satisfactoriamente"),
          change: !socket.assigns.change
        )}
     else
       NotificationComponent.set_timer_notification_error()
       {:noreply, assign(socket,
       error: "RFC Inválido, favor de revisar",
-      change: !socket.assigns.change
+      change: !socket.assigns.change,
+      message: nil
       )}
     end
   end
@@ -348,10 +357,18 @@ defmodule AccountingSystemWeb.AccountsComponent do
 
     case Account.create_account(params) do
       {:ok, _account} ->
-        {:noreply, socket |> put_flash(:info, "Cuenta creada")}
+        {:noreply, socket
+        |> assign(
+          message: "Cuenta creada satisfactoriamente",
+          change: !socket.assigns.change,
+          error: nil)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, changeset: changeset)}
+        {:noreply, socket
+        |> assign(
+          changeset: changeset,
+          error: "No pudo crearse la cuenta. Validar lo siguiente:<br>" <> EctoUtil.get_errors(changeset)),
+          message: nil}
     end
   end
 
