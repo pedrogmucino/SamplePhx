@@ -28,6 +28,18 @@ Hooks.return_to_account = {
         })
     }
 };
+
+Hooks.go_to_concept = {
+    mounted() {
+        this.el.addEventListener("blur", e => {
+            setTimeout(() => {
+                document.getElementById("concept_input").select();
+                document.getElementById("concept_input").focus();
+            }, 300);
+        })
+    }
+};
+
 Hooks.scroll_x = {
     mounted() {        
         var max = document.getElementById("scrolleable").offsetWidth
