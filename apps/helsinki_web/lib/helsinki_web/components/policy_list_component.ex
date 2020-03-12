@@ -58,7 +58,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
               |> Map.put("audited", checked(params["audited"]))
               |> Map.put("has_documents", checked(params["has_documents"]))
     {:ok, policy} = PolicyHandler.update_policy(current_policy, params)
-    notification()
+    NotificationComponent.set_timer_notification()
     {:noreply, assign(socket,
     edit?: false,
     policy_list: PolicyHandler.get_policy_list,
@@ -183,7 +183,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   def handle_event("action_account", params, socket) do
     case PolicyHandler.save_policy(params, socket.assigns.arr) do
       {:ok, policy} ->
-        notification()
+        NotificationComponent.set_timer_notification()
         {:noreply, assign(socket,
         new?: false,
         edit?: false,
@@ -194,7 +194,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
         message: "Póliza guardada con éxito: " <>policy.serial <> "-" <> Integer.to_string(policy.policy_number)
         )}
       {:error, %Ecto.Changeset{} = changeset} ->
-        notification_error()
+        NotificationComponent.set_timer_notification_error()
         {:noreply, assign(socket,
           changeset: changeset,
           error: "No pudo registrarse la póliza. Validar lo siguiente:<br>" <> EctoUtil.get_errors(changeset),
@@ -253,21 +253,6 @@ defmodule AccountingSystemWeb.PolicyListComponent do
       type_id_selected: type_id,
       policy_list: (if type_id == 0, do: all_policy, else: Enum.filter(all_policy, fn x -> x.policy_type == type_id end))
     )}
-  end
-
-  defp notification() do
-    Task.async(fn ->
-      :timer.sleep(5500)
-      %{message: "close_notification"}
-    end)
-    :ok
-  end
-
-  defp notification_error() do
-    Task.async(fn ->
-      :timer.sleep(5500)
-      %{message: "close_error"}
-    end)
   end
 
   defp totals("", params, socket) do
