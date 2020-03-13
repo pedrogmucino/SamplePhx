@@ -90,6 +90,10 @@
   }
   .tooltip:hover .tooltip-text {
     visibility: visible;
+  } 
+  .tooltip:focus-within {
+    /*For without border in span tooltip*/
+    outline: 0;
   }
   /* For animate msg confirmation */
   .zum:active {
