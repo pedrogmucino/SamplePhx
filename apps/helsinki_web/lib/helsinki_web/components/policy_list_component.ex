@@ -498,7 +498,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
       <%= live_component(@socket, AccountingSystemWeb.NotificationComponent, id: "error_comp", message: @error, show: true, notification_type: "error", change: @change) %>
     <% end %>
 
-    <div id="one" class="bg-white h-hoch-93 w-80 mt-16 ml-16 block float-left">
+    <div id="list_comp" class="bg-white h-hoch-93 w-80 mt-16 ml-16 block float-left">
       <div class="w-full py-2 bg-blue-700">
         <p class="ml-2 font-bold text-lg text-white">Pólizas</p>
       </div>
@@ -506,7 +506,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
       <div class="relative w-full px-2 mt-2">
         <label><b> Tipo de póliza </b></label>
         <div class="inline-block relative w-full">
-        <form phx-change="type_selected" phx-target="#one">
+        <form phx-change="type_selected" phx-target="#list_comp">
           <select name="policy_type_selected" class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
             <%= for item <- @policytypes do %>
               <option  value="<%= item.id %>" <%= if @type_id_selected == item.id, do: 'selected' %> >
@@ -537,7 +537,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     </div>
 
     <div class="w-1/2 px-2 mt-2">
-      <button phx-click="create_new" phx-value-id="xxx" phx-target="#one" class="py-2 bg-teal-500 hover:bg-teal-400 text-white items-center inline-flex font-bold rounded text-sm w-full ">
+      <button phx-click="create_new" phx-value-id="xxx" phx-target="#list_comp" class="py-2 bg-teal-500 hover:bg-teal-400 text-white items-center inline-flex font-bold rounded text-sm w-full ">
         <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
         class="h-4 w-4 mr-2 ml-auto">
           <path fill="currentColor" d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
@@ -551,7 +551,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     <div class="h-hoch-70 overflow-y-scroll pb-16 mt-2">
       <%= for item <- @policy_list do %>
         <div class="w-full px-2 block">
-          <div phx-click="open_policy" phx-value-id="<%= item.id %>" phx-target="#one" class="border cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
+          <div phx-click="open_policy" phx-value-id="<%= item.id %>" phx-target="#list_comp" class="border cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
             <h2 class="text-gray-700 text-xl"><%= item.serial  %>-<%= item.policy_number %></h2>
             <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Concepto: <b><%= item.concept %></b></label></br>
             <div class="block relative">
