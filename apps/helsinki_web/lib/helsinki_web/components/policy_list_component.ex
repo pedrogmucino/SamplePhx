@@ -165,7 +165,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def handle_event("account_focused", _params, socket) do
-    case AccountingSystem.AccountHandler.search_detail_account(socket.assigns.pollys.account) |> IO.inspect(label: "WHAT DROPDAWNS RETURNS---------------------->") do
+    case AccountingSystem.AccountHandler.search_detail_account(socket.assigns.pollys.account) do
       [] ->
         AccountingSystemWeb.NotificationComponent.set_timer_notification_error()
         {:noreply, assign(socket, dropdowns: [], error: "No existen cuentas de detalle", change: !socket.assigns.change)}
@@ -266,7 +266,6 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def handle_event("date_fill", %{"value" => date}, socket) do
-    IO.inspect(date, label: "When you aaaaaaaaaaaaa")
     date = String.split(date, "-")
     new_pollys = socket.assigns.pollys
       |> Map.put(:fiscal_exercise, Enum.at(date, 0))
