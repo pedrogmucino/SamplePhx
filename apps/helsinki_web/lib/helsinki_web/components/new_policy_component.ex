@@ -38,7 +38,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
           <div class="inline-block w-full">
             <div class="inline-flex w-full">
               <div class="px-8 py-4 flex flex-col my-2 w-6/12">
-              <form id="form1" phx-submit= <%= (if @edit, do: "edit_and_save_this", else: "action_account")%> phx-target="#one" phx-change="update_form">
+              <form id="form1" phx-submit= <%= (if @edit, do: "edit_and_save_this", else: "action_account")%> phx-target="#list_comp" phx-change="update_form">
                 <div class="inline-flex w-full">
                   <div class="inline-flex w-full">
                     <div class="inline-block w-full mr-2">
@@ -51,7 +51,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                     </div>
                     <div class="inline-block w-full ml-2">
                       <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Fecha de póliza</label>
-                      <input <%= if !@status, do: 'disabled' %> type="date" name="policy_date" value="<%=@pollys.policy_date%>" phx-target="#one" phx-blur="date_fill" phx-hook="go_to_concept" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
+                      <input <%= if !@status, do: 'disabled' %> type="date" name="policy_date" value="<%=@pollys.policy_date%>" phx-target="#list_comp" phx-blur="date_fill" phx-hook="go_to_concept" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
                     </div>
                   </div>
 
@@ -71,7 +71,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
 
                 </div>
                 <label class="block tracking-wide text-gray-700 font-bold" for="grid-code">Concepto</label>
-                <input <%= if !@status, do: 'disabled' %> type="text" name="concept" id="concept_input" value="<%=@pollys.concept%>" phx-target="#one" phx-keyup="focused_concept" maxlength="128" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code">
+                <input <%= if !@status, do: 'disabled' %> type="text" name="concept" id="concept_input" value="<%=@pollys.concept%>" phx-target="#list_comp" phx-keyup="focused_concept" maxlength="128" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code">
                 <input type="hidden" name="id" value="<%=@pollys.id%>">
 
                 <div class="flex py-2">
@@ -93,17 +93,17 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                   <label><b>Captura de Auxiliares</b></label>
                 </div>
                 <div class="border-solid border-2 border-gray-300 p-4 rounded">
-                <form id="form2" phx-submit="save_aux" phx-target="#one" phx-change="update_form" class="-mt-32">
+                <form id="form2" phx-submit="save_aux" phx-target="#list_comp" phx-change="update_form" class="-mt-32">
                   <label class="block pt-32 tracking-wide text-gray-700 font-bold" for="grid-name">Cuenta</label>
                   <div class="inline-flex w-full">
                     <div class="w-2/3 relative">
                       <input <%= if !@status, do: 'disabled' %> class="hidden" name="id_account" value="<%= @pollys.id_account %>">
                       <input <%= if !@status, do: 'disabled' %> class="hidden" name="id_aux" value="<%= @pollys.id_aux %>">
-                      <input id="account_input" <%= if !@status, do: 'disabled' %> autocomplete="off" type="text" phx-target="#one" phx-keyup="show_accounts" phx-focus="account_focused" phx-hook="hidden_account" name="account" value="<%=@pollys.account%>" maxlength="256" class="focus:outline-none focus:bg-white focus:border-blue-500 w-full appearance-none  bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
+                      <input id="account_input" <%= if !@status, do: 'disabled' %> autocomplete="off" type="text" phx-target="#list_comp" phx-keyup="show_accounts" phx-focus="account_focused" phx-hook="hidden_account" name="account" value="<%=@pollys.account%>" maxlength="256" class="focus:outline-none focus:bg-white focus:border-blue-500 w-full appearance-none  bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
                       <%= if length(@dropdowns) > 0 do %>
                         <div id="account_list" class="w-full block absolute top-0 left-0 z-10 mt-10 bg-gray-100 overflow-y-scroll h-64">
                           <%= for item <- @dropdowns do %>
-                            <div phx-target="#one" phx-click="autocomplete" phx-value-id="<%= item.value %>" phx-value-account="<%=List.first(item.key)%>" phx-value-name="<%=List.last(item.key)%>" class="block py-1 px-3 hover:bg-gray-500 hover:text-white cursor-pointer">
+                            <div phx-target="#list_comp" phx-click="autocomplete" phx-value-id="<%= item.value %>" phx-value-account="<%=List.first(item.key)%>" phx-value-name="<%=List.last(item.key)%>" class="block py-1 px-3 hover:bg-gray-500 hover:text-white cursor-pointer">
                                 <%= List.to_string(item.key) %>
                             </div>
                           <% end %>
@@ -148,7 +148,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                       <input <%= if !@status, do: 'disabled' %> type="number" name="credit" step="0.01" min="0" max="999999.99" phx-hook="format_number" value="<%=@pollys.credit%>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
                     </div>
                     <div class="ml-4">
-                      <button <%= if !@status, do: 'disabled' %> name="save_aux" class=" <%= if !@status, do: 'opacity-50 cursor-not-allowed' %> border tooltip w-10 h-hoch-2 mt-6 bg-teal-500 rounded text-white hover:bg-teal-400 phx-target="#one"" phx-hook="return_to_account">
+                      <button <%= if !@status, do: 'disabled' %> name="save_aux" class=" <%= if !@status, do: 'opacity-50 cursor-not-allowed' %> border tooltip w-10 h-hoch-2 mt-6 bg-teal-500 rounded text-white hover:bg-teal-400 phx-target="#list_comp"" phx-hook="return_to_account">
                         <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="share-square" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"
                           class="h-6 w-6 ml-2">
                           <path fill="currentColor" d="M568.482 177.448L424.479 313.433C409.3 327.768 384 317.14 384 295.985v-71.963c-144.575.97-205.566 35.113-164.775 171.353 4.483 14.973-12.846 26.567-25.006 17.33C155.252 383.105 120 326.488 120 269.339c0-143.937 117.599-172.5 264-173.312V24.012c0-21.174 25.317-31.768 40.479-17.448l144.003 135.988c10.02 9.463 10.028 25.425 0 34.896zM384 379.128V448H64V128h50.916a11.99 11.99 0 0 0 8.648-3.693c14.953-15.568 32.237-27.89 51.014-37.676C185.708 80.83 181.584 64 169.033 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48v-88.806c0-8.288-8.197-14.066-16.011-11.302a71.83 71.83 0 0 1-34.189 3.377c-7.27-1.046-13.8 4.514-13.8 11.859z" class="">
@@ -265,18 +265,18 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                           <!-----------------------------------END INFO--------------------------------->
                           <div class="w-1/6 text-right">
                             <%= if !@status do %>
-                              <button disabled value="<%=item.id%>" phx-target="#one" class="opacity-50 cursor-not-allowed bg-teal-500 text-white text-center hover:bg-teal-400 border rounded">
+                              <button disabled value="<%=item.id%>" phx-target="#list_comp" class="opacity-50 cursor-not-allowed bg-teal-500 text-white text-center hover:bg-teal-400 border rounded">
                                 <svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="edit" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="h-6 w-6 m-1"><path fill="currentColor" d="M402.3 344.9l32-32c5-5 13.7-1.5 13.7 5.7V464c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h273.5c7.1 0 10.7 8.6 5.7 13.7l-32 32c-1.5 1.5-3.5 2.3-5.7 2.3H48v352h352V350.5c0-2.1.8-4.1 2.3-5.6zm156.6-201.8L296.3 405.7l-90.4 10c-26.2 2.9-48.5-19.2-45.6-45.6l10-90.4L432.9 17.1c22.9-22.9 59.9-22.9 82.7 0l43.2 43.2c22.9 22.9 22.9 60 .1 82.8zM460.1 174L402 115.9 216.2 301.8l-7.3 65.3 65.3-7.3L460.1 174zm64.8-79.7l-43.2-43.2c-4.1-4.1-10.8-4.1-14.8 0L436 82l58.1 58.1 30.9-30.9c4-4.2 4-10.8-.1-14.9z" class=""></path></svg>
                               </button>
-                              <button disabled value="<%=item.id%>" phx-target="#one" class="opacity-50 cursor-not-allowed bg-red-500 text-white text-left hover:bg-red-400 border rounded">
+                              <button disabled value="<%=item.id%>" phx-target="#list_comp" class="opacity-50 cursor-not-allowed bg-red-500 text-white text-left hover:bg-red-400 border rounded">
                                 <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="minus" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="h-6 w-6 m-1"><path fill="currentColor" d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" class=""></path></svg>
                               </button>
                             <% else %>
-                              <button phx-click="edit_aux" value="<%=item.id%>" phx-target="#one" class="relative tooltip bg-teal-500 text-white text-center hover:bg-teal-400 border rounded">
+                              <button phx-click="edit_aux" value="<%=item.id%>" phx-target="#list_comp" class="relative tooltip bg-teal-500 text-white text-center hover:bg-teal-400 border rounded">
                                 <svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="edit" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="h-6 w-6 m-1"><path fill="currentColor" d="M402.3 344.9l32-32c5-5 13.7-1.5 13.7 5.7V464c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h273.5c7.1 0 10.7 8.6 5.7 13.7l-32 32c-1.5 1.5-3.5 2.3-5.7 2.3H48v352h352V350.5c0-2.1.8-4.1 2.3-5.6zm156.6-201.8L296.3 405.7l-90.4 10c-26.2 2.9-48.5-19.2-45.6-45.6l10-90.4L432.9 17.1c22.9-22.9 59.9-22.9 82.7 0l43.2 43.2c22.9 22.9 22.9 60 .1 82.8zM460.1 174L402 115.9 216.2 301.8l-7.3 65.3 65.3-7.3L460.1 174zm64.8-79.7l-43.2-43.2c-4.1-4.1-10.8-4.1-14.8 0L436 82l58.1 58.1 30.9-30.9c4-4.2 4-10.8-.1-14.9z" class=""></path></svg>
                                 <span class='absolute tooltip-text text-white bg-blue-500 mt-2 -ml-8 rounded'>Editar</span>
                               </button>
-                              <button phx-click="delete_aux" value="<%=item.id%>" phx-target="#one" class="relative tooltip bg-red-500 text-white text-left hover:bg-red-400 border rounded">
+                              <button phx-click="delete_aux" value="<%=item.id%>" phx-target="#list_comp" class="relative tooltip bg-red-500 text-white text-left hover:bg-red-400 border rounded">
                                 <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="minus" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="h-6 w-6 m-1"><path fill="currentColor" d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" class=""></path></svg>
                                 <span class='absolute tooltip-text text-white bg-blue-500 mt-2 -ml-10 rounded'>Eliminar</span>
                               </button>

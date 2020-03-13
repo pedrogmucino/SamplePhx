@@ -467,6 +467,37 @@ defmodule AccountingSystemWeb.AccountsComponent do
     clear_level(others, new_arr, level)
   end
 
-  defp clear_level([], new_arr, _level),
-    do: new_arr |> Enum.sort_by(& &1.level)
+  defp clear_level([], new_arr, _level), do: new_arr |> Enum.sort_by(& &1.level)
+
+  defp validate_max_code(params, true) do
+    Account.get_max_code(String.to_integer(params["level"]))
+    |> execute_validation(params)
+  end
+
+  defp validate_max_code(params, false) do
+    Account.get_max_code(String.to_integer(params["level"]), params["id"])
+    |> execute_validation(params)
+  end
+
+  defp execute_validation(code, params) do
+    code
+    |> String.to_integer()
+    |> next_code
+    |> Integer.to_string()
+    |> String.length()
+    |> compare_level_size(params["level"])
+  end
+
+  defp next_code(code) do
+    code + 1
+  end
+
+  defp compare_level_size(size, level) do
+    level_size =
+      StructureHandler.get_level_size(String.to_integer(level))
+      |> Map.get(:size)
+
+    size > level_size
+  end
+
 end

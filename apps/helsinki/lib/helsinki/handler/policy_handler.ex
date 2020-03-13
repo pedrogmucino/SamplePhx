@@ -75,12 +75,10 @@ defmodule AccountingSystem.PolicyHandler do
   end
 
   def create_policy(attrs \\ %{}, year, month, serial) do
-    IO.inspect(attrs, label: "ATTTRSRRSSRSRSRSRSRSR::::::::::::::::::>>>>>>>>>>>>>>>>>>")
     ps = Map.put(attrs, "serial", serial.serial)
           |> Map.put("policy_number", serial.number)
           |> Map.put("audited", check_to_bool(attrs, "audited"))
           |> Map.put("has_documents", check_to_bool(attrs, "has_documents"))
-          |> IO.inspect(label: "PPPPPPPPPPPSSSSSSSSSSSSSSSS:::::::::::::::>>>>>>>>>>>>>>>")
     %PolicySchema{}
     |> PolicySchema.changeset(GenericFunctions.string_map_to_atom(ps))
     |> Repo.insert(prefix: PrefixFormatter.get_prefix(year, month))

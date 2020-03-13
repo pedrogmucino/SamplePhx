@@ -131,7 +131,6 @@ defmodule AccountingSystem.AuxiliaryHandler do
 
   #****************************************************************************************************
   def validate_auxiliar(params) do #Valida si los parametros de auxiliar estan completos
-    IO.inspect(params, label: "Esto es lo que me llega para validar el AUXILIAR------------------------------------->")
     case are_complete(params) do
       false ->
         {:ok, params}
@@ -142,8 +141,7 @@ defmodule AccountingSystem.AuxiliaryHandler do
 
   defp are_complete(params) do #Revisa que todos los valorews estén OKAYYYY
     params
-      |> Enum.map(fn data -> check(data, params) |> IO.inspect(label: "LO QUE REGRESA CADA ITERACION---------------------------------->") end)
-      |> IO.inspect(label: "Termina enum map y regresa::::::::::::::::::>>>>>>")
+      |> Enum.map(fn data -> check(data, params) end)
       |> Enum.any?(fn report ->
                 {some, _} = report
                 some == :error
