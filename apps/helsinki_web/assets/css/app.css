@@ -45,16 +45,16 @@
   }
   
   @-webkit-keyframes notification_start {   
-    0%  { bottom: -30rem;} 
-    10%  { bottom: 0rem;}   
-    80%  { bottom: 0rem;}  
-    100% { bottom: -30rem; }   
+    0%  { bottom: -60rem;} 
+    10%  { bottom: 18rem;}   
+    80%  { bottom: 18rem;}  
+    100% { bottom: -60rem; }   
    } 
    @keyframes notification_start {   
-    0%  { bottom: -30rem;} 
-    10%  { bottom: 0rem;}   
-    80%  { bottom: 0rem;}  
-    100% { bottom: -30rem; }   
+    0%  { bottom: -60rem;} 
+    10%  { bottom: 18rem;}   
+    80%  { bottom: 18rem;}  
+    100% { bottom: -60rem; }   
    }
   
 /* For Slide toggle*/
@@ -90,4 +90,13 @@
   }
   .tooltip:hover .tooltip-text {
     visibility: visible;
+  } 
+  .tooltip:focus-within {
+    /*For without border in span tooltip*/
+    outline: 0;
   }
+  /* For animate msg confirmation */
+  .zum:active {
+    transform: translateY(4px);
+  }
+  

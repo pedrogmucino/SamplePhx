@@ -75,12 +75,10 @@ defmodule AccountingSystem.PolicyHandler do
   end
 
   def create_policy(attrs \\ %{}, year, month, serial) do
-    IO.inspect(attrs, label: "ATTTRSRRSSRSRSRSRSRSR::::::::::::::::::>>>>>>>>>>>>>>>>>>")
     ps = Map.put(attrs, "serial", serial.serial)
           |> Map.put("policy_number", serial.number)
           |> Map.put("audited", check_to_bool(attrs, "audited"))
           |> Map.put("has_documents", check_to_bool(attrs, "has_documents"))
-          |> IO.inspect(label: "PPPPPPPPPPPSSSSSSSSSSSSSSSS:::::::::::::::>>>>>>>>>>>>>>>")
     %PolicySchema{}
     |> PolicySchema.changeset(GenericFunctions.string_map_to_atom(ps))
     |> Repo.insert(prefix: PrefixFormatter.get_prefix(year, month))
@@ -155,7 +153,7 @@ defmodule AccountingSystem.PolicyHandler do
         {:ok, policy} ->
           policy
         {:error, reason} ->
-          {Repo.rollback({:error, reason})}
+          {Repo.rollback(reason)}
       end
     end)
   end
@@ -195,4 +193,11 @@ defmodule AccountingSystem.PolicyHandler do
     Enum.each(auxiliaries, fn id_aux -> AccountingSystem.AuxiliaryHandler.get_auxiliary!(Integer.to_string(id_aux))
                                         |> AccountingSystem.AuxiliaryHandler.delete_auxiliary end)
   end
+
+  def cancel_policy(id_to_cancel) do
+    id_to_cancel
+    |> get_policy!()
+    |> update_policy(%{"status" => "false"})
+  end
+
 end

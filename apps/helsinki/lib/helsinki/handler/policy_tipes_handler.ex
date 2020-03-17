@@ -108,6 +108,8 @@ defmodule AccountingSystem.PolicyTipeHandler do
       |> Enum.map(fn x -> Map.to_list(x) end)
   end
 
+  def get_all_as_list(_), do: AccountingSystem.GetAllIdName.valid_types_with_serial() |> Repo.all
+
   def get_types() do
     AccountingSystem.GetAllIdName.id_name()
       |> Repo.all

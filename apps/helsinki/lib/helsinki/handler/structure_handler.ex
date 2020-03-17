@@ -234,4 +234,9 @@ defmodule AccountingSystem.StructureHandler do
   def change_structure(%StructureSchema{} = structure) do
     StructureSchema.changeset(structure, %{})
   end
+
+  def get_level_size(level) do
+    AccountingSystem.GetSizeOf.size_of(level)
+    |> Repo.one!
+  end
 end

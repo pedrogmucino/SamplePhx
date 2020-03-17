@@ -3,33 +3,55 @@ defmodule AccountingSystemWeb.SeriesListComponent do
   use Phoenix.HTML
   alias AccountingSystem.{
     StructureHandler,
-    SeriesHandler
+    SeriesHandler,
+    EctoUtil
   }
+  alias AccountingSystemWeb.NotificationComponent
 
   def mount(socket) do
     {:ok, assign(socket,
     series_list: SeriesHandler.get_series,
     new?: false,
-    edit?: false
+    edit?: false,
+    message: nil,
+    error: nil,
+    change: false
     )}
   end
 
   def update(attrs, socket) do
-      {:ok, assign(socket, id: attrs.id)}
+    {:ok, assign(socket, id: attrs.id)}
   end
 
   def handle_event("create_series", params, socket) do
     params = Map.replace!(params, "fiscal_exercise", Integer.to_string(Date.utc_today.year))
     case SeriesHandler.create_series(params) do
-      {:ok, _series} ->
+      {:ok, series} ->
+        NotificationComponent.set_timer_notification()
         {:noreply,
           socket
-          |> put_flash(:info, "Serie creada")
-          |> assign(series_list: SeriesHandler.get_series(), new?: false, edit?: false)
+          |> assign(
+            series_list: SeriesHandler.get_series(),
+            new?: false,
+            edit?: false,
+            message: "Serie #{series.serial}-#{series.fiscal_exercise} creada satisfactoriamente",
+            error: nil,
+            change: !socket.assigns.change)
         }
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, changeset: changeset)}
+        NotificationComponent.set_timer_notification_error()
+        {:noreply,
+        socket
+        |> assign(
+          changeset: changeset,
+          series_list: SeriesHandler.get_series(),
+            new?: false,
+            edit?: false,
+            message: nil,
+            error: "No pudo crearse la serie. Validar lo siguiente:<br>" <> EctoUtil.get_errors(changeset),
+            change: !socket.assigns.change
+          )}
     end
   end
 
@@ -47,26 +69,63 @@ defmodule AccountingSystemWeb.SeriesListComponent do
     params["series_id"]
     |> SeriesHandler.get_series!()
     case SeriesHandler.update_series(series, %{"serial" => params["serial"]}) do
-      {:ok, _series} ->
+      {:ok, series} ->
+        NotificationComponent.set_timer_notification()
         {:noreply,
           socket
-          |> put_flash(:info, "Serie actualizada")
-          |> assign(series_list: SeriesHandler.get_series(), new?: false, edit?: false)
-        }
+          |> assign(
+            series_list: SeriesHandler.get_series(),
+            new?: false,
+            edit?: false,
+            message: "Serie #{series.serial}-#{series.fiscal_exercise} actualizada correctamente",
+            change: !socket.assigns.change,
+            error: nil
+            )}
       {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, changeset: changeset)}
+        NotificationComponent.set_timer_notification_error()
+        {:noreply, socket
+        |> assign(
+          changeset: changeset,
+          error: "Serie no puede ser actualizada",
+          message: nil,
+          change: !socket.assigns.change
+          )}
     end
   end
 
   def handle_event("delete_series", params, socket) do
-
     params["id"]
     |> SeriesHandler.get_series!
-    |> SeriesHandler.delete_series
-    socket
-    |> put_flash(:info, "Serie eliminada")
+    |> execute_delete(socket)
+  end
 
-    {:noreply, assign(socket, series_list: SeriesHandler.get_series, edit?: false)}
+  defp execute_delete(series, socket) do
+    case SeriesHandler.delete_series(series) do
+      {:ok, series} ->
+        NotificationComponent.set_timer_notification()
+        {:noreply,
+          socket
+          |> assign(
+            series_list: SeriesHandler.get_series(),
+            new?: false,
+            edit?: false,
+            message: "Serie #{series.serial}-#{series.fiscal_exercise} eliminada satisfactoriamente",
+            error: nil,
+            change: !socket.assigns.change)
+        }
+      {:error, %Ecto.Changeset{} = changeset} ->
+        NotificationComponent.set_timer_notification_error()
+        {:noreply,
+          socket
+          |> assign(
+            series_list: SeriesHandler.get_series(),
+            new?: false,
+            edit?: false,
+            message: "Serie #{series.serial}-#{series.fiscal_exercise} eliminada satisfactoriamente",
+            error: "Serie no pudo ser eliminada. Validar lo siguiente:<br>" <> EctoUtil.get_errors(changeset),
+            change: !socket.assigns.change)
+        }
+    end
   end
 
   def handle_event("create_new", _params, socket) do
@@ -79,8 +138,15 @@ defmodule AccountingSystemWeb.SeriesListComponent do
 
   def render(assigns) do
     ~L"""
+    <%= if @message do %>
+      <%= live_component(@socket, AccountingSystemWeb.NotificationComponent, id: "notification_comp", message: @message, show: true, notification_type: "notification", change: @change) %>
+    <% end %>
 
-    <div id="one" class="bg-white h-hoch-93 w-80 mt-16 ml-16 block float-left">
+    <%= if @error do %>
+      <%= live_component(@socket, AccountingSystemWeb.NotificationComponent, id: "error_comp", message: @error, show: true, notification_type: "error", change: @change) %>
+    <% end %>
+
+    <div id="series_list" class="bg-white h-hoch-93 w-80 mt-16 ml-16 block float-left">
       <div class="w-full py-2 bg-blue-700">
         <p class="ml-2 font-bold text-lg text-white">Series</p>
       </div>
@@ -100,7 +166,7 @@ defmodule AccountingSystemWeb.SeriesListComponent do
     </div>
 
     <div class="w-1/2 px-2 mt-2">
-      <button phx-click="create_new" phx-value-id="xxx" phx-target="#one" class="py-2 bg-teal-500 hover:bg-teal-400 text-white items-center inline-flex font-bold rounded text-sm w-full ">
+      <button phx-click="create_new" phx-value-id="xxx" phx-target="#series_list" class="py-2 bg-teal-500 hover:bg-teal-400 text-white items-center inline-flex font-bold rounded text-sm w-full ">
         <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
         class="h-4 w-4 mr-2 ml-auto">
           <path fill="currentColor" d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
@@ -111,13 +177,14 @@ defmodule AccountingSystemWeb.SeriesListComponent do
       </button>
     </div>
 
-    <div class="h-hoch-75 overflow-y-scroll pb-16">
+    <div class="h-hoch-75 overflow-y-scroll pb-16m mt-2">
       <%= for item <- @series_list do %>
         <div class="w-full px-2 block">
-          <div phx-click="open_series" phx-value-id="<%= item.id %>" phx-target="#one" class="border cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
+          <div phx-click="open_series" phx-value-id="<%= item.id %>" phx-target="#series_list" class="border cursor-pointer w-full inline-block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
             <h2 class="text-gray-700 text-xl"><%= item.serial  %><%= item.fiscal_exercise %></h2>
-            <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Folio Actual: <b><%= item.current_number %></b></label>
-            <label class="ml-10 inline-block cursor-pointer text-gray-600 font-bold text-sm">Tipo: <b><%= item.name %></b></label>
+            <label class="cursor-pointer text-gray-600 font-bold text-sm">Tipo: <b><%= item.name %></b></label>
+            <br>
+            <label class="cursor-pointer text-gray-600 font-bold text-sm">Folio Actual: <b><%= item.current_number %></b></label>
           </div>
         </div>
 

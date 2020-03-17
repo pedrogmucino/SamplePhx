@@ -3,8 +3,45 @@
 // its own CSS file.
 import css from "../css/app.css"
 let Hooks = {};
-Hooks.scroll_x = {
+Hooks.hidden_account = {
     mounted() {
+        this.el.addEventListener("blur", e => {
+            setTimeout(() => {
+                if(document.getElementById("account_list") != null)
+                    document.getElementById("account_list").style.display = "none";
+            }, 100);
+        })
+        this.el.addEventListener("focus", e => {
+            setTimeout(() => {
+                document.getElementById("account_list").style.display = "inline";
+            }, 200)
+        })
+    }
+};
+Hooks.return_to_account = {
+    mounted() {
+        this.el.addEventListener("click", e => {
+            setTimeout(() => {
+                document.getElementById("account_input").select();
+                document.getElementById("account_input").focus();
+            }, 100);
+        })
+    }
+};
+
+Hooks.go_to_concept = {
+    mounted() {
+        this.el.addEventListener("blur", e => {
+            setTimeout(() => {
+                document.getElementById("concept_input").select();
+                document.getElementById("concept_input").focus();
+            }, 300);
+        })
+    }
+};
+
+Hooks.scroll_x = {
+    mounted() {        
         var max = document.getElementById("scrolleable").offsetWidth
         var left = max - screen.width;
         setTimeout(() => {
@@ -20,6 +57,28 @@ Hooks.format_number = {
         setFormat(this.el);
     }
 
+};
+Hooks.scroll_y = {
+    mounted(){
+        setTimeout(() => {
+            var myDiv = document.getElementById('scrollableDiv');
+            myDiv.scrollTo({
+                'behavior': 'smooth',
+                'left': 0,
+                'top': document.getElementById('scrollableDiv').scrollHeight
+            });               
+        }, 100);
+    },
+    updated(){
+        setTimeout(() => {            
+            var myDiv = document.getElementById('scrollableDiv');
+            myDiv.scrollTo({
+                'behavior': 'smooth',
+                'left': 0,
+                'top': document.getElementById('scrollableDiv').scrollHeight
+            });            
+        }, 100);
+    }
 };
 function setFormat(el){
     el.innerHTML = formatNumber(parseFloat(el.textContent).toFixed(2));

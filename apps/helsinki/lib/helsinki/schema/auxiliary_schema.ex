@@ -24,6 +24,6 @@ defmodule AccountingSystem.AuxiliarySchema do
   def changeset(auxiliary, attrs) do
     auxiliary
     |> cast(attrs, [:policy_number, :id_account, :concept, :debit_credit, :mxn_amount, :amount, :department, :exchange_rate, :policy_id])
-    |> validate_required([:policy_number, :id_account, :concept, :debit_credit, :mxn_amount, :amount, :department, :exchange_rate, :policy_id])
+    |> validate_required([:policy_number, :id_account, :concept, :debit_credit, :mxn_amount, :amount, :exchange_rate, :policy_id])
   end
 end

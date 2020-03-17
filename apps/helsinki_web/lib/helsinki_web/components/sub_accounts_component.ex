@@ -9,9 +9,7 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
   end
 
   def update(attrs, socket) do
-    #{:ok, socket}
     max_level = StructureHandler.get_max_level()
-    attrs |> IO.inspect(label: "  --> PARAMS IN UPDATE SUB ACC")
     {:ok, assign(socket,
       level: attrs.next_level,
       id: attrs.id,
@@ -20,13 +18,15 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
       code: attrs.code,
       type: attrs.type,
       description: attrs.description,
-      status_father: (if max_level >= attrs.next_level and attrs.status_father == "A", do: true, else: false))
+      status_father: (if max_level >= attrs.next_level and attrs.status_father == "A" and attrs.type == "A", do: true, else: false))
     }
   end
 
   def render(assigns) do
     ~L"""
-    <div id="sub_account-<%= @id %>" phx-hook="scroll_x" class="bg-white h-hoch-90 w-80 float-left ml-1 mt-16 block">
+    <div class="z-40">
+    </div>
+    <div id="sub_account-<%= @id %>" phx-hook="scroll_x" class="bg-white h-hoch-93 w-80 float-left ml-1 mt-16 block">
       <div class=" w-full pt-6 bg-gray-200">
         <div class="block text-white px-3 text-center">
           <h1 class="tooltip text-2xl font-medium text-gray-800"> <%= if String.length(@name) > 32, do: String.slice(@name, 0, 32) <> "...", else: @name %>
@@ -44,7 +44,6 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
           <label class="block text-gray-700"><b><%= if @type == "A", do: "Acumulativo", else: "Detalle" %></b></label>
           <div class="w-full inline-flex py-2">
 
-
             <div class="w-1/2 px-2">
               <%= if @status_father do %>
               <button phx-click="create_new" phx-value-id="<%= @id %>" phx-value-level="<%= @level %>" phx-target="#one" class="py-2 bg-teal-500 text-white hover:bg-teal-400 items-center inline-flex font-bold rounded text-sm w-full ">
@@ -59,7 +58,6 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
               <% end %>
             </div>
 
-
             <div class="w-1/2 px-2">
               <button phx-click="edit_this" phx-value-id="<%= @id %>" phx-value-level="<%= @level %>" phx-value-code="<%= @code %>" phx-target="#one" class="py-2 bg-teal-500 text-white hover:bg-teal-400 items-center inline-flex font-bold rounded text-sm w-full ">
                 <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="pencil-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
@@ -71,35 +69,33 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
                 <label class="cursor-pointer mr-auto text-white">Editar</label>
               </button>
             </div>
-
           </div>
         </div>
-
       </div>
 
-
-
-      <%= for item <- @subaccounts do %>
-        <div class="w-full p-2 block cursor-pointer" phx-click="open_child" phx-value-origin="false" phx-value-level="<%= @level %>" phx-value-id="<%= item.id %>" phx-target="#one">
-          <div class="hover:bg-gray-300 border w-full block bg-gray-200 p-3 rounded relative">
-            <h2 class="tooltip pt-4 text-gray-800 text-xl"> <%= if String.length(item.name) > 38, do: String.slice(item.name, 0, 38) <> "...", else: item.name %>
-              <%= if String.length(item.name) > 38 do %>
-                <span class='tooltip-text text-sm text-white bg-blue-500 mt-8 -ml-24 mr-1 rounded'><%= item.name %></span>
-              <% end %>
-            </h2>
-            <label class="tooltip cursor-pointer text-gray-600 font-bold text-sm"> Código: <b><%= String.slice(item.code,0 ,70) %></b>
-              <%= if String.length(item.code) > 70 do %>
-                <span class='tooltip-text text-sm text-white bg-blue-500 mt-8 -ml-56 rounded'><%= item.code %></span>
-              <% end %>
-            </label>
-            <br>
-            <label class="cursor-pointer text-gray-600 font-bold text-sm"> Tipo: <b><%= if item.type == "A", do: "Acumulativo", else: "Detalle" %></b></label>
-            <div class="absolute bg-<%= if item.status == "A", do: "green", else: "red" %>-200 px-3 text-sm font-bold top-0 right-0 rounded-full text-<%= if item.status == "A", do: "green", else: "red" %>-700 mt-2 mr-2">
-            <%= if item.status == "A", do: "Activo", else: "Inactivo" %>
+      <div class="h-hoch-70 overflow-y-scroll pb-16 mt-2">
+        <%= for item <- @subaccounts do %>
+          <div class="w-full p-2 block cursor-pointer" phx-click="open_child" phx-value-origin="false" phx-value-level="<%= @level %>" phx-value-id="<%= item.id %>" phx-target="#one">
+            <div class="hover:bg-gray-300 border w-full block bg-gray-200 p-3 rounded relative">
+              <h2 class="tooltip pt-4 text-gray-800 text-xl"> <%= if String.length(item.name) > 38, do: String.slice(item.name, 0, 38) <> "...", else: item.name %>
+                <%= if String.length(item.name) > 38 do %>
+                  <span class='tooltip-text text-sm text-white bg-blue-500 mt-8 -ml-24 mr-1 rounded'><%= item.name %></span>
+                <% end %>
+              </h2>
+              <label class="tooltip cursor-pointer text-gray-600 font-bold text-sm"> Código: <b><%= String.slice(item.code,0 ,70) %></b>
+                <%= if String.length(item.code) > 70 do %>
+                  <span class='tooltip-text text-sm text-white bg-blue-500 mt-8 -ml-56 rounded'><%= item.code %></span>
+                <% end %>
+              </label>
+              <br>
+              <label class="cursor-pointer text-gray-600 font-bold text-sm"> Tipo: <b><%= if item.type == "A", do: "Acumulativo", else: "Detalle" %></b></label>
+              <div class="absolute bg-<%= if item.status == "A", do: "green", else: "red" %>-200 px-3 text-sm font-bold top-0 right-0 rounded-full text-<%= if item.status == "A", do: "green", else: "red" %>-700 mt-2 mr-2">
+              <%= if item.status == "A", do: "Activo", else: "Inactivo" %>
+              </div>
             </div>
           </div>
-        </div>
-      <% end %>
+        <% end %>
+      </div>
     </div>
 
     """
@@ -108,7 +104,6 @@ defmodule AccountingSystemWeb.SubAccountsComponent do
   @spec handle_event(<<_::96>>, nil | keyword | map, Phoenix.LiveView.Socket.t()) ::
           {:noreply, any}
   def handle_event("select_child", params, socket) do
-    IO.inspect(params, label: "params receive --->  ")
     {:noreply, assign(socket, child?: true, child_id: params["name"] )}
   end
 

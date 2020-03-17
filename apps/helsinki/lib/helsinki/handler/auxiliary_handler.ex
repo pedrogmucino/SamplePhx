@@ -68,7 +68,7 @@ defmodule AccountingSystem.AuxiliaryHandler do
 
   def create_auxiliary(attrs \\ %{}, year, month) do
     %AuxiliarySchema{}
-    |> AuxiliarySchema.changeset(attrs |> Map.put(:concept, attrs.aux_concept))
+    |> AuxiliarySchema.changeset(attrs)
     |> Repo.insert(prefix: PrefixFormatter.get_prefix(year, month))
   end
 
@@ -132,53 +132,102 @@ defmodule AccountingSystem.AuxiliaryHandler do
   #****************************************************************************************************
   def validate_auxiliar(params) do #Valida si los parametros de auxiliar estan completos
     case are_complete(params) do
-      7 ->
+      false ->
         {:ok, params}
-      _ ->
+      true ->
         {:error, params}
-
     end
   end
 
-  defp are_complete(params) do #regresa la cantidad de valores no vacios de un mapa
+  defp are_complete(params) do #Revisa que todos los valorews estén OKAYYYY
     params
-      |> Map.values
-      |> Enum.reject(fn x -> x == "" end)
-      |> Enum.count
+      |> Enum.map(fn data -> check(data, params) end)
+      |> Enum.any?(fn report ->
+                {some, _} = report
+                some == :error
+              end)
   end
 
+  defp check(:error, params), do: {:error, params}
+  defp check({"account" , ""}, params), do: {:error, params}
+  defp check({"aux_concept" , ""}, params), do: {:error, params}
+  defp check({"credit" , ""}, params), do: {:error, params}
+  defp check({"debit" , ""}, params), do: {:error, params}
+  defp check({"id_account" , ""}, params), do: {:error, params}
+  defp check({"account" , _}, params), do: {:ok, params}
+  defp check({"aux_concept" , _}, params), do: {:ok, params}
+  defp check({"credit" , _}, params), do: {:ok, params}
+  defp check({"debit" , _}, params), do: {:ok, params}
+  defp check({"id_account" , _}, params), do: {:ok, params}
+  defp check({_, _}, params), do: {:ok, params}
+
   def format_to_save(params, policy_number, policy_id) do
-    IO.inspect(params, label: "PARAMS EN FORMAT TO SAVEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE:::::::::::>>>>>>>>>>")
     params = Map.merge(params, %{debit_credit: h_or_d(params)})
-    params = Map.merge(params, %{mxn_amount: amount(params)})
-    params = Map.merge(params, %{amount: amount(params)})
-    params = Map.merge(params, %{exchange_rate: 1})
-    params = Map.merge(params, %{policy_id: policy_id})
-    params = Map.merge(params, %{policy_number: policy_number})
-    params = Map.delete(params, :credit)
-    params = Map.delete(params, :debit)
-    params = Map.delete(params, :id)
-    params |> IO.inspect(label: "PARAMS FINAAAAAAAAAAAAAAAAAAAALLLLLLLLLLLLLLLLLLLLLLLLLLL")
+              |> Map.merge(%{mxn_amount: amount(params)})
+              |> Map.merge(%{amount: amount(params)})
+              |> Map.merge(%{exchange_rate: 1})
+              |> Map.merge(%{policy_id: policy_id})
+              |> Map.merge(%{policy_number: policy_number})
+              |> Map.merge(%{concept: params.aux_concept})
+              |> Map.delete(:credit)
+              |> Map.delete(:debit)
+    params
+  end
+
+  def format_to_update(params) do
+    params = Map.merge(params, %{debit_credit: h_or_d(params)})
+              |> Map.merge(%{mxn_amount: amount(params)})
+              |> Map.merge(%{amount: amount(params)})
+              |> Map.merge(%{concept: params.aux_concept})
+              |> Map.delete(:credit)
+              |> Map.delete(:debit)
+    params
   end
 
   def h_or_d(%{credit: hab}) do
-    case hab do
-      "0" ->
+    case to_float(hab) do
+      0.0 ->
         "D"
       _ ->
         "H"
     end
   end
 
-  def amount(%{credit: hab}) when hab != "0" do
-    hab
+  def amount(%{credit: hab}) when hab != "0" and hab != 0 and hab != "0.0" and hab != 0.0 do
+    to_float(hab)
   end
 
-  def amount(%{debit: deb}) when deb != "0" do
-    deb
+  def amount(%{debit: deb}) when deb != "0" and deb != 0 and deb != "0.0" and deb != 0.0 do
+    to_float(deb)
   end
 
-  def amount(%{debit: "0"}) do
-    "0"
+  def amount(_) do
+    0.0
+  end
+
+  def to_float(x) when is_bitstring(x), do: void(x)
+  def to_float(x) when is_integer(x), do: x/1
+  def to_float(x) when is_float(x), do: x
+
+  def void(some) do
+    case some do
+      0 -> 0.0
+      _ -> some
+            |> Float.parse
+            |> Tuple.to_list
+            |> List.first
+    end
+  end
+
+  def cancel_auxiliary(id_to_cancel) do
+    id_to_cancel
+    |> get_auxiliary_by_policy_id
+    |> Enum.each(fn aux -> update_auxiliary(aux.id |> get_auxiliary!, %{"mxn_amount" => "0.0", "amount" => "0.0"}) end)
+  end
+
+  def get_max_id_by_policy(policy_id) do
+    AccountingSystem.GetMaxId.by_policy_id(policy_id)
+      |> Repo.all(prefix: PrefixFormatter.get_current_prefix)
+      |> List.first
   end
 end
