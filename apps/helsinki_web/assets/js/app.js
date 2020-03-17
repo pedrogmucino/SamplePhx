@@ -14,7 +14,7 @@ Hooks.hidden_account = {
         this.el.addEventListener("focus", e => {
             setTimeout(() => {
                 document.getElementById("account_list").style.display = "inline";
-            }, 150)
+            }, 200)
         })
     }
 };

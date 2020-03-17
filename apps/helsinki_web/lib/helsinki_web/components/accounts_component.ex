@@ -273,15 +273,22 @@ defmodule AccountingSystemWeb.AccountsComponent do
   end
 
   def handle_event("delete_account", params, socket) do
-    childs = get_child_list(params["id"])
+    account =
+    params["id"]
+    |> Account.get_account!
+
     case Account.delete_account(get_account_by_id(params["id"])) do
       {:ok, _account} ->
-        IO.inspect(params, label: "------------------------>PARAMS DELETE")
+        subacc = if account.level != -1, do: get_child_list(account), else: []
+        socket.assigns.child_components
+        |> Enum.take_while(fn a -> a.id == account.parent_account end)
+        |> Enum.at(0)
+        |> Map.put(:subaccounts, subacc)
 
         NotificationComponent.set_timer_notification()
         {:noreply, socket
         |> assign(
-          child_components: childs,
+          child_components: [],
           accounts: get_accounts_t(-1, -1),
           edit?: false,
           new?: false,
@@ -311,16 +318,13 @@ defmodule AccountingSystemWeb.AccountsComponent do
     {:noreply, assign(socket, accounts: result)}
   end
 
-  defp get_child_list(id) do
-    account =
-    id
-    |> Account.get_account!
+  defp get_child_list(account) do
+    sub2 = get_accounts_t(account.level-1, account.parent_account)
     case account.level do
       0 ->
         []
       _ ->
-        []
-
+        sub2
     end
   end
 
@@ -468,36 +472,5 @@ defmodule AccountingSystemWeb.AccountsComponent do
   end
 
   defp clear_level([], new_arr, _level), do: new_arr |> Enum.sort_by(& &1.level)
-
-  defp validate_max_code(params, true) do
-    Account.get_max_code(String.to_integer(params["level"]))
-    |> execute_validation(params)
-  end
-
-  defp validate_max_code(params, false) do
-    Account.get_max_code(String.to_integer(params["level"]), params["id"])
-    |> execute_validation(params)
-  end
-
-  defp execute_validation(code, params) do
-    code
-    |> String.to_integer()
-    |> next_code
-    |> Integer.to_string()
-    |> String.length()
-    |> compare_level_size(params["level"])
-  end
-
-  defp next_code(code) do
-    code + 1
-  end
-
-  defp compare_level_size(size, level) do
-    level_size =
-      StructureHandler.get_level_size(String.to_integer(level))
-      |> Map.get(:size)
-
-    size > level_size
-  end
 
 end

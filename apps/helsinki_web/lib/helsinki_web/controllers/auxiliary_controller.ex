@@ -18,7 +18,7 @@ defmodule AccountingSystemWeb.AuxiliaryController do
 
   def create(auxiliary_params, policy_number, year, month) do
     #Cada auxiliar se debe guardar en la base
-    AuxiliaryHandler.create_auxiliary(AuxiliaryHandler.format_to_save(auxiliary_params, policy_number), year, month)
+    AuxiliaryHandler.create_auxiliary(AuxiliaryHandler.format_to_save(auxiliary_params, policy_number, 1), year, month)
   end
 
   def show(conn, %{"id" => id}) do
