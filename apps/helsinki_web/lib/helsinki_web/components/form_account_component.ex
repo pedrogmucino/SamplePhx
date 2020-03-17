@@ -85,8 +85,8 @@ defmodule AccountingSystemWeb.FormAccountComponent do
 
                 <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Nombre</label>
                 <div class="inline-flex w-full">
-                  <input type="text" <%= if @actionx == "edit", do: "readonly" %> name="name" maxlength="32" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Nombre" value="<%= (if @actionx == "edit", do: @parent_editx.name, else: @namex) %>">
-                  <input type="text" <%= if @actionx == "edit", do: "readonly" %> name="name2" maxlength="32" class="focus:outline-none focus:bg-white focus:border-blue-500 ml-4 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Nombre">
+                  <input type="text" <%= if @actionx == "edit", do: 'readonly', else: if @levelx > 0, do: 'readonly' %> name="name" maxlength="32" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Nombre" value="<%= (if @actionx == "edit", do: @parent_editx.name, else: @namex) %>">
+                  <input type="text" <%= if @actionx == "edit", do: 'readonly' %> name="name2" maxlength="32" class="focus:outline-none focus:bg-white focus:border-blue-500 ml-4 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name2" placeholder="Nombre">
                 </div>
                 <label class="block tracking-wide text-gray-700 font-bold" for="grid-description">Descripción</label>
                 <input type="text" name="description" maxlength="128" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-description" placeholder="Descripción" value="<%= (if @actionx == "edit", do: @parent_editx.description) %>">
@@ -104,18 +104,18 @@ defmodule AccountingSystemWeb.FormAccountComponent do
               </div>
 
 
-              <label class="pt-5 block tracking-wide text-gray-700 font-bold" for="grid-name">Fiscales</label>
+              <label class="pt-5 block tracking-wide text-gray-700 font-bold" for="grid-fiscales">Fiscales</label>
               <div class="border-solid border-2 border-gray-300 p-4 rounded">
-                <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">RFC</label>
+                <label class="block tracking-wide text-gray-700 font-bold" for="grid-rfc">RFC</label>
                 <div class="inline-flex w-full">
                   <div class="inline-block w-full mr-2">
-                    <input type="text" name="rfc_literals" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Literales" value="<%= (if @actionx == "edit", do: @parent_editx.rfc_literals) %>">
+                    <input type="text" name="rfc_literals" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-rfc" placeholder="Literales" value="<%= (if @actionx == "edit", do: @parent_editx.rfc_literals) %>">
                   </div>
                   <div class="inline-block w-full mr-2">
-                    <input type="text" name="rfc_numeric" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Numéricos" value="<%= (if @actionx == "edit", do: @parent_editx.rfc_numeric) %>">
+                    <input type="text" name="rfc_numeric" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-rfc2" placeholder="Numéricos" value="<%= (if @actionx == "edit", do: @parent_editx.rfc_numeric) %>">
                   </div>
                   <div class="inline-block w-full mr-2">
-                    <input type="text" name="rfc_key" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Homoclave" value="<%= (if @actionx == "edit", do: @parent_editx.rfc_key) %>">
+                    <input type="text" name="rfc_key" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-rfc3" placeholder="Homoclave" value="<%= (if @actionx == "edit", do: @parent_editx.rfc_key) %>">
                   </div>
                 </div>
 
@@ -126,23 +126,23 @@ defmodule AccountingSystemWeb.FormAccountComponent do
 
                 <div class="inline-flex w-full">
                   <div class="inline-block w-full mr-2">
-                    <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Código de Grupo</label>
-                    <input type="number" name="group_code" min="1" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Código de Grupo" value="<%= (if @actionx == "edit", do: @parent_editx.group_code) %>">
+                    <label class="block tracking-wide text-gray-700 font-bold" for="grid-groupcode">Código de Grupo</label>
+                    <input type="number" name="group_code" min="1" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-groupcode" placeholder="Código de Grupo" value="<%= (if @actionx == "edit", do: @parent_editx.group_code) %>">
                   </div>
                   <div class="inline-block w-full ml-2">
-                    <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Aplicar a</label>
-                    <input type="number" name="apply_to" min="1" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Aplicar a" value="<%= (if @actionx == "edit", do: @parent_editx.apply_to) %>">
+                    <label class="block tracking-wide text-gray-700 font-bold" for="grid-apply">Aplicar a</label>
+                    <input type="number" name="apply_to" min="1" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-apply" placeholder="Aplicar a" value="<%= (if @actionx == "edit", do: @parent_editx.apply_to) %>">
                   </div>
                 </div>
 
                 <div class="inline-flex w-full">
                   <div class="inline-block w-full mr-2">
-                    <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Fiscal Tercero</label>
-                    <input type="number" name="third_party_prosecutor" min="1" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Fiscal Tercero"  value="<%= (if @actionx == "edit", do: @parent_editx.third_party_prosecutor) %>">
+                    <label class="block tracking-wide text-gray-700 font-bold" for="grid-fiscalt">Fiscal Tercero</label>
+                    <input type="number" name="third_party_prosecutor" min="1" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-fiscalt" placeholder="Fiscal Tercero"  value="<%= (if @actionx == "edit", do: @parent_editx.third_party_prosecutor) %>">
                   </div>
                   <div class="inline-block w-full ml-2">
-                    <label class="block tracking-wide text-gray-700 font-bold" for="grid-name">Aplicar a Tercero</label>
-                    <input type="text" name="apply_third_party_to" maxlength="2" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" placeholder="Aplicar Tercero a"  value="<%= (if @actionx == "edit", do: @parent_editx.apply_third_party_to) %>">
+                    <label class="block tracking-wide text-gray-700 font-bold" for="grid-applyt">Aplicar a Tercero</label>
+                    <input type="text" name="apply_third_party_to" maxlength="2" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-applyt" placeholder="Aplicar Tercero a"  value="<%= (if @actionx == "edit", do: @parent_editx.apply_third_party_to) %>">
                   </div>
                 </div>
 

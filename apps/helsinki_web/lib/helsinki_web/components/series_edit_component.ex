@@ -11,7 +11,7 @@ defmodule AccountingSystemWeb.SeriesEditComponent do
   end
   def render(assigns) do
     ~L"""
-    <div class="bg-white mt-16 ml-1 w-80 h-hoch-93 rounded border">
+    <div id="series_comp" class="bg-white mt-16 ml-1 w-80 h-hoch-93 rounded border">
 
       <div class="inline-block bg-blue-700 text-white px-6 py-4 w-full">
         <div class="inline-flex top-0 right-0 bg-blue-700 text-white mt-2">
