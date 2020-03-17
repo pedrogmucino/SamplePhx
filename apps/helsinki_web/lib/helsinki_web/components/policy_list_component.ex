@@ -215,6 +215,11 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     end
   end
 
+  def handle_event("add_xml", params, socket) do
+    params |> IO.inspect(label: " ------------------ > ADD XML ")
+    {:noreply, socket}
+  end
+
   def handle_event("delete_aux", %{"value" => id}, socket) do
     sum_debe = socket.assigns.pollys.sum_debe - to_float(Enum.find(socket.assigns.arr, fn aux -> aux.id == String.to_integer(id) end).debit)
     sum_haber = socket.assigns.pollys.sum_haber - to_float(Enum.find(socket.assigns.arr, fn aux -> aux.id == String.to_integer(id) end).credit)
