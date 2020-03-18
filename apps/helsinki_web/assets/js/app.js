@@ -95,6 +95,22 @@ Hooks.evidence_upload = {
             });        
         })
     }
+};
+
+Hooks.test = {
+    mounted(){
+        this.el.addEventListener("input", e =>{
+            var reader = new FileReader();
+            reader.onload = function() {
+                var arrayBuffer = this.result,
+                array = new Uint8Array(arrayBuffer),
+                binaryString = String.fromCharCode.apply(null, array);
+                console.log(array);
+                console.log(binaryString);
+            }
+            reader.readAsArrayBuffer(e.srcElement.files[0]);
+        })
+    }
 }
 
 // let liveSocket = new LiveSocket("/live", Socket, { hooks: hooks })

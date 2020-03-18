@@ -148,10 +148,18 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                       <input <%= if !@status, do: 'disabled' %> type="number" name="credit" step="0.01" min="0" max="999999.99" phx-hook="format_number" value="<%=@pollys.credit%>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
                     </div>
 
-                    <div class="ml-4">
-                      <button phx-click="add_xml" phx-target="#policy" class="border tooltip w-10 h-hoch-2 mt-6 bg-teal-500 rounded text-white hover:bg-teal-400">
-                      <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="paperclip" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="h-6 w-6 ml-2"><path fill="currentColor" d="M67.508 468.467c-58.005-58.013-58.016-151.92 0-209.943l225.011-225.04c44.643-44.645 117.279-44.645 161.92 0 44.743 44.749 44.753 117.186 0 161.944l-189.465 189.49c-31.41 31.413-82.518 31.412-113.926.001-31.479-31.482-31.49-82.453 0-113.944L311.51 110.491c4.687-4.687 12.286-4.687 16.972 0l16.967 16.971c4.685 4.686 4.685 12.283 0 16.969L184.983 304.917c-12.724 12.724-12.73 33.328 0 46.058 12.696 12.697 33.356 12.699 46.054-.001l189.465-189.489c25.987-25.989 25.994-68.06.001-94.056-25.931-25.934-68.119-25.932-94.049 0l-225.01 225.039c-39.249 39.252-39.258 102.795-.001 142.057 39.285 39.29 102.885 39.287 142.162-.028A739446.174 739446.174 0 0 1 439.497 238.49c4.686-4.687 12.282-4.684 16.969.004l16.967 16.971c4.685 4.686 4.689 12.279.004 16.965a755654.128 755654.128 0 0 0-195.881 195.996c-58.034 58.092-152.004 58.093-210.048.041z" class=""></path></svg>
-                      <span class='tooltip-text text-white bg-blue-500 mt-5 -ml-12 rounded'>Agregar XML</span>
+                  </div>
+
+                  <div class="inline-flex w-full">
+                    <div>
+                      <button phx-hook="test" class="ml-4 tooltip">
+                        <label for="file-upload" class="custom-file-upload border w-10 h-hoch-2 mt-6 bg-teal-500 rounded text-white hover:bg-teal-400">
+                          <i class="fa fa-cloud-upload"></i>
+                          <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="paperclip" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="h-6 w-6 -ml-1"><path fill="currentColor" d="M67.508 468.467c-58.005-58.013-58.016-151.92 0-209.943l225.011-225.04c44.643-44.645 117.279-44.645 161.92 0 44.743 44.749 44.753 117.186 0 161.944l-189.465 189.49c-31.41 31.413-82.518 31.412-113.926.001-31.479-31.482-31.49-82.453 0-113.944L311.51 110.491c4.687-4.687 12.286-4.687 16.972 0l16.967 16.971c4.685 4.686 4.685 12.283 0 16.969L184.983 304.917c-12.724 12.724-12.73 33.328 0 46.058 12.696 12.697 33.356 12.699 46.054-.001l189.465-189.489c25.987-25.989 25.994-68.06.001-94.056-25.931-25.934-68.119-25.932-94.049 0l-225.01 225.039c-39.249 39.252-39.258 102.795-.001 142.057 39.285 39.29 102.885 39.287 142.162-.028A739446.174 739446.174 0 0 1 439.497 238.49c4.686-4.687 12.282-4.684 16.969.004l16.967 16.971c4.685 4.686 4.689 12.279.004 16.965a755654.128 755654.128 0 0 0-195.881 195.996c-58.034 58.092-152.004 58.093-210.048.041z" class=""></path></svg>
+                        </label>
+                        <input type="file" name="file-upload[x]" id="file-upload" accept="text/xml"/>
+                        <label id="file-upload"></label>
+                        <span class='tooltip-text text-white bg-blue-500 mt-5 -ml-12 rounded'>Agregar XML</span>
                       </button>
                     </div>
 
@@ -168,6 +176,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                       </button>
                     </div>
                   </div>
+
 
                 </form>
                 </div>
