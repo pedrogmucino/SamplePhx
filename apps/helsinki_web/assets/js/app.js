@@ -2,6 +2,7 @@
 // The MiniCssExtractPlugin is used to separate it out into
 // its own CSS file.
 import css from "../css/app.css"
+var fileData;
 let Hooks = {};
 Hooks.hidden_account = {
     mounted() {
@@ -39,6 +40,34 @@ Hooks.go_to_concept = {
         })
     }
 };
+
+Hooks.get_path = {
+    mounted() {
+        var aux = this;
+        this.el.addEventListener("change", evt => {  
+            var files = evt.target.files[0];
+            fileData = new Blob([files]);
+            console.log("Filedata: ", files)
+            var promise = new Promise(getBuffer);
+            promise.then(function(data) {
+                aux.pushEventTo("#list_comp", "load_aux", {"value": data, "name": files.name})
+            }).catch(function(err) {
+                console.log('Error: ',err);
+            });
+        })
+    }
+}
+
+function getBuffer(resolve) {
+    var reader = new FileReader();
+    reader.readAsArrayBuffer(fileData);
+    reader.onload = function() {
+      var arrayBuffer = reader.result
+      var bytes = new Uint8Array(arrayBuffer);
+      var array = Array.from(bytes)
+      resolve(array);
+    }
+  }
 
 Hooks.scroll_x = {
     mounted() {        
