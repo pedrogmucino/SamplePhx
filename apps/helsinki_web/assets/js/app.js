@@ -80,6 +80,34 @@ Hooks.scroll_y = {
         }, 100);
     }
 };
+Hooks.evidence_upload = {
+    mounted() {
+        this.el.addEventListener("change", e => {
+            
+            toBase64(this.el.files[0]).then(base64 => {
+                var hidden = document.getElementById("evidence_upload_base64") // change this to the ID of your hidden input
+                hidden.value = base64;
+                console.log(base64);
+                hidden.focus() // this is needed to register the new value with live view
+                console.log(this.el.files[0].name)
+                var nombre = document.getElementById("nombre_archivo")
+                nombre.value =  this.el.files[0].name
+            });        
+        })
+    }
+}
+
+// let liveSocket = new LiveSocket("/live", Socket, { hooks: hooks })
+let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}, hooks: Hooks})
+liveSocket.connect()
+
+const toBase64 = file => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+});
+
 function setFormat(el){
     el.innerHTML = formatNumber(parseFloat(el.textContent).toFixed(2));
 }
@@ -91,7 +119,7 @@ import LiveSocket from "phoenix_live_view"
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content");
 
-let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}, hooks: Hooks})
+// let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}, hooks: Hooks})
 liveSocket.connect()
 
 // webpack automatically bundles all modules in your

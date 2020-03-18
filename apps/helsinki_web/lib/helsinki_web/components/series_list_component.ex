@@ -24,6 +24,7 @@ defmodule AccountingSystemWeb.SeriesListComponent do
   end
 
   def handle_event("create_series", params, socket) do
+    IO.inspect(params, label: "------------------------------------>PARAMS")
     params = Map.replace!(params, "fiscal_exercise", Integer.to_string(Date.utc_today.year))
     case SeriesHandler.create_series(params) do
       {:ok, series} ->
@@ -65,6 +66,7 @@ defmodule AccountingSystemWeb.SeriesListComponent do
   end
 
   def handle_event("set_series", params, socket) do
+    IO.inspect(params, label: "------------------------------------->PARAMS")
     series =
     params["series_id"]
     |> SeriesHandler.get_series!()
