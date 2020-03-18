@@ -3,6 +3,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   use Phoenix.HTML
   alias AccountingSystem.AuxiliaryHandler, as: Auxiliar
   alias AccountingSystem.CodeFormatter, as: Formatter
+  alias AccountingSystem.XlsxFunctions, as: Xlsx
   alias AccountingSystem.{
     PolicyHandler,
     GenericFunctions,
@@ -276,6 +277,20 @@ defmodule AccountingSystemWeb.PolicyListComponent do
       |> Map.put(:fiscal_exercise, Enum.at(date, 0))
       |> Map.put(:period, String.to_integer(Enum.at(date, 1)))
     {:noreply, assign(socket, pollys: new_pollys)}
+  end
+
+  def handle_event("load_aux", %{"_target" => []}, socket) do
+    {:noreply, socket}
+  end
+
+  def handle_event("load_aux", %{"value" => path, "name" => name}, socket) do
+    Xlsx.get_data(path, name)
+      |> validate_header
+    {:noreply, socket}
+  end
+
+  defp validate_header(exel_data) do
+    exel_data
   end
 
   defp totals("", params, socket) do
