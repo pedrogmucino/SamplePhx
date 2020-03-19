@@ -5,10 +5,10 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   alias AccountingSystem.CodeFormatter, as: Formatter
   alias AccountingSystem.XlsxFunctions, as: Xlsx
   alias AccountingSystem.AccountHandler, as: Account
+  alias AccountingSystem.GenericFunctions, as: Generic
   alias AccountingSystem.{
     PolicyHandler,
-    GenericFunctions,
-    EctoUtil,
+    EctoUtil
   }
   alias AccountingSystemWeb.NotificationComponent
 
@@ -181,7 +181,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     params = check(params, params)
     params = debit_credit_values(params, params)
     dropdowns = search_account(params["account"], params)
-    pollys = Map.merge(socket.assigns.pollys, GenericFunctions.string_map_to_atom(params))
+    pollys = Map.merge(socket.assigns.pollys, Generic.string_map_to_atom(params))
     {:noreply, assign(socket, pollys: pollys, update: false, arr: socket.assigns.arr, dropdowns: dropdowns)}
   end
 
@@ -285,11 +285,14 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def handle_event("load_aux", %{"value" => path, "name" => name}, socket) do
-    Xlsx.get_data(path, name)
-      |> validate_header
-      |> validate_accounts
-      |> IO.inspect(label: "VALIDATE_ACCOUNT----------------------->")
-    {:noreply, socket}
+    data = Xlsx.get_data(path, name)
+            |> validate_header
+            |> validate_accounts
+            |> validate_concept
+            |> complete_aux_data
+            |> calculate_totals
+            |> IO.inspect(label: "calculate_totals---------------------------->")
+    {:noreply, assign(socket, pollys: Map.merge(socket.assigns.pollys, data.pollys), arr: data.arr)}
   end
 
   defp validate_header(exel_data) do
@@ -307,7 +310,34 @@ defmodule AccountingSystemWeb.PolicyListComponent do
       |> Enum.filter(fn row -> not(exist_account_in(row, db_accounts)) end)
       |> nonexisting_accounts(data)
       |> fill_ids(db_accounts)
-      |> IO.inspect(label: "MENSAJE O DATOS QUE REGRESA EL FILLS----------------------------->")
+  end
+
+  defp validate_concept({:error, message}), do: {:error, message}
+  defp validate_concept({:ok, data}) do
+    data
+      |> Enum.filter(fn x -> Enum.at(x, 1) == nil end)
+      |> nonexisting_concept(data)
+  end
+
+  defp complete_aux_data({:error, message}), do: {:error, message}
+  defp complete_aux_data({:ok, data}) do
+    {:ok,
+      data
+        |> Enum.map(fn x -> create_map(x) end)
+        |> Stream.with_index(1)
+        |> Enum.to_list
+        |> Enum.map(fn x -> add_id_number(x) end )
+    }
+  end
+  defp calculate_totals({:error, message}), do: {:error, message}
+  defp calculate_totals({:ok, data}) do
+    sh = Enum.reduce(data, 0.0, fn x, acc -> x.credit + acc end)
+    sd = Enum.reduce(data, 0.0, fn x, acc -> x.debit + acc end)
+    %{pollys: Map.new()
+                |> Map.put(:sum_haber, Float.round(sh, 2))
+                |> Map.put(:sum_debe, Float.round(sd, 2))
+                |> Map.put(:total, Float.round(sh-sd, 2)),
+      arr: data}
   end
 #********************************VALIDATE HEADER**********************************
   defp validate_length(data), do: is_five(Enum.count(data), data)
@@ -328,11 +358,30 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   defp convert_to_string(nil), do: "NULO"
   defp convert_to_string(algo), do: algo
 
-  #******************************CONVERT TO MAP*************************************
+  #******************************VALIDATE CONCEPT*************************************
+  defp nonexisting_concept([], data), do: {:ok, data}
+  defp nonexisting_concept(_, _), do: {:error, "No puede haber conceptos vacíos"}
+
+  #******************************Convert to MAP And validate values*********************
+  defp create_map(data) do
+    Map.new
+      |> Map.put(:account, Enum.at(data, 0))
+      |> Map.put(:aux_concept, Enum.at(data, 1))
+      |> Map.put(:credit, Generic.to_float(Enum.at(data, 3)))
+      |> Map.put(:debit, Generic.to_float(Enum.at(data, 4)))
+      |> Map.put(:department, Enum.at(data, 2))
+      |> Map.put(:id_account, Enum.at(data, 5))
+      |> Map.put(:id_aux, "")
+      |> Map.put(:name, Enum.at(data, 6))
+  end
+  defp add_id_number({data, id}) do
+    data
+      |> Map.put(:id, id)
+      |> Map.put(:number, id)
+  end
 
   defp totals("", params, socket) do
-    params = GenericFunctions.string_map_to_atom(params)
-    |> IO.inspect(label: "data que necesito----------------->")
+    params = Generic.string_map_to_atom(params)
     sumh = socket.assigns.pollys.sum_haber
     sumd = socket.assigns.pollys.sum_debe
     sumhe = sumh + void(params.credit)
@@ -351,7 +400,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   defp totals(_, params, socket) do
-    params = GenericFunctions.string_map_to_atom(params)
+    params = Generic.string_map_to_atom(params)
     sumh = socket.assigns.pollys.sum_haber
     sumd = socket.assigns.pollys.sum_debe
     old_aux = Enum.find(socket.assigns.arr, fn x -> x.id == String.to_integer(params.id_aux) end)

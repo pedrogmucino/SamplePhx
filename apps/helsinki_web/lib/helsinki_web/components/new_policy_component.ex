@@ -214,6 +214,13 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                           <label class="cursor-pointer mr-auto text-white">Cancelar</label>
                         </button>
                       <% end %>
+                    <% else %>
+                      <div class="form-group">
+                        <form id="uploading" phx-target="#list_comp" phx-change="load_aux" class="-mt-32">
+                          <input type="file" id="myfile" name="" phx-hook="get_path" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                          <input type="hidden" id="path" value="" phx-target="#list_comp" phx-change="load_aux">
+                        </form>
+                      </div>
                     <% end %>
                   </div>
                 </div>
