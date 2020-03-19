@@ -302,12 +302,14 @@ defmodule AccountingSystemWeb.PolicyListComponent do
 
   defp validate_accounts({:error, data}), do: {:error, data}
   defp validate_accounts({:ok, data}) do
-    Account.get_all_detail_accounts
-      |> IO.inspect(label: "DATA FROM DB---------------------------------------->")
-    IO.inspect(data, label: "DATA FROM EXCEL TO COMPARE-------------------------->")
-    {:ok, data}
+    db_accounts = Account.get_all_detail_accounts
+    data
+      |> Enum.filter(fn row -> not(exist_account_in(row, db_accounts)) end)
+      |> nonexisting_accounts(data)
+      |> fill_ids(db_accounts)
+      |> IO.inspect(label: "MENSAJE O DATOS QUE REGRESA EL FILLS----------------------------->")
   end
-#********************************VALIDATE LENGTH**********************************
+#********************************VALIDATE HEADER**********************************
   defp validate_length(data), do: is_five(Enum.count(data), data)
   defp is_five(5, data), do: data
   defp is_five(_, _), do: []
@@ -317,6 +319,16 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   defp delete_header({_, data}), do: data
 
 #********************************VALIDATE ACCOUNTS********************************
+  defp exist_account_in(row, data), do: Enum.any?(data, fn x -> Enum.at(x, 1) == List.first(row) end)
+  defp nonexisting_accounts([], data), do: {:ok, data}
+  defp nonexisting_accounts(error, _), do: {:error, "Las Cuentas #{List.to_string(Enum.map(error, fn x -> convert_to_string(List.first(x)) <> " || " end))} no existen en la base o no son cuentas de detalle. Favor de revisar"}
+  defp fill_ids({:error, message}, _), do: {:error, message}
+  defp fill_ids({:ok, data}, db_data), do: {:ok, Enum.map(data, fn x -> x ++ [get_id_from_base(x, db_data)] end)}
+  defp get_id_from_base(x, db_data), do: Enum.at(Enum.find(db_data, fn row -> Enum.at(row, 1) == List.first(x) end), 0)
+  defp convert_to_string(nil), do: "NULO"
+  defp convert_to_string(algo), do: algo
+
+  #******************************CONVERT TO MAP*************************************
 
   defp totals("", params, socket) do
     params = GenericFunctions.string_map_to_atom(params)
