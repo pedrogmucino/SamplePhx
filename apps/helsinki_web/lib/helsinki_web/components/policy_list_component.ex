@@ -291,8 +291,8 @@ defmodule AccountingSystemWeb.PolicyListComponent do
             |> validate_concept
             |> complete_aux_data
             |> calculate_totals
-            |> IO.inspect(label: "calculate_totals---------------------------->")
-    {:noreply, assign(socket, pollys: Map.merge(socket.assigns.pollys, data.pollys), arr: data.arr)}
+            |> error_or_pass(socket)
+            |> IO.inspect(label: "ERROR OR PASSSSS---------------------------->")
   end
 
   defp validate_header(exel_data) do
@@ -379,6 +379,15 @@ defmodule AccountingSystemWeb.PolicyListComponent do
       |> Map.put(:id, id)
       |> Map.put(:number, id)
   end
+
+  #*******************************ERROR OR PASSSS*************************************************
+  defp error_or_pass({:error, message}, socket) do
+    NotificationComponent.set_timer_notification_error()
+    {:noreply, assign(socket, error: message)}
+  end
+  defp error_or_pass(data, socket), do: {:noreply, assign(socket, pollys: Map.merge(socket.assigns.pollys, data.pollys), arr: data.arr)}
+
+  #********************************END OF LOAD EXCEL************************************************************************^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   defp totals("", params, socket) do
     params = Generic.string_map_to_atom(params)
