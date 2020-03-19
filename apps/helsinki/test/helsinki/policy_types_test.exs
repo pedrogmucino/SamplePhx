@@ -1,4 +1,4 @@
-defmodule AccountingSystem.PolicyTipesTest do
+defmodule AccountingSystem.PolicyTypesTest do
   use AccountingSystem.DataCase
 
   alias AccountingSystem.PolicyTypeHandler

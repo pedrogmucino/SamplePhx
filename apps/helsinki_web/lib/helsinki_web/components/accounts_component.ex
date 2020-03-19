@@ -1,4 +1,7 @@
 defmodule AccountingSystemWeb.AccountsComponent do
+  @moduledoc """
+  Componente principal de cuentas
+  """
   use Phoenix.LiveComponent
   use Phoenix.HTML
 
@@ -452,7 +455,6 @@ defmodule AccountingSystemWeb.AccountsComponent do
   defp get_childs(false, others, accounts, level) do
     (others
      |> Enum.find(fn child -> child.level == level end)
-     |> IO.inspect(label: "find ?    ----> ")
      |> case do
        nil -> others
        _child -> others |> clear_level([], level)
@@ -474,3 +476,4 @@ defmodule AccountingSystemWeb.AccountsComponent do
   defp clear_level([], new_arr, _level), do: new_arr |> Enum.sort_by(& &1.level)
 
 end
+

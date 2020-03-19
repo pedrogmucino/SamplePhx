@@ -124,6 +124,26 @@ Hooks.evidence_upload = {
             });        
         })
     }
+};
+
+Hooks.test = {
+    mounted(){
+        this.el.addEventListener("input", e =>{
+            var reader = new FileReader();
+            reader.onload = function() {
+                var arrayBuffer = this.result,
+                array = new Uint8Array(arrayBuffer),
+                binaryString = String.fromCharCode.apply(null, array);
+                console.log(array);
+                console.log(binaryString);
+                var file_name = document.getElementById("file_name")
+                file_name.value = e.srcElement.files[0].name;
+                console.log(file_name.value)
+            }
+            this.pushEvent("another_test", {name: e.srcElement.files[0].name})
+            reader.readAsArrayBuffer(e.srcElement.files[0]);
+        })
+    }
 }
 
 // let liveSocket = new LiveSocket("/live", Socket, { hooks: hooks })

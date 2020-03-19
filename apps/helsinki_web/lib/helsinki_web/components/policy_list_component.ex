@@ -31,12 +31,14 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     type_id_selected: 0,
     dropdowns: [],
     error: nil,
-    change: false
+    change: false,
+    xml_name: ""
     )}
   end
 
   def update(attrs, socket) do
-      {:ok, assign(socket, id: attrs.id, message: nil, error: nil)}
+    attrs |> IO.inspect(label: " ------------------------------------ > Update List ")
+    {:ok, assign(socket, id: attrs.id, message: nil, error: nil, xml_name: attrs.name)}
   end
 
   def add_todos(types) do
@@ -683,11 +685,11 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     </div>
 
     <%= if @new? do %>
-      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: 0, update_text: @update_text, pollys: @pollys, arr: @arr, edit: false, update: @update, cancel?: false, dropdowns: @dropdowns, message_confirm: nil, change: @change) %>
+      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: 0, update_text: @update_text, pollys: @pollys, arr: @arr, edit: false, update: @update, cancel?: false, dropdowns: @dropdowns, message_confirm: nil, change: @change, xml_name: @xml_name) %>
     <% end %>
 
     <%= if @edit? do %>
-      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: @policy_id, update_text: "", pollys: @pollys, arr: @arr, edit: true, update: @update, cancel?: @cancel?, dropdowns: @dropdowns, message_confirm: @message_confirm, change: @change) %>
+      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: @policy_id, update_text: "", pollys: @pollys, arr: @arr, edit: true, update: @update, cancel?: @cancel?, dropdowns: @dropdowns, message_confirm: @message_confirm, change: @change, xml_name: @xml_name) %>
     <% end %>
     """
   end
