@@ -1,4 +1,7 @@
 defmodule AccountingSystem.EctoUtil do
+  @moduledoc """
+  Módulo para convertir lista de errores de ecto en un string con formato
+  """
   def get_errors(changeset) do
     get_errors(changeset.errors, "")
   end

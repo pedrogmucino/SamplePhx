@@ -1,5 +1,8 @@
 
 defmodule AccountingSystem.SchemaFormatter do
+  @moduledoc """
+  Módulo para consultas de órden de cuentas
+  """
   alias AccountingSystem.CodeFormatter
   alias AccountingSystem.GetLastIncrementValueQuery, as: AccountLastIncrement
 
@@ -8,10 +11,9 @@ defmodule AccountingSystem.SchemaFormatter do
     %AccountingSystem.AccountCodeSchema{}
       |> Map.put(:parent_account, id)
       |> Map.put(:code, CodeFormatter.giveme_a_son(code_schema))
-      |> Map.put(:name, CodeFormatter.get_parent_description(id)<> "-")
+      |> Map.put(:name, CodeFormatter.get_parent_description(id) <> "-")
       |> Map.put(:level, Map.get(code_schema, :level) + 1)
       |> Map.put(:root_account, Map.get(code_schema, :root_account))
-    #Ste men saca el valor del hijo mayor y genera el codigo del siguiente hijo
   end
 
   def get_root_account(nil) do

@@ -1,4 +1,7 @@
 defmodule AccountingSystem.PolicyFormatter do
+  @moduledoc """
+  Módulo de funciones para dar formato a fechas de póliza
+  """
 
   def get_necesaries() do
     %AccountingSystem.PolicyTypeSchema{}
