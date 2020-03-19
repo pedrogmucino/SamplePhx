@@ -29,4 +29,10 @@ defmodule AccountingSystem.SearchAccount do
       (fragment("a0.code SIMILAR TO (?)", ^search) or fragment("a0.description SIMILAR TO (?)", ^search) or fragment("a0.name SIMILAR TO (?)", ^search))
   end
 
+  def all_detail() do
+    #Qué necesito de la cuenta para llenar el aux?????
+    from acc in AccountingSystem.AccountSchema,
+      select: [acc.id, acc.code, acc.description],
+      where: acc.type == "D" and acc.status == "A"
+  end
 end
