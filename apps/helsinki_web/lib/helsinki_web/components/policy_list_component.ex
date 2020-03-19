@@ -127,7 +127,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
 
   def handle_event("create_new", _params, socket) do
     now = Date.utc_today
-    today = "#{now.year}-#{Formatter.addZero(Integer.to_string(now.month), 2)}-#{Formatter.addZero(Integer.to_string(now.day), 2)}"
+    today = "#{now.year}-#{Formatter.add_zero(Integer.to_string(now.month), 2)}-#{Formatter.add_zero(Integer.to_string(now.day), 2)}"
     {:noreply, assign(socket,
     policy_list: PolicyHandler.get_policy_list,
     new?: true,
