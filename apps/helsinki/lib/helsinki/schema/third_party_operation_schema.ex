@@ -1,4 +1,7 @@
 defmodule AccountingSystem.ThirdPartyOperationSchema do
+  @moduledoc """
+  Esquema de operaciones con terceros
+  """
   use Ecto.Schema
   import Ecto.Changeset
 
