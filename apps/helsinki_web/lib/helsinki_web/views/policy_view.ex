@@ -104,4 +104,10 @@ defmodule AccountingSystemWeb.PolicyListLiveView do
   def handle_info({:DOWN, _reference, _process, _pid, _normal}, socket) do
     {:noreply, socket}
   end
+
+  def handle_event("another_test", params, socket) do
+    send_update(AccountingSystemWeb.PolicyListComponent, id: 0, name: params["name"])
+    {:noreply, socket}
+  end
+
 end
