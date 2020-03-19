@@ -4,6 +4,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   alias AccountingSystem.AuxiliaryHandler, as: Auxiliar
   alias AccountingSystem.CodeFormatter, as: Formatter
   alias AccountingSystem.XlsxFunctions, as: Xlsx
+  alias AccountingSystem.AccountHandler, as: Account
   alias AccountingSystem.{
     PolicyHandler,
     GenericFunctions,
@@ -286,15 +287,40 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   def handle_event("load_aux", %{"value" => path, "name" => name}, socket) do
     Xlsx.get_data(path, name)
       |> validate_header
+      |> validate_accounts
+      |> IO.inspect(label: "VALIDATE_ACCOUNT----------------------->")
     {:noreply, socket}
   end
 
   defp validate_header(exel_data) do
     exel_data
+      |> List.first
+      |> validate_length
+      |> List.myers_difference(["Cuenta", "Concepto", "Departamento", "Debe", "Haber"])
+      |> more_than_eq(exel_data)
   end
+
+  defp validate_accounts({:error, data}), do: {:error, data}
+  defp validate_accounts({:ok, data}) do
+    Account.get_all_detail_accounts
+      |> IO.inspect(label: "DATA FROM DB---------------------------------------->")
+    IO.inspect(data, label: "DATA FROM EXCEL TO COMPARE-------------------------->")
+    {:ok, data}
+  end
+#********************************VALIDATE LENGTH**********************************
+  defp validate_length(data), do: is_five(Enum.count(data), data)
+  defp is_five(5, data), do: data
+  defp is_five(_, _), do: []
+  defp more_than_eq([del: _], _), do: {:error, "Error de encabezado, favor de revisar el orden y que no contenga más información fuera de la tabla"}
+  defp more_than_eq([ins: _], _), do: {:error, "Error de encabezado, favor de revisar el orden y que no contenga más información fuera de la tabla"}
+  defp more_than_eq(_, data), do: {:ok, delete_header(List.pop_at(data, 0))}
+  defp delete_header({_, data}), do: data
+
+#********************************VALIDATE ACCOUNTS********************************
 
   defp totals("", params, socket) do
     params = GenericFunctions.string_map_to_atom(params)
+    |> IO.inspect(label: "data que necesito----------------->")
     sumh = socket.assigns.pollys.sum_haber
     sumd = socket.assigns.pollys.sum_debe
     sumhe = sumh + void(params.credit)
