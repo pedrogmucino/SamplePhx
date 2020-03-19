@@ -1,4 +1,7 @@
 defmodule AccountingSystem.GetSeriesQuery do
+  @moduledoc """
+  Query para obtener una lista de series y folio actual de todos los tipos de póliza
+  """
   import Ecto.Query
   alias AccountingSystem.{
     SeriesSchema,
