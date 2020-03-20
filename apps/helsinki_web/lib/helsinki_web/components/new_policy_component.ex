@@ -88,11 +88,22 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                 </div>
               </form>
 
-              <div class="mt-10 py-6">
+              <div class="mt-5">
                 <div class="py-2">
                   <label><b>Captura de Auxiliares</b></label>
                 </div>
                 <div class="border-solid border-2 border-gray-300 p-4 rounded">
+                <div class="w-full text-right">
+                    <button phx-hook="get_path" class="tooltip">
+                          <label for="xlsx-upload" class="custom-file-upload border w-10 bg-teal-500 rounded text-white hover:bg-teal-400">
+                            <i class="fa fa-cloud-upload"></i>
+                            <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="upload" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="h-6 w-6 -ml-1"><path fill="currentColor" d="M296 384h-80c-13.3 0-24-10.7-24-24V192h-87.7c-17.8 0-26.7-21.5-14.1-34.1L242.3 5.7c7.5-7.5 19.8-7.5 27.3 0l152.2 152.2c12.6 12.6 3.7 34.1-14.1 34.1H320v168c0 13.3-10.7 24-24 24zm216-8v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h136v8c0 30.9 25.1 56 56 56h80c30.9 0 56-25.1 56-56v-8h136c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z" class=""></path></svg>
+                          </label>
+                          <input type="file" id="xlsx-upload" name="" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                          <label id="xlsx-upload"></label>
+                          <span class='tooltip-text text-white bg-blue-500 mt-5 -ml-12 rounded'>Cargar Xlsx</span>
+                    </button>
+                </div>
                 <form id="form2" phx-submit="save_aux" phx-target="#list_comp" phx-change="update_form" class="-mt-32">
                   <label class="block pt-32 tracking-wide text-gray-700 font-bold" for="grid-name">Cuenta</label>
                   <div class="inline-flex w-full">
