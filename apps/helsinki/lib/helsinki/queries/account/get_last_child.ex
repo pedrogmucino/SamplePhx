@@ -1,4 +1,7 @@
 defmodule AccountingSystem.GetLastChild do
+  @moduledoc """
+  Módulo con el query para obtener la cuenta hijo con mayor código de un padre
+  """
   import Ecto.Query
   alias AccountingSystem.AccountSchema
 

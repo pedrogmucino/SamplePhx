@@ -1,4 +1,7 @@
 defmodule AccountingSystem.GetMaxAccountByLevel do
+  @moduledoc """
+  Módulo que contiene el query que permite obtener el fragmento de código de una cuenta correspondiente a un nivel
+  """
 
   import Ecto.Query
   alias AccountingSystem.AccountSchema
