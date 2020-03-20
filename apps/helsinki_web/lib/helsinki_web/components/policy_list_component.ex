@@ -299,10 +299,10 @@ defmodule AccountingSystemWeb.PolicyListComponent do
             |> validate_header
             |> validate_accounts
             |> validate_concept
+            |> validate_debit_credit
             |> complete_aux_data
             |> calculate_totals
             |> error_or_pass(socket)
-            |> IO.inspect(label: "ERROR OR PASSSSS---------------------------->")
   end
 
   defp validate_header(exel_data) do
@@ -327,6 +327,13 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     data
       |> Enum.filter(fn x -> Enum.at(x, 1) == nil end)
       |> nonexisting_concept(data)
+  end
+
+  defp validate_debit_credit({:error, message}), do: {:error, message}
+  defp validate_debit_credit({:ok, data}) do
+    data
+      |> Enum.reject(fn aux -> just_one_value(Enum.at(aux, 3), Enum.at(aux, 4)) end)
+      |> evaluate_debit_credit(data)
   end
 
   defp complete_aux_data({:error, message}), do: {:error, message}
@@ -371,6 +378,14 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   #******************************VALIDATE CONCEPT*************************************
   defp nonexisting_concept([], data), do: {:ok, data}
   defp nonexisting_concept(_, _), do: {:error, "No puede haber conceptos vacíos"}
+
+  #******************************VALIDATE CREDIT AND DEBIT*************************************
+  defp just_one_value(val, debit) when (val == nil or val == 0) and debit >= 0, do: true
+  defp just_one_value(credit, val) when (val == nil or val == 0) and credit >= 0, do: true
+  defp just_one_value(_, _), do: false
+  defp evaluate_debit_credit([], data), do: {:ok, data}
+  defp evaluate_debit_credit(error, _), do: {:error, "Las cuentas #{List.to_string(Enum.map(error, fn x -> convert_to_string(List.first(x)) <> " || " end))} tienen valores en debe y haber mayores a cero, favor de revisar"}
+
 
   #******************************Convert to MAP And validate values*********************
   defp create_map(data) do

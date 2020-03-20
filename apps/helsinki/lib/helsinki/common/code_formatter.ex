@@ -1,4 +1,7 @@
 defmodule AccountingSystem.CodeFormatter do
+  @moduledoc """
+  Módulo que da formato a códigos de cuenta
+  """
 
   alias AccountingSystem.AccountHandler
   alias AccountingSystem.Repo
@@ -105,7 +108,7 @@ defmodule AccountingSystem.CodeFormatter do
   def add_zero(str, len) do
     size = String.length(str)
     if len - size < 0, do: raise RuntimeError, message: "Configuración incorrecta, favor de revisar"
-    String.duplicate("0",len - size) <> str
+    String.duplicate("0", len - size) <> str
   end
 
   defp insert_value(string, list, position) do
