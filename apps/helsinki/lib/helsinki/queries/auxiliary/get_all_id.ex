@@ -36,7 +36,9 @@ defmodule AccountingSystem.GetAllId do
       updated_at: aux.updated_at,
       policy_id: aux.policy_id,
       account: ac.code,
-      number: row_number() |> over(order_by: aux.id)
+      number: row_number() |> over(order_by: aux.id),
+      xml_id: aux.xml_id,
+      xml_name: aux.xml_name
     }
   end
 
