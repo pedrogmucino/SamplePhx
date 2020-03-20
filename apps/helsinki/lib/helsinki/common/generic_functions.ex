@@ -7,7 +7,7 @@ defmodule AccountingSystem.GenericFunctions do
   end
 
   def to_float(x) when is_bitstring(x), do: void(x)
-  def to_float(x) when is_integer(x), do: x/1
+  def to_float(x) when is_integer(x), do: x / 1
   def to_float(x) when is_float(x), do: x
   def to_float(nil), do: 0.0
   defp void(0), do: 0.0

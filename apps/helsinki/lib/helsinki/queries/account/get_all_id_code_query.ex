@@ -1,4 +1,7 @@
 defmodule AccountingSystem.GetAllIdCode do
+  @moduledoc """
+  Módulo que contiene el query para obtener una lista ordenada de códigos de cuenta
+  """
   import Ecto.Query, warn: false
 
   def id_code() do

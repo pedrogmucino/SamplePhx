@@ -31,12 +31,12 @@ defmodule AccountingSystem.StructureHandler do
 
   def update_code_size(%{size: size, level: level}, %{"size" => new_size}) do
     eval = String.to_integer(new_size) - size
-    do_the_update_please(eval, level)
+    update_execute(eval, level)
   end
 
-  defp do_the_update_please(length, _) when length == 0, do: :ok
+  defp update_execute(length, _) when length == 0, do: :ok
 
-  defp do_the_update_please(length, level) when length < 0 do   #Si el cambio fue a Codigo mas CHICO (Quitar ceros)
+  defp update_execute(length, level) when length < 0 do   #Si el cambio fue a Codigo mas CHICO (Quitar ceros)
     case check_if_you_can_delet_zeros(level, length * -1) do
       {:ok} ->
         AccountsGetSet.get_code_and_id
@@ -46,7 +46,7 @@ defmodule AccountingSystem.StructureHandler do
       end
   end
 
-  defp do_the_update_please(length, level) when length > 0 do  #Si el cambio fue a Codigo mas grande (cuantos '0' agregas, donde agregas osea en que nivel)
+  defp update_execute(length, level) when length > 0 do  #Si el cambio fue a Codigo mas grande (cuantos '0' agregas, donde agregas osea en que nivel)
     AccountsGetSet.get_code_and_id
       |> Enum.each(fn data -> change_db_code(data, level, length) end)
   end
