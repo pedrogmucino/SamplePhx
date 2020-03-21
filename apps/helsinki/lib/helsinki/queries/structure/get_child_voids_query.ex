@@ -1,4 +1,7 @@
 defmodule AccountingSystem.GetChildVoid do
+  @moduledoc """
+  Módulo que contiene los queries para consultar los id de estructuras de cuenta de determinado nivel
+  """
   import Ecto.Query, warn: false
 
   def get_all(level, max) do

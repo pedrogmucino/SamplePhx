@@ -1,5 +1,8 @@
 
 defmodule AccountingSystem.PolicyListQuery do
+  @moduledoc """
+  Módulo que contiene el query para obtener una lista de pólizas especificando su tipo
+  """
   import Ecto.Query, warn: false
   alias AccountingSystem.{
     PolicySchema,

@@ -1,4 +1,7 @@
 defmodule AccountingSystem.GetAllIdName do
+  @moduledoc """
+  Módulo que contiene los queries oara obtener los tipos de póliza y sus series
+  """
   import Ecto.Query, warn: false
 
   alias AccountingSystem.{
