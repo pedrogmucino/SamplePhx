@@ -1,4 +1,7 @@
 defmodule AccountingSystem.GetAllId do
+  @moduledoc """
+  Módulo que contiene los queries para consultar los auxiliares de una póliza
+  """
   import Ecto.Query, warn: false
   alias AccountingSystem.{
     AuxiliarySchema,

@@ -1,4 +1,7 @@
 defmodule AccountingSystem.GetFromParent do
+  @moduledoc """
+  Módulo que contiene el query para consultar el nombre de una cuenta por id
+  """
   import Ecto.Query, warn: false
   alias AccountingSystem.Repo
 

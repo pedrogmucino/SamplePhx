@@ -1,4 +1,7 @@
 defmodule AccountingSystem.SearchAccount do
+  @moduledoc """
+  Módulo que contiene los queries para realizar búsquedas de cuentas en base a un texto
+  """
   import Ecto.Query, warn: false
 
   def search(text) do
@@ -16,9 +19,9 @@ defmodule AccountingSystem.SearchAccount do
 
   def format(text) do
     new_text = text
-                |>String.trim
-                |>String.replace(" ", "|")
-    "%("<>new_text<>")%"
+                |> String.trim
+                |> String.replace(" ", "|")
+    "%("<> new_text <> ")%"
   end
 
   def search_detail_account(text) do
