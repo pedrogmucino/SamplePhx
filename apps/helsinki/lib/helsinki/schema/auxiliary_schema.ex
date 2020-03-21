@@ -15,6 +15,8 @@ defmodule AccountingSystem.AuxiliarySchema do
     field :iduuid, :integer
     field :mxn_amount, :float
     field :policy_number, :integer
+    field :xml_id, :binary_id
+    field :xml_name, :string
     belongs_to :policy, AccountingSystem.PolicySchema
 
     timestamps()
