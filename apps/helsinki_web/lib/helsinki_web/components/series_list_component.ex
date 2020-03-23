@@ -1,12 +1,16 @@
 defmodule AccountingSystemWeb.SeriesListComponent do
   use Phoenix.LiveComponent
   use Phoenix.HTML
+  import Ecto
   alias AccountingSystem.{
     StructureHandler,
     SeriesHandler,
     EctoUtil
   }
-  alias AccountingSystemWeb.NotificationComponent
+  alias AccountingSystemWeb.{
+    Alexandria,
+    NotificationComponent
+  }
 
   def mount(socket) do
     {:ok, assign(socket,
@@ -66,7 +70,17 @@ defmodule AccountingSystemWeb.SeriesListComponent do
   end
 
   def handle_event("set_series", params, socket) do
-    IO.inspect(params, label: "------------------------------------->PARAMS")
+    case Alexandria.get_file(Application.get_env(:helsinki_web, Format)[:file_uuid], 1) do
+      {:ok, %HTTPoison.Response{} = response} ->
+        if String.contains?(response.body, "\"errors\"") do
+          errors = response.body |> IO.inspect(label: "---------------------------------->ERRORES AL RECUPERAR")
+        else
+          bytes = response.body |> IO.inspect(label: "-------------------------------->BYTES O CONTENIDO DEL ARCHIVO")
+        end
+      {:error, response} ->
+        IO.inspect(response, label: "-------------------------------------->FALLA DEL SERVICIO")
+    end
+
     series =
     params["series_id"]
     |> SeriesHandler.get_series!()

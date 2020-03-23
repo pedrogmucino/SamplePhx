@@ -26,7 +26,8 @@ defmodule AccountingSystem.Umbrella.MixProject do
   defp deps do
     [
       {:excoveralls, "~> 0.10", only: :test},
-      {:credo, "~> 1.3", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.3", only: [:dev, :test], runtime: false},
+      {:httpoison, "~>1.6.2"}
     ]
   end
 end

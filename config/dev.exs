@@ -74,3 +74,10 @@ config :phoenix, :plug_init_mode, :runtime
 # Set a higher stacktrace during development. Avoid configuring such
 # in production as building large stacktraces may be expensive.
 config :phoenix, :stacktrace_depth, 20
+
+config :helsinki_web, Alexandria,
+  url: "http://10.0.3.120:4300/api/archivos/"
+
+
+config :helsinki_web, Format,
+file_uuid: "0c36ce08-032c-4afb-b14d-f050025821cd"
