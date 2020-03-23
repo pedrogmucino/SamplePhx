@@ -15,7 +15,7 @@ defmodule AccountingSystem.AuxiliarySchema do
     field :iduuid, :integer
     field :mxn_amount, :float
     field :policy_number, :integer
-    field :xml_id, :binary_id
+    field :xml_id, Ecto.UUID, autogenerate: true
     field :xml_name, :string
     belongs_to :policy, AccountingSystem.PolicySchema
 
@@ -25,7 +25,7 @@ defmodule AccountingSystem.AuxiliarySchema do
   @doc false
   def changeset(auxiliary, attrs) do
     auxiliary
-    |> cast(attrs, [:policy_number, :id_account, :concept, :debit_credit, :mxn_amount, :amount, :department, :exchange_rate, :policy_id])
+    |> cast(attrs, [:policy_number, :id_account, :concept, :debit_credit, :mxn_amount, :amount, :department, :exchange_rate, :policy_id, :xml_name, :xml_id])
     |> validate_required([:policy_number, :id_account, :concept, :debit_credit, :mxn_amount, :amount, :exchange_rate, :policy_id])
   end
 end
