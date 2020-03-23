@@ -293,26 +293,31 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                               <div>
                                 <label class="inline-block cursor-pointer text-gray-600 text-sm">Concepto: <b><%= item.aux_concept %></b></label><br>
                               </div>
-                              <div class="flex mb-2">
+                              <div class="flex">
                                 <div class="w-2/6">
                                   <label class="inline-block cursor-pointer text-gray-600 text-sm">Departamento: <b> <%= item.department %></b></label>
                                 </div>
-                                  <div class="w-2/6 text-right inline-flex">
-                                    <div>
-                                      <label class="inline-block cursor-pointer text-gray-600 text-sm">Debe: </label>
-                                    </div>
-                                    <div class="ml-2 w-32">
-                                      <label class="inline-block cursor-pointer text-gray-600 text-sm"><b phx-hook="format_number"> <%= item.debit %></b></label>
-                                    </div>
+                              </div>
+                              <div class="flex">
+                                <div class="w-2/6">
+                                  <label class="text-gray-600 text-xs"><%= item.xml_name %></label>
+                                </div>
+                                <div class="w-2/6 text-right inline-flex">
+                                  <div>
+                                    <label class="inline-block cursor-pointer text-gray-600 text-sm">Debe: </label>
                                   </div>
-                                  <div class="w-2/6 text-right inline-flex">
-                                    <div>
-                                      <label class="inline-block cursor-pointer text-gray-600 text-sm">Haber: </label>
-                                    </div>
-                                    <div class="ml-2 w-32">
-                                      <label class="inline-block cursor-pointer text-gray-600 text-sm"> <b phx-hook="format_number"> <%= item.credit %></b></label>
-                                    </div>
+                                  <div class="ml-2 w-32">
+                                    <label class="inline-block cursor-pointer text-gray-600 text-sm"><b phx-hook="format_number"> <%= item.debit %></b></label>
                                   </div>
+                                </div>
+                                <div class="w-2/6 text-right inline-flex">
+                                  <div>
+                                    <label class="inline-block cursor-pointer text-gray-600 text-sm">Haber: </label>
+                                  </div>
+                                  <div class="ml-2 w-32">
+                                    <label class="inline-block cursor-pointer text-gray-600 text-sm"> <b phx-hook="format_number"> <%= item.credit %></b></label>
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -403,7 +408,6 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
   # end
 
   def update(params, socket) do
-    params.id |> IO.inspect(label: "------------------------------------------------------------------------------------------- Update in New Policy")
     dropdowns = params.dropdowns
     cancel? = params.cancel?
     message_confirm = params.message_confirm
