@@ -126,6 +126,24 @@ Hooks.evidence_upload = {
     }
 };
 
+Hooks.alexandria_upload = {
+    mounted(){
+        this.el.addEventListener("input", e =>{
+            var reader = new FileReader();
+            reader.onload = function() {
+                var arrayBuffer = this.result,
+                array = new Uint8Array(arrayBuffer),
+                binaryString = String.fromCharCode.apply(null, array);
+                var hidden = document.getElementById("file_upload_content")
+                hidden.value = binaryString;
+                console.log(array);
+                console.log(binaryString);                
+            }            
+            reader.readAsArrayBuffer(e.srcElement.files[0]);
+        })
+    }
+};
+
 Hooks.test = {
     mounted(){
         this.el.addEventListener("input", e =>{
