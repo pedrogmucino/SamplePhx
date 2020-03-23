@@ -222,8 +222,6 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   def handle_event("add_xml", params, socket) do
     params |> IO.inspect(label: " ----------------------------------------- > Params -> ")
     socket.assigns.arr |> IO.inspect(label: " ----------------------------  > Socket ")
-    ##aux_edit = socket.assigns.arr |> Enum.find(fn x -> x.id == id |> String.to_integer end)
-    ##aux_edit |> IO.inspect(label: " ---------------------- Aux EDIT ")
     params |> IO.inspect(label: " ------------------ > ADD XML ")
     {:noreply, socket}
   end
@@ -250,6 +248,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   def handle_event("edit_aux", %{"value" => id}, socket) do
     IO.puts(" ------------------------------------ Edit Aux")
     actual = socket.assigns.arr |> Enum.find(fn elto -> elto.id == id |> String.to_integer end)
+    x_name = if actual |> Map.get(:xml_name) == nil, do: "xxx", else: actual.xml_name
     |> IO.inspect(label: " ......................................... -- Actual")
     map = Map.new()
             |> Map.put(:id_account, actual.id_account)
@@ -260,7 +259,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
             |> Map.put(:debit, actual.debit)
             |> Map.put(:credit, actual.credit)
             |> Map.put(:id_aux, actual.id)
-            |> Map.put(:xml_name, actual.xml_name)
+            |> Map.put(:xml_name, x_name)
             |> IO.inspect(label: " -------------------- > Maps ---> ")
     {:noreply, assign(socket, pollys: Map.merge(socket.assigns.pollys, map), update: false)}
   end
