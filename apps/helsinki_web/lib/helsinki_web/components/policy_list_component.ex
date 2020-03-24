@@ -405,6 +405,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
       |> Map.put(:id_account, Enum.at(data, 5))
       |> Map.put(:id_aux, "")
       |> Map.put(:name, Enum.at(data, 6))
+      |> Map.put(:xml_name, Generic.to_string_empty)
   end
   defp add_id_number({data, id}) do
     data
