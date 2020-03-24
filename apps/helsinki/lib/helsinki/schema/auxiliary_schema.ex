@@ -15,7 +15,7 @@ defmodule AccountingSystem.AuxiliarySchema do
     field :iduuid, :integer
     field :mxn_amount, :float
     field :policy_number, :integer
-    field :xml_id, Ecto.UUID, autogenerate: true
+    field :xml_id, Ecto.UUID
     field :xml_name, :string
     belongs_to :policy, AccountingSystem.PolicySchema
 
