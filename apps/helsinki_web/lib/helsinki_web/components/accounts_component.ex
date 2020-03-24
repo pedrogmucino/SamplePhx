@@ -418,6 +418,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
     |> exist_add("character")
     |> exist_add("payment_method")
     |> exist_add("third_party_op")
+    |> exist_add("requires_xml")
     |> exist_status_add("status")
   end
 
