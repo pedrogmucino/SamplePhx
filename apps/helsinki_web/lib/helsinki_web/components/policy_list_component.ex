@@ -32,13 +32,13 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     dropdowns: [],
     error: nil,
     change: false,
-    xml_name: ""
+    xml_name: "",
+    add_xml?: false
     )}
   end
 
   def update(attrs, socket) do
-    attrs |> IO.inspect(label: " ------------------------------------ > Update List ")
-    {:ok, assign(socket, id: attrs.id, message: nil, error: nil, xml_name: attrs.name)}
+    {:ok, assign(socket, id: attrs.id, message: nil, error: nil, xml_name: attrs.name, add_xml?: (if attrs.name != "", do: false))}
   end
 
   def add_todos(types) do
@@ -133,7 +133,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     new?: true,
     edit?: false,
     actionx: "new",
-    pollys: %{audited: "unchecked", concept: "", fiscal_exercise: now.year, has_documents: "unchecked", period: now.month, policy_date: today, policy_type: "0", aux_concept: "", debit: 0, department: "", credit: 0, id: "0", sum_haber: 0, sum_debe: 0, total: 0, focused: 0, account: "", name: "", id_account: "", id_aux: "", status: true},
+    pollys: %{audited: "unchecked", concept: "", fiscal_exercise: now.year, has_documents: "unchecked", period: now.month, policy_date: today, policy_type: "0", aux_concept: "", debit: 0, department: "", credit: 0, id: "0", sum_haber: 0, sum_debe: 0, total: 0, focused: 0, account: "", name: "", id_account: "", id_aux: "", status: true, xml_name: ""},
     arr: [],
     policy_id: 0,
     message: nil,
@@ -211,19 +211,20 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def handle_event("save_aux", params, socket) do
-    case AccountingSystem.AuxiliaryHandler.validate_auxiliar(params) do
+    if !socket.assigns.add_xml? do
+      case AccountingSystem.AuxiliaryHandler.validate_auxiliar(params) do
       {:ok, _} ->
         totals(params["id_aux"], params, socket)
       {:error, _} ->
         {:noreply, socket}
+      end
+    else
+      {:noreply, socket}
     end
   end
 
-  def handle_event("add_xml", params, socket) do
-    params |> IO.inspect(label: " ----------------------------------------- > Params -> ")
-    socket.assigns.arr |> IO.inspect(label: " ----------------------------  > Socket ")
-    params |> IO.inspect(label: " ------------------ > ADD XML ")
-    {:noreply, socket}
+  def handle_event("add_xml_file", _params, socket) do
+    {:noreply, assign(socket, add_xml?: true)}
   end
 
   def handle_event("delete_aux", %{"value" => id}, socket) do
@@ -300,6 +301,10 @@ defmodule AccountingSystemWeb.PolicyListComponent do
             |> calculate_totals
             |> error_or_pass(socket)
   end
+
+  #defp to_inspect(value, label), do: value |> IO.inspect(label: label)
+
+  #defp to_bool(text), do: text == "true"
 
   defp validate_header(exel_data) do
     exel_data
