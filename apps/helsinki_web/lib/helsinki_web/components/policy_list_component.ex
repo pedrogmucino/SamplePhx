@@ -71,7 +71,8 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     arr: [],
     policy_id: 0,
     pollys: %{audited: "unchecked", concept: "", fiscal_exercise: "", has_documents: "unchecked", period: "", policy_date: "", policy_type: "0", aux_concept: "", debit: 0, department: "", credit: 0, id: "", sum_haber: 0, sum_debe: 0, total: 0, focused: 0, account: "", name: "", id_account: ""},
-    message: "Póliza " <> policy.serial <> "-" <> Integer.to_string(policy.policy_number) <> " actualizada correctamente"
+    message: "Póliza " <> policy.serial <> "-" <> Integer.to_string(policy.policy_number) <> " actualizada correctamente",
+    xml_name: ""
     )}
   end
 
@@ -189,6 +190,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def handle_event("action_account", params, socket) do
+    AccountingSystem.GenericFunctions.to_inspect(socket.assigns, " -------- Z Action account ")
     case PolicyHandler.save_policy(params, socket.assigns.arr) do
       {:ok, policy} ->
         NotificationComponent.set_timer_notification()
@@ -308,10 +310,6 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     #Phoenix.Controller.send_download(socket.conn, {:file, "template.xlsx"})
     {:noreply, socket}
   end
-
-  #defp to_inspect(value, label), do: value |> IO.inspect(label: label)
-
-  #defp to_bool(text), do: text == "true"
 
   defp validate_header(exel_data) do
     exel_data
