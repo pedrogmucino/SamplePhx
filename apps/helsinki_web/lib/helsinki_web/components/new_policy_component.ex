@@ -6,6 +6,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
     PolicyHandler,
     PolicySchema
   }
+  alias AccountingSystem.GenericFunctions, as: Generic
 
   #alias AccountingSystem.AccountHandler, as: Account
 
@@ -399,7 +400,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
       message_confirm: nil,
       status: false,
       change: false,
-      xml_name: ""
+      xml_name: Generic.to_string_empty
     )}
   end
 
