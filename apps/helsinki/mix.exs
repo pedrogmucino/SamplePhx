@@ -42,7 +42,8 @@ defmodule AccountingSystem.MixProject do
       {:postgrex, ">= 0.0.0"},
       {:jason, "~> 1.0"},
       {:excoveralls, "~> 0.10", only: :test},
-      {:xlsxir, "~> 1.6.4"}
+      {:xlsxir, "~> 1.6.4"},
+      {:elixlsx, "~> 0.4.2"}
     ]
   end
 

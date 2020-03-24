@@ -93,6 +93,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                   <label><b>Captura de Auxiliares</b></label>
                 </div>
                 <div class="border-solid border-2 border-gray-300 p-4 rounded">
+
                 <div class="w-full text-right">
                     <button phx-hook="get_path" class="tooltip">
                           <label for="xlsx-upload" class="custom-file-upload border w-10 bg-teal-500 rounded text-white hover:bg-teal-400">
@@ -104,6 +105,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                           <span class='tooltip-text text-white bg-blue-500 mt-5 -ml-12 rounded'>Cargar Xlsx</span>
                     </button>
                 </div>
+
                 <form id="form2" phx-submit="save_aux" phx-target="#list_comp" phx-change="update_form" class="-mt-32">
                   <label class="block pt-32 tracking-wide text-gray-700 font-bold" for="grid-name">Cuenta</label>
                   <div class="inline-flex w-full">
