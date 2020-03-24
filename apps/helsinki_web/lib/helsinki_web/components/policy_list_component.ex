@@ -6,6 +6,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   alias AccountingSystem.XlsxFunctions, as: Xlsx
   alias AccountingSystem.AccountHandler, as: Account
   alias AccountingSystem.GenericFunctions, as: Generic
+  alias AccountingSystemWeb.Alexandria
   alias AccountingSystem.{
     PolicyHandler,
     EctoUtil
@@ -304,11 +305,17 @@ defmodule AccountingSystemWeb.PolicyListComponent do
             |> error_or_pass(socket)
   end
 
+  def handle_event("set_series", _params, socket) do
+    Xlsx.create_template("template.xlsx")
+    #Phoenix.Controller.send_download(socket.conn, {:file, "template.xlsx"})
+    {:noreply, socket}
+  end
+
   defp validate_header(exel_data) do
     exel_data
       |> List.first
       |> validate_length
-      |> List.myers_difference(["Cuenta", "Concepto", "Departamento", "Debe", "Haber"])
+      |> List.myers_difference(Xlsx.get_header)
       |> more_than_eq(exel_data)
   end
 
@@ -674,18 +681,31 @@ defmodule AccountingSystemWeb.PolicyListComponent do
         </g>
       </svg>
     </div>
+    <div class="inline-flex w-full mt-4" >
+      <div class="w-1/2 px-2">
+        <button phx-click="create_new" phx-value-id="xxx" phx-target="#list_comp" class="py-2 bg-teal-500 hover:bg-teal-400 text-white items-center inline-flex font-bold rounded text-sm w-full ">
+          <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+          class="h-4 w-4 mr-2 ml-auto">
+            <path fill="currentColor" d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
+            class="text-white">
+            </path>
+          </svg>
+          <label class="cursor-pointer mr-auto text-white">Nueva</label>
+        </button>
+      </div>
 
-    <div class="w-1/2 px-2 mt-2">
-      <button phx-click="create_new" phx-value-id="xxx" phx-target="#list_comp" class="py-2 bg-teal-500 hover:bg-teal-400 text-white items-center inline-flex font-bold rounded text-sm w-full ">
-        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
-        class="h-4 w-4 mr-2 ml-auto">
-          <path fill="currentColor" d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
-          class="text-white">
-          </path>
-        </svg>
-        <label class="cursor-pointer mr-auto text-white">Nueva</label>
-      </button>
+      <div class="w-1/2 px-2 text-right">
+        <button phx-click="set_series" phx-target="#list_comp" class="tooltip">
+          <label for="xlsx-download" class="custom-file-upload border w-10 bg-teal-500 rounded text-white hover:bg-teal-400">
+            <i class="fa fa-cloud-upload"></i>
+            <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="upload" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="h-6 w-6 -ml-1"><path fill="currentColor" d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm76.45 211.36l-96.42 95.7c-6.65 6.61-17.39 6.61-24.04 0l-96.42-95.7C73.42 337.29 80.54 320 94.82 320H160v-80c0-8.84 7.16-16 16-16h32c8.84 0 16 7.16 16 16v80h65.18c14.28 0 21.4 17.29 11.27 27.36zM377 105L279.1 7c-4.5-4.5-10.6-7-17-7H256v128h128v-6.1c0-6.3-2.5-12.4-7-16.9z" class=""></path></svg>
+          </label>
+          <label id="xlsx-download"></label>
+          <span class='tooltip-text text-white bg-blue-500 mt-5 -ml-12 rounded'>Descargar plantilla</span>
+        </button>
+      </div>
     </div>
+
 
     <div class="h-hoch-70 overflow-y-scroll pb-16 mt-2">
       <%= for item <- @policy_list do %>
