@@ -28,7 +28,6 @@ defmodule AccountingSystemWeb.SeriesListComponent do
   end
 
   def handle_event("create_series", params, socket) do
-    IO.inspect(params, label: "------------------------------------>PARAMS")
     params = Map.replace!(params, "fiscal_exercise", Integer.to_string(Date.utc_today.year))
     case SeriesHandler.create_series(params) do
       {:ok, series} ->
@@ -70,16 +69,16 @@ defmodule AccountingSystemWeb.SeriesListComponent do
   end
 
   def handle_event("set_series", params, socket) do
-    case Alexandria.get_file(Application.get_env(:helsinki_web, Format)[:file_uuid], 1) do
+    case Alexandria.get_file("EBDFB8F7-DBF8-44A5-9B78-0D81267AB92C", 1) do
       {:ok, %HTTPoison.Response{} = response} ->
-        if String.contains?(response.body, "\"errors\"") do
-          errors = response.body |> IO.inspect(label: "---------------------------------->ERRORES AL RECUPERAR")
-        else
-          bytes = response.body |> IO.inspect(label: "-------------------------------->BYTES O CONTENIDO DEL ARCHIVO")
-        end
-      {:error, response} ->
-        IO.inspect(response, label: "-------------------------------------->FALLA DEL SERVICIO")
+        IO.puts("------------------------->LECTURA OK")
+      {:error, %HTTPoison.Error{} = error} ->
+        IO.puts("------------------------->LECTURA ERROR")
     end
+
+    resp_carga =
+    Alexandria.upload_file(params["file_upload_content"], "Prueba ajustes.xml")
+    |> IO.inspect(label: "--------------------------------->RESPUESTA CARGA")
 
     series =
     params["series_id"]

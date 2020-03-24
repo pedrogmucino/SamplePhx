@@ -247,10 +247,8 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def handle_event("edit_aux", %{"value" => id}, socket) do
-    IO.puts(" ------------------------------------ Edit Aux")
     actual = socket.assigns.arr |> Enum.find(fn elto -> elto.id == id |> String.to_integer end)
-    x_name = if actual |> Map.get(:xml_name) == nil, do: "xxx", else: actual.xml_name
-    |> IO.inspect(label: " ......................................... -- Actual")
+    x_name = if actual |> Map.get(:xml_name) == nil, do: "", else: actual.xml_name
     map = Map.new()
             |> Map.put(:id_account, actual.id_account)
             |> Map.put(:account, actual.account)
@@ -261,7 +259,6 @@ defmodule AccountingSystemWeb.PolicyListComponent do
             |> Map.put(:credit, actual.credit)
             |> Map.put(:id_aux, actual.id)
             |> Map.put(:xml_name, x_name)
-            |> IO.inspect(label: " -------------------- > Maps ---> ")
     {:noreply, assign(socket, pollys: Map.merge(socket.assigns.pollys, map), update: false)}
   end
 
@@ -590,7 +587,8 @@ defmodule AccountingSystemWeb.PolicyListComponent do
             serial: policy.serial,
             policy_number: policy.policy_number,
             id_aux: "",
-            status: policy.status
+            status: policy.status,
+            xml_name: ""
       },
       update_text: "",
       cancel?: false

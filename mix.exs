@@ -27,7 +27,8 @@ defmodule AccountingSystem.Umbrella.MixProject do
     [
       {:excoveralls, "~> 0.10", only: :test},
       {:credo, "~> 1.3", only: [:dev, :test], runtime: false},
-      {:httpoison, "~>1.6.2"}
+      {:httpoison, "~>1.6.2"},
+      {:poison, "~> 3.1"}
     ]
   end
 end
