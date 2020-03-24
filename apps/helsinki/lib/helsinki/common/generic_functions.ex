@@ -28,4 +28,6 @@ defmodule AccountingSystem.GenericFunctions do
 
   def to_string_empty, do: ""
 
+  def to_binary_empty, do: <<>>
+
 end
