@@ -41,6 +41,18 @@ Hooks.go_to_concept = {
     }
 };
 
+Hooks.download_template = {
+    mounted() {
+        this.el.addEventListener("click", e => {
+            setTimeout(() => {
+                console.log(window.location.pathname)
+                var iframe = document.getElementById('invisible');
+                iframe.src = "download_template";
+            }, 500);
+        })
+    }
+};
+
 Hooks.get_path = {
     mounted() {
         var aux = this;
