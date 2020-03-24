@@ -33,13 +33,13 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     dropdowns: [],
     error: nil,
     change: false,
-    xml_name: ""
+    xml_name: Generic.to_string_empty,
+    add_xml?: false
     )}
   end
 
   def update(attrs, socket) do
-    attrs |> IO.inspect(label: " ------------------------------------ > Update List ")
-    {:ok, assign(socket, id: attrs.id, message: nil, error: nil, xml_name: attrs.name)}
+    {:ok, assign(socket, id: attrs.id, message: nil, error: nil, xml_name: attrs.name, add_xml?: (if attrs.name != "", do: false))}
   end
 
   def add_todos(types) do
@@ -71,7 +71,8 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     arr: [],
     policy_id: 0,
     pollys: %{audited: "unchecked", concept: "", fiscal_exercise: "", has_documents: "unchecked", period: "", policy_date: "", policy_type: "0", aux_concept: "", debit: 0, department: "", credit: 0, id: "", sum_haber: 0, sum_debe: 0, total: 0, focused: 0, account: "", name: "", id_account: ""},
-    message: "Póliza " <> policy.serial <> "-" <> Integer.to_string(policy.policy_number) <> " actualizada correctamente"
+    message: "Póliza " <> policy.serial <> "-" <> Integer.to_string(policy.policy_number) <> " actualizada correctamente",
+    xml_name: Generic.to_string_empty
     )}
   end
 
@@ -134,7 +135,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     new?: true,
     edit?: false,
     actionx: "new",
-    pollys: %{audited: "unchecked", concept: "", fiscal_exercise: now.year, has_documents: "unchecked", period: now.month, policy_date: today, policy_type: "0", aux_concept: "", debit: 0, department: "", credit: 0, id: "0", sum_haber: 0, sum_debe: 0, total: 0, focused: 0, account: "", name: "", id_account: "", id_aux: "", status: true},
+    pollys: %{audited: "unchecked", concept: "", fiscal_exercise: now.year, has_documents: "unchecked", period: now.month, policy_date: today, policy_type: "0", aux_concept: "", debit: 0, department: "", credit: 0, id: "0", sum_haber: 0, sum_debe: 0, total: 0, focused: 0, account: "", name: "", id_account: "", id_aux: "", status: true, xml_name: Generic.to_string_empty},
     arr: [],
     policy_id: 0,
     message: nil,
@@ -189,6 +190,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def handle_event("action_account", params, socket) do
+    AccountingSystem.GenericFunctions.to_inspect(socket.assigns, " -------- Z Action account ")
     case PolicyHandler.save_policy(params, socket.assigns.arr) do
       {:ok, policy} ->
         NotificationComponent.set_timer_notification()
@@ -212,19 +214,20 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def handle_event("save_aux", params, socket) do
-    case AccountingSystem.AuxiliaryHandler.validate_auxiliar(params) do
+    if !socket.assigns.add_xml? do
+      case AccountingSystem.AuxiliaryHandler.validate_auxiliar(params) do
       {:ok, _} ->
         totals(params["id_aux"], params, socket)
       {:error, _} ->
         {:noreply, socket}
+      end
+    else
+      {:noreply, socket}
     end
   end
 
-  def handle_event("add_xml", params, socket) do
-    params |> IO.inspect(label: " ----------------------------------------- > Params -> ")
-    socket.assigns.arr |> IO.inspect(label: " ----------------------------  > Socket ")
-    params |> IO.inspect(label: " ------------------ > ADD XML ")
-    {:noreply, socket}
+  def handle_event("add_xml_file", _params, socket) do
+    {:noreply, assign(socket, add_xml?: true)}
   end
 
   def handle_event("delete_aux", %{"value" => id}, socket) do
@@ -433,7 +436,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     params = params
                 |> Map.put(:id, get_max_id(socket.assigns.arr, socket.assigns.id))
                 |> Map.put(:number, arr_max_number(socket.assigns.arr))
-    {:noreply, assign(socket, arr: socket.assigns.arr ++ [params], pollys: pollys)}
+    {:noreply, assign(socket, arr: socket.assigns.arr ++ [params], pollys: pollys, xml_name: Generic.to_string_empty)}
   end
 
   defp totals(_, params, socket) do
@@ -454,7 +457,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     params = params
               |> Map.put(:id, String.to_integer(params.id_aux))
               |> Map.put(:number, Enum.find(socket.assigns.arr, fn aux -> aux.id == String.to_integer(params.id_aux) end).number)
-    {:noreply, assign(socket, arr: new_arr ++ [params], pollys: pollys)}
+    {:noreply, assign(socket, arr: new_arr ++ [params], pollys: pollys, xml_name: Generic.to_string_empty)}
   end
 
   defp arr_max_number([]) do
@@ -588,7 +591,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
             policy_number: policy.policy_number,
             id_aux: "",
             status: policy.status,
-            xml_name: ""
+            xml_name: Generic.to_string_empty
       },
       update_text: "",
       cancel?: false

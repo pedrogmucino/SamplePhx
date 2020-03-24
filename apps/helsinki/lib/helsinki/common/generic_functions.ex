@@ -21,4 +21,11 @@ defmodule AccountingSystem.GenericFunctions do
       |> Tuple.to_list
       |> List.first
   end
+
+  def to_inspect(value, label), do: value |> IO.inspect(label: label)
+
+  def to_bool(text), do: text == "true"
+
+  def to_string_empty, do: ""
+
 end
