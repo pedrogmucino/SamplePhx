@@ -67,7 +67,7 @@ defmodule AccountingSystem.AuxiliaryHandler do
     |> AuxiliarySchema.changeset(attrs)
     |> Repo.insert(prefix: PrefixFormatter.get_current_prefix)
     |> case do
-      {:ok, aux} -> if aux.id != GenericFunctions.to_binary_empty, do: save_in_alexandria(xml_b64, aux.xml_id)
+      {:ok, aux} -> if aux.id != GenericFunctions.to_binary_empty, do: save_in_alexandria(xml_b64, aux.xml_id, aux.xml_name)
       {:error, aux} -> aux |> GenericFunctions.to_inspect(" -> ERROR AUX NOT SAVED")
     end
   end
@@ -79,7 +79,7 @@ defmodule AccountingSystem.AuxiliaryHandler do
     |> AuxiliarySchema.changeset(attrs)
     |> Repo.insert(prefix: PrefixFormatter.get_prefix(year, month))
     |> case do
-      {:ok, aux} -> if aux.id != GenericFunctions.to_binary_empty, do: save_in_alexandria(xml_b64, aux.xml_id)
+      {:ok, aux} -> if aux.id != GenericFunctions.to_binary_empty, do: save_in_alexandria(xml_b64, aux.xml_id, aux.xml_name)
       {:error, aux} -> aux |> GenericFunctions.to_inspect(" -> ERROR AUX NOT SAVED")
     end
   end
@@ -88,9 +88,8 @@ defmodule AccountingSystem.AuxiliaryHandler do
     attrs |> Map.put(:xml_id, (if attrs.xml_name != GenericFunctions.to_string_empty, do: Ecto.UUID.autogenerate, else: GenericFunctions.to_binary_empty))
   end
 
-  defp save_in_alexandria(xml_b64, xml_id) do
-    xml_b64 |> GenericFunctions.to_inspect(" ----------- > XMLB64")
-    xml_id |> GenericFunctions.to_inspect(" ----------- > XMLID")
+  defp save_in_alexandria(xml_b64, xml_id, xml_name) do
+    AccountingSystemWeb.Alexandria.upload_file(xml_b64, xml_name, xml_id)
   end
 
   @doc """

@@ -13,6 +13,11 @@ defmodule AccountingSystemWeb.Alexandria do
     |> upload_post(name)
   end
 
+  def upload_file(file, name, uuid) do
+    upload_put(file, uuid)
+    |> upload_post(name)
+  end
+
   defp upload_put(file, uuid) do
     Application.get_env(:helsinki_web, Alexandria)[:url]
     |> URI.merge(uuid)

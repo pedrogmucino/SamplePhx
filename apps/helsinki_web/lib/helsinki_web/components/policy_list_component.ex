@@ -192,7 +192,6 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def handle_event("action_account", params, socket) do
-    AccountingSystem.GenericFunctions.to_inspect(socket.assigns, " -------- Z Action account ")
     case PolicyHandler.save_policy(params, socket.assigns.arr) do
       {:ok, policy} ->
         NotificationComponent.set_timer_notification()
