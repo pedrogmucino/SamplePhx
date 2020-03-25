@@ -400,8 +400,8 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     Map.new
       |> Map.put(:account, Enum.at(data, 0))
       |> Map.put(:aux_concept, Enum.at(data, 1))
-      |> Map.put(:credit, Generic.to_float(Enum.at(data, 3)))
-      |> Map.put(:debit, Generic.to_float(Enum.at(data, 4)))
+      |> Map.put(:credit, Generic.to_float(Enum.at(data, 4)))
+      |> Map.put(:debit, Generic.to_float(Enum.at(data, 3)))
       |> Map.put(:department, Enum.at(data, 2))
       |> Map.put(:id_account, Enum.at(data, 5))
       |> Map.put(:id_aux, "")
