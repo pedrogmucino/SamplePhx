@@ -159,13 +159,20 @@ Hooks.alexandria_upload = {
 Hooks.load_file_xml_js = {
     mounted() {
         var toEvent = this
-        this.el.addEventListener("input", e =>{
-            var file = e.srcElement.files[0]
-            toBase64(file).then(base64 => {
-                //toEvent.pushEventTo("#list_comp", "test_for_xml", {"name": file.name, "xml_b64": base64, "xml_string": "test"})
-                toEvent.pushEvent("send_to_view", {name: e.srcElement.files[0].name, xml_b64: base64})
-            })
-        })
+        this.el.addEventListener("input", e => {
+            var reader = new FileReader();
+            reader.onload = function() {
+                var arrayBuffer = this.result,
+                array = new Uint8Array(arrayBuffer),
+                binaryString = String.fromCharCode.apply(null, array);
+                // var hidden = document.getElementById("file_upload_content")
+                // hidden.value = binaryString;
+                console.log(array);
+                console.log(binaryString);  
+                toEvent.pushEvent("send_to_view", {name: e.srcElement.files[0].name, xml_b64: binaryString})
+            }
+            reader.readAsArrayBuffer(e.srcElement.files[0]);
+        })       
     }
 }
 
