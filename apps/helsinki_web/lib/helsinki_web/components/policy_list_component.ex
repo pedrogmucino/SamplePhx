@@ -718,6 +718,18 @@ defmodule AccountingSystemWeb.PolicyListComponent do
       <%= for item <- @policy_list do %>
         <div class="w-full px-2 block">
           <div phx-click="open_policy" phx-value-id="<%= item.id %>" phx-target="#list_comp" class="border cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
+          <%= if item.status do %>
+            <div class="w-full text-right h-3">
+              <div class="absolute px-3 text-sm top-1 right-0">
+                <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="h-3 svg-inline--fa fa-circle fa-w-16 fa-2x">
+                  <path
+                    style="fill:#13FE00;"
+                    d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z" class="">
+                  </path>
+                </svg>
+              </div>
+            </div>
+          <% end %>
             <h2 class="text-gray-700 text-xl"><%= item.serial  %>-<%= item.policy_number %></h2>
             <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Concepto: <b><%= item.concept %></b></label></br>
             <div class="block relative">
