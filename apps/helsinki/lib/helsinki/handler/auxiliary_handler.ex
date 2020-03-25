@@ -62,11 +62,12 @@ defmodule AccountingSystem.AuxiliaryHandler do
   """
   def create_auxiliary(attrs \\ %{}) do
     attrs = load_xml_id(attrs)
+    xml_b64 = attrs.xml_b64
     %AuxiliarySchema{}
     |> AuxiliarySchema.changeset(attrs)
     |> Repo.insert(prefix: PrefixFormatter.get_current_prefix)
-    |> case do ##Validate that´s aux has xml file to can send alexandria -> attrs.xml_b64
-      {:ok, aux} -> aux |> GenericFunctions.to_inspect(" -> OK AUX SAVED -> Go to Alexandria")
+    |> case do
+      {:ok, aux} -> if aux.id != GenericFunctions.to_binary_empty, do: save_in_alexandria(xml_b64, aux.xml_id)
       {:error, aux} -> aux |> GenericFunctions.to_inspect(" -> ERROR AUX NOT SAVED")
     end
   end
@@ -77,7 +78,7 @@ defmodule AccountingSystem.AuxiliaryHandler do
     %AuxiliarySchema{}
     |> AuxiliarySchema.changeset(attrs)
     |> Repo.insert(prefix: PrefixFormatter.get_prefix(year, month))
-    |> case do ##Validate that´s aux has xml file to can send alexandria -> attrs.xml_b64
+    |> case do
       {:ok, aux} -> if aux.id != GenericFunctions.to_binary_empty, do: save_in_alexandria(xml_b64, aux.xml_id)
       {:error, aux} -> aux |> GenericFunctions.to_inspect(" -> ERROR AUX NOT SAVED")
     end
