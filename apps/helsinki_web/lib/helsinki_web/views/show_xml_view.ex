@@ -10,8 +10,8 @@ defmodule AccountingSystemWeb.ShowXmlLiveView do
     Phoenix.View.render(AccountingSystemWeb.ShowXmlView, "index.html", assigns)
   end
 
-  def mount(_params, _session, socket) do
-    {:ok, socket}
+  def mount(_params, session, socket) do
+    {:ok, assign(socket, xml_id: session["xml_id"])}
   end
 
 end
