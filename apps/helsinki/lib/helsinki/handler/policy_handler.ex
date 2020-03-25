@@ -46,14 +46,19 @@ defmodule AccountingSystem.PolicyHandler do
     |> Repo.all(prefix: PrefixFormatter.get_current_prefix)
 
     combine_lists(general, requires_xml_list, pending_xml_list, [])
+    |> Enum.reverse
     |> IO.inspect(label: "---------------------------------->NEW LIST")
 
   end
 
   defp combine_lists([head | tail], requires_list, pending_list, new_list) do
-
     if Enum.any?(requires_list, fn x -> x == Map.get(head, :id) end) do
-      combine_lists(tail, requires_list, pending_list, List.insert_at(new_list, 0, set_true(head)))
+      if Enum.any?(pending_list, fn x -> x == Map.get(head, :id) end) do
+        combine_lists(tail, requires_list, pending_list,
+        List.insert_at(new_list, 0, set_true(head, :pending_xml) |> set_true(:requires_xml)))
+      else
+        combine_lists(tail, requires_list, pending_list, List.insert_at(new_list, 0, set_true(head, :requires_xml)))
+      end
     else
       combine_lists(tail, requires_list, pending_list, List.insert_at(new_list, 0, head))
     end
@@ -61,9 +66,9 @@ defmodule AccountingSystem.PolicyHandler do
 
   defp combine_lists([], requires_list, pending_list, new_list), do: new_list
 
-  defp set_true(head) do
+  defp set_true(head, atom) do
     {_, new_map} =
-    Map.get_and_update(head, :requires_xml, fn current -> {current, true} end)
+    Map.get_and_update(head, atom, fn current -> {current, true} end)
     new_map
   end
 
