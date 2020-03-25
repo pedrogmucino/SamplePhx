@@ -92,6 +92,13 @@ defmodule AccountingSystem.AuxiliaryHandler do
     AccountingSystemWeb.Alexandria.upload_file(xml_b64, xml_name, xml_id)
   end
 
+  def get_xml_file_to_alexandria(xml_id) do
+    case AccountingSystemWeb.Alexandria.get_file(xml_id, 1) do
+      {:ok, xml} -> xml.body |> GenericFunctions.to_inspect(" ---> Ok File from alexa")
+      {_, xml} -> xml |> GenericFunctions.to_inspect(" ---> Error File from alexa")
+    end
+  end
+
   @doc """
   Updates a auxiliary.
 
