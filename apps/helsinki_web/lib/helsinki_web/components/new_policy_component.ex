@@ -315,7 +315,9 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                               </div>
                               <div class="flex">
                                 <div class="w-2/6">
-                                  <label class="text-gray-600 text-xs"><%= item.xml_name %></label>
+                                  <a href="/show_xml" target="_blank">
+                                    <label class="text-gray-600 text-xs"><%= item.xml_name %></label>
+                                  </a>
                                 </div>
                                 <div class="w-2/6 text-right inline-flex">
                                   <div>

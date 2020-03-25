@@ -29,6 +29,7 @@ defmodule AccountingSystemWeb.Router do
     get "/configuration", ConfigurationController, :index
     get "/listconfiguration", ListConfigurationController, :index
     get "/download_template", DownloadController, :index
+    get "/show_xml", ShowXmlController, :index
     # get "/submenu", SubMenuController, :sub_menu
     resources "/accounts", AccountController
     resources "/structures", StructureController
