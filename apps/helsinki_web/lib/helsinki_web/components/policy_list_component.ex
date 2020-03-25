@@ -407,6 +407,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
       |> Map.put(:id_aux, "")
       |> Map.put(:name, Enum.at(data, 6))
       |> Map.put(:xml_name, Generic.to_string_empty)
+      |> Map.put(:xml_id, Generic.to_string_empty)
   end
   defp add_id_number({data, id}) do
     data
@@ -722,7 +723,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
               <div class="absolute px-3 text-sm top-1 right-0">
                 <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="h-3 svg-inline--fa fa-circle fa-w-16 fa-2x">
                   <path
-                    style="fill:#13FE00;"
+                    style="fill:#00D106;"
                     d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z" class="">
                   </path>
                 </svg>
