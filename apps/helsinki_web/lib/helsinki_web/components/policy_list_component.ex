@@ -417,7 +417,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   #*******************************ERROR OR PASSSS*************************************************
   defp error_or_pass({:error, message}, socket) do
     NotificationComponent.set_timer_notification_error()
-    {:noreply, assign(socket, error: message)}
+    {:noreply, assign(socket, error: message, change: !socket.assigns.change)}
   end
   defp error_or_pass(data, socket), do: {:noreply, assign(socket, pollys: Map.merge(socket.assigns.pollys, data.pollys), arr: data.arr)}
 
