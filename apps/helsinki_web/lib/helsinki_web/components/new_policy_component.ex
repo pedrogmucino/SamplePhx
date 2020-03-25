@@ -184,7 +184,16 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                           <label id="file-upload"></label>
                           <span class='tooltip-text text-white bg-blue-500 mt-5 -ml-12 rounded'>Agregar XML</span>
                         </button>
-                        <label><%= @xml_name %></label>
+
+                        <label>
+                          <%= if @pollys.xml_name != "" do %>
+                            <% @pollys.xml_name %>
+                          <% else %>
+                            <% if @xml_name != "" do %>
+                              <% @xml_name %>
+                            <% end %>
+                          <% end %>
+                        </label>
                       <% end %>
                     </div>
 
