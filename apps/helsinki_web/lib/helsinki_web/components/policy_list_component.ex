@@ -39,6 +39,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def update(attrs, socket) do
+    attrs |> Generic.to_inspect(" --> Update in list ------------------------------> ")
     {:ok, assign(socket, id: attrs.id, message: nil, error: nil, xml_name: attrs.name, add_xml?: (if attrs.name != "", do: false))}
   end
 
@@ -303,13 +304,6 @@ defmodule AccountingSystemWeb.PolicyListComponent do
             |> complete_aux_data
             |> calculate_totals
             |> error_or_pass(socket)
-  end
-
-  def handle_event("test_for_xml", %{"name" => name, "xml_b64" => xml_b64, "xml_string" => xml_string}, socket) do
-    name |> Generic.to_inspect("-------- > Name")
-    xml_b64 |> Generic.to_inspect(" -------> Xml 64 ")
-    xml_string |> Generic.to_inspect(" -----> Xml string")
-    {:noreply, socket}
   end
 
   def handle_event("set_series", _params, socket) do

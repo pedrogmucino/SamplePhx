@@ -162,7 +162,8 @@ Hooks.test = {
         this.el.addEventListener("input", e =>{
             var file = e.srcElement.files[0]
             toBase64(file).then(base64 => {
-                toEvent.pushEventTo("#list_comp", "test_for_xml", {"name": file.name, "xml_b64": base64, "xml_string": "test"})
+                //toEvent.pushEventTo("#list_comp", "test_for_xml", {"name": file.name, "xml_b64": base64, "xml_string": "test"})
+                toEvent.pushEvent("another_test", {name: e.srcElement.files[0].name, xml_b64: base64})
             })
         })
     }
