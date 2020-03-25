@@ -61,8 +61,7 @@ defmodule AccountingSystem.AuxiliaryHandler do
 
   """
   def create_auxiliary(attrs \\ %{}) do
-    xml_id = (if attrs.xml_name != GenericFunctions.to_string_empty, do: Ecto.UUID.autogenerate, else: GenericFunctions.to_binary_empty)
-    attrs = attrs |> Map.put(:xml_id, xml_id)
+    attrs = load_xml_id(attrs)
     %AuxiliarySchema{}
     |> AuxiliarySchema.changeset(attrs)
     |> Repo.insert(prefix: PrefixFormatter.get_current_prefix)
@@ -73,9 +72,14 @@ defmodule AccountingSystem.AuxiliaryHandler do
   end
 
   def create_auxiliary(attrs \\ %{}, year, month) do
+    attrs = load_xml_id(attrs)
     %AuxiliarySchema{}
     |> AuxiliarySchema.changeset(attrs)
     |> Repo.insert(prefix: PrefixFormatter.get_prefix(year, month))
+  end
+
+  defp load_xml_id(attrs) do
+    attrs |> Map.put(:xml_id, (if attrs.xml_name != GenericFunctions.to_string_empty, do: Ecto.UUID.autogenerate, else: GenericFunctions.to_binary_empty))
   end
 
   @doc """
