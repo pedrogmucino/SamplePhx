@@ -66,6 +66,10 @@ defmodule AccountingSystem.AuxiliaryHandler do
     %AuxiliarySchema{}
     |> AuxiliarySchema.changeset(attrs)
     |> Repo.insert(prefix: PrefixFormatter.get_current_prefix)
+    |> case do ##Validate that´s aux has xml file to can send alexandria
+      {:ok, aux} -> aux |> GenericFunctions.to_inspect(" -> OK AUX SAVED -> Go to Alexandria")
+      {:error, aux} -> aux |> GenericFunctions.to_inspect(" -> ERROR AUX NOT SAVED")
+    end
   end
 
   def create_auxiliary(attrs \\ %{}, year, month) do

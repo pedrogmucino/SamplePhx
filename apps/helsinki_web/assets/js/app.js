@@ -157,21 +157,13 @@ Hooks.alexandria_upload = {
 };
 
 Hooks.test = {
-    mounted(){
+    mounted() {
+        var toEvent = this
         this.el.addEventListener("input", e =>{
-            var reader = new FileReader();
-            reader.onload = function() {
-                var arrayBuffer = this.result,
-                array = new Uint8Array(arrayBuffer),
-                binaryString = String.fromCharCode.apply(null, array);
-                console.log(array);
-                console.log(binaryString);
-                var file_name = document.getElementById("file_name")
-                file_name.value = e.srcElement.files[0].name;
-                console.log(file_name.value)
-            }
-            this.pushEvent("another_test", {name: e.srcElement.files[0].name})
-            reader.readAsArrayBuffer(e.srcElement.files[0]);
+            var file = e.srcElement.files[0]
+            toBase64(file).then(base64 => {
+                toEvent.pushEventTo("#list_comp", "test_for_xml", {"name": file.name, "xml_b64": base64, "xml_string": "test"})
+            })
         })
     }
 }

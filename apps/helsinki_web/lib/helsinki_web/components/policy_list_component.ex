@@ -305,6 +305,13 @@ defmodule AccountingSystemWeb.PolicyListComponent do
             |> error_or_pass(socket)
   end
 
+  def handle_event("test_for_xml", %{"name" => name, "xml_b64" => xml_b64, "xml_string" => xml_string}, socket) do
+    name |> Generic.to_inspect("-------- > Name")
+    xml_b64 |> Generic.to_inspect(" -------> Xml 64 ")
+    xml_string |> Generic.to_inspect(" -----> Xml string")
+    {:noreply, socket}
+  end
+
   def handle_event("set_series", _params, socket) do
     Xlsx.create_template("template.xlsx")
     #Phoenix.Controller.send_download(socket.conn, {:file, "template.xlsx"})
