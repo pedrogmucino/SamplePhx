@@ -33,8 +33,38 @@ defmodule AccountingSystem.PolicyHandler do
   end
 
   def get_policy_list() do
+    general =
     PolicyListQuery.new
     |> Repo.all(prefix: PrefixFormatter.get_current_prefix)
+
+    requires_xml_list =
+    PolicyListQuery.requires_xml
+    |> Repo.all(prefix: PrefixFormatter.get_current_prefix)
+
+    pending_xml_list =
+    PolicyListQuery.pending_xml
+    |> Repo.all(prefix: PrefixFormatter.get_current_prefix)
+
+    combine_lists(general, requires_xml_list, pending_xml_list, [])
+    |> IO.inspect(label: "---------------------------------->NEW LIST")
+
+  end
+
+  defp combine_lists([head | tail], requires_list, pending_list, new_list) do
+
+    if Enum.any?(requires_list, fn x -> x == Map.get(head, :id) end) do
+      combine_lists(tail, requires_list, pending_list, List.insert_at(new_list, 0, set_true(head)))
+    else
+      combine_lists(tail, requires_list, pending_list, List.insert_at(new_list, 0, head))
+    end
+  end
+
+  defp combine_lists([], requires_list, pending_list, new_list), do: new_list
+
+  defp set_true(head) do
+    {_, new_map} =
+    Map.get_and_update(head, :requires_xml, fn current -> {current, true} end)
+    new_map
   end
 
   @doc """
