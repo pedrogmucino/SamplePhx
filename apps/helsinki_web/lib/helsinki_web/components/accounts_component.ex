@@ -234,8 +234,8 @@ defmodule AccountingSystemWeb.AccountsComponent do
 
   def handle_event("action_account", params, socket) do
     rfc = params["rfc_literals"] <> params["rfc_numeric"] <> params["rfc_key"]
-
     if String.trim(rfc) == "" or AccountingSystem.AccountHandler.rfc_validation(rfc) do
+      if !Map.has_key?(params, "requires_xml") or (params["requires_xml"] == "on" and params["type"] == "D") do
       id = params["id"] |> String.to_integer()
       level = params["level"] |> String.to_integer()
       action = params["action"]
@@ -265,6 +265,14 @@ defmodule AccountingSystemWeb.AccountsComponent do
          message: (if action == "edit", do: "Cuenta modificada satisfactoriamente", else: "Cuenta creada satisfactoriamente"),
          change: !socket.assigns.change
        )}
+      else
+        NotificationComponent.set_timer_notification_error()
+        {:noreply, assign(socket,
+        error: "Únicamente las cuentas de Detalle pueden requerir XML. Favor de revisar",
+        change: !socket.assigns.change,
+        message: nil
+        )}
+      end
     else
       NotificationComponent.set_timer_notification_error()
       {:noreply, assign(socket,
@@ -368,7 +376,6 @@ defmodule AccountingSystemWeb.AccountsComponent do
 
   def edit(id, params, socket) do
     account = get_account_by_id(id)
-
     params =
       load_params(params)
       |> Map.put("parent_account", account.parent_account)
