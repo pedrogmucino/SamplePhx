@@ -65,7 +65,7 @@ defmodule AccountingSystem.AuxiliaryHandler do
     %AuxiliarySchema{}
     |> AuxiliarySchema.changeset(attrs)
     |> Repo.insert(prefix: PrefixFormatter.get_current_prefix)
-    |> case do ##Validate that´s aux has xml file to can send alexandria
+    |> case do ##Validate that´s aux has xml file to can send alexandria -> attrs.xml_b64
       {:ok, aux} -> aux |> GenericFunctions.to_inspect(" -> OK AUX SAVED -> Go to Alexandria")
       {:error, aux} -> aux |> GenericFunctions.to_inspect(" -> ERROR AUX NOT SAVED")
     end
@@ -73,13 +73,23 @@ defmodule AccountingSystem.AuxiliaryHandler do
 
   def create_auxiliary(attrs \\ %{}, year, month) do
     attrs = load_xml_id(attrs)
+    xml_b64 = attrs.xml_b64
     %AuxiliarySchema{}
     |> AuxiliarySchema.changeset(attrs)
     |> Repo.insert(prefix: PrefixFormatter.get_prefix(year, month))
+    |> case do ##Validate that´s aux has xml file to can send alexandria -> attrs.xml_b64
+      {:ok, aux} -> if aux.id != GenericFunctions.to_binary_empty, do: save_in_alexandria(xml_b64, aux.xml_id)
+      {:error, aux} -> aux |> GenericFunctions.to_inspect(" -> ERROR AUX NOT SAVED")
+    end
   end
 
   defp load_xml_id(attrs) do
     attrs |> Map.put(:xml_id, (if attrs.xml_name != GenericFunctions.to_string_empty, do: Ecto.UUID.autogenerate, else: GenericFunctions.to_binary_empty))
+  end
+
+  defp save_in_alexandria(xml_b64, xml_id) do
+    xml_b64 |> GenericFunctions.to_inspect(" ----------- > XMLB64")
+    xml_id |> GenericFunctions.to_inspect(" ----------- > XMLID")
   end
 
   @doc """
