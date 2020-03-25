@@ -156,14 +156,14 @@ Hooks.alexandria_upload = {
     }
 };
 
-Hooks.test = {
+Hooks.load_file_xml_js = {
     mounted() {
         var toEvent = this
         this.el.addEventListener("input", e =>{
             var file = e.srcElement.files[0]
             toBase64(file).then(base64 => {
                 //toEvent.pushEventTo("#list_comp", "test_for_xml", {"name": file.name, "xml_b64": base64, "xml_string": "test"})
-                toEvent.pushEvent("another_test", {name: e.srcElement.files[0].name, xml_b64: base64})
+                toEvent.pushEvent("send_to_view", {name: e.srcElement.files[0].name, xml_b64: base64})
             })
         })
     }
