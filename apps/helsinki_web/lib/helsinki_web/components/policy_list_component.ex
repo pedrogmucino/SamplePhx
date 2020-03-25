@@ -34,13 +34,14 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     error: nil,
     change: false,
     xml_name: Generic.to_string_empty,
-    add_xml?: false
+    add_xml?: false,
+    xml_b64: Generic.to_string_empty
     )}
   end
 
   def update(attrs, socket) do
     attrs |> Generic.to_inspect(" --> Update in list ------------------------------> ")
-    {:ok, assign(socket, id: attrs.id, message: nil, error: nil, xml_name: attrs.name, add_xml?: (if attrs.name != "", do: false))}
+    {:ok, assign(socket, id: attrs.id, message: nil, error: nil, xml_name: attrs.name, add_xml?: (if attrs.name != "", do: false), xml_b64: attrs.xml_b64)}
   end
 
   def add_todos(types) do
@@ -136,7 +137,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     new?: true,
     edit?: false,
     actionx: "new",
-    pollys: %{audited: "unchecked", concept: "", fiscal_exercise: now.year, has_documents: "unchecked", period: now.month, policy_date: today, policy_type: "0", aux_concept: "", debit: 0, department: "", credit: 0, id: "0", sum_haber: 0, sum_debe: 0, total: 0, focused: 0, account: "", name: "", id_account: "", id_aux: "", status: true, xml_name: Generic.to_string_empty},
+    pollys: %{audited: "unchecked", concept: "", fiscal_exercise: now.year, has_documents: "unchecked", period: now.month, policy_date: today, policy_type: "0", aux_concept: "", debit: 0, department: "", credit: 0, id: "0", sum_haber: 0, sum_debe: 0, total: 0, focused: 0, account: "", name: "", id_account: "", id_aux: "", status: true, xml_name: Generic.to_string_empty, xml_b64: Generic.to_string_empty},
     arr: [],
     policy_id: 0,
     message: nil,
@@ -439,7 +440,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     params = params
                 |> Map.put(:id, get_max_id(socket.assigns.arr, socket.assigns.id))
                 |> Map.put(:number, arr_max_number(socket.assigns.arr))
-    {:noreply, assign(socket, arr: socket.assigns.arr ++ [params], pollys: pollys, xml_name: Generic.to_string_empty)}
+    {:noreply, assign(socket, arr: socket.assigns.arr ++ [params], pollys: pollys, xml_name: Generic.to_string_empty, xml_b64: Generic.to_string_empty)}
   end
 
   defp totals(_, params, socket) do
@@ -460,7 +461,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     params = params
               |> Map.put(:id, String.to_integer(params.id_aux))
               |> Map.put(:number, Enum.find(socket.assigns.arr, fn aux -> aux.id == String.to_integer(params.id_aux) end).number)
-    {:noreply, assign(socket, arr: new_arr ++ [params], pollys: pollys, xml_name: Generic.to_string_empty)}
+    {:noreply, assign(socket, arr: new_arr ++ [params], pollys: pollys, xml_name: Generic.to_string_empty, xml_b64: Generic.to_string_empty)}
   end
 
   defp arr_max_number([]) do
@@ -594,7 +595,8 @@ defmodule AccountingSystemWeb.PolicyListComponent do
             policy_number: policy.policy_number,
             id_aux: "",
             status: policy.status,
-            xml_name: Generic.to_string_empty
+            xml_name: Generic.to_string_empty,
+            xml_b64: Generic.to_string_empty
       },
       update_text: "",
       cancel?: false
@@ -732,11 +734,11 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     </div>
 
     <%= if @new? do %>
-      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: 0, update_text: @update_text, pollys: @pollys, arr: @arr, edit: false, update: @update, cancel?: false, dropdowns: @dropdowns, message_confirm: nil, change: @change, xml_name: @xml_name) %>
+      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: 0, update_text: @update_text, pollys: @pollys, arr: @arr, edit: false, update: @update, cancel?: false, dropdowns: @dropdowns, message_confirm: nil, change: @change, xml_name: @xml_name, xml_b64: @xml_b64) %>
     <% end %>
 
     <%= if @edit? do %>
-      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: @policy_id, update_text: "", pollys: @pollys, arr: @arr, edit: true, update: @update, cancel?: @cancel?, dropdowns: @dropdowns, message_confirm: @message_confirm, change: @change, xml_name: @xml_name) %>
+      <%= live_component(@socket, AccountingSystemWeb.NewPolicyComponent, id: @policy_id, update_text: "", pollys: @pollys, arr: @arr, edit: true, update: @update, cancel?: @cancel?, dropdowns: @dropdowns, message_confirm: @message_confirm, change: @change, xml_name: @xml_name, xml_b64: @xml_b64) %>
     <% end %>
     """
   end
