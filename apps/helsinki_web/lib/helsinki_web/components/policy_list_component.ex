@@ -440,10 +440,13 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     params = params
                 |> Map.put(:id, get_max_id(socket.assigns.arr, socket.assigns.id))
                 |> Map.put(:number, arr_max_number(socket.assigns.arr))
+                |> Map.put(:xml_id, Generic.to_string_empty)
     {:noreply, assign(socket, arr: socket.assigns.arr ++ [params], pollys: pollys, xml_name: Generic.to_string_empty, xml_b64: Generic.to_string_empty)}
   end
 
   defp totals(_, params, socket) do
+    IO.inspect(params, label: "PARAAAAAAAAAAMSSSSSSSS----------------------------------->")
+    IO.inspect(socket.assigns.arr, label: "AAAAAAAAAAAAAAAARRRRRRRRRRRRRRRRRR----------------------------------->")
     params = Generic.string_map_to_atom(params)
     sumh = socket.assigns.pollys.sum_haber
     sumd = socket.assigns.pollys.sum_debe
@@ -461,6 +464,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     params = params
               |> Map.put(:id, String.to_integer(params.id_aux))
               |> Map.put(:number, Enum.find(socket.assigns.arr, fn aux -> aux.id == String.to_integer(params.id_aux) end).number)
+              |> Map.put(:xml_id, Enum.find(socket.assigns.arr, fn aux -> aux.id == String.to_integer(params.id_aux) end).xml_id)
     {:noreply, assign(socket, arr: new_arr ++ [params], pollys: pollys, xml_name: Generic.to_string_empty, xml_b64: Generic.to_string_empty)}
   end
 
@@ -718,12 +722,16 @@ defmodule AccountingSystemWeb.PolicyListComponent do
       <%= for item <- @policy_list do %>
         <div class="w-full px-2 block">
           <div phx-click="open_policy" phx-value-id="<%= item.id %>" phx-target="#list_comp" class="border cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
-          <%= if item.status do %>
+          <%= if item.status and item.requires_xml do %>
             <div class="w-full text-right h-3">
               <div class="absolute px-3 text-sm top-1 right-0">
                 <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="h-3 svg-inline--fa fa-circle fa-w-16 fa-2x">
                   <path
+                  <%= if item.pending_xml do %>
+                    style="fill:#AE1717;"
+                  <% else %>
                     style="fill:#00D106;"
+                  <% end %>
                     d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z" class="">
                   </path>
                 </svg>

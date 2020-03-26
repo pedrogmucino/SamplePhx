@@ -47,7 +47,6 @@ defmodule AccountingSystem.PolicyHandler do
 
     combine_lists(general, requires_xml_list, pending_xml_list, [])
     |> Enum.reverse
-    |> IO.inspect(label: "---------------------------------->NEW LIST")
 
   end
 
