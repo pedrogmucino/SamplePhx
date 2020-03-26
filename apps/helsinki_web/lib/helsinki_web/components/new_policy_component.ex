@@ -316,9 +316,13 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                               </div>
                               <div class="flex">
                                 <div class="w-2/6">
-                                  <a href="/show_xml/<%= item.xml_id %>/<%= item.xml_name %>" target="_blank">
+                                  <%= if item.xml_id != "" do %>
+                                    <a href="/show_xml/<%= item.xml_id %>/<%= item.xml_name %>" target="_blank">
+                                      <label class="text-gray-600 text-xs"><b><%= item.xml_name %></b></label>
+                                    </a>
+                                  <% else %>
                                     <label class="text-gray-600 text-xs"><b><%= item.xml_name %></b></label>
-                                  </a>
+                                  <% end %>
                                 </div>
                                 <div class="w-2/6 text-right inline-flex">
                                   <div>
