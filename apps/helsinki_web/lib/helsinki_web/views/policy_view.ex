@@ -48,10 +48,9 @@ defmodule AccountingSystemWeb.PolicyLiveView do
     {:noreply, assign(socket, actual: actual)}
   end
 
-  def handle_event("search",%{"value" => value}, socket) do
+  def handle_event("search", %{"value" => value}, socket) do
     dropdowns = AccountingSystem.SearchAccount.search(value)
                   |> AccountingSystem.Repo.all
-                  |> IO.inspect
     {:noreply, assign(socket, dropdowns: dropdowns)}
   end
 

@@ -1,4 +1,7 @@
 defmodule AccountingSystemWeb.FormAccountComponent do
+  @moduledoc """
+  Componente con formulario para edición de Cuentas
+  """
   use Phoenix.LiveComponent
   use Phoenix.HTML
 

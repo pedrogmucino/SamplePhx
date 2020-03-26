@@ -34,7 +34,6 @@ defmodule AccountingSystemWeb.Router do
     resources "/accounts", AccountController
     resources "/structures", StructureController
     get "/accounts/:id/new", AccountController, :new
-    live "/example", ExampleLive
     resources "/auxiliaries", AuxiliaryController
     resources "/policies", PolicyController
     resources "/providers", ProviderController

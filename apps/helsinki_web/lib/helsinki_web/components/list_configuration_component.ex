@@ -1,4 +1,7 @@
 defmodule AccountingSystemWeb.ListConfigurationComponent do
+  @moduledoc """
+  Componente de listado de configuraciones de Cuenta
+  """
   use Phoenix.LiveComponent
   use Phoenix.HTML
   alias AccountingSystem.{

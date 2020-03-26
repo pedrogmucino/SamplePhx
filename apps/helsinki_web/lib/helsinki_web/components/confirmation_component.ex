@@ -1,4 +1,7 @@
 defmodule AccountingSystemWeb.ConfirmationComponent do
+  @moduledoc """
+  Componente de mensaje de confirmación
+  """
   use Phoenix.LiveComponent
   use Phoenix.HTML
 
@@ -40,7 +43,6 @@ defmodule AccountingSystemWeb.ConfirmationComponent do
   end
 
   def update(attrs, socket) do
-    attrs |> IO.inspect(label: " --> --> Params confirmation -> ")
     {:ok, assign(socket, message: Map.get(attrs, :message), show: Map.get(attrs, :show))}
   end
 end

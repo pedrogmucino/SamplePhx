@@ -1,5 +1,8 @@
 
 defmodule AccountingSystemWeb.SeriesEditComponent do
+  @moduledoc """
+  Componente de edción de series de póliza
+  """
   use Phoenix.LiveComponent
   use Phoenix.HTML
   alias AccountingSystem.{

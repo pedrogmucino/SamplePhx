@@ -1,4 +1,7 @@
 defmodule AccountingSystem.ProviderSchema do
+  @moduledoc """
+  Esquema de Proveedor
+  """
   use Ecto.Schema
   import Ecto.Changeset
 

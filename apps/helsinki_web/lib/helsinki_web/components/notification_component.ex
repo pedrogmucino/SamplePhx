@@ -1,4 +1,7 @@
 defmodule AccountingSystemWeb.NotificationComponent do
+  @moduledoc """
+  Componente de mensajes de notificación y error
+  """
   use Phoenix.LiveComponent
   use Phoenix.HTML
 
