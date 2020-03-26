@@ -35,7 +35,9 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     change: false,
     xml_name: Generic.to_string_empty,
     add_xml?: false,
-    xml_b64: Generic.to_string_empty
+    xml_b64: Generic.to_string_empty,
+    non_filtered: [],
+    filter_activated: false
     )}
   end
 
@@ -272,7 +274,8 @@ defmodule AccountingSystemWeb.PolicyListComponent do
 
     {:noreply, assign(socket,
       type_id_selected: type_id,
-      policy_list: (if type_id == 0, do: all_policy, else: Enum.filter(all_policy, fn x -> x.policy_type == type_id end))
+      policy_list: (if type_id == 0, do: all_policy, else: Enum.filter(all_policy, fn x -> x.policy_type == type_id end)),
+      non_filtered: (if type_id == 0, do: all_policy, else: Enum.filter(all_policy, fn x -> x.policy_type == type_id end))
     )}
   end
 
@@ -318,6 +321,14 @@ defmodule AccountingSystemWeb.PolicyListComponent do
       |> validate_length
       |> List.myers_difference(Xlsx.get_header)
       |> more_than_eq(exel_data)
+  end
+
+  def handle_event("pending", params, socket) do
+    if socket.assigns.filter_activated do
+      {:noreply, assign(socket, change: !socket.assigns.change, filter_activated: false, message: nil, error: nil, policy_list: socket.assigns.non_filtered)}
+    else
+      {:noreply, assign(socket, change: !socket.assigns.change, filter_activated: true, message: nil, error: nil, non_filtered: socket.assigns.policy_list, policy_list: Enum.filter(socket.assigns.policy_list, fn x -> x.pending_xml end))}
+    end
   end
 
   defp validate_accounts({:error, data}), do: {:error, data}
@@ -701,6 +712,17 @@ defmodule AccountingSystemWeb.PolicyListComponent do
             </path>
           </svg>
           <label class="cursor-pointer mr-auto text-white">Nueva</label>
+        </button>
+      </div>
+
+      <div class="w-1/4 px-2">
+          <button phx-target="#list_comp" phx-click="pending" class="items-center inline-flex font-bold rounded text-sm ">
+          <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+          class="h-4 w-4 mr-2 ml-auto">
+            <path fill="currentColor" d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
+            class="text-red">
+            </path>
+          </svg>
         </button>
       </div>
 
