@@ -34,7 +34,7 @@ defmodule AccountingSystem.StructureHandler do
     update_execute(eval, level)
   end
 
-  defp update_execute(length, _) when length == 0, do: :ok
+  defp update_execute(0, _), do: :ok
 
   defp update_execute(length, level) when length < 0 do   #Si el cambio fue a Codigo mas CHICO (Quitar ceros)
     case check_if_you_can_delet_zeros(level, length * -1) do

@@ -1,4 +1,7 @@
 defmodule AccountingSystem.XlsxFunctions do
+  @moduledoc """
+  Módulo para el procesamiento de archivos de excel
+  """
 
   alias Elixlsx.Workbook
   alias Elixlsx.Sheet

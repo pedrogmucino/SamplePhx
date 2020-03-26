@@ -1,4 +1,7 @@
 defmodule AccountingSystem.AccountSchema do
+  @moduledoc """
+  Módulo de Schema de Cuentas
+  """
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -37,6 +40,9 @@ defmodule AccountingSystem.AccountSchema do
 end
 
 defmodule AccountingSystem.AccountCodeSchema do
+  @moduledoc """
+  Módulo de Schema con lo requierido para el manejo de códigos de Cuenta
+  """
   use Ecto.Schema
   import Ecto.Changeset
   schema "accounts" do

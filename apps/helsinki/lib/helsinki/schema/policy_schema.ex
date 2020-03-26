@@ -1,4 +1,7 @@
 defmodule AccountingSystem.PolicySchema do
+  @moduledoc """
+  Módulo con el Schema de Pólizas
+  """
   use Ecto.Schema
   import Ecto.Changeset
 

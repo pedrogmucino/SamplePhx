@@ -1,4 +1,7 @@
 defmodule AccountingSystem.GetSizeOf do
+  @moduledoc """
+  Módulo que consulta de tamaño de estructura de determinado nivel
+  """
 
   import Ecto.Query, warn: false
 

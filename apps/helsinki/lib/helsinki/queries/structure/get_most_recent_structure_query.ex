@@ -1,4 +1,7 @@
 defmodule AccountingSystem.GetMostRecentStructureQuery do
+  @moduledoc """
+  Módulo que obtiene la consulta la estructura de mayor nivel
+  """
   import Ecto.Query, warn: false
 
   def new() do
