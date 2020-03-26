@@ -67,7 +67,7 @@ defmodule AccountingSystem.AuxiliaryHandler do
     |> AuxiliarySchema.changeset(attrs)
     |> Repo.insert(prefix: PrefixFormatter.get_current_prefix)
     |> case do
-      {:ok, aux} -> if aux.id != GenericFunctions.to_binary_empty, do: save_in_alexandria(xml_b64, aux.xml_id, aux.xml_name)
+      {:ok, aux} -> if aux.id != nil, do: save_in_alexandria(xml_b64, aux.xml_id, aux.xml_name)
       {:error, aux} -> aux |> GenericFunctions.to_inspect(" -> ERROR AUX NOT SAVED")
     end
   end
@@ -79,7 +79,7 @@ defmodule AccountingSystem.AuxiliaryHandler do
     |> AuxiliarySchema.changeset(attrs)
     |> Repo.insert(prefix: PrefixFormatter.get_prefix(year, month))
     |> case do
-      {:ok, aux} -> if aux.id != GenericFunctions.to_binary_empty, do: save_in_alexandria(xml_b64, aux.xml_id, aux.xml_name)
+      {:ok, aux} -> if aux.xml_id != nil, do: save_in_alexandria(xml_b64, aux.xml_id, aux.xml_name)
       {:error, aux} -> aux |> GenericFunctions.to_inspect(" -> ERROR AUX NOT SAVED")
     end
   end
