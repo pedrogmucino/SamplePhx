@@ -1,4 +1,7 @@
 defmodule AccountingSystem.AuxiliarySchema do
+  @moduledoc """
+  Módulo con el Schema de Auxiliares
+  """
   use Ecto.Schema
   import Ecto.Changeset
 
