@@ -668,7 +668,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
       <%= live_component(@socket, AccountingSystemWeb.NotificationComponent, id: "error_comp", message: @error, show: true, notification_type: "error", change: @change) %>
     <% end %>
 
-    <div id="list_comp" class="bg-white h-hoch-93 w-80 mt-16 ml-16 block float-left">
+    <div id="list_comp" class="flex-none bg-white h-hoch-93 w-80 mt-16 ml-16 block float-left">
       <div class="w-full py-2 bg-blue-700">
         <p class="ml-2 font-bold text-lg text-white">Pólizas</p>
       </div>
