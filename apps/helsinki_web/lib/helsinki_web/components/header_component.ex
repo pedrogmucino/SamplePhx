@@ -1,4 +1,7 @@
 defmodule AccountingSystemWeb.HeaderComponent do
+  @moduledoc """
+  Componente con menú principal
+  """
   use Phoenix.LiveComponent
   use Phoenix.HTML
 

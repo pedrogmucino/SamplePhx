@@ -1,4 +1,7 @@
 defmodule AccountingSystemWeb.Alexandria do
+  @moduledoc """
+  Módulo para comunicación con sistema de archivos Alexandria
+  """
   import Ecto
   def get_file(id, parts) do
     Application.get_env(:helsinki_web, Alexandria)[:url]
