@@ -181,7 +181,8 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                           <input type="file" name="xml_name_file" id="file-upload" accept="text/xml"/>
                           <span class='tooltip-text text-white bg-blue-500 mt-5 -ml-12 rounded'>Agregar XML</span>
                           <input type="hidden" name="xml_name" value="<%= @xml_name %>" id="file-upload" accept="text/xml"/>
-                          <input type="hidden" name="xml_b64" value=<%= @xml_b64 %> />
+                          <input type="hidden" name="xml_b64" value="<%= @xml_b64 %>"/>
+                          <input type="hidden" name="xml_id" />
                           <label> <%= @pollys.xml_name %> </label>
                           <label id="file-upload"></label>
 
@@ -316,7 +317,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                               <div class="flex">
                                 <div class="w-2/6">
                                   <a href="/show_xml/<%= item.xml_id %>" target="_blank">
-                                    <label class="text-gray-600 text-xs"><%= item.xml_name %></label>
+                                    <label class="text-gray-600 text-xs"><b><%= item.xml_name %></b></label>
                                   </a>
                                 </div>
                                 <div class="w-2/6 text-right inline-flex">
@@ -426,12 +427,11 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
   # end
 
   def update(params, socket) do
-    params |> Generic.to_inspect( "-------------- > Update new policy")
     dropdowns = params.dropdowns
     cancel? = params.cancel?
     message_confirm = params.message_confirm
-    xml_name = params.xml_name
-    xml_b64 = params.xml_b64
+    xml_name = params.xml_name |> Generic.to_inspect( "-------------- > Name in Update new policy")
+    xml_b64 = params.xml_b64 |> Generic.to_inspect( "-------------- > XML in Update new policy")
     status = params.pollys.status
     pollys = params.pollys
     params = socket.assigns |> Map.put(:pollys, pollys) |> Map.put(:arr, params.arr) |> Map.put(:edit, params.edit)
