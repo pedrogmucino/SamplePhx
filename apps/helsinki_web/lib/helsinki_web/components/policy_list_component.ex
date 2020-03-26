@@ -420,6 +420,8 @@ defmodule AccountingSystemWeb.PolicyListComponent do
       |> Map.put(:name, Enum.at(data, 6))
       |> Map.put(:xml_name, Generic.to_string_empty)
       |> Map.put(:xml_id, Generic.to_string_empty)
+      |> Map.put(:xml_b64, Generic.to_string_empty)
+      |> Map.put(:xml_name_file, Generic.to_string_empty)
   end
   defp add_id_number({data, id}) do
     data
