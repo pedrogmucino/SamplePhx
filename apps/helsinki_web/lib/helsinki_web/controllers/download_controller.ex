@@ -1,4 +1,7 @@
 defmodule AccountingSystemWeb.DownloadController do
+  @moduledoc """
+  Controller para descarga de archivos
+  """
   use AccountingSystemWeb, :controller
   alias Phoenix.LiveView
 
@@ -8,7 +11,6 @@ defmodule AccountingSystemWeb.DownloadController do
     Task.async(fn ->
       :timer.sleep(4000)
       File.rm("template.xlsx")
-        |> IO.inspect(label: "FILE RM RESULT--------------------------------->")
     end)
     a
   end

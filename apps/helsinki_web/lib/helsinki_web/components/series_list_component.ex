@@ -1,4 +1,7 @@
 defmodule AccountingSystemWeb.SeriesListComponent do
+  @moduledoc """
+  Componente de listado de series de póliza
+  """
   use Phoenix.LiveComponent
   use Phoenix.HTML
   import Ecto
@@ -69,17 +72,6 @@ defmodule AccountingSystemWeb.SeriesListComponent do
   end
 
   def handle_event("set_series", params, socket) do
-    case Alexandria.get_file("EBDFB8F7-DBF8-44A5-9B78-0D81267AB92C", 1) do
-      {:ok, %HTTPoison.Response{} = response} ->
-        IO.puts("------------------------->LECTURA OK")
-      {:error, %HTTPoison.Error{} = error} ->
-        IO.puts("------------------------->LECTURA ERROR")
-    end
-
-    resp_carga =
-    Alexandria.upload_file(params["file_upload_content"], "Prueba ajustes.xml")
-    |> IO.inspect(label: "--------------------------------->RESPUESTA CARGA")
-
     series =
     params["series_id"]
     |> SeriesHandler.get_series!()
