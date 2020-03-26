@@ -1,6 +1,6 @@
 defmodule AccountingSystem.AccountSchema do
   @moduledoc """
-  Módulo de Schema de Cuentas
+  Esquema de Cuentas
   """
   use Ecto.Schema
   import Ecto.Changeset

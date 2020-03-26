@@ -1,4 +1,7 @@
 defmodule AccountingSystem.SeriesSchema do
+  @moduledoc """
+  Esquema de Series
+  """
   use Ecto.Schema
   import Ecto.Changeset
 
