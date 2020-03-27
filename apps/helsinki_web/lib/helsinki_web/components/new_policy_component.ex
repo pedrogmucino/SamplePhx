@@ -320,8 +320,6 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                                     <% end %>
                                   </div>
                                 </div>
-                                <label> <%= item.req_xml %> </label>
-                                <br>
                                 <label class="text-gray-600 text-right">Cta: <b><%= item.account %></b></label><br>
                               </div>
                               <div>
