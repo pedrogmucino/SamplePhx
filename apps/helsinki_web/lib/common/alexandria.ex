@@ -13,7 +13,7 @@ defmodule AccountingSystemWeb.Alexandria do
   end
 
   def upload_file(file, name, uuid) do
-    Task.start_link(__MODULE__, :upload_file_execute, [file, name, uuid])
+    if is_nil(uuid), do: nil, else: Task.start_link(__MODULE__, :upload_file_execute, [file, name, uuid])
   end
 
   def upload_file([file, name]) do
