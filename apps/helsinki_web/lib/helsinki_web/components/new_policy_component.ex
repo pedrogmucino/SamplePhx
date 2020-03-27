@@ -117,7 +117,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                       <%= if length(@dropdowns) > 0 do %>
                         <div id="account_list" class="w-full block absolute top-0 left-0 z-10 mt-10 bg-gray-100 overflow-y-scroll h-64">
                           <%= for item <- @dropdowns do %>
-                            <div phx-target="#list_comp" phx-click="autocomplete" phx-value-id="<%= item.value %>" phx-value-account="<%=List.first(item.key)%>" phx-value-name="<%=List.last(item.key)%>" class="block py-1 px-3 hover:bg-gray-500 hover:text-white cursor-pointer">
+                            <div phx-target="#list_comp" phx-click="autocomplete" phx-value-req_xml="<%= item.req_xml %>" phx-value-id="<%= item.value %>" phx-value-account="<%=List.first(item.key)%>" phx-value-name="<%=List.last(item.key)%>" class="block py-1 px-3 hover:bg-gray-500 hover:text-white cursor-pointer">
                                 <%= List.to_string(item.key) %>
                             </div>
                           <% end %>
@@ -183,6 +183,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                           <input type="hidden" name="xml_name" value="<%= @xml_name %>" id="file-upload" accept="text/xml"/>
                           <input type="hidden" name="xml_b64" value="<%= @xml_b64 %>"/>
                           <input type="hidden" name="xml_id" />
+                          <input type="hidden" name="req_xml" value="<%= @pollys.req_xml %>" >
                           <label> <%= @pollys.xml_name %> </label>
                           <label id="file-upload"></label>
 
@@ -304,6 +305,8 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                           <div class="w-full gap-4">
                             <div phx-value-id="" phx-target="#policy" class="border cursor-pointer bg-gray-200 p-2 mt-2 rounded relative hover:bg-gray-300">
                               <div class="text-right">
+                                <label> <%= item.req_xml %> </label>
+                                <br>
                                 <label class="text-gray-600 text-right">Cta: <b><%= item.account %></b></label><br>
                               </div>
                               <div>
@@ -434,8 +437,8 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
     dropdowns = params.dropdowns
     cancel? = params.cancel?
     message_confirm = params.message_confirm
-    xml_name = params.xml_name |> Generic.to_inspect( "-------------- > Name in Update new policy")
-    xml_b64 = params.xml_b64 |> Generic.to_inspect( "-------------- > XML in Update new policy")
+    xml_name = params.xml_name
+    xml_b64 = params.xml_b64
     status = params.pollys.status
     pollys = params.pollys
     params = socket.assigns |> Map.put(:pollys, pollys) |> Map.put(:arr, params.arr) |> Map.put(:edit, params.edit)

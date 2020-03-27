@@ -41,7 +41,8 @@ defmodule AccountingSystem.GetAllId do
       account: ac.code,
       number: row_number() |> over(order_by: aux.id),
       xml_id: aux.xml_id,
-      xml_name: aux.xml_name
+      xml_name: aux.xml_name,
+      req_xml: ac.requires_xml
     }
   end
 
