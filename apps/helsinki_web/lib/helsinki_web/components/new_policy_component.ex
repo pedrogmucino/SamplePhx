@@ -305,6 +305,21 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                           <div class="w-full gap-4">
                             <div phx-value-id="" phx-target="#policy" class="border cursor-pointer bg-gray-200 p-2 mt-2 rounded relative hover:bg-gray-300">
                               <div class="text-right">
+                                <div class="w-full text-right h-3">
+                                  <div class="absolute px-3 text-sm top-1 right-0">
+                                    <%= if item.req_xml == true do %>
+                                      <%= if item.xml_name != nil do %>
+                                        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="h-3 svg-inline--fa fa-circle fa-w-16 fa-2x">
+                                          <path style="fill:#00D106;" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z" class=""></path>
+                                        </svg>
+                                      <% else %>
+                                        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="h-3 svg-inline--fa fa-circle fa-w-16 fa-2x">
+                                          <path style="fill:#AE1717;" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z" class=""></path>
+                                        </svg>
+                                      <% end %>
+                                    <% end %>
+                                  </div>
+                                </div>
                                 <label> <%= item.req_xml %> </label>
                                 <br>
                                 <label class="text-gray-600 text-right">Cta: <b><%= item.account %></b></label><br>
@@ -434,6 +449,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
   # end
 
   def update(params, socket) do
+    params.arr |> IO.inspect(label: " ------------------ > > > >Z Z Z Z Z ARRRR")
     dropdowns = params.dropdowns
     cancel? = params.cancel?
     message_confirm = params.message_confirm
