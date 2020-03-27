@@ -334,10 +334,22 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                                 <div class="w-2/6">
                                   <%= if item.xml_id != "" do %>
                                     <a href="/show_xml/<%= item.xml_id %>/<%= item.xml_name %>" target="_blank">
-                                      <label class="text-gray-600 text-xs"><b><%= item.xml_name %></b></label>
+                                      <label class="text-gray-600 text-xs">
+                                        <b>
+                                          <%= if item.xml_name != nil do %>
+                                            <%= if String.length(item.xml_name) > 20, do: String.slice(item.xml_name, 0, 20)<>"...", else: item.xml_name %>
+                                          <% end %>
+                                        </b>
+                                      </label>
                                     </a>
                                   <% else %>
-                                    <label class="text-gray-600 text-xs"><b><%= item.xml_name %></b></label>
+                                    <label class="text-gray-600 text-xs">
+                                      <b>
+                                        <%= if item.xml_name != nil do %>
+                                          <%= if String.length(item.xml_name) > 20, do: String.slice(item.xml_name, 0, 20)<>"...", else: item.xml_name %>
+                                        <% end %>
+                                      </b>
+                                    </label>
                                   <% end %>
                                 </div>
                                 <div class="w-2/6 text-right inline-flex">
