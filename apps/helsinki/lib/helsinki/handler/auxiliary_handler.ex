@@ -89,7 +89,7 @@ defmodule AccountingSystem.AuxiliaryHandler do
   end
 
   defp load_xml_id_edit(attrs) do
-    if is_nil(attrs.xml_id) and (attrs.xml_name != "" or !is_nil(attrs.xml_name)) do
+    if is_nil(attrs.xml_id) and !is_nil(attrs.xml_name) do
       attrs |> Map.put(:xml_id, (if attrs.xml_name != GenericFunctions.to_string_empty, do: Ecto.UUID.autogenerate, else: GenericFunctions.to_string_empty))
     else
       attrs
