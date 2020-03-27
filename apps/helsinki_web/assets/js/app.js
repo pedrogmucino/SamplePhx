@@ -160,7 +160,7 @@ Hooks.load_file_xml_js = {
     mounted() {
         var toEvent = this
         this.el.addEventListener("input", e => {
-            fuckfunction(toEvent, e);
+            get_xml_data(toEvent, e);
         })       
     }
 }
@@ -176,18 +176,15 @@ const toBase64 = file => new Promise((resolve, reject) => {
     reader.onerror = error => reject(error);
 });
 
-function fuckfunction(toEvent, e) {
-    var ee = e.srcElement.files[0]
+function get_xml_data(toEvent, e) {
+    var element_file = e.srcElement.files[0]
     setTimeout(function() {
-        console.log(ee)
         var reader = new FileReader();
         reader.onload = function () {
             var arrayBuffer = this.result, array = new Uint8Array(arrayBuffer), binaryString = String.fromCharCode.apply(null, array);
-            console.log(array);
-            console.log(binaryString);
-            toEvent.pushEvent("send_to_view", { name: ee.name, xml_b64: binaryString });
+            toEvent.pushEvent("send_to_view", { name: element_file.name, xml_b64: binaryString });
         };
-        reader.readAsArrayBuffer(ee);
+        reader.readAsArrayBuffer(element_file);
     }, 100)
 }
 
