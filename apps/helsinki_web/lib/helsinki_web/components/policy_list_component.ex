@@ -304,6 +304,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
 
   def handle_event("load_aux", %{"value" => path, "name" => name}, socket) do
     data = Xlsx.get_data(path, name)
+            |> validate_table
             |> validate_header
             |> validate_accounts
             |> validate_concept
@@ -319,14 +320,6 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     {:noreply, socket}
   end
 
-  defp validate_header(exel_data) do
-    exel_data
-      |> List.first
-      |> validate_length
-      |> List.myers_difference(Xlsx.get_header)
-      |> more_than_eq(exel_data)
-  end
-
   def handle_event("pending", params, socket) do
     if socket.assigns.filter_activated do
       {:noreply, assign(socket, change: !socket.assigns.change, filter_activated: false, message: nil, error: nil, policy_list: socket.assigns.non_filtered)}
@@ -335,7 +328,24 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     end
   end
 
-  defp validate_accounts({:error, data}), do: {:error, data}
+  defp validate_table(excel_data) do
+    excel_data
+      |> Enum.any?(fn row -> is_overloaded(row) end)
+      |> send_result(excel_data)
+  end
+
+  defp validate_header({:error, message}), do: {:error, message}
+  defp validate_header({:ok, exel_data}) do
+    exel_data
+      |> List.first
+      |> validate_length
+      |> IO.inspect(label: "Esto llega a myers Diff")
+      |> List.myers_difference(Xlsx.get_header)
+      |> IO.inspect(label: "Esto Sale del myers Diff")
+      |> more_than_eq(exel_data)
+  end
+
+  defp validate_accounts({:error, message}), do: {:error, message}
   defp validate_accounts({:ok, data}) do
     db_accounts = Account.get_all_detail_accounts
     data
@@ -378,13 +388,20 @@ defmodule AccountingSystemWeb.PolicyListComponent do
                 |> Map.put(:total, Float.round(sh-sd, 2)),
       arr: data}
   end
+
+#**********************************VALIDATE TABLE***************************************************
+defp is_overloaded(row), do: five_or_less(Enum.count(row))
+defp five_or_less(count) when count <= 5, do: false
+defp five_or_less(_), do: true
+defp send_result(true, _), do: {:error, "Existen datos fuera de la tabla, favor de revisar y seguir la plantilla"}
+defp send_result(false, excel_data), do: {:ok, excel_data}
+
 #********************************VALIDATE HEADER**********************************
   defp validate_length(data), do: is_five(Enum.count(data), data)
   defp is_five(5, data), do: data
   defp is_five(_, _), do: []
-  defp more_than_eq([del: _], _), do: {:error, "Error de encabezado, favor de revisar el orden y que no contenga más información fuera de la tabla"}
-  defp more_than_eq([ins: _], _), do: {:error, "Error de encabezado, favor de revisar el orden y que no contenga más información fuera de la tabla"}
-  defp more_than_eq(_, data), do: {:ok, delete_header(List.pop_at(data, 0))}
+  defp more_than_eq([eq: _], data), do: {:ok, delete_header(List.pop_at(data, 0))} |> IO.inspect(label: "***********OK*********")
+  defp more_than_eq(_, _), do: {:error, "Error de encabezado, favor de revisar el orden (Puedes descargar la plantilla actualizada)"} |> IO.inspect(label: "***********DEL*********")
   defp delete_header({_, data}), do: data
 
 #********************************VALIDATE ACCOUNTS********************************
