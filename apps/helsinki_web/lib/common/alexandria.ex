@@ -2,6 +2,8 @@ defmodule AccountingSystemWeb.Alexandria do
   @moduledoc """
   Módulo para comunicación con sistema de archivos Alexandria
   """
+  use Task
+
   import Ecto
   def get_file(id, parts) do
     Application.get_env(:helsinki_web, Alexandria)[:url]
@@ -10,13 +12,23 @@ defmodule AccountingSystemWeb.Alexandria do
     |> HTTPoison.get(recv_timeout: 800_000)
   end
 
+  def upload_file(file, name, uuid) do
+    Task.start_link(__MODULE__, :upload_file_execute, [file, name, uuid])
+  end
+
+  def upload_file([file, name]) do
+    uuid = Ecto.UUID.generate
+    upload_put(file, uuid)
+    |> upload_post(name)
+  end
+
   def upload_file(file, name) do
     uuid = Ecto.UUID.generate
     upload_put(file, uuid)
     |> upload_post(name)
   end
 
-  def upload_file(file, name, uuid) do
+  def upload_file_execute(file, name, uuid) do
     upload_put(file, uuid)
     |> upload_post(name)
   end
