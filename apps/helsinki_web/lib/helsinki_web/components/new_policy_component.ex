@@ -307,14 +307,14 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                               <div class="text-right">
                                 <div class="w-full text-right h-3">
                                   <div class="absolute px-3 text-sm top-1 right-0">
-                                    <%= if item.req_xml == true do %>
-                                      <%= if item.xml_name != nil do %>
+                                    <%= if item.req_xml == "true" || item.req_xml == true do %>
+                                      <%= if item.xml_name == "" || item.xml_name == nil do %>
                                         <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="h-3 svg-inline--fa fa-circle fa-w-16 fa-2x">
-                                          <path style="fill:#00D106;" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z" class=""></path>
+                                          <path style="fill:#AE1717;" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z" class=""></path>
                                         </svg>
                                       <% else %>
                                         <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="h-3 svg-inline--fa fa-circle fa-w-16 fa-2x">
-                                          <path style="fill:#AE1717;" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z" class=""></path>
+                                          <path style="fill:#00D106;" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z" class=""></path>
                                         </svg>
                                       <% end %>
                                     <% end %>
