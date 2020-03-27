@@ -425,11 +425,15 @@ defmodule AccountingSystemWeb.PolicyListComponent do
       |> Map.put(:xml_id, Generic.to_string_empty)
       |> Map.put(:xml_b64, Generic.to_string_empty)
       |> Map.put(:xml_name_file, Generic.to_string_empty)
+      |> Map.put(:req_xml, requires_xml(Enum.at(data, 0)))
   end
   defp add_id_number({data, id}) do
     data
       |> Map.put(:id, id)
       |> Map.put(:number, id)
+  end
+  defp requires_xml(code) do
+    Account.account_requires_xml(code)
   end
 
   #*******************************ERROR OR PASSSS*************************************************
