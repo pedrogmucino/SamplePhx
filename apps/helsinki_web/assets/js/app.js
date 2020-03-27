@@ -160,18 +160,7 @@ Hooks.load_file_xml_js = {
     mounted() {
         var toEvent = this
         this.el.addEventListener("input", e => {
-            var reader = new FileReader();
-            reader.onload = function() {
-                var arrayBuffer = this.result,
-                array = new Uint8Array(arrayBuffer),
-                binaryString = String.fromCharCode.apply(null, array);
-                // var hidden = document.getElementById("file_upload_content")
-                // hidden.value = binaryString;
-                console.log(array);
-                console.log(binaryString);  
-                toEvent.pushEvent("send_to_view", {name: e.srcElement.files[0].name, xml_b64: binaryString})
-            }
-            reader.readAsArrayBuffer(e.srcElement.files[0]);
+            fuckfunction(toEvent, e);
         })       
     }
 }
@@ -186,6 +175,21 @@ const toBase64 = file => new Promise((resolve, reject) => {
     reader.onload = () => resolve(reader.result);
     reader.onerror = error => reject(error);
 });
+
+function fuckfunction(toEvent, e) {
+    var ee = e.srcElement.files[0]
+    setTimeout(function() {
+        console.log(ee)
+        var reader = new FileReader();
+        reader.onload = function () {
+            var arrayBuffer = this.result, array = new Uint8Array(arrayBuffer), binaryString = String.fromCharCode.apply(null, array);
+            console.log(array);
+            console.log(binaryString);
+            toEvent.pushEvent("send_to_view", { name: ee.name, xml_b64: binaryString });
+        };
+        reader.readAsArrayBuffer(ee);
+    }, 100)
+}
 
 function setFormat(el){
     el.innerHTML = formatNumber(parseFloat(el.textContent).toFixed(2));
