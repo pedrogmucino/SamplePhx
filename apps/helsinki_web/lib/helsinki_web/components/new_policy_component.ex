@@ -446,7 +446,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
       message_confirm: nil,
       status: false,
       change: false,
-      xml_name: Generic.to_string_empty,
+      xml_name: nil,
       xml_b64: Generic.to_string_empty
     )}
   end
@@ -459,7 +459,6 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
   # end
 
   def update(params, socket) do
-    params.arr |> IO.inspect(label: " ------------------ > > > >Z Z Z Z Z ARRRR")
     dropdowns = params.dropdowns
     cancel? = params.cancel?
     message_confirm = params.message_confirm
