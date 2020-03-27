@@ -308,7 +308,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                                 <div class="w-full text-right h-3">
                                   <div class="absolute px-3 text-sm top-1 right-0">
                                     <%= if item.req_xml == "true" || item.req_xml == true do %>
-                                      <%= if item.xml_name == "" || item.xml_name == nil do %>
+                                      <%= if item.xml_name == nil do %>
                                         <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="h-3 svg-inline--fa fa-circle fa-w-16 fa-2x">
                                           <path style="fill:#AE1717;" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z" class=""></path>
                                         </svg>
@@ -446,7 +446,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
       message_confirm: nil,
       status: false,
       change: false,
-      xml_name: Generic.to_string_empty,
+      xml_name: nil,
       xml_b64: Generic.to_string_empty
     )}
   end
@@ -459,7 +459,6 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
   # end
 
   def update(params, socket) do
-    params.arr |> IO.inspect(label: " ------------------ > > > >Z Z Z Z Z ARRRR")
     dropdowns = params.dropdowns
     cancel? = params.cancel?
     message_confirm = params.message_confirm
