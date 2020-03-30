@@ -1,4 +1,7 @@
 defmodule AccountingSystemWeb.NotificationComponent do
+  @moduledoc """
+  Componente de mensajes de notificación y error
+  """
   use Phoenix.LiveComponent
   use Phoenix.HTML
 
@@ -31,7 +34,7 @@ defmodule AccountingSystemWeb.NotificationComponent do
           </div>
         </div>
 
-        <%= "error" -> %>
+        <% "error" -> %>
         <div class="fixed z-40 w-full flex bottom-12 left-0 notification">
           <div class="z-40 w-120 top-12 py-6 px-12 ml-auto mr-auto bg-red-100 border-t-4 border-red-500 rounded-b text-red-900 shadow-md role="alert">
             <div class="flex" items-center>
@@ -49,7 +52,7 @@ defmodule AccountingSystemWeb.NotificationComponent do
           </div>
         </div>
 
-        <%= nil -> %>
+        <% nil -> %>
 
       <% end %>
       </div>

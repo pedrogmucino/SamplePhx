@@ -1,4 +1,7 @@
 defmodule AccountingSystemWeb.FormAccountComponent do
+  @moduledoc """
+  Componente con formulario para edición de Cuentas
+  """
   use Phoenix.LiveComponent
   use Phoenix.HTML
 
@@ -177,6 +180,13 @@ defmodule AccountingSystemWeb.FormAccountComponent do
                     <label class="relative inline bg-transparent w-10" for="checkbox-third-party-op"></label>
                   </div>
                   <label class="ml-2 font-bold text-gray-700">Operación de Terceros</label>
+                </div>
+                <div class="inline-flex items-center py-6">
+                  <div class="modern-checkbox flex shadow-md h-6 w-12 rounded-full " >
+                    <input type="checkbox" name="requires_xml" class="hidden" id="checkbox-requires-xml" <%= (if @actionx == "edit", do: (if @parent_editx.requires_xml, do: "checked", else: "unchecked")) %> >
+                    <label class="relative inline bg-transparent w-10" for="checkbox-requires-xml"></label>
+                  </div>
+                  <label class="ml-2 font-bold text-gray-700">Requiere XML</label>
                 </div>
                 <div class="inline-flex items-center py-6">
                   <div class="modern-checkbox flex shadow-md h-6 w-12 rounded-full " >

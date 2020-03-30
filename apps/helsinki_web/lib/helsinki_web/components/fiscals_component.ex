@@ -1,4 +1,7 @@
 defmodule AccountingSystemWeb.FiscalsComponent do
+  @moduledoc """
+  Componente de Fiscales
+  """
   use Phoenix.LiveComponent
   use Phoenix.HTML
 

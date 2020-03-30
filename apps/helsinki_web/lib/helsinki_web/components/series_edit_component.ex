@@ -1,5 +1,8 @@
 
 defmodule AccountingSystemWeb.SeriesEditComponent do
+  @moduledoc """
+  Componente de edción de series de póliza
+  """
   use Phoenix.LiveComponent
   use Phoenix.HTML
   alias AccountingSystem.{
@@ -41,6 +44,9 @@ defmodule AccountingSystemWeb.SeriesEditComponent do
           <input <%= if !@editable, do: 'disabled' %> type="text" name="serial" value=<%= @series.serial %> class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code" type="text" placeholder="Introduce la serie deseada">
           <input type="hidden" name="fiscal_exercise" value=<%= @series.fiscal_exercise %>>
           <input type="hidden" name="series_id" value=<%= @series.id %>>
+          <input type="file" id="file_upload" name="evidence_upload" phx-hook="alexandria_upload">
+          <input type="hidden" id="file_upload_content" name="file_upload_content" phx_update="ignore">
+          <input type="hidden" id="nombre_archivo" name="nombre_archivo" phx_update="ignore">
           <div class="inline-flex w-full py-16 absolute bottom-0 right-0 pr-0">
           <%= if @editable do %>
             <button class= "ml-5 py-2 w-32 bg-teal-500 text-white hover:bg-teal-400 items-center inline-flex font-bold rounded shadow focus:shadow-outline focus:outline-none rounded">

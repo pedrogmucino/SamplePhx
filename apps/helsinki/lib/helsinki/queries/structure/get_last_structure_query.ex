@@ -1,4 +1,7 @@
 defmodule AccountingSystem.GetLastStructureQuery do
+  @moduledoc """
+  Módulo que contiene el query para consultar la cuenta de mayor nivel
+  """
   import Ecto.Query, warn: false
   alias AccountingSystem.Repo
 

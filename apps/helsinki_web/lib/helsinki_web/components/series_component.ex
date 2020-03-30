@@ -1,11 +1,9 @@
 defmodule AccountingSystemWeb.SeriesComponent do
+  @moduledoc """
+  Componente de creación de series de póliza
+  """
   use Phoenix.LiveComponent
   use Phoenix.HTML
-  alias AccountingSystem.{
-    PolicyTipeHandler,
-    StructureHandler,
-    StructureSchema
-  }
 
   def mount(socket) do
     policytypes = AccountingSystem.PolicyTipeHandler.get_types

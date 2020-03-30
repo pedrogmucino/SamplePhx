@@ -1,4 +1,7 @@
 defmodule AccountingSystem.PrefixFormatter do
+  @moduledoc """
+  Módulo para establecer prefix de tablas de pólizas y auxiliares
+  """
   def get_current_prefix do
     current_date =
     Date.utc_today

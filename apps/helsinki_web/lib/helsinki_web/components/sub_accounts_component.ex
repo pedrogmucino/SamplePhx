@@ -1,4 +1,7 @@
 defmodule AccountingSystemWeb.SubAccountsComponent do
+  @moduledoc """
+  Componente de listado de subcuentas
+  """
   use Phoenix.LiveComponent
   use Phoenix.HTML
 

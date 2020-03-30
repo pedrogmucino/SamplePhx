@@ -1,4 +1,7 @@
 defmodule AccountingSystemWeb.NewPolicyComponent do
+  @moduledoc """
+  Componente de formulario para nuevas pólizas
+  """
   use Phoenix.LiveComponent
   use Phoenix.HTML
 
@@ -6,6 +9,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
     PolicyHandler,
     PolicySchema
   }
+  alias AccountingSystem.GenericFunctions, as: Generic
 
   #alias AccountingSystem.AccountHandler, as: Account
 
@@ -88,11 +92,24 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                 </div>
               </form>
 
-              <div class="mt-10 py-6">
+              <div class="mt-5">
                 <div class="py-2">
                   <label><b>Captura de Auxiliares</b></label>
                 </div>
                 <div class="border-solid border-2 border-gray-300 p-4 rounded">
+
+                <div class="w-full text-right">
+                    <button phx-hook="get_path" class="tooltip">
+                          <label for="xlsx-upload" class="custom-file-upload border w-10 bg-teal-500 rounded text-white hover:bg-teal-400">
+                            <i class="fa fa-cloud-upload"></i>
+                            <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="upload" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="h-6 w-6 -ml-1"><path fill="currentColor" d="M296 384h-80c-13.3 0-24-10.7-24-24V192h-87.7c-17.8 0-26.7-21.5-14.1-34.1L242.3 5.7c7.5-7.5 19.8-7.5 27.3 0l152.2 152.2c12.6 12.6 3.7 34.1-14.1 34.1H320v168c0 13.3-10.7 24-24 24zm216-8v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h136v8c0 30.9 25.1 56 56 56h80c30.9 0 56-25.1 56-56v-8h136c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z" class=""></path></svg>
+                          </label>
+                          <input type="file" id="xlsx-upload" name="" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                          <label id="xlsx-upload"></label>
+                          <span class='tooltip-text text-white bg-blue-500 mt-5 -ml-12 rounded'>Cargar Xlsx</span>
+                    </button>
+                </div>
+
                 <form id="form2" phx-submit="save_aux" phx-target="#list_comp" phx-change="update_form" class="-mt-32">
                   <label class="block pt-32 tracking-wide text-gray-700 font-bold" for="grid-name">Cuenta</label>
                   <div class="inline-flex w-full">
@@ -103,7 +120,7 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                       <%= if length(@dropdowns) > 0 do %>
                         <div id="account_list" class="w-full block absolute top-0 left-0 z-10 mt-10 bg-gray-100 overflow-y-scroll h-64">
                           <%= for item <- @dropdowns do %>
-                            <div phx-target="#list_comp" phx-click="autocomplete" phx-value-id="<%= item.value %>" phx-value-account="<%=List.first(item.key)%>" phx-value-name="<%=List.last(item.key)%>" class="block py-1 px-3 hover:bg-gray-500 hover:text-white cursor-pointer">
+                            <div phx-target="#list_comp" phx-click="autocomplete" phx-value-req_xml="<%= item.req_xml %>" phx-value-id="<%= item.value %>" phx-value-account="<%=List.first(item.key)%>" phx-value-name="<%=List.last(item.key)%>" class="block py-1 px-3 hover:bg-gray-500 hover:text-white cursor-pointer">
                                 <%= List.to_string(item.key) %>
                             </div>
                           <% end %>
@@ -148,26 +165,68 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                       <input <%= if !@status, do: 'disabled' %> type="number" name="credit" step="0.01" min="0" max="999999.99" phx-hook="format_number" value="<%=@pollys.credit%>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name">
                     </div>
 
-                    <div class="ml-4">
-                      <button phx-click="add_xml" phx-target="#policy" class="border tooltip w-10 h-hoch-2 mt-6 bg-teal-500 rounded text-white hover:bg-teal-400">
-                      <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="paperclip" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="h-6 w-6 ml-2"><path fill="currentColor" d="M67.508 468.467c-58.005-58.013-58.016-151.92 0-209.943l225.011-225.04c44.643-44.645 117.279-44.645 161.92 0 44.743 44.749 44.753 117.186 0 161.944l-189.465 189.49c-31.41 31.413-82.518 31.412-113.926.001-31.479-31.482-31.49-82.453 0-113.944L311.51 110.491c4.687-4.687 12.286-4.687 16.972 0l16.967 16.971c4.685 4.686 4.685 12.283 0 16.969L184.983 304.917c-12.724 12.724-12.73 33.328 0 46.058 12.696 12.697 33.356 12.699 46.054-.001l189.465-189.489c25.987-25.989 25.994-68.06.001-94.056-25.931-25.934-68.119-25.932-94.049 0l-225.01 225.039c-39.249 39.252-39.258 102.795-.001 142.057 39.285 39.29 102.885 39.287 142.162-.028A739446.174 739446.174 0 0 1 439.497 238.49c4.686-4.687 12.282-4.684 16.969.004l16.967 16.971c4.685 4.686 4.689 12.279.004 16.965a755654.128 755654.128 0 0 0-195.881 195.996c-58.034 58.092-152.004 58.093-210.048.041z" class=""></path></svg>
-                      <span class='tooltip-text text-white bg-blue-500 mt-5 -ml-12 rounded'>Agregar XML</span>
-                      </button>
+                  </div>
+
+                  <div class="inline-flex w-full">
+                    <div class="w-full">
+                      <%= if !@status do %>
+                        <button class="opacity-50 cursor-not-allowed">
+                          <label for="file-upload" class="custom-file-upload border w-10 bg-teal-500 rounded text-white hover:bg-teal-400 cursor-not-allowed">
+                            <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="paperclip" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="h-6 w-6 -ml-1 cursor-not-allowed"><path fill="currentColor" d="M67.508 468.467c-58.005-58.013-58.016-151.92 0-209.943l225.011-225.04c44.643-44.645 117.279-44.645 161.92 0 44.743 44.749 44.753 117.186 0 161.944l-189.465 189.49c-31.41 31.413-82.518 31.412-113.926.001-31.479-31.482-31.49-82.453 0-113.944L311.51 110.491c4.687-4.687 12.286-4.687 16.972 0l16.967 16.971c4.685 4.686 4.685 12.283 0 16.969L184.983 304.917c-12.724 12.724-12.73 33.328 0 46.058 12.696 12.697 33.356 12.699 46.054-.001l189.465-189.489c25.987-25.989 25.994-68.06.001-94.056-25.931-25.934-68.119-25.932-94.049 0l-225.01 225.039c-39.249 39.252-39.258 102.795-.001 142.057 39.285 39.29 102.885 39.287 142.162-.028A739446.174 739446.174 0 0 1 439.497 238.49c4.686-4.687 12.282-4.684 16.969.004l16.967 16.971c4.685 4.686 4.689 12.279.004 16.965a755654.128 755654.128 0 0 0-195.881 195.996c-58.034 58.092-152.004 58.093-210.048.041z" class=""></path></svg>
+                          </label>
+                        </button>
+                      <% else %>
+                        <button phx-click="add_xml_file" phx-target="#policy" phx-hook="load_file_xml_js" class="tooltip">
+                          <label for="file-upload" class="custom-file-upload border w-10 bg-teal-500 rounded text-white hover:bg-teal-400">
+                            <i class="fa fa-cloud-upload"></i>
+                            <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="paperclip" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="h-6 w-6 -ml-1"><path fill="currentColor" d="M67.508 468.467c-58.005-58.013-58.016-151.92 0-209.943l225.011-225.04c44.643-44.645 117.279-44.645 161.92 0 44.743 44.749 44.753 117.186 0 161.944l-189.465 189.49c-31.41 31.413-82.518 31.412-113.926.001-31.479-31.482-31.49-82.453 0-113.944L311.51 110.491c4.687-4.687 12.286-4.687 16.972 0l16.967 16.971c4.685 4.686 4.685 12.283 0 16.969L184.983 304.917c-12.724 12.724-12.73 33.328 0 46.058 12.696 12.697 33.356 12.699 46.054-.001l189.465-189.489c25.987-25.989 25.994-68.06.001-94.056-25.931-25.934-68.119-25.932-94.049 0l-225.01 225.039c-39.249 39.252-39.258 102.795-.001 142.057 39.285 39.29 102.885 39.287 142.162-.028A739446.174 739446.174 0 0 1 439.497 238.49c4.686-4.687 12.282-4.684 16.969.004l16.967 16.971c4.685 4.686 4.689 12.279.004 16.965a755654.128 755654.128 0 0 0-195.881 195.996c-58.034 58.092-152.004 58.093-210.048.041z" class=""></path></svg>
+                          </label>
+                          <input type="file" name="xml_name_file" id="file-upload" accept="text/xml"/>
+                          <span class='tooltip-text text-white bg-blue-500 mt-5 -ml-12 rounded'>Agregar XML</span>
+                          <input type="hidden" name="xml_name" value="<%= @xml_name %>" id="file-upload" accept="text/xml"/>
+                          <input type="hidden" name="xml_b64" value="<%= @xml_b64 %>"/>
+                          <input type="hidden" name="xml_id" />
+                          <input type="hidden" name="req_xml" value="<%= @pollys.req_xml %>" >
+                          <label> <%= @pollys.xml_name %> </label>
+                          <label id="file-upload"></label>
+
+                        </button>
+
+                        <label>
+                          <%= if @pollys.xml_name != "" do %>
+                            <% @pollys.xml_name %>
+                          <% else %>
+                            <% if @xml_name != "" do %>
+                              <% @xml_name %>
+                            <% end %>
+                          <% end %>
+                        </label>
+                      <% end %>
                     </div>
 
                     <div class="ml-4">
-                      <button <%= if !@status, do: 'disabled' %> name="save_aux" class=" <%= if !@status, do: 'opacity-50 cursor-not-allowed' %> border tooltip w-10 h-hoch-2 mt-6 bg-teal-500 rounded text-white hover:bg-teal-400 phx-target="#list_comp"" phx-hook="return_to_account">
-                        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="share-square" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"
-                          class="h-6 w-6 ml-2">
-                          <path fill="currentColor" d="M568.482 177.448L424.479 313.433C409.3 327.768 384 317.14 384 295.985v-71.963c-144.575.97-205.566 35.113-164.775 171.353 4.483 14.973-12.846 26.567-25.006 17.33C155.252 383.105 120 326.488 120 269.339c0-143.937 117.599-172.5 264-173.312V24.012c0-21.174 25.317-31.768 40.479-17.448l144.003 135.988c10.02 9.463 10.028 25.425 0 34.896zM384 379.128V448H64V128h50.916a11.99 11.99 0 0 0 8.648-3.693c14.953-15.568 32.237-27.89 51.014-37.676C185.708 80.83 181.584 64 169.033 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48v-88.806c0-8.288-8.197-14.066-16.011-11.302a71.83 71.83 0 0 1-34.189 3.377c-7.27-1.046-13.8 4.514-13.8 11.859z" class="">
-                          </path>
-                        </svg>
-                        <%= if @status do  %>
+                      <%= if !@status do %>
+                        <button disabled class="opacity-50 cursor-not-allowed border tooltip w-10 h-hoch-2 bg-teal-500 rounded text-white hover:bg-teal-400 phx-target="#list_comp"" phx-hook="return_to_account">
+                          <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="share-square" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"
+                            class="h-6 w-6 ml-2">
+                            <path fill="currentColor" d="M568.482 177.448L424.479 313.433C409.3 327.768 384 317.14 384 295.985v-71.963c-144.575.97-205.566 35.113-164.775 171.353 4.483 14.973-12.846 26.567-25.006 17.33C155.252 383.105 120 326.488 120 269.339c0-143.937 117.599-172.5 264-173.312V24.012c0-21.174 25.317-31.768 40.479-17.448l144.003 135.988c10.02 9.463 10.028 25.425 0 34.896zM384 379.128V448H64V128h50.916a11.99 11.99 0 0 0 8.648-3.693c14.953-15.568 32.237-27.89 51.014-37.676C185.708 80.83 181.584 64 169.033 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48v-88.806c0-8.288-8.197-14.066-16.011-11.302a71.83 71.83 0 0 1-34.189 3.377c-7.27-1.046-13.8 4.514-13.8 11.859z" class="">
+                            </path>
+                          </svg>
+                        </button>
+                      <% else %>
+                        <button form="form2"  class=" border tooltip w-10 h-hoch-2 bg-teal-500 rounded text-white hover:bg-teal-400 phx-target="#list_comp"" phx-hook="return_to_account">
+                          <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="share-square" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"
+                            class="h-6 w-6 ml-2">
+                            <path fill="currentColor" d="M568.482 177.448L424.479 313.433C409.3 327.768 384 317.14 384 295.985v-71.963c-144.575.97-205.566 35.113-164.775 171.353 4.483 14.973-12.846 26.567-25.006 17.33C155.252 383.105 120 326.488 120 269.339c0-143.937 117.599-172.5 264-173.312V24.012c0-21.174 25.317-31.768 40.479-17.448l144.003 135.988c10.02 9.463 10.028 25.425 0 34.896zM384 379.128V448H64V128h50.916a11.99 11.99 0 0 0 8.648-3.693c14.953-15.568 32.237-27.89 51.014-37.676C185.708 80.83 181.584 64 169.033 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48v-88.806c0-8.288-8.197-14.066-16.011-11.302a71.83 71.83 0 0 1-34.189 3.377c-7.27-1.046-13.8 4.514-13.8 11.859z" class="">
+                            </path>
+                          </svg>
                           <span class='tooltip-text text-white bg-blue-500 mt-5 -ml-12 rounded'>Agregar partida</span>
-                        <% end %>
-                      </button>
+                        </button>
+                      <% end %>
                     </div>
+
                   </div>
+
 
                 </form>
                 </div>
@@ -214,6 +273,13 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                           <label class="cursor-pointer mr-auto text-white">Cancelar</label>
                         </button>
                       <% end %>
+                    <% else %>
+                      <div class="form-group">
+                        <form id="uploading" phx-target="#list_comp" phx-change="load_aux" class="-mt-32">
+                          <input type="file" id="myfile" name="" phx-hook="get_path" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                          <input type="hidden" id="path" value="" phx-target="#list_comp" phx-change="load_aux">
+                        </form>
+                      </div>
                     <% end %>
                   </div>
                 </div>
@@ -242,31 +308,69 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
                           <div class="w-full gap-4">
                             <div phx-value-id="" phx-target="#policy" class="border cursor-pointer bg-gray-200 p-2 mt-2 rounded relative hover:bg-gray-300">
                               <div class="text-right">
+                                <div class="w-full text-right h-3">
+                                  <div class="absolute px-3 text-sm top-1 right-0">
+                                    <%= if item.req_xml == "true" || item.req_xml == true do %>
+                                      <%= if item.xml_name == "" || item.xml_name == nil do %>
+                                        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="h-3 svg-inline--fa fa-circle fa-w-16 fa-2x">
+                                          <path style="fill:#AE1717;" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z" class=""></path>
+                                        </svg>
+                                      <% else %>
+                                        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="h-3 svg-inline--fa fa-circle fa-w-16 fa-2x">
+                                          <path style="fill:#00D106;" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z" class=""></path>
+                                        </svg>
+                                      <% end %>
+                                    <% end %>
+                                  </div>
+                                </div>
                                 <label class="text-gray-600 text-right">Cta: <b><%= item.account %></b></label><br>
                               </div>
                               <div>
                                 <label class="inline-block cursor-pointer text-gray-600 text-sm">Concepto: <b><%= item.aux_concept %></b></label><br>
                               </div>
-                              <div class="flex mb-2">
+                              <div class="flex">
                                 <div class="w-2/6">
                                   <label class="inline-block cursor-pointer text-gray-600 text-sm">Departamento: <b> <%= item.department %></b></label>
                                 </div>
-                                  <div class="w-2/6 text-right inline-flex">
-                                    <div>
-                                      <label class="inline-block cursor-pointer text-gray-600 text-sm">Debe: </label>
-                                    </div>
-                                    <div class="ml-2 w-32">
-                                      <label class="inline-block cursor-pointer text-gray-600 text-sm"><b phx-hook="format_number"> <%= item.debit %></b></label>
-                                    </div>
+                              </div>
+                              <div class="flex">
+                                <div class="w-2/6">
+                                  <%= if item.xml_id != "" do %>
+                                    <a href="/show_xml/<%= item.xml_id %>/<%= item.xml_name %>" target="_blank">
+                                      <label class="text-gray-600 text-xs">
+                                        <b>
+                                          <%= if item.xml_name != nil do %>
+                                            <%= if String.length(item.xml_name) > 20, do: String.slice(item.xml_name, 0, 20)<>"...", else: item.xml_name %>
+                                          <% end %>
+                                        </b>
+                                      </label>
+                                    </a>
+                                  <% else %>
+                                    <label class="text-gray-600 text-xs">
+                                      <b>
+                                        <%= if item.xml_name != nil do %>
+                                          <%= if String.length(item.xml_name) > 20, do: String.slice(item.xml_name, 0, 20)<>"...", else: item.xml_name %>
+                                        <% end %>
+                                      </b>
+                                    </label>
+                                  <% end %>
+                                </div>
+                                <div class="w-2/6 text-right inline-flex">
+                                  <div>
+                                    <label class="inline-block cursor-pointer text-gray-600 text-sm">Debe: </label>
                                   </div>
-                                  <div class="w-2/6 text-right inline-flex">
-                                    <div>
-                                      <label class="inline-block cursor-pointer text-gray-600 text-sm">Haber: </label>
-                                    </div>
-                                    <div class="ml-2 w-32">
-                                      <label class="inline-block cursor-pointer text-gray-600 text-sm"> <b phx-hook="format_number"> <%= item.credit %></b></label>
-                                    </div>
+                                  <div class="ml-2 w-32">
+                                    <label class="inline-block cursor-pointer text-gray-600 text-sm"><b phx-hook="format_number"> <%= item.debit %></b></label>
                                   </div>
+                                </div>
+                                <div class="w-2/6 text-right inline-flex">
+                                  <div>
+                                    <label class="inline-block cursor-pointer text-gray-600 text-sm">Haber: </label>
+                                  </div>
+                                  <div class="ml-2 w-32">
+                                    <label class="inline-block cursor-pointer text-gray-600 text-sm"> <b phx-hook="format_number"> <%= item.credit %></b></label>
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -344,7 +448,9 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
       cancel?: false,
       message_confirm: nil,
       status: false,
-      change: false
+      change: false,
+      xml_name: nil,
+      xml_b64: Generic.to_string_empty
     )}
   end
 
@@ -359,6 +465,8 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
     dropdowns = params.dropdowns
     cancel? = params.cancel?
     message_confirm = params.message_confirm
+    xml_name = params.xml_name
+    xml_b64 = params.xml_b64
     status = params.pollys.status
     pollys = params.pollys
     params = socket.assigns |> Map.put(:pollys, pollys) |> Map.put(:arr, params.arr) |> Map.put(:edit, params.edit)
@@ -378,7 +486,9 @@ defmodule AccountingSystemWeb.NewPolicyComponent do
       update_text: params.update_text,
       cancel?: cancel?,
       message_confirm: message_confirm,
-      status: status
+      status: status,
+      xml_name: xml_name,
+      xml_b64: xml_b64
       )}
   end
 end

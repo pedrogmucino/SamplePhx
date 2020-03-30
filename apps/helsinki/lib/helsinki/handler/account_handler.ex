@@ -13,7 +13,8 @@ defmodule AccountingSystem.AccountHandler do
     GetStructureByLevel,
     StructureSchema,
     GetLastAccount,
-    GetMaxAccountByLevel
+    GetMaxAccountByLevel,
+    GetRequiresXml
   }
 
   @doc """
@@ -260,6 +261,16 @@ defmodule AccountingSystem.AccountHandler do
   def get_max_code(level, id) do
     GetMaxAccountByLevel.child_level(level, id)
     |> get_consult_result
+  end
+
+  def get_all_detail_accounts() do
+    AccountingSystem.SearchAccount.all_detail
+      |> Repo.all
+  end
+
+  def account_requires_xml(code) do
+    GetRequiresXml.new(code)
+    |> Repo.one!
   end
 
   defp get_consult_result(query) do

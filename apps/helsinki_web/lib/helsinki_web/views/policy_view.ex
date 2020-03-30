@@ -48,10 +48,9 @@ defmodule AccountingSystemWeb.PolicyLiveView do
     {:noreply, assign(socket, actual: actual)}
   end
 
-  def handle_event("search",%{"value" => value}, socket) do
+  def handle_event("search", %{"value" => value}, socket) do
     dropdowns = AccountingSystem.SearchAccount.search(value)
                   |> AccountingSystem.Repo.all
-                  |> IO.inspect
     {:noreply, assign(socket, dropdowns: dropdowns)}
   end
 
@@ -104,4 +103,11 @@ defmodule AccountingSystemWeb.PolicyListLiveView do
   def handle_info({:DOWN, _reference, _process, _pid, _normal}, socket) do
     {:noreply, socket}
   end
+
+  def handle_event("send_to_view", params, socket) do
+    file_name = params["name"] |> String.replace(" ", "")
+    send_update(AccountingSystemWeb.PolicyListComponent, id: 0, name: file_name, xml_b64: params["xml_b64"])
+    {:noreply, socket}
+  end
+
 end

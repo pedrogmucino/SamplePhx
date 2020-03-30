@@ -1,4 +1,7 @@
 defmodule AccountingSystem.StructureSchema do
+  @moduledoc """
+  Esquema de estructura de cuenta
+  """
   use Ecto.Schema
   import Ecto.Changeset
 

@@ -1,10 +1,13 @@
 defmodule AccountingSystemWeb.SeriesListComponent do
+  @moduledoc """
+  Componente de listado de series de póliza
+  """
   use Phoenix.LiveComponent
   use Phoenix.HTML
+
   alias AccountingSystem.{
-    StructureHandler,
-    SeriesHandler,
-    EctoUtil
+    EctoUtil,
+    SeriesHandler
   }
   alias AccountingSystemWeb.NotificationComponent
 
@@ -99,6 +102,14 @@ defmodule AccountingSystemWeb.SeriesListComponent do
     |> execute_delete(socket)
   end
 
+  def handle_event("create_new", _params, socket) do
+    {:noreply, assign(socket, new?: true, edit?: false)}
+  end
+
+  def handle_event("close", _params, socket) do
+    {:noreply, assign(socket, new?: false, edit?: false)}
+  end
+
   defp execute_delete(series, socket) do
     case SeriesHandler.delete_series(series) do
       {:ok, series} ->
@@ -126,14 +137,6 @@ defmodule AccountingSystemWeb.SeriesListComponent do
             change: !socket.assigns.change)
         }
     end
-  end
-
-  def handle_event("create_new", _params, socket) do
-    {:noreply, assign(socket, new?: true, edit?: false)}
-  end
-
-  def handle_event("close", _params, socket) do
-    {:noreply, assign(socket, new?: false, edit?: false)}
   end
 
   def render(assigns) do

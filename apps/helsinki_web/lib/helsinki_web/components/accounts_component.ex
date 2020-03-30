@@ -1,4 +1,7 @@
 defmodule AccountingSystemWeb.AccountsComponent do
+  @moduledoc """
+  Componente principal de cuentas
+  """
   use Phoenix.LiveComponent
   use Phoenix.HTML
 
@@ -231,8 +234,8 @@ defmodule AccountingSystemWeb.AccountsComponent do
 
   def handle_event("action_account", params, socket) do
     rfc = params["rfc_literals"] <> params["rfc_numeric"] <> params["rfc_key"]
-
     if String.trim(rfc) == "" or AccountingSystem.AccountHandler.rfc_validation(rfc) do
+      if !Map.has_key?(params, "requires_xml") or (params["requires_xml"] == "on" and params["type"] == "D") do
       id = params["id"] |> String.to_integer()
       level = params["level"] |> String.to_integer()
       action = params["action"]
@@ -262,6 +265,14 @@ defmodule AccountingSystemWeb.AccountsComponent do
          message: (if action == "edit", do: "Cuenta modificada satisfactoriamente", else: "Cuenta creada satisfactoriamente"),
          change: !socket.assigns.change
        )}
+      else
+        NotificationComponent.set_timer_notification_error()
+        {:noreply, assign(socket,
+        error: "Únicamente las cuentas de Detalle pueden requerir XML. Favor de revisar",
+        change: !socket.assigns.change,
+        message: nil
+        )}
+      end
     else
       NotificationComponent.set_timer_notification_error()
       {:noreply, assign(socket,
@@ -365,7 +376,6 @@ defmodule AccountingSystemWeb.AccountsComponent do
 
   def edit(id, params, socket) do
     account = get_account_by_id(id)
-
     params =
       load_params(params)
       |> Map.put("parent_account", account.parent_account)
@@ -415,6 +425,7 @@ defmodule AccountingSystemWeb.AccountsComponent do
     |> exist_add("character")
     |> exist_add("payment_method")
     |> exist_add("third_party_op")
+    |> exist_add("requires_xml")
     |> exist_status_add("status")
   end
 
@@ -452,7 +463,6 @@ defmodule AccountingSystemWeb.AccountsComponent do
   defp get_childs(false, others, accounts, level) do
     (others
      |> Enum.find(fn child -> child.level == level end)
-     |> IO.inspect(label: "find ?    ----> ")
      |> case do
        nil -> others
        _child -> others |> clear_level([], level)
@@ -474,3 +484,4 @@ defmodule AccountingSystemWeb.AccountsComponent do
   defp clear_level([], new_arr, _level), do: new_arr |> Enum.sort_by(& &1.level)
 
 end
+

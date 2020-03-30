@@ -1,4 +1,7 @@
 defmodule AccountingSystemWeb.ActivesComponent do
+  @moduledoc """
+  Componente de Activos
+  """
   use Phoenix.LiveComponent
   use Phoenix.HTML
 

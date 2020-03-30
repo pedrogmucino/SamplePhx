@@ -1,4 +1,7 @@
 defmodule AccountingSystem.GetAccountList do
+  @moduledoc """
+  Módulo para obtener una lista ordenada de cuentas
+  """
 
   import Ecto.Query
   alias AccountingSystem.AccountSchema

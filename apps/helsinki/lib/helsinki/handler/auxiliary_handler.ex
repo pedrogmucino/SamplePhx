@@ -61,15 +61,50 @@ defmodule AccountingSystem.AuxiliaryHandler do
 
   """
   def create_auxiliary(attrs \\ %{}) do
+    attrs = load_xml_id(attrs)
+    xml_b64 = attrs.xml_b64
     %AuxiliarySchema{}
     |> AuxiliarySchema.changeset(attrs)
     |> Repo.insert(prefix: PrefixFormatter.get_current_prefix)
+    |> case do
+      {:ok, aux} -> if aux.id != nil, do: save_in_alexandria(xml_b64, aux.xml_id, aux.xml_name)
+      {:error, aux} -> aux |> GenericFunctions.to_inspect(" -> ERROR AUX NOT SAVED")
+    end
   end
 
   def create_auxiliary(attrs \\ %{}, year, month) do
+    attrs = load_xml_id(attrs)
+    xml_b64 = attrs.xml_b64
     %AuxiliarySchema{}
     |> AuxiliarySchema.changeset(attrs)
     |> Repo.insert(prefix: PrefixFormatter.get_prefix(year, month))
+    |> case do
+      {:ok, aux} -> if aux.xml_id != nil, do: save_in_alexandria(xml_b64, aux.xml_id, aux.xml_name)
+      {:error, aux} -> aux |> GenericFunctions.to_inspect(" -> ERROR AUX NOT SAVED")
+    end
+  end
+
+  defp load_xml_id(attrs) do
+      attrs |> Map.put(:xml_id, (if attrs.xml_name != GenericFunctions.to_string_empty, do: Ecto.UUID.autogenerate, else: GenericFunctions.to_string_empty))
+  end
+
+  defp load_xml_id_edit(attrs) do
+    if is_nil(attrs.xml_id) and !is_nil(attrs.xml_name) do
+      attrs |> Map.put(:xml_id, (if attrs.xml_name != GenericFunctions.to_string_empty, do: Ecto.UUID.autogenerate, else: GenericFunctions.to_string_empty))
+    else
+      attrs
+    end
+  end
+
+  defp save_in_alexandria(xml_b64, xml_id, xml_name) do
+    AccountingSystem.Alexandria.upload_file(xml_b64, xml_name, xml_id)
+  end
+
+  def get_xml_file_to_alexandria(xml_id) do
+    case AccountingSystem.Alexandria.get_file(xml_id, 1) do
+      {:ok, xml} -> xml.body |> GenericFunctions.to_inspect(" ---> Ok File from alexa")
+      {_, xml} -> xml |> GenericFunctions.to_inspect(" ---> Error File from alexa")
+    end
   end
 
   @doc """
@@ -85,9 +120,15 @@ defmodule AccountingSystem.AuxiliaryHandler do
 
   """
   def update_auxiliary(%AuxiliarySchema{} = auxiliary, attrs) do
+    attrs = load_xml_id_edit(attrs)
+    xml_b64 = if Map.has_key?(attrs, :xml_b64), do: attrs.xml_b64, else: GenericFunctions.to_string_empty
     auxiliary
     |> AuxiliarySchema.changeset(attrs)
     |> Repo.update(prefix: PrefixFormatter.get_current_prefix)
+    |> case do
+      {:ok, aux} -> if aux.xml_id != nil and xml_b64 != "", do: save_in_alexandria(xml_b64, attrs.xml_id, attrs.xml_name)
+      {:error, aux} -> aux |> GenericFunctions.to_inspect(" -> ERROR AUX NOT SAVED")
+    end
   end
 
   def update_auxiliary(%AuxiliarySchema{} = auxiliary, attrs, year, month) do
@@ -206,7 +247,7 @@ defmodule AccountingSystem.AuxiliaryHandler do
   end
 
   def to_float(x) when is_bitstring(x), do: void(x)
-  def to_float(x) when is_integer(x), do: x/1
+  def to_float(x) when is_integer(x), do: x / 1
   def to_float(x) when is_float(x), do: x
 
   def void(some) do

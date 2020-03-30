@@ -1,4 +1,7 @@
 defmodule AccountingSystem.GetSetAccountsCodes do
+  @moduledoc """
+  Módulo que contiene los queries para consultar y establecer códigos de cuenta
+  """
   import Ecto.Query, warn: false
   alias AccountingSystem.Repo
 

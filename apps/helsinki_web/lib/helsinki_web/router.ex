@@ -28,11 +28,12 @@ defmodule AccountingSystemWeb.Router do
     get "/formaccount", FormAccountController, :index
     get "/configuration", ConfigurationController, :index
     get "/listconfiguration", ListConfigurationController, :index
+    get "/download_template", DownloadController, :index
+    get "/show_xml/:xml_id/:xml_name", ShowXmlController, :show
     # get "/submenu", SubMenuController, :sub_menu
     resources "/accounts", AccountController
     resources "/structures", StructureController
     get "/accounts/:id/new", AccountController, :new
-    live "/example", ExampleLive
     resources "/auxiliaries", AuxiliaryController
     resources "/policies", PolicyController
     resources "/providers", ProviderController

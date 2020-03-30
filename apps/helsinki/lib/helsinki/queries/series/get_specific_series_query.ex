@@ -1,4 +1,7 @@
 defmodule AccountingSystem.GetSpecificSeriesQuery do
+  @moduledoc """
+  Query para obtener el folio actual de una serie específica
+  """
   import Ecto.Query
   alias AccountingSystem.{
     SeriesSchema,

@@ -1,4 +1,7 @@
 defmodule AccountingSystem.GetPrincipal do
+  @moduledoc """
+  Módulo que contiene el query para la última cuenta registrada de nivel 0
+  """
   import Ecto.Query, warn: false
 
   def account() do
