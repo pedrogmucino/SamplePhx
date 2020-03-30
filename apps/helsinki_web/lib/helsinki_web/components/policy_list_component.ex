@@ -1,4 +1,7 @@
 defmodule AccountingSystemWeb.PolicyListComponent do
+  @moduledoc """
+  Componente con listado general de pólizas
+  """
   use Phoenix.LiveComponent
   use Phoenix.HTML
   alias AccountingSystem.AuxiliaryHandler, as: Auxiliar
@@ -207,7 +210,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
         pollys: %{audited: "unchecked", concept: "", fiscal_exercise: "", has_documents: "unchecked", period: "", policy_date: "", policy_type: "0", aux_concept: "", debit: 0, department: "", credit: 0, id: "", sum_haber: 0, sum_debe: 0, total: 0, focused: 0, account: "", name: "", id_account: "", id_aux: ""},
         arr: [],
         policy_id: 0,
-        message: "Póliza guardada con éxito: " <>policy.serial <> "-" <> Integer.to_string(policy.policy_number)
+        message: "Póliza guardada con éxito: " <> policy.serial <> "-" <> Integer.to_string(policy.policy_number)
         )}
       {:error, %Ecto.Changeset{} = changeset} ->
         NotificationComponent.set_timer_notification_error()
@@ -220,15 +223,15 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def handle_event("save_aux", params, socket) do
-    if !socket.assigns.add_xml? do
-      case AccountingSystem.AuxiliaryHandler.validate_auxiliar(params) do
-      {:ok, _} ->
-        totals(params["id_aux"], params, socket)
-      {:error, _} ->
-        {:noreply, socket}
-      end
-    else
+    if socket.assigns.add_xml? do
       {:noreply, socket}
+    else
+      case AccountingSystem.AuxiliaryHandler.validate_auxiliar(params) do
+        {:ok, _} ->
+          totals(params["id_aux"], params, socket)
+        {:error, _} ->
+          {:noreply, socket}
+        end
     end
   end
 
@@ -336,17 +339,17 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   defp validate_header({:error, message}), do: {:error, message}
+
   defp validate_header({:ok, exel_data}) do
     exel_data
       |> List.first
       |> validate_length
-      |> IO.inspect(label: "Esto llega a myers Diff")
       |> List.myers_difference(Xlsx.get_header)
-      |> IO.inspect(label: "Esto Sale del myers Diff")
       |> more_than_eq(exel_data)
   end
 
   defp validate_accounts({:error, message}), do: {:error, message}
+
   defp validate_accounts({:ok, data}) do
     db_accounts = Account.get_all_detail_accounts
     data
@@ -386,7 +389,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     %{pollys: Map.new()
                 |> Map.put(:sum_haber, Float.round(sh, 2))
                 |> Map.put(:sum_debe, Float.round(sd, 2))
-                |> Map.put(:total, Float.round(sh-sd, 2)),
+                |> Map.put(:total, Float.round(sh - sd, 2)),
       arr: data}
   end
 
@@ -401,8 +404,8 @@ defp send_result(false, excel_data), do: {:ok, excel_data}
   defp validate_length(data), do: is_five(Enum.count(data), data)
   defp is_five(5, data), do: data
   defp is_five(_, _), do: []
-  defp more_than_eq([eq: _], data), do: {:ok, delete_header(List.pop_at(data, 0))} |> IO.inspect(label: "***********OK*********")
-  defp more_than_eq(_, _), do: {:error, "Error de encabezado, favor de revisar el orden (Puedes descargar la plantilla actualizada)"} |> IO.inspect(label: "***********DEL*********")
+  defp more_than_eq([eq: _], data), do: {:ok, delete_header(List.pop_at(data, 0))}
+  defp more_than_eq(_, _), do: {:error, "Error de encabezado, favor de revisar el orden (Puedes descargar la plantilla actualizada)"}
   defp delete_header({_, data}), do: data
 
 #********************************VALIDATE ACCOUNTS********************************
@@ -484,8 +487,6 @@ defp send_result(false, excel_data), do: {:ok, excel_data}
   end
 
   defp totals(_, params, socket) do
-    IO.inspect(params, label: "PARAAAAAAAAAAMSSSSSSSS----------------------------------->")
-    IO.inspect(socket.assigns.arr, label: "AAAAAAAAAAAAAAAARRRRRRRRRRRRRRRRRR----------------------------------->")
     params = Generic.string_map_to_atom(params)
     sumh = socket.assigns.pollys.sum_haber
     sumd = socket.assigns.pollys.sum_debe
@@ -519,8 +520,7 @@ defp send_result(false, excel_data), do: {:ok, excel_data}
     db_aux = AccountingSystem.AuxiliaryHandler.get_auxiliary_by_policy_id(policy_id)
     Enum.each(auxiliaries, fn aux -> create_aux(aux, db_aux, policy_id, policy_number) end)
     Enum.reject(db_aux, fn aux -> update_auxiliar(aux, auxiliaries) end)
-      |> Enum.each(fn aux-> delete_aux(aux) end)
-
+      |> Enum.each(fn aux -> delete_aux(aux) end)
   end
 
   defp create_aux(aux_one, aux_list, policy_id, policy_number) do
@@ -555,7 +555,7 @@ defp send_result(false, excel_data), do: {:ok, excel_data}
   end
 
   defp convert_to_aux_schema(params, policy_number, policy_id) do
-    Map.merge(%AccountingSystem.AuxiliarySchema{},Auxiliar.format_to_save(params, policy_number, policy_id))
+    Map.merge(%AccountingSystem.AuxiliarySchema{}, Auxiliar.format_to_save(params, policy_number, policy_id))
   end
 
   defp void(some) do
@@ -681,7 +681,7 @@ defp send_result(false, excel_data), do: {:ok, excel_data}
   end
 
   defp to_float(x) when is_bitstring(x), do: void(x)
-  defp to_float(x) when is_integer(x), do: x/1
+  defp to_float(x) when is_integer(x), do: x / 1
   defp to_float(x) when is_float(x), do: x
 
   def render(assigns) do

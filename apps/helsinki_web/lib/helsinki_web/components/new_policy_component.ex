@@ -1,4 +1,7 @@
 defmodule AccountingSystemWeb.NewPolicyComponent do
+  @moduledoc """
+  Componente de formulario para nuevas pólizas
+  """
   use Phoenix.LiveComponent
   use Phoenix.HTML
 
