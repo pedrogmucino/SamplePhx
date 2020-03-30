@@ -4,13 +4,9 @@ defmodule AccountingSystem.PolicyListQuery do
   Módulo que contiene el query para obtener una lista de pólizas especificando su tipo
   """
   import Ecto.Query, warn: false
-  alias AccountingSystem.{
-    PolicySchema,
-    PolicyTypeSchema,
-    PrefixFormatter
-  }
+  alias AccountingSystem.PolicyTypeSchema
 
-  def new() do
+  def new do
     from p in "policies",
     join: t in PolicyTypeSchema,
     prefix: "public",
@@ -33,7 +29,7 @@ defmodule AccountingSystem.PolicyListQuery do
     order_by: [desc: p.inserted_at]
   end
 
-  def requires_xml() do
+  def requires_xml do
     from p in "policies",
     join: a in "auxiliaries",
     on: p.id == a.policy_id,
@@ -52,7 +48,7 @@ defmodule AccountingSystem.PolicyListQuery do
     order_by: [desc: p.inserted_at]
   end
 
-  def pending_xml() do
+  def pending_xml do
     from p in "policies",
     join: a in "auxiliaries",
     on: p.id == a.policy_id,

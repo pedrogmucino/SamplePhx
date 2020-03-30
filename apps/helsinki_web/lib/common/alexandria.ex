@@ -3,8 +3,6 @@ defmodule AccountingSystemWeb.Alexandria do
   Módulo para comunicación con sistema de archivos Alexandria
   """
   use Task
-
-  import Ecto
   def get_file(id, parts) do
     Application.get_env(:helsinki_web, Alexandria)[:url]
     |> URI.merge(id <> "/" <> Integer.to_string(parts))

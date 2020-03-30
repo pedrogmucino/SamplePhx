@@ -63,7 +63,7 @@ defmodule AccountingSystem.PolicyHandler do
     end
   end
 
-  defp combine_lists([], requires_list, pending_list, new_list), do: new_list
+  defp combine_lists([], _requires_list, _pending_list, new_list), do: new_list
 
   defp set_true(head, atom) do
     {_, new_map} =

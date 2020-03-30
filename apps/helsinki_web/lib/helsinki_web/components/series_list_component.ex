@@ -4,16 +4,12 @@ defmodule AccountingSystemWeb.SeriesListComponent do
   """
   use Phoenix.LiveComponent
   use Phoenix.HTML
-  import Ecto
+
   alias AccountingSystem.{
-    StructureHandler,
-    SeriesHandler,
-    EctoUtil
+    EctoUtil,
+    SeriesHandler
   }
-  alias AccountingSystemWeb.{
-    Alexandria,
-    NotificationComponent
-  }
+  alias AccountingSystemWeb.NotificationComponent
 
   def mount(socket) do
     {:ok, assign(socket,
@@ -106,6 +102,14 @@ defmodule AccountingSystemWeb.SeriesListComponent do
     |> execute_delete(socket)
   end
 
+  def handle_event("create_new", _params, socket) do
+    {:noreply, assign(socket, new?: true, edit?: false)}
+  end
+
+  def handle_event("close", _params, socket) do
+    {:noreply, assign(socket, new?: false, edit?: false)}
+  end
+
   defp execute_delete(series, socket) do
     case SeriesHandler.delete_series(series) do
       {:ok, series} ->
@@ -133,14 +137,6 @@ defmodule AccountingSystemWeb.SeriesListComponent do
             change: !socket.assigns.change)
         }
     end
-  end
-
-  def handle_event("create_new", _params, socket) do
-    {:noreply, assign(socket, new?: true, edit?: false)}
-  end
-
-  def handle_event("close", _params, socket) do
-    {:noreply, assign(socket, new?: false, edit?: false)}
   end
 
   def render(assigns) do

@@ -1,6 +1,5 @@
 defmodule AccountingSystemWeb.ShowXmlController do
   use AccountingSystemWeb, :controller
-  alias Phoenix.LiveView
 
   def show(conn, params) do
     file_name = params["xml_name"] |> String.replace(" ", "")
