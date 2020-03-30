@@ -1,4 +1,4 @@
-defmodule AccountingSystemWeb.Alexandria do
+defmodule AccountingSystem.Alexandria do
   @moduledoc """
   Módulo para comunicación con sistema de archivos Alexandria
   """
