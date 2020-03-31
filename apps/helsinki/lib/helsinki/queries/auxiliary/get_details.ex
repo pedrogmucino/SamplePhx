@@ -37,6 +37,6 @@ defmodule AccountingSystem.GetDetailsQuery do
       auxiliary_type: aux.debit_credit,
       concept: aux.concept
     },
-    order_by: [acc.code, aux.debit_credit]
+    order_by: [policy.policy_date]
   end
 end
