@@ -8,7 +8,8 @@ defmodule AccountingSystem.AuxiliaryHandler do
     AuxiliarySchema,
     PrefixFormatter,
     Repo,
-    GenericFunctions
+    GenericFunctions,
+    GetHeaderQuery
   }
 
   @doc """
@@ -270,5 +271,11 @@ defmodule AccountingSystem.AuxiliaryHandler do
     AccountingSystem.GetMaxId.by_policy_id(policy_id)
       |> Repo.all(prefix: PrefixFormatter.get_current_prefix)
       |> List.first
+  end
+
+  def get_header() do
+    GetHeaderQuery.header()
+    |> Repo.all(prefix: PrefixFormatter.get_current_prefix)
+    |> IO.inspect()
   end
 end
