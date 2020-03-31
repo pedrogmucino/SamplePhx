@@ -309,6 +309,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     Xlsx.get_data(path, name)
       |> validate_table
       |> validate_header
+      |> add_excel_index
       |> validate_accounts
       |> validate_concept
       |> validate_debit_credit
@@ -347,6 +348,15 @@ defmodule AccountingSystemWeb.PolicyListComponent do
       |> more_than_eq(exel_data)
   end
 
+  defp add_excel_index({:error, message}), do: {:error, message}
+  defp add_excel_index({:ok, data}) do
+    {:ok, data
+          |> Stream.with_index(1)
+          |> Enum.to_list()
+          |> Enum.map(fn tuple -> add_index_to_list(tuple) end)
+  }
+  end
+
   defp validate_accounts({:error, message}), do: {:error, message}
 
   defp validate_accounts({:ok, data}) do
@@ -360,14 +370,14 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   defp validate_concept({:error, message}), do: {:error, message}
   defp validate_concept({:ok, data}) do
     data
-      |> Enum.filter(fn x -> Enum.at(x, 1) == nil end)
+      |> Enum.filter(fn x -> Enum.at(x, 2) == nil end)
       |> nonexisting_concept(data)
   end
 
   defp validate_debit_credit({:error, message}), do: {:error, message}
   defp validate_debit_credit({:ok, data}) do
     data
-      |> Enum.reject(fn aux -> just_one_value(Enum.at(aux, 3), Enum.at(aux, 4)) end)
+      |> Enum.reject(fn aux -> just_one_value(Enum.at(aux, 4), Enum.at(aux, 5)) end)
       |> evaluate_debit_credit(data)
   end
 
@@ -376,9 +386,6 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     {:ok,
       data
         |> Enum.map(fn x -> create_map(x) end)
-        |> Stream.with_index(1)
-        |> Enum.to_list
-        |> Enum.map(fn x -> add_id_number(x) end )
     }
   end
   defp calculate_totals({:error, message}), do: {:error, message}
@@ -407,51 +414,52 @@ defp send_result(false, excel_data), do: {:ok, excel_data}
   defp more_than_eq(_, _), do: {:error, "Error de encabezado, favor de revisar el orden (Puedes descargar la plantilla actualizada)"}
   defp delete_header({_, data}), do: data
 
+#************************************ADD ECXEL INDEX************************************************************************
+  defp add_index_to_list({list, index}), do: [index] ++ list
+
 #********************************VALIDATE ACCOUNTS********************************
-  defp exist_account_in(row, data), do: Enum.any?(data, fn x -> Enum.at(x, 1) == List.first(row) end)
+  defp exist_account_in(row, data), do: Enum.any?(data, fn x -> Enum.at(x, 1) == Enum.at(row, 1) end)
   defp nonexisting_accounts([], data), do: {:ok, data}
-  defp nonexisting_accounts(error, _), do: {:error, "Las Cuentas #{List.to_string(Enum.map(error, fn x -> convert_to_string(List.first(x)) <> " || " end))} no existen en la base o no son cuentas de detalle. Favor de revisar"}
+  defp nonexisting_accounts(error, _), do: {:error, "Error en lineas: <br> #{List.to_string(Enum.map(error, fn x -> convert_to_string(List.first(x)) <> " <br> " end))} Las cuentas no existen en la base o no son cuentas de detalle. Favor de revisar"}
   defp fill_ids({:error, message}, _), do: {:error, message}
   defp fill_ids({:ok, data}, db_data), do: {:ok, Enum.map(data, fn x -> complete_values(x) ++ [get_id_from_base(x, db_data)] end)}
-  defp get_id_from_base(x, db_data), do: Enum.at(Enum.find(db_data, fn row -> Enum.at(row, 1) == List.first(x) end), 0)
+  defp get_id_from_base(x, db_data), do: Enum.at(Enum.find(db_data, fn row -> Enum.at(row, 1) == Enum.at(x, 1) end), 0)
   defp convert_to_string(nil), do: "NULO"
-  defp convert_to_string(algo), do: algo
-  defp complete_values(list), do: list ++ List.duplicate(nil, Enum.count(Xlsx.get_header) - Enum.count(list))
+  defp convert_to_string(algo), do: "#{algo}"
+  defp complete_values(list), do: list ++ List.duplicate(nil, Enum.count(Xlsx.get_header) - Enum.count(list) + 1)
 
   #******************************VALIDATE CONCEPT*************************************
   defp nonexisting_concept([], data), do: {:ok, data}
-  defp nonexisting_concept(_, _), do: {:error, "No puede haber conceptos vacíos"}
+  defp nonexisting_concept(error, _), do: {:error, "Error en lineas: <br> #{List.to_string(Enum.map(error, fn x -> convert_to_string(List.first(x)) <> " <br> " end))} Tienen conceptos vacíos"}
 
   #******************************VALIDATE CREDIT AND DEBIT*************************************
   defp just_one_value(val, debit) when (val == nil or val == 0) and debit >= 0, do: true
   defp just_one_value(credit, val) when (val == nil or val == 0) and credit >= 0, do: true
   defp just_one_value(_, _), do: false
   defp evaluate_debit_credit([], data), do: {:ok, data}
-  defp evaluate_debit_credit(error, _), do: {:error, "Las cuentas #{List.to_string(Enum.map(error, fn x -> convert_to_string(List.first(x)) <> " || " end))} tienen valores en debe y haber mayores a cero, favor de revisar"}
+  defp evaluate_debit_credit(error, _), do: {:error, "Error en lineas: <br> #{List.to_string(Enum.map(error, fn x -> convert_to_string(List.first(x)) <> " <br> " end))} Los valores en debe y haber son mayores a cero o tienen valores incorrectos, favor de revisar"}
 
 
   #******************************Convert to MAP And validate values*********************
   defp create_map(data) do
     Map.new
-      |> Map.put(:account, Enum.at(data, 0))
-      |> Map.put(:aux_concept, Enum.at(data, 1))
-      |> Map.put(:credit, Generic.to_float(Enum.at(data, 4)))
-      |> Map.put(:debit, Generic.to_float(Enum.at(data, 3)))
-      |> Map.put(:department, Enum.at(data, 2))
-      |> Map.put(:id_account, Enum.at(data, 5))
+      |> Map.put(:account, Enum.at(data, 1))
+      |> Map.put(:aux_concept, Enum.at(data, 2))
+      |> Map.put(:credit, Generic.to_float(Enum.at(data, 5)))
+      |> Map.put(:debit, Generic.to_float(Enum.at(data, 4)))
+      |> Map.put(:department, Enum.at(data, 3))
+      |> Map.put(:id_account, Enum.at(data, 6))
       |> Map.put(:id_aux, "")
-      |> Map.put(:name, Enum.at(data, 6))
+      |> Map.put(:name, Enum.at(data, 7))
       |> Map.put(:xml_name, Generic.to_string_empty)
       |> Map.put(:xml_id, Generic.to_string_empty)
       |> Map.put(:xml_b64, Generic.to_string_empty)
       |> Map.put(:xml_name_file, Generic.to_string_empty)
-      |> Map.put(:req_xml, requires_xml(Enum.at(data, 0)))
+      |> Map.put(:req_xml, requires_xml(Enum.at(data, 1)))
+      |> Map.put(:id, Enum.at(data, 0))
+      |> Map.put(:number, Enum.at(data, 0))
   end
-  defp add_id_number({data, id}) do
-    data
-      |> Map.put(:id, id)
-      |> Map.put(:number, id)
-  end
+
   defp requires_xml(code) do
     Account.account_requires_xml(code)
   end
