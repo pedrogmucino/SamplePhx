@@ -274,8 +274,8 @@ defmodule AccountingSystem.AuxiliaryHandler do
   end
 
   def get_header() do
+    list =
     GetHeaderQuery.header()
     |> Repo.all(prefix: PrefixFormatter.get_current_prefix)
-    |> IO.inspect()
   end
 end

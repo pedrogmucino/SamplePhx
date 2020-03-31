@@ -8,6 +8,7 @@ defmodule AccountingSystem.GetHeaderQuery do
   }
 
   def header() do
+    query =
     from aux in AuxiliarySchema,
     join: policy in "policies",
     on: aux.policy_id == policy.id,
@@ -25,7 +26,17 @@ defmodule AccountingSystem.GetHeaderQuery do
       debit_credit: aux.debit_credit,
       debe: fragment("case when debit_credit = ? then SUM(amount) else 0 end", "D"),
       haber: fragment("case when debit_credit = ? then SUM(amount) else 0 end", "H")
-    },
-    order_by: [acc.code, aux.debit_credit]
+    }
+
+    from a in subquery(query),
+    group_by: [:code, :name, :type],
+    order_by: :code,
+    select: %{
+      code: a.code,
+      name: a.name,
+      type: a.type,
+      debe: fragment("sum(debe)"),
+      haber: fragment("sum(haber)")
+    }
   end
 end
