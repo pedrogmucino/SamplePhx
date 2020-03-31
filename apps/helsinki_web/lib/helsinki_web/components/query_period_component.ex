@@ -23,7 +23,7 @@ defmodule AccountingSystemWeb.QueryPeriodComponent do
         </div>
 
         <div class="relative w-full px-2 mt-4">
-          <input class="focus:outline-none focus:bg-white focus:border-blue-500 h-8 w-full rounded border bg-gray-300 pl-2" placeholder="Buscar Periodos" >
+          <input class="focus:outline-none focus:bg-white focus:border-blue-500 h-8 w-full rounded border bg-gray-300 pl-2" placeholder="Buscar Periodo" >
           <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="search" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="absolute right-0 top-0 h-4 w-4 mr-4 mt-2">
             <g>
               <path fill="currentColor" d="M208 80a128 128 0 1 1-90.51 37.49A127.15 127.15 0 0 1 208 80m0-80C93.12 0 0 93.12 0 208s93.12 208 208 208 208-93.12 208-208S322.88 0 208 0z" class="text-gray-600"></path>
