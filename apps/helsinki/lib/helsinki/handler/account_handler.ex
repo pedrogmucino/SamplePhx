@@ -273,6 +273,11 @@ defmodule AccountingSystem.AccountHandler do
     |> Repo.one!
   end
 
+  def get_active_accounts() do
+    AccountingSystem.ActiveAccounts.get_all()
+      |> Repo.all
+  end
+
   defp get_consult_result(query) do
     query
     |> Repo.one!
