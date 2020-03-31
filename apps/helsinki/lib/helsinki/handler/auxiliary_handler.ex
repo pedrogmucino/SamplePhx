@@ -8,7 +8,9 @@ defmodule AccountingSystem.AuxiliaryHandler do
     AuxiliarySchema,
     PrefixFormatter,
     Repo,
-    GenericFunctions
+    GenericFunctions,
+    GetHeaderQuery,
+    GetDetailsQuery
   }
 
   @doc """
@@ -270,5 +272,27 @@ defmodule AccountingSystem.AuxiliaryHandler do
     AccountingSystem.GetMaxId.by_policy_id(policy_id)
       |> Repo.all(prefix: PrefixFormatter.get_current_prefix)
       |> List.first
+  end
+
+  def get_aux_report do
+    add_details(get_header(), []) |> Enum.reverse |> IO.inspect(label: "----------------------------------->RESULTADO")
+  end
+
+  defp get_header do
+    GetHeaderQuery.header
+    |> Repo.all(prefix: PrefixFormatter.get_current_prefix)
+  end
+
+  defp get_details(id) do
+    GetDetailsQuery.details(id)
+    |> Repo.all(prefix: PrefixFormatter.get_current_prefix)
+  end
+
+  defp add_details([h | t], new_list) do
+    add_details(t, List.insert_at(new_list, 0, Map.put(h, :details, get_details(h.id))))
+  end
+
+  defp add_details([], new_list) do
+    new_list
   end
 end
