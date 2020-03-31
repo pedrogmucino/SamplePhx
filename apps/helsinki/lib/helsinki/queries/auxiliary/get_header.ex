@@ -18,8 +18,9 @@ defmodule AccountingSystem.GetHeaderQuery do
     join: type in "policytypes",
     prefix: "public",
     on: policy.policy_type == type.id,
-    group_by: [acc.code, acc.name, acc.type, aux.debit_credit],
+    group_by: [acc.id, acc.code, acc.name, acc.type, aux.debit_credit],
     select: %{
+      id: acc.id,
       code: acc.code,
       name: acc.name,
       type: acc.type,
@@ -29,9 +30,10 @@ defmodule AccountingSystem.GetHeaderQuery do
     }
 
     from a in subquery(query),
-    group_by: [:code, :name, :type],
+    group_by: [:id, :code, :name, :type],
     order_by: :code,
     select: %{
+      id: a.id,
       code: a.code,
       name: a.name,
       type: a.type,
