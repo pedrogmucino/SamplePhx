@@ -9,7 +9,8 @@ defmodule AccountingSystem.AuxiliaryHandler do
     PrefixFormatter,
     Repo,
     GenericFunctions,
-    GetHeaderQuery
+    GetHeaderQuery,
+    GetDetailsQuery
   }
 
   @doc """
@@ -277,5 +278,14 @@ defmodule AccountingSystem.AuxiliaryHandler do
     list =
     GetHeaderQuery.header()
     |> Repo.all(prefix: PrefixFormatter.get_current_prefix)
+  end
+
+  def get_details(id) do
+    details =
+    GetDetailsQuery.details(id)
+    |> Repo.all(prefix: PrefixFormatter.get_current_prefix)
+
+    IO.inspect(details, label: "------------------------------------>RESULTADO")
+    IO.inspect(Enum.count(details), label: "---------------------------------->CUANTOS")
   end
 end
