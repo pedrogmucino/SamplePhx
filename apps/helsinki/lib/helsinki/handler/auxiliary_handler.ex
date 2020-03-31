@@ -5,6 +5,7 @@ defmodule AccountingSystem.AuxiliaryHandler do
 
   import Ecto.Query, warn: false
   alias AccountingSystem.{
+    AccountHandler,
     AuxiliarySchema,
     PrefixFormatter,
     Repo,
@@ -273,6 +274,44 @@ defmodule AccountingSystem.AuxiliaryHandler do
       |> Repo.all(prefix: PrefixFormatter.get_current_prefix)
       |> List.first
   end
+
+  def get_header_acum do
+    header_03 =
+    GetHeaderQuery.header
+    |> Repo.all(prefix: PrefixFormatter.get_current_prefix)
+
+    header_02 =
+    GetHeaderQuery.header
+    |> Repo.all(prefix: PrefixFormatter.get_prefix(2020, 2))
+
+    accounts =
+    AccountHandler.list_accounts
+
+    combine_accounts(accounts, header_02 ++ header_03, [])
+    |> Enum.filter(fn x -> !is_nil(x) end)
+    |> Enum.reverse
+    |> IO.inspect(label: "------------------------------------->RESULTADO ACUM")
+  end
+
+  defp combine_accounts([h | t], headers, new_list) do
+    combine_accounts(t, headers, List.insert_at(new_list, 0, combine_header(headers, h, 0, 0, %{})))
+  end
+
+  defp combine_accounts([], _headers, new_list), do: new_list
+
+  defp combine_header([h | t], account, new_debe, new_haber, new_header) do
+    if account.id == h.id do
+      new_debe = new_debe + h.debe
+      new_haber = new_haber + h.haber
+      combine_header(t, account, new_debe, new_haber, Map.put(h, :debe, new_debe) |> Map.put(:haber, new_haber))
+    else
+      combine_header(t, account,
+      (if new_header == %{}, do: 0, else: new_header.debe), (if new_header == %{}, do: 0, else: new_header.haber),
+      new_header)
+    end
+  end
+
+  defp combine_header([], _account, _new_debe, _new_haber, new_header), do: if new_header != %{}, do: new_header, else: nil
 
   def get_aux_report do
     add_details(get_header(), []) |> Enum.reverse |> IO.inspect(label: "----------------------------------->RESULTADO")
