@@ -274,18 +274,25 @@ defmodule AccountingSystem.AuxiliaryHandler do
       |> List.first
   end
 
-  def get_header() do
-    list =
-    GetHeaderQuery.header()
+  def get_aux_report do
+    add_details(get_header(), []) |> Enum.reverse |> IO.inspect(label: "----------------------------------->RESULTADO")
+  end
+
+  defp get_header do
+    GetHeaderQuery.header
     |> Repo.all(prefix: PrefixFormatter.get_current_prefix)
   end
 
-  def get_details(id) do
-    details =
+  defp get_details(id) do
     GetDetailsQuery.details(id)
     |> Repo.all(prefix: PrefixFormatter.get_current_prefix)
+  end
 
-    IO.inspect(details, label: "------------------------------------>RESULTADO")
-    IO.inspect(Enum.count(details), label: "---------------------------------->CUANTOS")
+  defp add_details([h | t], new_list) do
+    add_details(t, List.insert_at(new_list, 0, Map.put(h, :details, get_details(h.id))))
+  end
+
+  defp add_details([], new_list) do
+    new_list
   end
 end
