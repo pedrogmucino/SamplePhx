@@ -275,23 +275,21 @@ defmodule AccountingSystem.AuxiliaryHandler do
       |> List.first
   end
 
-  def get_header_acum do
-    header_03 =
-    GetHeaderQuery.header
-    |> Repo.all(prefix: PrefixFormatter.get_current_prefix)
-
-    header_02 =
-    GetHeaderQuery.header
-    |> Repo.all(prefix: PrefixFormatter.get_prefix(2020, 2))
-
-    accounts =
-    AccountHandler.list_accounts
-
-    combine_accounts(accounts, header_02 ++ header_03, [])
+  def get_aux_report_acum do
+    combine_accounts(
+      AccountHandler.list_detail_accounts,
+      get_headers_list([PrefixFormatter.get_prefix(2020, 2), PrefixFormatter.get_prefix(2020, 3)], []),
+      [])
     |> Enum.filter(fn x -> !is_nil(x) end)
-    |> Enum.reverse
-    |> IO.inspect(label: "------------------------------------->RESULTADO ACUM")
+    |> add_details([PrefixFormatter.get_prefix(2020, 2), PrefixFormatter.get_prefix(2020, 3)], [])
+
   end
+
+  defp get_headers_list([h | t], new_list) do
+    get_headers_list(t, new_list ++ (GetHeaderQuery.header |> Repo.all(prefix: h)))
+  end
+
+  defp get_headers_list([], new_list), do: new_list
 
   defp combine_accounts([h | t], headers, new_list) do
     combine_accounts(t, headers, List.insert_at(new_list, 0, combine_header(headers, h, 0, 0, %{})))
@@ -312,6 +310,18 @@ defmodule AccountingSystem.AuxiliaryHandler do
   end
 
   defp combine_header([], _account, _new_debe, _new_haber, new_header), do: if new_header != %{}, do: new_header, else: nil
+
+  defp add_details([h | t], periods, new_list) do
+    add_details(t, periods, List.insert_at(new_list, 0, Map.put(h, :details, get_details(periods, h.id, []))))
+  end
+
+  defp add_details([], _periods, new_list), do: new_list
+
+  defp get_details([h | t], id, new_list) do
+    get_details(t, id, new_list ++ (GetDetailsQuery.details(id) |> Repo.all(prefix: h)))
+  end
+
+  defp get_details([], _id, new_list), do: new_list
 
   def get_aux_report do
     add_details(get_header(), []) |> Enum.reverse |> IO.inspect(label: "----------------------------------->RESULTADO")
