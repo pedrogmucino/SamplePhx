@@ -45,7 +45,6 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   end
 
   def update(attrs, socket) do
-    attrs |> Generic.to_inspect(" --> Update in list ------------------------------> ")
     {:ok, assign(socket, id: attrs.id, message: nil, error: nil, xml_name: attrs.name, add_xml?: (if attrs.name != "", do: false), xml_b64: attrs.xml_b64)}
   end
 
