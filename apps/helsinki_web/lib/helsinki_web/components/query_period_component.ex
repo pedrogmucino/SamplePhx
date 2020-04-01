@@ -6,8 +6,13 @@ defmodule AccountingSystemWeb.QueryPeriodComponent do
   use Phoenix.HTML
 
   def mount(socket) do
-    #{:ok, socket}
-    {:ok, assign(socket, list_periods: get_query_periods_test())}
+    {:ok, assign(socket,
+      list_periods: get_query_periods_test(),
+      period_id: 0,
+      new?: false,
+      edit?: false
+      )
+    }
   end
 
   def update(_attrs, socket) do
@@ -17,7 +22,6 @@ defmodule AccountingSystemWeb.QueryPeriodComponent do
   def render(assigns) do
     ~L"""
       <div id="queryperiodlist" class="bg-white h-hoch-93 w-80 mt-16 ml-16 block float-left">
-
         <div class="w-full py-2 bg-blue-700">
           <p class="ml-2 font-bold text-lg text-white">Periodos de Consulta</p>
         </div>
@@ -44,7 +48,7 @@ defmodule AccountingSystemWeb.QueryPeriodComponent do
         <div class="h-hoch-75 overflow-y-scroll pb-16 mt-2">
           <%= for item <- @list_periods do %>
             <div class="w-full px-2 block">
-              <div phx-value-id="<%= item.id %>" phx-target="#queryperiodlist" class="border cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
+              <div phx-click="open_period" phx-value-id="<%= item.id %>" phx-target="#queryperiodlist" class="border cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
                 <h2 class="text-gray-700 text-xl"><%= item.name %></h2>
                 <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Inicio: <b><%= item.start_date %></b></label>
                 <label class="ml-5 inline-block cursor-pointer text-gray-600 font-bold text-sm">Fin: <b><%= item.end_date %></b></label>
@@ -53,7 +57,9 @@ defmodule AccountingSystemWeb.QueryPeriodComponent do
           <% end %>
         </div>
 
-      </div
+      </div>
+
+      <%= if @edit?, do: live_component(@socket, AccountingSystemWeb.FormQueryPeriodComponent, id: @period_id) %>
     """
   end
 
@@ -65,5 +71,10 @@ defmodule AccountingSystemWeb.QueryPeriodComponent do
       %{id: 4, name: "ABR-2020", start_date: "01/04/2020", end_date: "31/04/2020"},
       %{id: 5, name: "MAY-2020", start_date: "01/05/2020", end_date: "31/05/2020"}
     ]
+
+  def handle_event("open_period", params, socket) do
+    period_id = params["id"] |> IO.inspect(label: " ------------------------------ > OPEN PERIOD :> ")
+    {:noreply, assign(socket, new?: false, edit?: true, period_id: period_id)}
+  end
 
 end
