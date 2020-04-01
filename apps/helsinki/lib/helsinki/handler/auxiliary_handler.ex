@@ -87,7 +87,7 @@ defmodule AccountingSystem.AuxiliaryHandler do
     |> Repo.insert(prefix: PrefixFormatter.get_prefix(year, month))
     |> case do
       {:ok, aux} -> if aux.xml_id != nil, do: save_in_alexandria(xml_b64, aux.xml_id, aux.xml_name)
-      {:error, aux} -> aux |> GenericFunctions.to_inspect(" -> ERROR AUX NOT SAVED")
+      {:error, aux} -> aux
     end
   end
 
@@ -109,8 +109,8 @@ defmodule AccountingSystem.AuxiliaryHandler do
 
   def get_xml_file_to_alexandria(xml_id) do
     case AccountingSystem.Alexandria.get_file(xml_id, 1) do
-      {:ok, xml} -> xml.body |> GenericFunctions.to_inspect(" ---> Ok File from alexa")
-      {_, xml} -> xml |> GenericFunctions.to_inspect(" ---> Error File from alexa")
+      {:ok, xml} -> xml.body
+      {_, xml} -> xml
     end
   end
 
@@ -134,7 +134,7 @@ defmodule AccountingSystem.AuxiliaryHandler do
     |> Repo.update(prefix: PrefixFormatter.get_current_prefix)
     |> case do
       {:ok, aux} -> if aux.xml_id != nil and xml_b64 != "", do: save_in_alexandria(xml_b64, attrs.xml_id, attrs.xml_name)
-      {:error, aux} -> aux |> GenericFunctions.to_inspect(" -> ERROR AUX NOT SAVED")
+      {:error, aux} -> aux
     end
   end
 
