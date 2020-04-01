@@ -59,8 +59,8 @@ defmodule AccountingSystemWeb.PeriodComponent do
 
       </div>
 
-      <%= if @new?, do: live_component(@socket, AccountingSystemWeb.FormPeriodComponent, id: "period") %>
-      <%= if @edit?, do: live_component(@socket, AccountingSystemWeb.FormPeriodComponent, id: @period_id) %>
+      <%= if @new?, do: live_component(@socket, AccountingSystemWeb.FormPeriodComponent, id: "period", new?: true, edit?: false) %>
+      <%= if @edit?, do: live_component(@socket, AccountingSystemWeb.FormPeriodComponent, id: @period_id, new?: false, edit?: true) %>
     """
   end
 
@@ -79,6 +79,14 @@ defmodule AccountingSystemWeb.PeriodComponent do
 
   def handle_event("open_edit_period", params, socket) do
     {:noreply, assign(socket, new?: false, edit?: true, period_id: params["id"])}
+  end
+
+  def handle_event("save_new_period", params, socket) do
+    {:noreply, socket}
+  end
+
+  def handle_event("save_edit_period", params, socket) do
+    {:noreply, socket}
   end
 
   def handle_event("close", _params, socket) do

@@ -6,11 +6,11 @@ defmodule AccountingSystemWeb.FormPeriodComponent do
   use Phoenix.HTML
 
   def mount(socket) do
-    {:ok, socket}
+    {:ok, assign(socket, new?: false, edit?: false)}
   end
 
-  def update(_attrs, socket) do
-    {:ok, socket}
+  def update(attrs, socket) do
+    {:ok, assign(socket, new?: attrs.new?, edit?: attrs.edit?)}
   end
 
   def render(assigns) do
@@ -24,11 +24,11 @@ defmodule AccountingSystemWeb.FormPeriodComponent do
               </svg>
             </button>
           </div>
-          <h1 class="text-2xl font-medium text-white block">Crear Periodo de Consulta</h1>
+          <h1 class="text-2xl font-medium text-white block"> <%= if @new?, do: "Crear Periodo de Consulta", else: "Editar Periodo de Consulta" %></h1>
         </div>
 
         <div class="h-hoch-80 px-8 w-full py-6 inline-flex -mt-8 relative">
-          <form phx-submit="edit_period" phx-target="#formquery">
+          <form phx-submit= <%= if @new?, do: "save_new_period", else: "save_edit_period" %> phx-target="#formquery">
             <label class="block tracking-wide text-gray-700 font-bold">Nombre</label>
             <input type="text" name="name" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code" type="text" placeholder="Introduce el Nombre">
             <label class="block tracking-wide text-gray-700 font-bold">Fecha Inicial</label>
