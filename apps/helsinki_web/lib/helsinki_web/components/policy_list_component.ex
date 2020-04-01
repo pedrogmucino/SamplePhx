@@ -473,6 +473,31 @@ defp send_result(false, excel_data), do: {:ok, excel_data}
 
   #********************************END OF LOAD EXCEL************************************************************************^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+  #**************************************************CALCULATING BALANCE*****************************************************************************
+  def get_account_tree() do
+    all_active = Enum.map(Account.get_active_accounts(), fn acc -> tree_map(acc) end)
+    all_active
+      |> get_root_accounts
+      |> Enum.map(fn acc -> get_childs(acc, all_active) end)
+  end
+
+  defp get_root_accounts(accounts), do: Enum.filter(accounts, fn acc -> acc.parent_account == -1 end)
+  defp tree_map(root) do
+    Map.new()
+      |> Map.put(:id, Enum.at(root, 0))
+      |> Map.put(:account, Enum.at(root, 1))
+      |> Map.put(:description, Enum.at(root, 2))
+      |> Map.put(:parent_account, Enum.at(root, 3))
+      |> Map.put(:root_account, Enum.at(root, 4))
+  end
+  defp get_childs(_, []), do: []
+  defp get_childs(root, accounts) do
+    childs = Enum.filter(accounts, fn acc -> acc.parent_account == root.id end)
+    no_childs = Enum.reject(accounts, fn acc -> acc.parent_account == root.id end)
+    root |> Map.put(:childs, Enum.map(childs, fn acc -> get_childs(acc, no_childs) end))
+  end
+  #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^END OF CALCULATING BALANCE^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
   defp totals("", params, socket) do
     params = Generic.string_map_to_atom(params)
     sumh = socket.assigns.pollys.sum_haber
