@@ -75,7 +75,7 @@ defmodule AccountingSystem.AuxiliaryHandler do
         save_in_alexandria(xml_b64, aux.xml_id, aux.xml_name)
         aux
       end
-      {:error, aux} -> aux |> GenericFunctions.to_inspect(" -> ERROR AUX NOT SAVED")
+      {:error, aux} -> aux
     end
   end
 
