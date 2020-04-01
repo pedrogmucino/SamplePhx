@@ -37,6 +37,11 @@ defmodule AccountingSystem.AccountHandler do
     |> Repo.all
   end
 
+  def list_detail_range_accounts(initial_account, final_account) do
+    GetActiveAccountsQuery.detail_range_accounts(initial_account, final_account)
+    |> Repo.all
+  end
+
   @doc """
   Gets a single account.
 

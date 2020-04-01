@@ -275,7 +275,18 @@ defmodule AccountingSystem.AuxiliaryHandler do
       |> List.first
   end
 
-  def get_aux_report_acum(start_date, end_date) do
+  def get_aux_report(start_date, end_date, initial_account, final_account) do
+    period_list = PrefixFormatter.get_period_list(start_date, end_date)
+    combine_accounts(
+      AccountHandler.list_detail_range_accounts(initial_account, final_account),
+      get_headers_list(period_list, [], start_date, end_date),
+      [])
+    |> Enum.filter(fn x -> !is_nil(x) end)
+    # |> Enum.filter(fn x -> x.id == 182 end)
+    |> add_details(period_list, [], start_date, end_date)
+  end
+
+  def get_aux_report(start_date, end_date) do
     period_list = PrefixFormatter.get_period_list(start_date, end_date)
     combine_accounts(
       AccountHandler.list_detail_accounts,
