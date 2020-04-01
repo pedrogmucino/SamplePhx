@@ -7,7 +7,7 @@ defmodule AccountingSystem.GetHeaderQuery do
     AuxiliarySchema
   }
 
-  def header() do
+  def header(start_date, end_date) do
     query =
     from aux in AuxiliarySchema,
     join: policy in "policies",
@@ -18,6 +18,7 @@ defmodule AccountingSystem.GetHeaderQuery do
     join: type in "policytypes",
     prefix: "public",
     on: policy.policy_type == type.id,
+    where: (policy.policy_date >= ^start_date and policy.policy_date <= ^end_date),
     group_by: [acc.id, acc.code, acc.name, acc.type, aux.debit_credit],
     select: %{
       id: acc.id,

@@ -25,7 +25,7 @@ defmodule AccountingSystem.MixProject do
   def application do
     [
       mod: {AccountingSystem.Application, []},
-      extra_applications: [:logger, :runtime_tools, :xlsxir]
+      extra_applications: [:logger, :runtime_tools, :xlsxir, :timex]
     ]
   end
 
