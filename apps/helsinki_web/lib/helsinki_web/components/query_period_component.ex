@@ -77,4 +77,8 @@ defmodule AccountingSystemWeb.QueryPeriodComponent do
     {:noreply, assign(socket, new?: false, edit?: true, period_id: period_id)}
   end
 
+  def handle_event("close", _params, socket) do
+    {:noreply, assign(socket, new?: false, edit?: false)}
+  end
+
 end
