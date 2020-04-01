@@ -282,7 +282,6 @@ defmodule AccountingSystem.AuxiliaryHandler do
       get_headers_list(period_list, []),
       [])
     |> Enum.filter(fn x -> !is_nil(x) end)
-    |> Enum.filter(fn x -> x.id == 151 end)
     |> add_details(period_list, [])
   end
 
