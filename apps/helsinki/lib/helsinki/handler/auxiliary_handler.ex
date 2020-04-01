@@ -279,17 +279,21 @@ defmodule AccountingSystem.AuxiliaryHandler do
     period_list = PrefixFormatter.get_period_list(start_date, end_date)
     combine_accounts(
       AccountHandler.list_detail_accounts,
-      get_headers_list(period_list, []),
+      get_headers_list(period_list, [], start_date, end_date),
       [])
     |> Enum.filter(fn x -> !is_nil(x) end)
-    |> add_details(period_list, [])
+    # |> Enum.filter(fn x -> x.id == 151 end)
+    |> add_details(period_list, [], start_date, end_date)
   end
 
-  defp get_headers_list([h | t], new_list) do
-    get_headers_list(t, new_list ++ (GetHeaderQuery.header |> Repo.all(prefix: h)))
+  defp get_headers_list([h | t], new_list, start_date, end_date) do
+    get_headers_list(
+      t,
+      new_list ++ (GetHeaderQuery.header(start_date, end_date) |> Repo.all(prefix: h)),
+      start_date, end_date)
   end
 
-  defp get_headers_list([], new_list), do: new_list
+  defp get_headers_list([], new_list, _start_date, _end_date), do: new_list
 
   defp combine_accounts([h | t], headers, new_list) do
     combine_accounts(t, headers, List.insert_at(new_list, 0, combine_header(headers, h, 0, 0, %{})))
@@ -311,16 +315,21 @@ defmodule AccountingSystem.AuxiliaryHandler do
 
   defp combine_header([], _account, _new_debe, _new_haber, new_header), do: if new_header != %{}, do: new_header, else: nil
 
-  defp add_details([h | t], periods, new_list) do
-    add_details(t, periods, List.insert_at(new_list, 0, Map.put(h, :details, get_details(periods, h.id, []))))
+  defp add_details([h | t], periods, new_list, start_date, end_date) do
+    add_details(
+      t,
+      periods,
+      List.insert_at(new_list, 0, Map.put(h, :details, get_details(periods, h.id, [], start_date, end_date))),
+      start_date,
+      end_date)
   end
 
-  defp add_details([], _periods, new_list), do: new_list
+  defp add_details([], _periods, new_list, _start_date, _end_date), do: new_list
 
-  defp get_details([h | t], id, new_list) do
-    get_details(t, id, new_list ++ (GetDetailsQuery.details(id) |> Repo.all(prefix: h)))
+  defp get_details([h | t], id, new_list, start_date, end_date) do
+    get_details(t, id, new_list ++ (GetDetailsQuery.details(id, start_date, end_date) |> Repo.all(prefix: h)), start_date, end_date)
   end
 
-  defp get_details([], _id, new_list), do: new_list
+  defp get_details([], _id, new_list, _start_date, _end_date), do: new_list
 
 end

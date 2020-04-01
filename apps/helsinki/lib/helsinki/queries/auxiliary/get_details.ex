@@ -7,7 +7,7 @@ defmodule AccountingSystem.GetDetailsQuery do
     AuxiliarySchema
   }
 
-  def details(id) do
+  def details(id, start_date, end_date) do
     from aux in AuxiliarySchema,
     join: policy in "policies",
     on: aux.policy_id == policy.id,
@@ -17,7 +17,8 @@ defmodule AccountingSystem.GetDetailsQuery do
     join: type in "policytypes",
     prefix: "public",
     on: policy.policy_type == type.id,
-    where: acc.id == ^id,
+    where: acc.id == ^id
+    and (policy.policy_date >= ^start_date and policy.policy_date <= ^end_date),
     group_by: [
       type.name,
       policy.serial,
