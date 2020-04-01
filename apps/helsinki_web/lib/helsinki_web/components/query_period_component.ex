@@ -37,7 +37,7 @@ defmodule AccountingSystemWeb.QueryPeriodComponent do
         </div>
 
         <div class="w-1/2 px-2 mt-2">
-          <button phx-target="#queryperiodlist" class="py-2 bg-teal-500 hover:bg-teal-400 text-white items-center inline-flex font-bold rounded text-sm w-full">
+          <button phx-click="open_new_period" phx-target="#queryperiodlist" class="py-2 bg-teal-500 hover:bg-teal-400 text-white items-center inline-flex font-bold rounded text-sm w-full">
             <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="h-4 w-4 mr-2 ml-auto">
               <path fill="currentColor" d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" class="text-white"></path>
             </svg>
@@ -48,7 +48,7 @@ defmodule AccountingSystemWeb.QueryPeriodComponent do
         <div class="h-hoch-75 overflow-y-scroll pb-16 mt-2">
           <%= for item <- @list_periods do %>
             <div class="w-full px-2 block">
-              <div phx-click="open_period" phx-value-id="<%= item.id %>" phx-target="#queryperiodlist" class="border cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
+              <div phx-click="open_edit_period" phx-value-id="<%= item.id %>" phx-target="#queryperiodlist" class="border cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
                 <h2 class="text-gray-700 text-xl"><%= item.name %></h2>
                 <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Inicio: <b><%= item.start_date %></b></label>
                 <label class="ml-5 inline-block cursor-pointer text-gray-600 font-bold text-sm">Fin: <b><%= item.end_date %></b></label>
@@ -59,6 +59,7 @@ defmodule AccountingSystemWeb.QueryPeriodComponent do
 
       </div>
 
+      <%= if @new?, do: live_component(@socket, AccountingSystemWeb.FormQueryPeriodComponent, id: "period") %>
       <%= if @edit?, do: live_component(@socket, AccountingSystemWeb.FormQueryPeriodComponent, id: @period_id) %>
     """
   end
@@ -72,9 +73,12 @@ defmodule AccountingSystemWeb.QueryPeriodComponent do
       %{id: 5, name: "MAY-2020", start_date: "01/05/2020", end_date: "31/05/2020"}
     ]
 
-  def handle_event("open_period", params, socket) do
-    period_id = params["id"] |> IO.inspect(label: " ------------------------------ > OPEN PERIOD :> ")
-    {:noreply, assign(socket, new?: false, edit?: true, period_id: period_id)}
+  def handle_event("open_new_period", _params, socket) do
+    {:noreply, assign(socket, new?: true, edit?: false)}
+  end
+
+  def handle_event("open_edit_period", params, socket) do
+    {:noreply, assign(socket, new?: false, edit?: true, period_id: params["id"])}
   end
 
   def handle_event("close", _params, socket) do
