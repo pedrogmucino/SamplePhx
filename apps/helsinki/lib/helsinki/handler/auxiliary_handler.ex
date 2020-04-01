@@ -275,6 +275,16 @@ defmodule AccountingSystem.AuxiliaryHandler do
       |> List.first
   end
 
+  def get_aux_report_acum(start_date, end_date) do
+    period_list = PrefixFormatter.get_period_list(start_date, end_date)
+    combine_accounts(
+      AccountHandler.list_detail_accounts,
+      get_headers_list(period_list, []),
+      [])
+    |> Enum.filter(fn x -> !is_nil(x) end)
+    |> add_details(period_list, [])
+  end
+
   def get_aux_report_acum do
     combine_accounts(
       AccountHandler.list_detail_accounts,
@@ -282,7 +292,6 @@ defmodule AccountingSystem.AuxiliaryHandler do
       [])
     |> Enum.filter(fn x -> !is_nil(x) end)
     |> add_details([PrefixFormatter.get_prefix(2020, 2), PrefixFormatter.get_prefix(2020, 3)], [])
-
   end
 
   defp get_headers_list([h | t], new_list) do
