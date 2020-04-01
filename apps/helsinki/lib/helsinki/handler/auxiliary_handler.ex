@@ -72,9 +72,9 @@ defmodule AccountingSystem.AuxiliaryHandler do
     |> case do
       {:ok, aux} ->
         if aux.id != nil do
-        save_in_alexandria(xml_b64, aux.xml_id, aux.xml_name)
-        aux
-      end
+          save_in_alexandria(xml_b64, aux.xml_id, aux.xml_name)
+          aux
+        end
       {:error, aux} -> aux
     end
   end
@@ -86,7 +86,11 @@ defmodule AccountingSystem.AuxiliaryHandler do
     |> AuxiliarySchema.changeset(attrs)
     |> Repo.insert(prefix: PrefixFormatter.get_prefix(year, month))
     |> case do
-      {:ok, aux} -> if aux.xml_id != nil, do: save_in_alexandria(xml_b64, aux.xml_id, aux.xml_name)
+      {:ok, aux} ->
+        if aux.xml_id != nil do
+          save_in_alexandria(xml_b64, aux.xml_id, aux.xml_name)
+          aux
+        end
       {:error, aux} -> aux
     end
   end
