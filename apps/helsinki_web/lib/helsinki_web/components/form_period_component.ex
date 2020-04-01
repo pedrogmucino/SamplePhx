@@ -1,6 +1,6 @@
-defmodule AccountingSystemWeb.FormQueryPeriodComponent do
+defmodule AccountingSystemWeb.FormPeriodComponent do
   @moduledoc """
-  Componente Form Query Period Component
+  Componente Form Period Component
   """
   use Phoenix.LiveComponent
   use Phoenix.HTML
