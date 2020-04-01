@@ -1,4 +1,7 @@
 defmodule AccountingSystem.PeriodSchema do
+  @moduledoc """
+  Period Scheme
+  """
   use Ecto.Schema
   import Ecto.Changeset
 

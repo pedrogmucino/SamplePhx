@@ -9,8 +9,7 @@ defmodule AccountingSystemWeb.FormPeriodComponent do
     {:ok, socket}
   end
 
-  def update(attrs, socket) do
-    attrs |> IO.inspect(label: " ---------------------- > UPDATE _> ")
+  def update(_attrs, socket) do
     {:ok, socket}
   end
 
