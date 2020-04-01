@@ -8,7 +8,17 @@ defmodule AccountingSystem.GetActiveAccountsQuery do
 
   def detail_accounts do
     from a in AccountSchema,
-    where: a.status == "A" and a.type == "D",
+    where: a.status == "A"
+    and a.type == "D",
     order_by: [a.code]
+  end
+
+  def detail_range_accounts(initial_account, final_account) do
+    from a in AccountSchema,
+    where: a.status == "A"
+    and a.type == "D"
+    and a.code >= ^initial_account
+    and a.code <= ^final_account,
+    order_by: a.code
   end
 end
