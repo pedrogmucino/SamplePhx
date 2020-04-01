@@ -282,16 +282,8 @@ defmodule AccountingSystem.AuxiliaryHandler do
       get_headers_list(period_list, []),
       [])
     |> Enum.filter(fn x -> !is_nil(x) end)
+    |> Enum.filter(fn x -> x.id == 151 end)
     |> add_details(period_list, [])
-  end
-
-  def get_aux_report_acum do
-    combine_accounts(
-      AccountHandler.list_detail_accounts,
-      get_headers_list([PrefixFormatter.get_prefix(2020, 2), PrefixFormatter.get_prefix(2020, 3)], []),
-      [])
-    |> Enum.filter(fn x -> !is_nil(x) end)
-    |> add_details([PrefixFormatter.get_prefix(2020, 2), PrefixFormatter.get_prefix(2020, 3)], [])
   end
 
   defp get_headers_list([h | t], new_list) do
@@ -332,25 +324,4 @@ defmodule AccountingSystem.AuxiliaryHandler do
 
   defp get_details([], _id, new_list), do: new_list
 
-  def get_aux_report do
-    add_details(get_header(), []) |> Enum.reverse |> IO.inspect(label: "----------------------------------->RESULTADO")
-  end
-
-  defp get_header do
-    GetHeaderQuery.header
-    |> Repo.all(prefix: PrefixFormatter.get_current_prefix)
-  end
-
-  defp get_details(id) do
-    GetDetailsQuery.details(id)
-    |> Repo.all(prefix: PrefixFormatter.get_current_prefix)
-  end
-
-  defp add_details([h | t], new_list) do
-    add_details(t, List.insert_at(new_list, 0, Map.put(h, :details, get_details(h.id))))
-  end
-
-  defp add_details([], new_list) do
-    new_list
-  end
 end
