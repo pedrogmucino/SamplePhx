@@ -5,12 +5,19 @@ defmodule AccountingSystemWeb.PeriodComponent do
   use Phoenix.LiveComponent
   use Phoenix.HTML
 
+  alias AccountingSystemWeb.NotificationComponent, as: Notification
+  alias AccountingSystem.PeriodHandler, as: Period
+  alias AccountingSystem.EctoUtil
+
   def mount(socket) do
     {:ok, assign(socket,
-      list_periods: get_periods_test(),
+      list_periods: get_periods(),
       period_id: 0,
       new?: false,
-      edit?: false
+      edit?: false,
+      message: nil,
+      error: nil,
+      change: false
       )
     }
   end
@@ -51,7 +58,7 @@ defmodule AccountingSystemWeb.PeriodComponent do
               <div phx-click="open_edit_period" phx-value-id="<%= item.id %>" phx-target="#periodlist" class="border cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
                 <h2 class="text-gray-700 text-xl"><%= item.name %></h2>
                 <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Inicio: <b><%= item.start_date %></b></label>
-                <label class="ml-5 inline-block cursor-pointer text-gray-600 font-bold text-sm">Fin: <b><%= item.end_date %></b></label>
+                <label class="ml-4 inline-block cursor-pointer text-gray-600 font-bold text-sm">Fin: <b><%= item.end_date %></b></label>
               </div>
             </div>
           <% end %>
@@ -61,17 +68,12 @@ defmodule AccountingSystemWeb.PeriodComponent do
 
       <%= if @new?, do: live_component(@socket, AccountingSystemWeb.FormPeriodComponent, id: "period", new?: true, edit?: false) %>
       <%= if @edit?, do: live_component(@socket, AccountingSystemWeb.FormPeriodComponent, id: @period_id, new?: false, edit?: true) %>
+
+      <%= if @message, do: live_component(@socket, AccountingSystemWeb.NotificationComponent, id: "notification_comp", message: @message, show: true, notification_type: "notification", change: @change) %>
+      <%= if @error, do: live_component(@socket, AccountingSystemWeb.NotificationComponent, id: "error_comp", message: @error, show: true, notification_type: "error", change: @change) %>
+
     """
   end
-
-  defp get_periods_test(), do:
-    [
-      %{id: 1, name: "ENE-2020", start_date: "01/01/2020", end_date: "31/01/2020"},
-      %{id: 2, name: "FEB-2020", start_date: "01/02/2020", end_date: "31/02/2020"},
-      %{id: 3, name: "MAR-2020", start_date: "01/03/2020", end_date: "31/03/2020"},
-      %{id: 4, name: "ABR-2020", start_date: "01/04/2020", end_date: "31/04/2020"},
-      %{id: 5, name: "MAY-2020", start_date: "01/05/2020", end_date: "31/05/2020"}
-    ]
 
   def handle_event("open_new_period", _params, socket) do
     {:noreply, assign(socket, new?: true, edit?: false)}
@@ -82,15 +84,25 @@ defmodule AccountingSystemWeb.PeriodComponent do
   end
 
   def handle_event("save_new_period", params, socket) do
-    {:noreply, socket}
+    params |> Period.create_period
+    |> case do
+      {:ok, period} ->
+        Notification.set_timer_notification()
+        {:noreply, assign(socket, new?: false, edit?: false, list_periods: get_periods(), message: "Periodo " <> period.name <> " creado correctamente", error: nil, change: !socket.assigns.change)}
+      {:error, %Ecto.Changeset{} = changeset} ->
+        Notification.set_timer_notification_error()
+        {:noreply, assign(socket, new?: false, edit?: false, list_periods: get_periods(), message: nil, error: "Error al intentar crear el periodo: " <> EctoUtil.get_errors(changeset), change: !socket.assigns.change, changeset: changeset)}
+    end
   end
 
-  def handle_event("save_edit_period", params, socket) do
+  def handle_event("save_edit_period", _params, socket) do
     {:noreply, socket}
   end
 
   def handle_event("close", _params, socket) do
     {:noreply, assign(socket, new?: false, edit?: false)}
   end
+
+  defp get_periods(), do: Period.list_periods
 
 end
