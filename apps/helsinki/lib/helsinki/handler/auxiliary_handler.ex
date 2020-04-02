@@ -274,7 +274,7 @@ defmodule AccountingSystem.AuxiliaryHandler do
   def cancel_auxiliary(id_to_cancel) do
     id_to_cancel
     |> get_auxiliary_by_policy_id
-    |> Enum.each(fn aux -> update_auxiliary(aux.id |> get_auxiliary!, %{"mxn_amount" => "0.0", "amount" => "0.0"}) end)
+    |> Enum.each(fn aux -> update_auxiliary(aux.id |> get_auxiliary!, %{mxn_amount: "0.0", amount: "0.0", xml_id: nil, xml_name: nil}) end)
   end
 
   def get_max_id_by_policy(policy_id) do
