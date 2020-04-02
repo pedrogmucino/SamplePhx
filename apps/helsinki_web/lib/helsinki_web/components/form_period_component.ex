@@ -27,7 +27,7 @@ defmodule AccountingSystemWeb.FormPeriodComponent do
               </svg>
             </button>
           </div>
-          <h1 class="text-2xl font-medium text-white block"> <%= if @new?, do: "Crear Periodo de Consulta", else: "Editar Periodo de Consulta" %></h1>
+          <label class="text-2xl font-normal text-white block"> <%= if @new?, do: "Crear Periodo de Consulta", else: "Editar Periodo de Consulta" %></label>
         </div>
 
         <div class="h-hoch-80 px-8 w-full py-6 inline-flex -mt-8 relative">
