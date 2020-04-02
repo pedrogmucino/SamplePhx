@@ -56,7 +56,7 @@ defmodule AccountingSystemWeb.PeriodComponent do
           <%= for item <- @list_periods do %>
             <div class="w-full px-2 block">
               <div phx-click="open_edit_period" phx-value-id="<%= item.id %>" phx-target="#periodlist" class="border cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
-                <h2 class="text-gray-700 text-xl"><%= item.name %></h2>
+                <h2 class="text-gray-700 text-xl"><%= if String.length(item.name) > 15, do: String.slice(item.name, 0, 15) <> "... ", else: item.name %></h2>
                 <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Inicio: <b><%= item.start_date %></b></label>
                 <label class="ml-4 inline-block cursor-pointer text-gray-600 font-bold text-sm">Fin: <b><%= item.end_date %></b></label>
               </div>
@@ -97,7 +97,7 @@ defmodule AccountingSystemWeb.PeriodComponent do
                new?: false,
                edit?: false,
                list_periods: get_periods(),
-               message: "Periodo " <> period.name <> " creado correctamente",
+               message: "Periodo " <> truncate_string_fifteen(period.name) <> " creado correctamente",
                error: nil,
                change: !socket.assigns.change
              )}
@@ -140,7 +140,7 @@ defmodule AccountingSystemWeb.PeriodComponent do
                new?: false,
                edit?: false,
                list_periods: get_periods(),
-               message: "Periodo " <> period.name <> " modificado correctamente",
+               message: "Periodo " <> truncate_string_fifteen(period.name) <> " modificado correctamente",
                error: nil,
                change: !socket.assigns.change
              )}
@@ -181,7 +181,7 @@ defmodule AccountingSystemWeb.PeriodComponent do
            new?: false,
            edit?: false,
            list_periods: get_periods(),
-           message: "Periodo " <> period.name <> " eliminado correctamente",
+           message: "Periodo " <> truncate_string_fifteen(period.name) <> " eliminado correctamente",
            error: nil,
            change: !socket.assigns.change
          )}
@@ -209,4 +209,6 @@ defmodule AccountingSystemWeb.PeriodComponent do
   defp get_periods(), do: Period.list_periods() |> Enum.sort_by(& &1.id)
 
   defp validate_dates(params), do: if(params["start_date"] <= params["end_date"], do: true, else: false)
+
+  defp truncate_string_fifteen(text), do: if(text != "", do: if(String.length(text) > 15, do: String.slice(text, 0, 15) <> "... ", else: text ))
 end
