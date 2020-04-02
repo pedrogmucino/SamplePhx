@@ -31,7 +31,7 @@ defmodule AccountingSystemWeb.FormPeriodComponent do
         </div>
 
         <div class="h-hoch-80 px-8 w-full py-6 inline-flex -mt-8 relative">
-          <form phx-submit= <%= if @new?, do: "save_new_period", else: "save_edit_period" %> phx-target="#formquery">
+          <form id="form1" phx-submit= <%= if @new?, do: "save_new_period", else: "save_edit_period" %> phx-target="#formquery">
             <input type="hidden" name="id" value="<%= if @edit?, do: @period.id %>">
             <label class="block tracking-wide text-gray-700 font-bold">Nombre</label>
             <input type="text" name="name" value="<%= if @edit?, do: @period.name %>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" placeholder="Introduce el Nombre" required>
@@ -40,7 +40,7 @@ defmodule AccountingSystemWeb.FormPeriodComponent do
             <label class="block tracking-wide text-gray-700 font-bold">Fecha Final</label>
             <input type="date" name="end_date" value="<%= if @edit?, do: @period.end_date %>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" required>
             <div class="inline-flex w-full py-16 absolute bottom-0 right-0 pr-0">
-            <button class= "ml-5 py-2 w-32 bg-teal-500 text-white hover:bg-teal-400 items-center inline-flex font-bold rounded shadow focus:shadow-outline focus:outline-none rounded">
+            <button type="submit" form="form1" class= "ml-5 py-2 w-32 bg-teal-500 text-white hover:bg-teal-400 items-center inline-flex font-bold rounded shadow focus:shadow-outline focus:outline-none rounded">
               <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="save" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="h-4 w-4 mr-2 ml-auto">
                 <g class="fa-group">
                   <path fill="currentColor" d="M288 352a64 64 0 1 1-64-64 64 64 0 0 1 64 64z" class="text-white"></path>
@@ -49,6 +49,19 @@ defmodule AccountingSystemWeb.FormPeriodComponent do
               </svg>
               <label class="cursor-pointer mr-auto text-white">Guardar</label>
             </button>
+
+            <%= if @edit? do %>
+              <button type="submit" form="" phx-click="delete_period" phx-target="#formquery" phx-value-id=<%=@ period.id %> class= "ml-5 py-2 w-32 bg-red-500 text-white hover:bg-red-400 items-center inline-flex font-bold rounded shadow focus:shadow-outline focus:outline-none rounded">
+                <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="trash-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="h-4 w-4 mr-2 ml-auto">
+                  <g class="fa-group">
+                    <path fill="currentColor" d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V96H32zm272-288a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0z" class="fa-secondary"></path>
+                    <path fill="currentColor" d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM128 160a16 16 0 0 0-16 16v224a16 16 0 0 0 32 0V176a16 16 0 0 0-16-16zm96 0a16 16 0 0 0-16 16v224a16 16 0 0 0 32 0V176a16 16 0 0 0-16-16zm96 0a16 16 0 0 0-16 16v224a16 16 0 0 0 32 0V176a16 16 0 0 0-16-16z" class="fa-primary"></path>
+                  </g>
+                </svg>
+                <label class="cursor-pointer mr-auto text-white">Eliminar</label>
+              </button>
+            <% end %>
+
           </div>
           </form>
         </div>

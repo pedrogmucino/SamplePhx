@@ -168,6 +168,40 @@ defmodule AccountingSystemWeb.PeriodComponent do
     end
   end
 
+  def handle_event("delete_period", params, socket) do
+    params["id"]
+    |> Period.get_period!()
+    |> Period.delete_period()
+    |> case do
+      {:ok, period} ->
+        Notification.set_timer_notification()
+
+        {:noreply,
+         assign(socket,
+           new?: false,
+           edit?: false,
+           list_periods: get_periods(),
+           message: "Periodo " <> period.name <> " eliminado correctamente",
+           error: nil,
+           change: !socket.assigns.change
+         )}
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        Notification.set_timer_notification_error()
+
+        {:noreply,
+         assign(socket,
+           new?: false,
+           edit?: false,
+           list_periods: get_periods(),
+           message: nil,
+           error: "Error al intentar eliminar el periodo: " <> EctoUtil.get_errors(changeset),
+           change: !socket.assigns.change,
+           changeset: changeset
+         )}
+    end
+  end
+
   def handle_event("close", _params, socket) do
     {:noreply, assign(socket, new?: false, edit?: false)}
   end
