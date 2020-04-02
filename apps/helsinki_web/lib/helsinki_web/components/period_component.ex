@@ -172,7 +172,7 @@ defmodule AccountingSystemWeb.PeriodComponent do
     {:noreply, assign(socket, new?: false, edit?: false)}
   end
 
-  defp get_periods(), do: Period.list_periods()
+  defp get_periods(), do: Period.list_periods() |> Enum.sort_by(& &1.id)
 
   defp validate_dates(params), do: if(params["start_date"] <= params["end_date"], do: true, else: false)
 end
