@@ -18,5 +18,6 @@ defmodule AccountingSystem.PeriodSchema do
     period
     |> cast(attrs, [:name, :start_date, :end_date])
     |> validate_required([:name, :start_date, :end_date])
+    |> unique_constraint(:periods_start_date_end_date_index, name: :periods_start_date_end_date_index)
   end
 end
