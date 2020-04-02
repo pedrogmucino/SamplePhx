@@ -289,6 +289,11 @@ defmodule AccountingSystem.AccountHandler do
       |> Repo.all
   end
 
+  def get_active_accounts_range(first, last) do
+    AccountingSystem.ActiveAccounts.get_range(first, last)
+      |> Repo.all
+  end
+
   defp get_consult_result(query) do
     query
     |> Repo.one!

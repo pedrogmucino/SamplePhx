@@ -480,6 +480,12 @@ defp send_result(false, excel_data), do: {:ok, excel_data}
       |> get_root_accounts
       |> Enum.map(fn acc -> get_childs(acc, all_active) end)
   end
+  def get_account_tree_range(first_account, last_account) do
+    all_active = Enum.map(Account.get_active_accounts_range(first_account, last_account), fn acc -> tree_map(acc) end)
+    all_active
+      |> get_root_accounts
+      |> Enum.map(fn acc -> get_childs(acc, all_active) end)
+  end
 
   defp get_root_accounts(accounts), do: Enum.filter(accounts, fn acc -> acc.parent_account == -1 end)
   defp tree_map(root) do
@@ -495,6 +501,10 @@ defp send_result(false, excel_data), do: {:ok, excel_data}
     childs = Enum.filter(accounts, fn acc -> acc.parent_account == root.id end)
     no_childs = Enum.reject(accounts, fn acc -> acc.parent_account == root.id end)
     root |> Map.put(:childs, Enum.map(childs, fn acc -> get_childs(acc, no_childs) end))
+  end
+
+  def get_debit_credit_detail(start_date, end_date, first_account, last_account) do
+    Auxiliar.get_aux_report(Date.from_iso8601!(start_date), Date.from_iso8601!(end_date), first_account, last_account)
   end
   #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^END OF CALCULATING BALANCE^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
