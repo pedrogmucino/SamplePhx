@@ -1,17 +1,19 @@
-defmodule AccountingSystemWeb.FormQueryPeriodComponent do
+defmodule AccountingSystemWeb.FormPeriodComponent do
   @moduledoc """
-  Componente Form Query Period Component
+  Componente Form Period Component
   """
   use Phoenix.LiveComponent
   use Phoenix.HTML
 
+  alias AccountingSystem.PeriodHandler, as: Period
+
   def mount(socket) do
-    {:ok, socket}
+    {:ok, assign(socket, new?: false, edit?: false, period: nil)}
   end
 
   def update(attrs, socket) do
-    attrs |> IO.inspect(label: " ---------------------- > UPDATE _> ")
-    {:ok, socket}
+    period = if attrs.edit?, do: attrs.id |> Period.get_period!(), else: nil
+    {:ok, assign(socket, new?: attrs.new?, edit?: attrs.edit?, period: period)}
   end
 
   def render(assigns) do
@@ -25,17 +27,18 @@ defmodule AccountingSystemWeb.FormQueryPeriodComponent do
               </svg>
             </button>
           </div>
-          <h1 class="text-2xl font-medium text-white block">Crear Periodo de Consulta</h1>
+          <h1 class="text-2xl font-medium text-white block"> <%= if @new?, do: "Crear Periodo de Consulta", else: "Editar Periodo de Consulta" %></h1>
         </div>
 
         <div class="h-hoch-80 px-8 w-full py-6 inline-flex -mt-8 relative">
-          <form phx-submit="edit_period" phx-target="#formquery">
+          <form phx-submit= <%= if @new?, do: "save_new_period", else: "save_edit_period" %> phx-target="#formquery">
+            <input type="hidden" name="id" value="<%= if @edit?, do: @period.id %>">
             <label class="block tracking-wide text-gray-700 font-bold">Nombre</label>
-            <input type="text" name="name" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code" type="text" placeholder="Introduce el Nombre">
+            <input type="text" name="name" value="<%= if @edit?, do: @period.name %>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" placeholder="Introduce el Nombre" required>
             <label class="block tracking-wide text-gray-700 font-bold">Fecha Inicial</label>
-            <input type="date" name="start_date" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code" type="text" placeholder="Introduce el Nombre">
+            <input type="date" name="start_date" value="<%= if @edit?, do: @period.start_date %>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" required>
             <label class="block tracking-wide text-gray-700 font-bold">Fecha Final</label>
-            <input type="date" name="end_date" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-code" type="text" placeholder="Introduce el Nombre">
+            <input type="date" name="end_date" value="<%= if @edit?, do: @period.end_date %>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" required>
             <div class="inline-flex w-full py-16 absolute bottom-0 right-0 pr-0">
             <button class= "ml-5 py-2 w-32 bg-teal-500 text-white hover:bg-teal-400 items-center inline-flex font-bold rounded shadow focus:shadow-outline focus:outline-none rounded">
               <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="save" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="h-4 w-4 mr-2 ml-auto">
@@ -54,5 +57,4 @@ defmodule AccountingSystemWeb.FormQueryPeriodComponent do
 
     """
   end
-
 end
