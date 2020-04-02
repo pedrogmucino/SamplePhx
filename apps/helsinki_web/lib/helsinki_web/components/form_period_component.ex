@@ -34,11 +34,11 @@ defmodule AccountingSystemWeb.FormPeriodComponent do
           <form id="form1" phx-submit= <%= if @new?, do: "save_new_period", else: "save_edit_period" %> phx-target="#formquery">
             <input type="hidden" name="id" value="<%= if @edit?, do: @period.id %>">
             <label class="block tracking-wide text-gray-700 font-bold">Nombre</label>
-            <input type="text" name="name" value="<%= if @edit?, do: @period.name %>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" placeholder="Introduce el Nombre" required>
+            <input type="text" name="name" value="<%= if @edit?, do: @period.name %>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" placeholder="Introduce el Nombre" >
             <label class="block tracking-wide text-gray-700 font-bold">Fecha Inicial</label>
-            <input type="date" name="start_date" value="<%= if @edit?, do: @period.start_date %>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" required>
+            <input type="date" name="start_date" value="<%= if @edit?, do: @period.start_date %>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" >
             <label class="block tracking-wide text-gray-700 font-bold">Fecha Final</label>
-            <input type="date" name="end_date" value="<%= if @edit?, do: @period.end_date %>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" required>
+            <input type="date" name="end_date" value="<%= if @edit?, do: @period.end_date %>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" >
             <div class="inline-flex w-full py-16 absolute bottom-0 right-0 pr-0">
             <button type="submit" form="form1" class= "ml-5 py-2 w-32 bg-teal-500 text-white hover:bg-teal-400 items-center inline-flex font-bold rounded shadow focus:shadow-outline focus:outline-none rounded">
               <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="save" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="h-4 w-4 mr-2 ml-auto">
