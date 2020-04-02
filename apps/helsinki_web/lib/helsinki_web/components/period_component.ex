@@ -10,16 +10,16 @@ defmodule AccountingSystemWeb.PeriodComponent do
   alias AccountingSystem.EctoUtil
 
   def mount(socket) do
-    {:ok, assign(socket,
-      list_periods: get_periods(),
-      period_id: 0,
-      new?: false,
-      edit?: false,
-      message: nil,
-      error: nil,
-      change: false
-      )
-    }
+    {:ok,
+     assign(socket,
+       list_periods: get_periods(),
+       period_id: 0,
+       new?: false,
+       edit?: false,
+       message: nil,
+       error: nil,
+       change: false
+     )}
   end
 
   def update(_attrs, socket) do
@@ -84,14 +84,42 @@ defmodule AccountingSystemWeb.PeriodComponent do
   end
 
   def handle_event("save_new_period", params, socket) do
-    params |> Period.create_period
-    |> case do
-      {:ok, period} ->
-        Notification.set_timer_notification()
-        {:noreply, assign(socket, new?: false, edit?: false, list_periods: get_periods(), message: "Periodo " <> period.name <> " creado correctamente", error: nil, change: !socket.assigns.change)}
-      {:error, %Ecto.Changeset{} = changeset} ->
+    case validate_dates(params) do
+      true ->
+        params
+        |> Period.create_period()
+        |> case do
+          {:ok, period} ->
+            Notification.set_timer_notification()
+
+            {:noreply,
+             assign(socket,
+               new?: false,
+               edit?: false,
+               list_periods: get_periods(),
+               message: "Periodo " <> period.name <> " creado correctamente",
+               error: nil,
+               change: !socket.assigns.change
+             )}
+
+          {:error, %Ecto.Changeset{} = changeset} ->
+            Notification.set_timer_notification_error()
+
+            {:noreply,
+             assign(socket,
+               new?: false,
+               edit?: false,
+               list_periods: get_periods(),
+               message: nil,
+               error: "Error al intentar crear el periodo: " <> EctoUtil.get_errors(changeset),
+               change: !socket.assigns.change,
+               changeset: changeset
+             )}
+        end
+
+      false ->
         Notification.set_timer_notification_error()
-        {:noreply, assign(socket, new?: false, edit?: false, list_periods: get_periods(), message: nil, error: "Error al intentar crear el periodo: " <> EctoUtil.get_errors(changeset), change: !socket.assigns.change, changeset: changeset)}
+        {:noreply, assign(socket, error: "Error en la validación de fechas", change: false)}
     end
   end
 
@@ -103,6 +131,7 @@ defmodule AccountingSystemWeb.PeriodComponent do
     {:noreply, assign(socket, new?: false, edit?: false)}
   end
 
-  defp get_periods(), do: Period.list_periods
+  defp get_periods(), do: Period.list_periods()
 
+  defp validate_dates(params), do: if(params["start_date"] <= params["end_date"], do: true, else: false)
 end
