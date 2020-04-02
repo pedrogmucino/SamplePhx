@@ -12,7 +12,7 @@ defmodule AccountingSystemWeb.FormPeriodComponent do
   end
 
   def update(attrs, socket) do
-    period = attrs.id |> Period.get_period!()
+    period = if attrs.edit?, do: attrs.id |> Period.get_period!(), else: nil
     {:ok, assign(socket, new?: attrs.new?, edit?: attrs.edit?, period: period)}
   end
 
