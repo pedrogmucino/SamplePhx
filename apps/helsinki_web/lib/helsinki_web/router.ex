@@ -32,6 +32,7 @@ defmodule AccountingSystemWeb.Router do
     get "/show_xml/:xml_id/:xml_name", ShowXmlController, :show
     get "/periods", PeriodController, :index
     get "/auxiliaries", AuxiliariesController, :index
+    get "/form_auxiliaries", FormAuxiliariesController, :index
     # get "/submenu", SubMenuController, :sub_menu
     resources "/accounts", AccountController
     resources "/structures", StructureController
