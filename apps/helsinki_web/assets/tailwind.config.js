@@ -33,6 +33,7 @@ module.exports = {
           'mar-180': '45rem',
           'mar-200': '50rem',
           'mar-240': '60rem',
+          'mar-380': '95rem',
           'mar-14': '3.5rem'     
         }
       }
