@@ -18,8 +18,8 @@ defmodule AccountingSystem.AuxiliariesTest do
     @valid_account_attrs %{"apply_third_party_to" => "no", "apply_to" => 42, "character" => false, "code" => "2-001-001-002", "group_code" => 42, "is_departamental" => false, "name" => "Activos", "parent_account" => -1, "payment_method" => true, "root_account" => 1, "status" => "A", "third_party_op" => true, "third_party_prosecutor" => 42, "type" => "D", "uuid_voucher" => "some uuid_voucher", "level" => "3", "description" => "description", "rfc_literals" => "AAA", "rfc_numeric" => "010101", "rfc_key" => "000", "requires_xml" => false}
     @valid_structure %{"size" => "3", "max_current_size" => 0, "level" => 3}
     @valid_policy_type_attrs %{identifier: "G", name: "Gastos", classat: 1}
-    @update_attrs %{amount: 456.7, concept: "some updated concept", cost_center: 43, counterpart: "some updated counterpart", debit_credit: "s", department: 43, exchange_rate: 456.7, group: 43, id_account: 43, iduuid: 43, mxn_amount: 456.7, policy_number: 43}
-    @invalid_attrs %{amount: nil, concept: nil, cost_center: nil, counterpart: nil, debit_credit: nil, department: nil, exchange_rate: nil, group: nil, id_account: nil, iduuid: nil, mxn_amount: nil, policy_number: nil}
+    @update_attrs %{concept: "other concept", mxn_amount: 150, amount: 150, department: 2, xml_id: nil, xml_name: "", xml_b64: nil}
+    @invalid_attrs %{policy_number: nil, id_account: nil, concept: nil, debit_credit: nil, mxn_amount: 120.5, amount: 120.5, department: 1, counterpart: "some counterpart", cost_center: 1, group: 1, iduuid: 1, exchange_rate: 1, policy_id: 1, xml_id: nil, xml_name: "", xml_b64: nil}
     @valid_year 2020
     @valid_month 4
 
@@ -132,7 +132,7 @@ defmodule AccountingSystem.AuxiliariesTest do
     test "create_auxiliary/1 with valid data creates a auxiliary" do
       policy = policy_fixture()
       account = account_fixture()
-      {:ok, %AuxiliarySchema{} = auxiliary} =
+      auxiliary =
       %{}
       |> Enum.into(@valid_aux_attrs)
       |> Map.put(:policy_id, policy.id)
@@ -140,77 +140,60 @@ defmodule AccountingSystem.AuxiliariesTest do
       |> AuxiliaryHandler.create_auxiliary()
       assert auxiliary.amount == 120.5
       assert auxiliary.concept == "some concept"
-      assert auxiliary.cost_center == 42
-      assert auxiliary.counterpart == "some counterpart"
-      assert auxiliary.debit_credit == "d"
-      assert auxiliary.department == 42
-      assert auxiliary.exchange_rate == 120.5
-      assert auxiliary.group == 42
-      assert auxiliary.id_account == 42
-      assert auxiliary.iduuid == 42
+      assert auxiliary.cost_center == nil
+      assert auxiliary.counterpart == nil
+      assert auxiliary.debit_credit == "D"
+      assert auxiliary.department == 1
+      assert auxiliary.exchange_rate == 1
+      assert auxiliary.group == nil
       assert auxiliary.mxn_amount == 120.5
-      assert auxiliary.policy_number == 42
     end
 
     test "create_auxiliary/3 with valid data creates a auxiliary with specific period" do
-      assert {:ok, %AuxiliarySchema{} = auxiliary} =
-      AuxiliaryHandler.create_auxiliary(@valid_attrs, @valid_year, @valid_month)
+      policy = policy_fixture()
+      account = account_fixture()
+      auxiliary =
+      %{}
+      |> Enum.into(@valid_aux_attrs)
+      |> Map.put(:policy_id, policy.id)
+      |> Map.put(:id_account, account.id)
+      |> AuxiliaryHandler.create_auxiliary(@valid_year, @valid_month)
       assert auxiliary.amount == 120.5
       assert auxiliary.concept == "some concept"
-      assert auxiliary.cost_center == 42
-      assert auxiliary.counterpart == "some counterpart"
-      assert auxiliary.debit_credit == "d"
-      assert auxiliary.department == 42
-      assert auxiliary.exchange_rate == 120.5
-      assert auxiliary.group == 42
-      assert auxiliary.id_account == 42
-      assert auxiliary.iduuid == 42
+      assert auxiliary.cost_center == nil
+      assert auxiliary.counterpart == nil
+      assert auxiliary.debit_credit == "D"
+      assert auxiliary.department == 1
+      assert auxiliary.exchange_rate == 1
+      assert auxiliary.group == nil
       assert auxiliary.mxn_amount == 120.5
-      assert auxiliary.policy_number == 42
     end
 
     test "create_auxiliary/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = AuxiliaryHandler.create_auxiliary(@invalid_attrs)
+      assert %Ecto.Changeset{} = AuxiliaryHandler.create_auxiliary(@invalid_attrs)
     end
 
     test "update_auxiliary/2 with valid data updates the auxiliary" do
       auxiliary = auxiliary_fixture()
-      assert {:ok, %AuxiliarySchema{} = auxiliary} = AuxiliaryHandler.update_auxiliary(auxiliary, @update_attrs)
-      assert auxiliary.amount == 456.7
-      assert auxiliary.concept == "some updated concept"
-      assert auxiliary.cost_center == 43
-      assert auxiliary.counterpart == "some updated counterpart"
-      assert auxiliary.debit_credit == "s"
-      assert auxiliary.department == 43
-      assert auxiliary.exchange_rate == 456.7
-      assert auxiliary.group == 43
-      assert auxiliary.id_account == 43
-      assert auxiliary.iduuid == 43
-      assert auxiliary.mxn_amount == 456.7
-      assert auxiliary.policy_number == 43
+      auxiliary = AuxiliaryHandler.update_auxiliary(auxiliary, @update_attrs)
+      assert auxiliary.amount == 150
+      assert auxiliary.concept == "other concept"
+      assert auxiliary.mxn_amount == 150
+      assert auxiliary.department == 2
     end
 
     test "update_auxiliary/4 with valid data updates the auxiliary with specific period" do
       auxiliary = auxiliary_fixture(@valid_year, @valid_month)
-      assert {:ok, %AuxiliarySchema{} = auxiliary} =
-      AuxiliaryHandler.update_auxiliary(auxiliary, @update_attrs, @valid_year, @valid_month)
-      assert auxiliary.amount == 456.7
-      assert auxiliary.concept == "some updated concept"
-      assert auxiliary.cost_center == 43
-      assert auxiliary.counterpart == "some updated counterpart"
-      assert auxiliary.debit_credit == "s"
-      assert auxiliary.department == 43
-      assert auxiliary.exchange_rate == 456.7
-      assert auxiliary.group == 43
-      assert auxiliary.id_account == 43
-      assert auxiliary.iduuid == 43
-      assert auxiliary.mxn_amount == 456.7
-      assert auxiliary.policy_number == 43
+      auxiliary = AuxiliaryHandler.update_auxiliary(auxiliary, @update_attrs, @valid_year, @valid_month)
+      assert auxiliary.amount == 150
+      assert auxiliary.concept == "other concept"
+      assert auxiliary.mxn_amount == 150
+      assert auxiliary.department == 2
     end
 
     test "update_auxiliary/2 with invalid data returns error changeset" do
       auxiliary = auxiliary_fixture()
-      assert {:error, %Ecto.Changeset{}} = AuxiliaryHandler.update_auxiliary(auxiliary, @invalid_attrs)
+      assert %Ecto.Changeset{} = AuxiliaryHandler.update_auxiliary(auxiliary, @invalid_attrs)
       assert auxiliary == AuxiliaryHandler.get_auxiliary!(auxiliary.id)
     end
 
