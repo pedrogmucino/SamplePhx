@@ -91,6 +91,7 @@ defmodule AccountingSystem.AuxiliaryHandler do
           save_in_alexandria(xml_b64, aux.xml_id, aux.xml_name)
           aux
         end
+        aux
       {:error, aux} -> aux
     end
   end
