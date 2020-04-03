@@ -12,7 +12,6 @@ defmodule AccountingSystem.AuxiliariesTest do
   describe "auxiliaries" do
     alias AccountingSystem.AuxiliarySchema
 
-    @valid_attrs %{amount: 120.5, concept: "some concept", cost_center: 42, counterpart: "some counterpart", debit_credit: "d", department: 42, exchange_rate: 120.5, group: 42, id_account: 42, iduuid: 42, mxn_amount: 120.5, policy_number: 42}
     @valid_aux_attrs %{policy_number: 1, id_account: 1, concept: "some concept", debit_credit: "D", mxn_amount: 120.5, amount: 120.5, department: 1, counterpart: "some counterpart", cost_center: 1, group: 1, iduuid: 1, exchange_rate: 1, policy_id: 1, xml_id: nil, xml_name: "", xml_b64: nil}
     @valid_policy_attrs %{serial: "G", policy_number: 1, policy_type: 1, period: 4, fiscal_exercise: 2020, policy_date: Date.utc_today(), concept: "policy concept", audited: false, has_documents: false, status: true}
     @valid_account_attrs %{"apply_third_party_to" => "no", "apply_to" => 42, "character" => false, "code" => "2-001-001-002", "group_code" => 42, "is_departamental" => false, "name" => "Activos", "parent_account" => -1, "payment_method" => true, "root_account" => 1, "status" => "A", "third_party_op" => true, "third_party_prosecutor" => 42, "type" => "D", "uuid_voucher" => "some uuid_voucher", "level" => "3", "description" => "description", "rfc_literals" => "AAA", "rfc_numeric" => "010101", "rfc_key" => "000", "requires_xml" => false}
