@@ -138,15 +138,31 @@ defmodule AccountingSystem.AuxiliaryHandler do
     |> AuxiliarySchema.changeset(attrs)
     |> Repo.update(prefix: PrefixFormatter.get_current_prefix)
     |> case do
-      {:ok, aux} -> if aux.xml_id != nil and xml_b64 != "", do: save_in_alexandria(xml_b64, attrs.xml_id, attrs.xml_name)
+      {:ok, aux} ->
+        if aux.xml_id != nil and xml_b64 != "" do
+          save_in_alexandria(xml_b64, attrs.xml_id, attrs.xml_name)
+          aux
+        end
+        aux
       {:error, aux} -> aux
     end
   end
 
   def update_auxiliary(%AuxiliarySchema{} = auxiliary, attrs, year, month) do
+    attrs = load_xml_id_edit(attrs)
+    xml_b64 = if Map.has_key?(attrs, :xml_b64), do: attrs.xml_b64, else: GenericFunctions.to_string_empty
     auxiliary
     |> AuxiliarySchema.changeset(attrs)
     |> Repo.update(prefix: PrefixFormatter.get_prefix(year, month))
+    |> case do
+      {:ok, aux} ->
+        if aux.xml_id != nil and xml_b64 != "" do
+          save_in_alexandria(xml_b64, attrs.xml_id, attrs.xml_name)
+          aux
+        end
+        aux
+      {:error, aux} -> aux
+    end
   end
 
   @doc """
