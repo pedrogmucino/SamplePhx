@@ -28,4 +28,6 @@ defmodule AccountingSystem.GenericFunctions do
 
   def to_binary_empty, do: <<>>
 
+  def string_concat(text_a, text_b), do: text_a <> text_b
+
 end
