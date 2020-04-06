@@ -35,7 +35,7 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
               <div class="relative mb-3">
                 <select name="account_from" class="focus:outline-none focus:bg-white focus:border-blue-500 block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded leading-tight" id="option-type">
                   <%= for item <- @details_accounts do %>
-                    <option><%= item.key %></option>
+                    <option value=<%= List.first(item.key)%>><%= item.key %></option>
                   <% end %>
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
@@ -46,7 +46,7 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
               <div class="relative mb-3">
                 <select name="account_to" class="focus:outline-none focus:bg-white focus:border-blue-500 block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded leading-tight" id="option-type">
                   <%= for item <- @details_accounts do %>
-                    <option><%= item.key %></option>
+                    <option value=<%= List.first(item.key)%>><%= item.key %></option>
                   <% end %>
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
@@ -96,6 +96,9 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
   end
 
   def handle_event("search_auxiliaries", params, socket) do
+    params |> IO.inspect(label:  " ---------------- > PARAMS ->  ")
+
+
     if params["period"] != " " do
       period = String.split(params["period"], " ")
       start_date = Date.from_iso8601!(List.first(period))
@@ -127,7 +130,7 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
 
   defp join_none_details_accounts(details_accounts) do
     none = %{
-      key: "Ninguna",
+      key: ["", "Ninguna"],
       req_xml: false,
       value: 0
     }
