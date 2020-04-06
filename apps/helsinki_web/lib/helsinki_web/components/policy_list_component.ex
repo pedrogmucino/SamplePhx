@@ -16,6 +16,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   alias AccountingSystemWeb.NotificationComponent
 
   require Logger
+  @errors_amount 12
 
   def mount(socket) do
     label_todos = add_todos(AccountingSystem.PolicyTipeHandler.list_policytypes)
@@ -455,7 +456,7 @@ defp send_result(false, excel_data), do: {:ok, excel_data}
 
   defp list_to_string(error) do
     error
-    |> Enum.take(12)
+    |> Enum.take(@errors_amount)
     |> Enum.map(fn x -> convert_to_string(List.first(x) + 1) <> ", " end)
     |> List.to_string()
     |> final_format(error)
@@ -463,7 +464,7 @@ defp send_result(false, excel_data), do: {:ok, excel_data}
   end
 
   defp final_format(text, error_list) do
-    if Enum.count(error_list) > 12 do
+    if Enum.count(error_list) > @errors_amount do
       text
       |> Generic.string_concat("...")
     else
