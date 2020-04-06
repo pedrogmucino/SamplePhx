@@ -437,7 +437,7 @@ defp send_result(false, excel_data), do: {:ok, excel_data}
 
   #******************************VALIDATE CONCEPT*************************************
   defp nonexisting_concept([], data), do: {:ok, data}
-  defp nonexisting_concept(error, _), do: {:error, "Error en lineas: <br> #{List.to_string(Enum.map(error, fn x -> convert_to_string(List.first(x)) <> " <br> " end))} Tienen conceptos vacíos"}
+  defp nonexisting_concept(error, _), do: {:error, "Error en lineas: <br> #{list_to_string(error)} Tienen conceptos vacíos"}
 
   #******************************VALIDATE CREDIT AND DEBIT*************************************
   defp just_one_value(val, debit) when (val == nil or val == 0) and debit >= 0, do: true
@@ -446,6 +446,30 @@ defp send_result(false, excel_data), do: {:ok, excel_data}
   defp evaluate_debit_credit([], data), do: {:ok, data}
   defp evaluate_debit_credit(error, _), do: {:error, "Error en lineas: <br> #{List.to_string(Enum.map(error, fn x -> convert_to_string(List.first(x)) <> " <br> " end))} Los valores en debe y haber son mayores a cero o tienen valores incorrectos, favor de revisar"}
 
+  defp list_to_string(error) do
+    error
+    |> IO.inspect(label: "----------------------------------->CUANDO LLEGA")
+    |> Enum.take(12)
+    |> Enum.map(fn x -> convert_to_string(List.first(x) + 1) <> ", " end)
+    |> List.to_string()
+    |> check_maximum(error)
+    |> string_concat(" <br> ")
+    |> IO.inspect(label: "------------------------------------>CUANDO SE VA")
+  end
+
+  defp string_concat(text_a, text_b) do
+    text_a <> text_b
+  end
+
+  defp check_maximum(text, error_list) do
+    if Enum.count(error_list) > 12 do
+      text
+      |> string_concat("...")
+    else
+      text_length = String.length(text) - 3
+      String.slice(text, 0..text_length)
+    end
+  end
 
   #******************************Convert to MAP And validate values*********************
   defp create_map(data) do
