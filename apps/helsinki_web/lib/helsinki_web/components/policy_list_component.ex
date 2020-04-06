@@ -452,19 +452,15 @@ defp send_result(false, excel_data), do: {:ok, excel_data}
     |> Enum.take(12)
     |> Enum.map(fn x -> convert_to_string(List.first(x) + 1) <> ", " end)
     |> List.to_string()
-    |> check_maximum(error)
-    |> string_concat(" <br> ")
+    |> final_format(error)
+    |> Generic.string_concat(" <br> ")
     |> IO.inspect(label: "------------------------------------>CUANDO SE VA")
   end
 
-  defp string_concat(text_a, text_b) do
-    text_a <> text_b
-  end
-
-  defp check_maximum(text, error_list) do
+  defp final_format(text, error_list) do
     if Enum.count(error_list) > 12 do
       text
-      |> string_concat("...")
+      |> Generic.string_concat("...")
     else
       text_length = String.length(text) - 3
       String.slice(text, 0..text_length)
