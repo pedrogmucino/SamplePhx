@@ -13,7 +13,9 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
        list_auxiliaries: nil,
        details_accounts: join_none_details_accounts(get_details_accounts()),
        periods: join_none_period(get_periods()),
-       period_selected: 0
+       period_selected: 0,
+       account_from_selected: 0,
+       account_to_selected: 0
      )}
   end
 
@@ -36,7 +38,7 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
               <div class="relative mb-3">
                 <select name="account_from" class="focus:outline-none focus:bg-white focus:border-blue-500 block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded leading-tight" id="option-type">
                   <%= for item <- @details_accounts do %>
-                    <option value=<%= List.first(item.key)%>><%= item.key %></option>
+                    <option <%= if @account_from_selected == item.value, do: 'selected' %> value="<%= item.value %> <%= List.first(item.key)%>"  ><%= item.key %></option>
                   <% end %>
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
@@ -47,7 +49,7 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
               <div class="relative mb-3">
                 <select name="account_to" class="focus:outline-none focus:bg-white focus:border-blue-500 block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded leading-tight" id="option-type">
                   <%= for item <- @details_accounts do %>
-                    <option value=<%= List.first(item.key)%>><%= item.key %></option>
+                    <option <%= if @account_to_selected == item.value, do: 'selected' %> value="<%= item.value %> <%= List.first(item.key)%>" ><%= item.key %></option>
                   <% end %>
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
@@ -97,22 +99,25 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
   end
 
   def handle_event("search_auxiliaries", params, socket) do
-    period_id =
-      if params["period"] != " ", do: Enum.at(String.split(params["period"]), 0) |> String.to_integer, else: 0
+    params |> IO.inspect(label: "  ------< --<-<-<-<-<-< PARAMS")
+    period_selected_id = Enum.at(String.split(params["period"]), 0) |> String.to_integer()
 
     start_date =
-      if params["period"] != " ",
+      if period_selected_id > 0,
         do: Date.from_iso8601!(Enum.at(String.split(params["period"]), 1)),
         else: Date.from_iso8601!(params["start_date"])
 
     end_date =
-      if params["period"] != " ",
+      if period_selected_id > 0,
         do: Date.from_iso8601!(Enum.at(String.split(params["period"]), 2)),
         else: Date.from_iso8601!(params["end_date"])
 
-    if params["account_from"] != "" && params["account_to"] != "" do
-      account_from = params["account_from"]
-      account_to = params["account_to"]
+    account_from_selected_id = Enum.at(String.split(params["account_from"]), 0) |> String.to_integer()
+    account_to_selected_id = Enum.at(String.split(params["account_to"]), 0) |> String.to_integer()
+
+    if account_from_selected_id > 0 && account_to_selected_id > 0 do
+      account_from = Enum.at(String.split(params["account_from"]), 1)
+      account_to = Enum.at(String.split(params["account_to"]), 1)
 
       result =
         AccountingSystem.AuxiliaryHandler.get_aux_report(
@@ -122,10 +127,23 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
           account_to
         )
 
-      {:noreply, assign(socket, list_auxiliaries: result, period_selected: period_id)}
+      {:noreply,
+       assign(socket,
+         list_auxiliaries: result,
+         period_selected: period_selected_id,
+         account_from_selected: account_from_selected_id,
+         account_to_selected: account_to_selected_id
+       )}
     else
       result = AccountingSystem.AuxiliaryHandler.get_aux_report(start_date, end_date)
-      {:noreply, assign(socket, list_auxiliaries: result, period_selected: period_id)}
+
+      {:noreply,
+       assign(socket,
+         list_auxiliaries: result,
+         period_selected: period_selected_id,
+         account_from_selected: account_from_selected_id,
+         account_to_selected: account_to_selected_id
+       )}
     end
   end
 
