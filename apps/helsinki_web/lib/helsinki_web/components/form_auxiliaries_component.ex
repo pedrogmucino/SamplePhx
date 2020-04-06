@@ -4,9 +4,10 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
   """
   use Phoenix.LiveComponent
   use Phoenix.HTML
+  alias AccountingSystem.PeriodHandler, as: Period
 
   def mount(socket) do
-    {:ok, assign(socket, list_auxiliaries: nil)}
+    {:ok, assign(socket, list_auxiliaries: nil, periods: get_periods())}
   end
 
   def update(_attrs, socket) do
@@ -58,8 +59,9 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
               <label class="block"><b>Periodo</b></label>
               <div class="relative mb-3">
                 <select name="period" class="focus:outline-none focus:bg-white focus:border-blue-500 block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded leading-tight" id="option-type">
-                  <option value="A">EJEMPLO 1</option>
-                  <option value="D">EJEMPLO 2</option>
+                  <%= for item <- @periods do %>
+                    <option value="<%= item.start_date %> <%= item.end_date %>"><%= item.name %></option>
+                  <% end %>
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                   <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
@@ -86,9 +88,15 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
   end
 
   def handle_event("search_auxiliaries", params, socket) do
+    period = String.split(params["period"], " ")
+    List.first(period) |> IO.inspect(label: " ------------------ <> > > START")
+    List.last(period) |> IO.inspect(label: " ------------------ <> > > END ")
     start_date = Date.from_iso8601!(params["start_date"])
     end_date = Date.from_iso8601!(params["end_date"])
     result = AccountingSystem.AuxiliaryHandler.get_aux_report(start_date, end_date)
     {:noreply, assign(socket, list_auxiliaries: result)}
   end
+
+  defp get_periods(), do: Period.list_periods() |> Enum.sort_by(& &1.id)
+
 end
