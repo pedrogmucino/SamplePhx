@@ -357,11 +357,15 @@ defmodule AccountingSystemWeb.PolicyListComponent do
 
   defp add_excel_index({:error, message}), do: {:error, message}
   defp add_excel_index({:ok, data}) do
-    {:ok, data
+    if Enum.empty?(data) do
+      {:error, "Archivo sin partidas, favor de revisar"}
+    else
+      {:ok, data
           |> Stream.with_index(1)
           |> Enum.to_list()
           |> Enum.map(fn tuple -> add_index_to_list(tuple) end)
-  }
+        }
+    end
   end
 
   defp validate_accounts({:error, message}), do: {:error, message}
