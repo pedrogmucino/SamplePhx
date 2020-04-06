@@ -9,7 +9,8 @@ defmodule AccountingSystemWeb.AuxiliariesComponent do
     {:ok, assign(socket, list_auxiliaries: get_auxiliaries())}
   end
 
-  def update(_attrs, socket) do
+  def update(attrs, socket) do
+    attrs |> IO.inspect(label: " ---------------- > What arrived here ?? ")
     {:ok, socket}
   end
 

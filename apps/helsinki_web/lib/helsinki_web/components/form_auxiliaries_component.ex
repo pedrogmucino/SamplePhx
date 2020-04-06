@@ -6,7 +6,7 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
   use Phoenix.HTML
 
   def mount(socket) do
-    {:ok, socket}
+    {:ok, assign(socket, list_auxiliaries: [])}
   end
 
   def update(_attrs, socket) do
@@ -80,11 +80,15 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
         </form>
 
       </div>
+
+      <%= if @list_auxiliaries != [], do: live_component(@socket, AccountingSystemWeb.AuxiliariesComponent, id: "auxiliaries", list_auxiliaries: @list_auxiliaries) %>
     """
   end
 
   def handle_event("search_auxiliaries", params, socket) do
-    params |> IO.inspect(label: " ----------- > > > > > > > >")
-    {:noreply, socket}
+    start_date = Date.from_iso8601!(params["start_date"])
+    end_date = Date.from_iso8601!(params["end_date"])
+    result = AccountingSystem.AuxiliaryHandler.get_aux_report(start_date, end_date)
+    {:noreply, assign(socket, list_auxiliaries: result)}
   end
 end
