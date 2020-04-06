@@ -15,6 +15,9 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   }
   alias AccountingSystemWeb.NotificationComponent
 
+  require Logger
+  @errors_amount 12
+
   def mount(socket) do
     label_todos = add_todos(AccountingSystem.PolicyTipeHandler.list_policytypes)
     {:ok, assign(socket,
@@ -357,11 +360,16 @@ defmodule AccountingSystemWeb.PolicyListComponent do
 
   defp add_excel_index({:error, message}), do: {:error, message}
   defp add_excel_index({:ok, data}) do
-    {:ok, data
+    Logger.debug("----------------------------->DATA: #{inspect(data)}")
+    if Enum.empty?(data) do
+      {:error, "Archivo sin partidas, favor de revisar"}
+    else
+      {:ok, data
           |> Stream.with_index(1)
           |> Enum.to_list()
           |> Enum.map(fn tuple -> add_index_to_list(tuple) end)
-  }
+        }
+    end
   end
 
   defp validate_accounts({:error, message}), do: {:error, message}
@@ -448,7 +456,7 @@ defp send_result(false, excel_data), do: {:ok, excel_data}
 
   defp list_to_string(error) do
     error
-    |> Enum.take(12)
+    |> Enum.take(@errors_amount)
     |> Enum.map(fn x -> convert_to_string(List.first(x) + 1) <> ", " end)
     |> List.to_string()
     |> final_format(error)
@@ -456,7 +464,7 @@ defp send_result(false, excel_data), do: {:ok, excel_data}
   end
 
   defp final_format(text, error_list) do
-    if Enum.count(error_list) > 12 do
+    if Enum.count(error_list) > @errors_amount do
       text
       |> Generic.string_concat("...")
     else
