@@ -15,7 +15,7 @@ defmodule AccountingSystemWeb.AuxiliariesComponent do
 
   def render(assigns) do
     ~L"""
-      <div class="mt-16 h-auto w-full bg-white">
+      <div class="mt-16 w-full bg-white h-hoch-93 overflow-y-scroll">
 
         <div class="inline-block bg-blue-700 text-white px-6 py-4 w-full">
           <button class="ml-mar-360 -mr-2 -mt-4 text-white font-bold rounded shadow">
