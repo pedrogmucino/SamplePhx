@@ -15,6 +15,8 @@ defmodule AccountingSystemWeb.PolicyListComponent do
   }
   alias AccountingSystemWeb.NotificationComponent
 
+  require Logger
+
   def mount(socket) do
     label_todos = add_todos(AccountingSystem.PolicyTipeHandler.list_policytypes)
     {:ok, assign(socket,
@@ -357,6 +359,7 @@ defmodule AccountingSystemWeb.PolicyListComponent do
 
   defp add_excel_index({:error, message}), do: {:error, message}
   defp add_excel_index({:ok, data}) do
+    Logger.debug("----------------------------->DATA: #{inspect(data)}")
     if Enum.empty?(data) do
       {:error, "Archivo sin partidas, favor de revisar"}
     else
