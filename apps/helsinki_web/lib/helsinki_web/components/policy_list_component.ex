@@ -327,7 +327,15 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     if socket.assigns.filter_activated do
       {:noreply, assign(socket, change: !socket.assigns.change, filter_activated: false, message: nil, error: nil, policy_list: socket.assigns.non_filtered)}
     else
-      {:noreply, assign(socket, change: !socket.assigns.change, filter_activated: true, message: nil, error: nil, non_filtered: socket.assigns.policy_list, policy_list: Enum.filter(socket.assigns.policy_list, fn x -> x.pending_xml end))}
+      {:noreply,
+      assign(socket,
+      change: !socket.assigns.change,
+      filter_activated: true,
+      message: nil,
+      error: nil,
+      non_filtered: socket.assigns.policy_list,
+      policy_list: Enum.filter(socket.assigns.policy_list, fn x -> x.pending_xml and x.status end)
+      )}
     end
   end
 
