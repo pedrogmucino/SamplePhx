@@ -427,7 +427,7 @@ defp send_result(false, excel_data), do: {:ok, excel_data}
 #********************************VALIDATE ACCOUNTS********************************
   defp exist_account_in(row, data), do: Enum.any?(data, fn x -> Enum.at(x, 1) == Enum.at(row, 1) end)
   defp nonexisting_accounts([], data), do: {:ok, data}
-  defp nonexisting_accounts(error, _), do: {:error, "Error en lineas: <br> #{List.to_string(Enum.map(error, fn x -> convert_to_string(List.first(x)) <> " <br> " end))} Las cuentas no existen en la base o no son cuentas de detalle. Favor de revisar"}
+  defp nonexisting_accounts(error, _), do: {:error, "Error en lineas: <br> #{list_to_string(error)} Las cuentas no existen en la base o no son cuentas de detalle. Favor de revisar"}
   defp fill_ids({:error, message}, _), do: {:error, message}
   defp fill_ids({:ok, data}, db_data), do: {:ok, Enum.map(data, fn x -> complete_values(x) ++ [get_id_from_base(x, db_data)] end)}
   defp get_id_from_base(x, db_data), do: Enum.at(Enum.find(db_data, fn row -> Enum.at(row, 1) == Enum.at(x, 1) end), 0)
@@ -444,17 +444,15 @@ defp send_result(false, excel_data), do: {:ok, excel_data}
   defp just_one_value(credit, val) when (val == nil or val == 0) and credit >= 0, do: true
   defp just_one_value(_, _), do: false
   defp evaluate_debit_credit([], data), do: {:ok, data}
-  defp evaluate_debit_credit(error, _), do: {:error, "Error en lineas: <br> #{List.to_string(Enum.map(error, fn x -> convert_to_string(List.first(x)) <> " <br> " end))} Los valores en debe y haber son mayores a cero o tienen valores incorrectos, favor de revisar"}
+  defp evaluate_debit_credit(error, _), do: {:error, "Error en lineas: <br> #{list_to_string(error)} Los valores en debe y haber son mayores a cero o tienen valores incorrectos, favor de revisar"}
 
   defp list_to_string(error) do
     error
-    |> IO.inspect(label: "----------------------------------->CUANDO LLEGA")
     |> Enum.take(12)
     |> Enum.map(fn x -> convert_to_string(List.first(x) + 1) <> ", " end)
     |> List.to_string()
     |> final_format(error)
-    |> Generic.string_concat(" <br> ")
-    |> IO.inspect(label: "------------------------------------>CUANDO SE VA")
+    |> Generic.string_concat("<br>")
   end
 
   defp final_format(text, error_list) do
