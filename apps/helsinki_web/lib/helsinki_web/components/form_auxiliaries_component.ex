@@ -71,7 +71,7 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
               <div class="relative mb-3">
                 <select name="period" class="focus:outline-none focus:bg-white focus:border-blue-500 block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded leading-tight" id="option-type">
                   <%= for item <- @periods do %>
-                    <option <%= if @period_selected == item.id, do: 'selected' %> value="<%= item.id %> <%= item.start_date %> <%= item.end_date %>"><%= item.name %></option>
+                    <option phx-target="#formauxiliaries" phx-click="period_chosen" <%= if @period_selected == item.id, do: 'selected' %> value="<%= item.id %> <%= item.start_date %> <%= item.end_date %>"><%= item.name %></option>
                   <% end %>
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
@@ -99,7 +99,6 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
   end
 
   def handle_event("search_auxiliaries", params, socket) do
-    params |> IO.inspect(label: "  ------< --<-<-<-<-<-< PARAMS")
     period_selected_id = Enum.at(String.split(params["period"]), 0) |> String.to_integer()
 
     start_date =
@@ -145,6 +144,15 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
          account_to_selected: account_to_selected_id
        )}
     end
+  end
+
+  def handle_event("period_chosen", params, socket) do
+    period_selected_id = Enum.at(String.split(params["value"]), 0) |> String.to_integer()
+
+    {:noreply,
+     assign(socket,
+       period_selected: period_selected_id
+     )}
   end
 
   defp get_periods(), do: Period.list_periods() |> Enum.sort_by(& &1.id)
