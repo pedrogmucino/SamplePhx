@@ -12,7 +12,8 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
      assign(socket,
        list_auxiliaries: nil,
        details_accounts: join_none_details_accounts(get_details_accounts()),
-       periods: join_none_period(get_periods())
+       periods: join_none_period(get_periods()),
+       period_selected: 0
      )}
   end
 
@@ -68,7 +69,7 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
               <div class="relative mb-3">
                 <select name="period" class="focus:outline-none focus:bg-white focus:border-blue-500 block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded leading-tight" id="option-type">
                   <%= for item <- @periods do %>
-                    <option value="<%= item.start_date %> <%= item.end_date %>"><%= item.name %></option>
+                    <option <%= if @period_selected == item.id, do: 'selected' %> value="<%= item.id %> <%= item.start_date %> <%= item.end_date %>"><%= item.name %></option>
                   <% end %>
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
@@ -96,14 +97,17 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
   end
 
   def handle_event("search_auxiliaries", params, socket) do
+    period_id =
+      if params["period"] != " ", do: Enum.at(String.split(params["period"]), 0) |> String.to_integer, else: 0
+
     start_date =
       if params["period"] != " ",
-        do: Date.from_iso8601!(List.first(String.split(params["period"]))),
+        do: Date.from_iso8601!(Enum.at(String.split(params["period"]), 1)),
         else: Date.from_iso8601!(params["start_date"])
 
     end_date =
       if params["period"] != " ",
-        do: Date.from_iso8601!(List.last(String.split(params["period"]))),
+        do: Date.from_iso8601!(Enum.at(String.split(params["period"]), 2)),
         else: Date.from_iso8601!(params["end_date"])
 
     if params["account_from"] != "" && params["account_to"] != "" do
@@ -118,10 +122,10 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
           account_to
         )
 
-      {:noreply, assign(socket, list_auxiliaries: result)}
+      {:noreply, assign(socket, list_auxiliaries: result, period_selected: period_id)}
     else
       result = AccountingSystem.AuxiliaryHandler.get_aux_report(start_date, end_date)
-      {:noreply, assign(socket, list_auxiliaries: result)}
+      {:noreply, assign(socket, list_auxiliaries: result, period_selected: period_id)}
     end
   end
 
