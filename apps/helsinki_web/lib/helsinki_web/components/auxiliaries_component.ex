@@ -6,7 +6,7 @@ defmodule AccountingSystemWeb.AuxiliariesComponent do
   use Phoenix.HTML
 
   def mount(socket) do
-    {:ok, socket}
+    {:ok, assign(socket, list_auxiliaries: get_auxiliaries())}
   end
 
   def update(_attrs, socket) do
@@ -15,8 +15,64 @@ defmodule AccountingSystemWeb.AuxiliariesComponent do
 
   def render(assigns) do
     ~L"""
-    <div class="mt-16 ml-16"> AUX </div>
+      <div class="mt-16 ml-16 h-auto w-full bg-white">
+
+        <div class="inline-block bg-blue-700 text-white px-6 py-4 w-full">
+          <button class="ml-mar-380 -mr-2 -mt-4 text-white font-bold rounded shadow">
+            <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="h-5 w-5 ml-auto">
+              <path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z" class=""></path>
+            </svg>
+          </button>
+        </div>
+
+      <div class="m-4 mr-4 mt-4 mb-4 border-t-2 border-gray-300"></div>
+        <table class="table-auto">
+          <thead>
+            <tr>
+              <th class="w-48 px-4 py-2">Tipo Póliza</th>
+              <th class="w-40 px-4 py-2">Número Póliza</th>
+              <th class="w-48 px-4 py-2">Fecha</th>
+              <th class="w-64 px-4 py-2">Cuenta Detalle</th>
+              <th class="w-40 px-4 py-2">Caja</th>
+              <th class="w-40 px-4 py-2">Abono</th>
+              <th class="w-80 px-4 py-2">Concepto</th>
+            </tr>
+          </thead>
+        </table>
+        <div class="ml-4 mr-4 mb-4 border-solid border-2 border-gray-300 p-4 rounded">
+          <%= for item <- @list_auxiliaries do %>
+            <div class="py-1">
+              <label><b><%= item.name %></b></label>
+              <div class="bg-gray-300 border rounded relative">
+                <%= for item2 <- item.details do %>
+                  <div>
+                    <div class="inline-flex w-48 px-2 py-2"><%= item2.policy_type %></div>
+                    <div class="inline-flex w-40 px-2 py-2"><%= item2.number %></div>
+                    <div class="inline-flex w-48 px-2 py-2"><%= item2.date %></div>
+                    <div class="inline-flex w-64 px-2 py-2"><%= item.code %></div>
+                    <div class="inline-flex w-40 px-2 py-2 justify-end"><%= if item2.auxiliary_type == "D", do: item2.amount %></div>
+                    <div class="inline-flex w-40 px-2 py-2 justify-end"><%= if item2.auxiliary_type == "H", do: item2.amount %></div>
+                    <div class="inline-flex w-80 px-2 py-2"><%= item2.concept %></div>
+                  </div>
+                <% end %>
+                <div>
+                  <div class="inline-flex w-200 px-4 py-2"></div>
+                  <div class="inline-flex w-40 px-4 py-2 justify-end ml-5"><%= item.debe %></div>
+                  <div class="inline-flex w-40 px-4 py-2 justify-end"><%= item.haber %></div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
     """
+  end
+
+  defp get_auxiliaries() do
+    start_date = Date.from_iso8601!("2020-03-01")
+    end_date = Date.from_iso8601!("2020-04-03")
+    AccountingSystem.AuxiliaryHandler.get_aux_report(start_date, end_date)
+    |> IO.inspect(label: "true list")
   end
 
 end
