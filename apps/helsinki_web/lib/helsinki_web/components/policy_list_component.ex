@@ -327,7 +327,15 @@ defmodule AccountingSystemWeb.PolicyListComponent do
     if socket.assigns.filter_activated do
       {:noreply, assign(socket, change: !socket.assigns.change, filter_activated: false, message: nil, error: nil, policy_list: socket.assigns.non_filtered)}
     else
-      {:noreply, assign(socket, change: !socket.assigns.change, filter_activated: true, message: nil, error: nil, non_filtered: socket.assigns.policy_list, policy_list: Enum.filter(socket.assigns.policy_list, fn x -> x.pending_xml end))}
+      {:noreply,
+      assign(socket,
+      change: !socket.assigns.change,
+      filter_activated: true,
+      message: nil,
+      error: nil,
+      non_filtered: socket.assigns.policy_list,
+      policy_list: Enum.filter(socket.assigns.policy_list, fn x -> x.pending_xml and x.status end)
+      )}
     end
   end
 
@@ -471,41 +479,6 @@ defp send_result(false, excel_data), do: {:ok, excel_data}
   defp error_or_pass(data, socket), do: {:noreply, assign(socket, pollys: Map.merge(socket.assigns.pollys, data.pollys), arr: data.arr)}
 
   #********************************END OF LOAD EXCEL************************************************************************^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-  #**************************************************CALCULATING BALANCE*****************************************************************************
-  def get_account_tree() do
-    all_active = Enum.map(Account.get_active_accounts(), fn acc -> tree_map(acc) end)
-    all_active
-      |> get_root_accounts
-      |> Enum.map(fn acc -> get_childs(acc, all_active) end)
-  end
-  def get_account_tree_range(first_account, last_account) do
-    all_active = Enum.map(Account.get_active_accounts_range(first_account, last_account), fn acc -> tree_map(acc) end)
-    all_active
-      |> get_root_accounts
-      |> Enum.map(fn acc -> get_childs(acc, all_active) end)
-  end
-
-  defp get_root_accounts(accounts), do: Enum.filter(accounts, fn acc -> acc.parent_account == -1 end)
-  defp tree_map(root) do
-    Map.new()
-      |> Map.put(:id, Enum.at(root, 0))
-      |> Map.put(:account, Enum.at(root, 1))
-      |> Map.put(:description, Enum.at(root, 2))
-      |> Map.put(:parent_account, Enum.at(root, 3))
-      |> Map.put(:root_account, Enum.at(root, 4))
-  end
-  defp get_childs(_, []), do: []
-  defp get_childs(root, accounts) do
-    childs = Enum.filter(accounts, fn acc -> acc.parent_account == root.id end)
-    no_childs = Enum.reject(accounts, fn acc -> acc.parent_account == root.id end)
-    root |> Map.put(:childs, Enum.map(childs, fn acc -> get_childs(acc, no_childs) end))
-  end
-
-  def get_debit_credit_detail(start_date, end_date, first_account, last_account) do
-    Auxiliar.get_aux_report(Date.from_iso8601!(start_date), Date.from_iso8601!(end_date), first_account, last_account)
-  end
-  #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^END OF CALCULATING BALANCE^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   defp totals("", params, socket) do
     params = Generic.string_map_to_atom(params)
