@@ -5,9 +5,15 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
   use Phoenix.LiveComponent
   use Phoenix.HTML
   alias AccountingSystem.PeriodHandler, as: Period
+  alias AccountingSystem.AccountHandler, as: Account
 
   def mount(socket) do
-    {:ok, assign(socket, list_auxiliaries: nil, periods: join_none_period(get_periods()))}
+    {:ok,
+     assign(socket,
+       list_auxiliaries: nil,
+       details_accounts: join_none_details_accounts(get_details_accounts()),
+       periods: join_none_period(get_periods())
+     )}
   end
 
   def update(_attrs, socket) do
@@ -28,8 +34,9 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
               <label class="block"><b>Desde</b></label>
               <div class="relative mb-3">
                 <select name="account_from" class="focus:outline-none focus:bg-white focus:border-blue-500 block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded leading-tight" id="option-type">
-                  <option value="A">EJEMPLO 1</option>
-                  <option value="D">EJEMPLO 2</option>
+                  <%= for item <- @details_accounts do %>
+                    <option><%= item.key %></option>
+                  <% end %>
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                   <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
@@ -38,8 +45,9 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
               <label class="block"><b>Hasta</b></label>
               <div class="relative mb-3">
                 <select name="account_to" class="focus:outline-none focus:bg-white focus:border-blue-500 block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded leading-tight" id="option-type">
-                  <option value="A">EJEMPLO 3</option>
-                  <option value="D">EJEMPLO 4</option>
+                  <%= for item <- @details_accounts do %>
+                    <option><%= item.key %></option>
+                  <% end %>
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                   <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
@@ -115,5 +123,15 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
     List.flatten(periods, [none]) |> Enum.sort_by(& &1.id)
   end
 
+  defp get_details_accounts(), do: Account.search_detail_account("")
 
+  defp join_none_details_accounts(details_accounts) do
+    none = %{
+      key: "Ninguna",
+      req_xml: false,
+      value: 0
+    }
+
+    List.flatten(details_accounts, [none]) |> Enum.sort_by(& &1.value)
+  end
 end
