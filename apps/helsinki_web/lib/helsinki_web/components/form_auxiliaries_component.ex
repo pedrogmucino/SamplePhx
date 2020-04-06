@@ -6,7 +6,7 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
   use Phoenix.HTML
 
   def mount(socket) do
-    {:ok, assign(socket, list_auxiliaries: [])}
+    {:ok, assign(socket, list_auxiliaries: nil)}
   end
 
   def update(_attrs, socket) do
@@ -81,7 +81,7 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
 
       </div>
 
-      <%= if @list_auxiliaries != [], do: live_component(@socket, AccountingSystemWeb.AuxiliariesComponent, id: "auxiliaries", list_auxiliaries: @list_auxiliaries) %>
+      <%= if @list_auxiliaries != nil, do: live_component(@socket, AccountingSystemWeb.AuxiliariesComponent, id: "auxiliaries", list_auxiliaries: @list_auxiliaries) %>
     """
   end
 

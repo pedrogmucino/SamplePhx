@@ -6,12 +6,11 @@ defmodule AccountingSystemWeb.AuxiliariesComponent do
   use Phoenix.HTML
 
   def mount(socket) do
-    {:ok, assign(socket, list_auxiliaries: get_auxiliaries())}
+    {:ok, assign(socket, list_auxiliaries: [])}
   end
 
   def update(attrs, socket) do
-    attrs |> IO.inspect(label: " ---------------- > What arrived here ?? ")
-    {:ok, socket}
+    {:ok, assign(socket, list_auxiliaries: attrs.list_auxiliaries)}
   end
 
   def render(assigns) do
@@ -67,13 +66,6 @@ defmodule AccountingSystemWeb.AuxiliariesComponent do
         </div>
       </div>
     """
-  end
-
-  defp get_auxiliaries() do
-    start_date = Date.from_iso8601!("2020-03-01")
-    end_date = Date.from_iso8601!("2020-04-03")
-    AccountingSystem.AuxiliaryHandler.get_aux_report(start_date, end_date)
-    |> IO.inspect(label: "true list")
   end
 
 end
