@@ -7,7 +7,7 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
   alias AccountingSystem.PeriodHandler, as: Period
 
   def mount(socket) do
-    {:ok, assign(socket, list_auxiliaries: nil, periods: get_periods())}
+    {:ok, assign(socket, list_auxiliaries: nil, periods: join_none_period(get_periods()))}
   end
 
   def update(_attrs, socket) do
@@ -88,15 +88,32 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
   end
 
   def handle_event("search_auxiliaries", params, socket) do
-    period = String.split(params["period"], " ")
-    List.first(period) |> IO.inspect(label: " ------------------ <> > > START")
-    List.last(period) |> IO.inspect(label: " ------------------ <> > > END ")
-    start_date = Date.from_iso8601!(params["start_date"])
-    end_date = Date.from_iso8601!(params["end_date"])
-    result = AccountingSystem.AuxiliaryHandler.get_aux_report(start_date, end_date)
-    {:noreply, assign(socket, list_auxiliaries: result)}
+    if params["period"] != " " do
+      period = String.split(params["period"], " ")
+      start_date = Date.from_iso8601!(List.first(period))
+      end_date = Date.from_iso8601!(List.last(period))
+      result = AccountingSystem.AuxiliaryHandler.get_aux_report(start_date, end_date)
+      {:noreply, assign(socket, list_auxiliaries: result)}
+    else
+      start_date = Date.from_iso8601!(params["start_date"])
+      end_date = Date.from_iso8601!(params["end_date"])
+      result = AccountingSystem.AuxiliaryHandler.get_aux_report(start_date, end_date)
+      {:noreply, assign(socket, list_auxiliaries: result)}
+    end
   end
 
   defp get_periods(), do: Period.list_periods() |> Enum.sort_by(& &1.id)
+
+  defp join_none_period(periods) do
+    none = %AccountingSystem.PeriodSchema{
+      id: 0,
+      name: "Ninguno",
+      start_date: nil,
+      end_date: nil
+    }
+
+    List.flatten(periods, [none]) |> Enum.sort_by(& &1.id)
+  end
+
 
 end
