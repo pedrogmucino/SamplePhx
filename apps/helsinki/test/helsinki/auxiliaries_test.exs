@@ -19,6 +19,7 @@ defmodule AccountingSystem.AuxiliariesTest do
     @valid_policy_type_attrs %{identifier: "G", name: "Gastos", classat: 1}
     @update_attrs %{concept: "other concept", mxn_amount: 150, amount: 150, department: 2, xml_id: nil, xml_name: "", xml_b64: nil}
     @invalid_attrs %{policy_number: nil, id_account: nil, concept: nil, debit_credit: nil, mxn_amount: 120.5, amount: 120.5, department: 1, counterpart: "some counterpart", cost_center: 1, group: 1, iduuid: 1, exchange_rate: 1, policy_id: 1, xml_id: nil, xml_name: "", xml_b64: nil}
+    @valid_parmas %{"account" => "3-001-000-000", "aux_concept" => "xxx", "credit" => "0", "debit" => "0", "department" => "1", "id_account" => "170", "id_aux" => "", "name" => "Capital Social", "req_xml" => "false", "xml_b64" => "", "xml_id" => "", "xml_name" => "", "xml_name_file" => ""}
     @valid_year 2020
     @valid_month 4
 
@@ -128,6 +129,15 @@ defmodule AccountingSystem.AuxiliariesTest do
       auxiliary
     end
 
+    test "get_auxiliary_by_policy_id/1 returns a list with auxiliaries related with an specific policy_id" do
+      auxiliary = auxiliary_fixture()
+      result = List.first(AuxiliaryHandler.get_auxiliary_by_policy_id(auxiliary.policy_id))
+      assert result.amount == auxiliary.amount
+      assert result.number == auxiliary.policy_number
+      assert result.policy_id == auxiliary.policy_id
+      assert result.id == auxiliary.id
+    end
+
     test "create_auxiliary/1 with valid data creates a auxiliary" do
       policy = policy_fixture()
       account = account_fixture()
@@ -213,6 +223,11 @@ defmodule AccountingSystem.AuxiliariesTest do
     test "change_auxiliary/1 returns a auxiliary changeset" do
       auxiliary = auxiliary_fixture()
       assert %Ecto.Changeset{} = AuxiliaryHandler.change_auxiliary(auxiliary)
+    end
+
+    test "validate_auxiliar/1 validate if tha auxiliary map is complete" do
+      {response, _params} = AuxiliaryHandler.validate_auxiliar(@valid_parmas)
+      assert response == :ok
     end
   end
 end
