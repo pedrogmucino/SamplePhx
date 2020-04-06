@@ -96,18 +96,30 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
   end
 
   def handle_event("search_auxiliaries", params, socket) do
-    params |> IO.inspect(label:  " ---------------- > PARAMS ->  ")
+    start_date =
+      if params["period"] != " ",
+        do: Date.from_iso8601!(List.first(String.split(params["period"]))),
+        else: Date.from_iso8601!(params["start_date"])
 
+    end_date =
+      if params["period"] != " ",
+        do: Date.from_iso8601!(List.last(String.split(params["period"]))),
+        else: Date.from_iso8601!(params["end_date"])
 
-    if params["period"] != " " do
-      period = String.split(params["period"], " ")
-      start_date = Date.from_iso8601!(List.first(period))
-      end_date = Date.from_iso8601!(List.last(period))
-      result = AccountingSystem.AuxiliaryHandler.get_aux_report(start_date, end_date)
+    if params["account_from"] != "" && params["account_to"] != "" do
+      account_from = params["account_from"]
+      account_to = params["account_to"]
+
+      result =
+        AccountingSystem.AuxiliaryHandler.get_aux_report(
+          start_date,
+          end_date,
+          account_from,
+          account_to
+        )
+
       {:noreply, assign(socket, list_auxiliaries: result)}
     else
-      start_date = Date.from_iso8601!(params["start_date"])
-      end_date = Date.from_iso8601!(params["end_date"])
       result = AccountingSystem.AuxiliaryHandler.get_aux_report(start_date, end_date)
       {:noreply, assign(socket, list_auxiliaries: result)}
     end
