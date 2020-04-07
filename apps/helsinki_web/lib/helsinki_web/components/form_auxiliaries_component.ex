@@ -107,19 +107,15 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
     if params["start_date"] != "" && params["end_date"] != "" do
       period_selected_id = Enum.at(String.split(params["period"]), 0) |> String.to_integer()
 
-      start_date =
-        if period_selected_id > 0,
-          do: Date.from_iso8601!(Enum.at(String.split(params["period"]), 1)),
-          else: Date.from_iso8601!(params["start_date"])
+      start_date = get_start_date(period_selected_id, params)
 
-      end_date =
-        if period_selected_id > 0,
-          do: Date.from_iso8601!(Enum.at(String.split(params["period"]), 2)),
-          else: Date.from_iso8601!(params["end_date"])
+      end_date = get_end_date(period_selected_id, params)
 
-      account_from_selected_id = Enum.at(String.split(params["account_from"]), 0) |> String.to_integer()
+      account_from_selected_id =
+        Enum.at(String.split(params["account_from"]), 0) |> String.to_integer()
 
-      account_to_selected_id = Enum.at(String.split(params["account_to"]), 0) |> String.to_integer()
+      account_to_selected_id =
+        Enum.at(String.split(params["account_to"]), 0) |> String.to_integer()
 
       if account_from_selected_id > 0 && account_to_selected_id > 0 do
         account_from = Enum.at(String.split(params["account_from"]), 1)
@@ -132,47 +128,55 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
             account_from,
             account_to
           )
-        Notification.set_timer_notification_error()
-        {:noreply,
-        assign(socket,
-          list_auxiliaries: (if result == [], do: nil, else: result),
-          period_selected: period_selected_id,
-          account_from_selected: account_from_selected_id,
-          account_to_selected: account_to_selected_id,
-          start_date: start_date,
-          end_date: end_date,
-          error: (if result == [], do: "No se encontraron datos con los parámetros ingresados", else: nil)
-        )}
-      else
-        first_date = ~D[2020-01-01]
-        start_date = (if start_date < first_date, do: first_date, else: start_date)
-        end_date = (if end_date > Date.utc_today(), do: Date.utc_today, else: end_date)
 
+        Notification.set_timer_notification_error()
+
+        {:noreply,
+         assign(socket,
+           list_auxiliaries: if(result == [], do: nil, else: result),
+           period_selected: period_selected_id,
+           account_from_selected: account_from_selected_id,
+           account_to_selected: account_to_selected_id,
+           start_date: start_date,
+           end_date: end_date,
+           error:
+             if(result == [],
+               do: "No se encontraron datos con los parámetros ingresados",
+               else: nil
+             )
+         )}
+      else
         result = AccountingSystem.AuxiliaryHandler.get_aux_report(start_date, end_date)
         Notification.set_timer_notification_error()
+
         {:noreply,
-        assign(socket,
-          list_auxiliaries: (if result == [], do: nil, else: result),
-          period_selected: period_selected_id,
-          account_from_selected: account_from_selected_id,
-          account_to_selected: account_to_selected_id,
-          start_date: start_date,
-          end_date: end_date,
-          error: (if result == [], do: "No se encontraron datos con los parámetros ingresados", else: nil)
-        )}
+         assign(socket,
+           list_auxiliaries: if(result == [], do: nil, else: result),
+           period_selected: period_selected_id,
+           account_from_selected: account_from_selected_id,
+           account_to_selected: account_to_selected_id,
+           start_date: start_date,
+           end_date: end_date,
+           error:
+             if(result == [],
+               do: "No se encontraron datos con los parámetros ingresados",
+               else: nil
+             )
+         )}
       end
     else
       Notification.set_timer_notification_error()
+
       {:noreply,
-      assign(socket,
-        list_auxiliaries: nil,
-        period_selected: 0,
-        account_from_selected: 0,
-        account_to_selected: 0,
-        start_date: "",
-        end_date: "",
-        error: "Parámetros de búsqueda incorrectos"
-      )}
+       assign(socket,
+         list_auxiliaries: nil,
+         period_selected: 0,
+         account_from_selected: 0,
+         account_to_selected: 0,
+         start_date: "",
+         end_date: "",
+         error: "Parámetros de búsqueda incorrectos"
+       )}
     end
   end
 
@@ -192,15 +196,15 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
 
   def handle_event("close", _params, socket) do
     {:noreply,
-      assign(socket,
-        list_auxiliaries: nil,
-        period_selected: 0,
-        account_from_selected: 0,
-        account_to_selected: 0,
-        start_date: "",
-        end_date: "",
-        error: nil
-      )}
+     assign(socket,
+       list_auxiliaries: nil,
+       period_selected: 0,
+       account_from_selected: 0,
+       account_to_selected: 0,
+       start_date: "",
+       end_date: "",
+       error: nil
+     )}
   end
 
   defp get_periods(), do: Period.list_periods() |> Enum.sort_by(& &1.id)
@@ -226,5 +230,23 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
     }
 
     List.flatten(details_accounts, [none]) |> Enum.sort_by(& &1.value)
+  end
+
+  defp get_start_date(period_selected_id, params) do
+    start_date =
+      if period_selected_id > 0,
+        do: Date.from_iso8601!(Enum.at(String.split(params["period"]), 1)),
+        else: Date.from_iso8601!(params["start_date"])
+
+    if start_date.year < 2020, do: ~D[2020-01-01], else: start_date
+  end
+
+  defp get_end_date(period_selected_id, params) do
+    end_date =
+      if period_selected_id > 0,
+        do: Date.from_iso8601!(Enum.at(String.split(params["period"]), 2)),
+        else: Date.from_iso8601!(params["end_date"])
+
+    if end_date > Date.utc_today(), do: Date.utc_today(), else: end_date
   end
 end
