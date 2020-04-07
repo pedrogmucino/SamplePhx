@@ -141,7 +141,7 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
           account_to_selected: account_to_selected_id,
           start_date: start_date,
           end_date: end_date,
-          error: (if result == [], do: "No existen datos", else: nil)
+          error: (if result == [], do: "No se encontraron datos con los parámetros ingresados", else: nil)
         )}
       else
         result = AccountingSystem.AuxiliaryHandler.get_aux_report(start_date, end_date)
@@ -154,7 +154,7 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
           account_to_selected: account_to_selected_id,
           start_date: start_date,
           end_date: end_date,
-          error: (if result == [], do: "No existen datos", else: nil)
+          error: (if result == [], do: "No se encontraron datos con los parámetros ingresados", else: nil)
         )}
       end
     else
