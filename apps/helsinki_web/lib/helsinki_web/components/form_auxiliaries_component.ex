@@ -101,51 +101,55 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
   end
 
   def handle_event("search_auxiliaries", params, socket) do
-    period_selected_id = Enum.at(String.split(params["period"]), 0) |> String.to_integer()
+    if params["start_date"] != "" && params["end_date"] != "" do
+      period_selected_id = Enum.at(String.split(params["period"]), 0) |> String.to_integer()
 
-    start_date =
-      if period_selected_id > 0,
-        do: Date.from_iso8601!(Enum.at(String.split(params["period"]), 1)),
-        else: Date.from_iso8601!(params["start_date"])
+      start_date =
+        if period_selected_id > 0,
+          do: Date.from_iso8601!(Enum.at(String.split(params["period"]), 1)),
+          else: Date.from_iso8601!(params["start_date"])
 
-    end_date =
-      if period_selected_id > 0,
-        do: Date.from_iso8601!(Enum.at(String.split(params["period"]), 2)),
-        else: Date.from_iso8601!(params["end_date"])
+      end_date =
+        if period_selected_id > 0,
+          do: Date.from_iso8601!(Enum.at(String.split(params["period"]), 2)),
+          else: Date.from_iso8601!(params["end_date"])
 
-    account_from_selected_id = Enum.at(String.split(params["account_from"]), 0) |> String.to_integer()
+      account_from_selected_id = Enum.at(String.split(params["account_from"]), 0) |> String.to_integer()
 
-    account_to_selected_id = Enum.at(String.split(params["account_to"]), 0) |> String.to_integer()
+      account_to_selected_id = Enum.at(String.split(params["account_to"]), 0) |> String.to_integer()
 
-    if account_from_selected_id > 0 && account_to_selected_id > 0 do
-      account_from = Enum.at(String.split(params["account_from"]), 1)
-      account_to = Enum.at(String.split(params["account_to"]), 1)
+      if account_from_selected_id > 0 && account_to_selected_id > 0 do
+        account_from = Enum.at(String.split(params["account_from"]), 1)
+        account_to = Enum.at(String.split(params["account_to"]), 1)
 
-      result =
-        AccountingSystem.AuxiliaryHandler.get_aux_report(
-          start_date,
-          end_date,
-          account_from,
-          account_to
-        )
+        result =
+          AccountingSystem.AuxiliaryHandler.get_aux_report(
+            start_date,
+            end_date,
+            account_from,
+            account_to
+          )
 
-      {:noreply,
-       assign(socket,
-         list_auxiliaries: result,
-         period_selected: period_selected_id,
-         account_from_selected: account_from_selected_id,
-         account_to_selected: account_to_selected_id
-       )}
+        {:noreply,
+        assign(socket,
+          list_auxiliaries: result,
+          period_selected: period_selected_id,
+          account_from_selected: account_from_selected_id,
+          account_to_selected: account_to_selected_id
+        )}
+      else
+        result = AccountingSystem.AuxiliaryHandler.get_aux_report(start_date, end_date)
+
+        {:noreply,
+        assign(socket,
+          list_auxiliaries: result,
+          period_selected: period_selected_id,
+          account_from_selected: account_from_selected_id,
+          account_to_selected: account_to_selected_id
+        )}
+      end
     else
-      result = AccountingSystem.AuxiliaryHandler.get_aux_report(start_date, end_date)
-
-      {:noreply,
-       assign(socket,
-         list_auxiliaries: result,
-         period_selected: period_selected_id,
-         account_from_selected: account_from_selected_id,
-         account_to_selected: account_to_selected_id
-       )}
+      {:noreply, socket}
     end
   end
 
