@@ -6,6 +6,7 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
   use Phoenix.HTML
   alias AccountingSystem.PeriodHandler, as: Period
   alias AccountingSystem.AccountHandler, as: Account
+  alias AccountingSystemWeb.NotificationComponent, as: Notification
 
   def mount(socket) do
     {:ok,
@@ -17,7 +18,8 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
        account_from_selected: 0,
        account_to_selected: 0,
        start_date: "",
-       end_date: ""
+       end_date: "",
+       error: nil
      )}
   end
 
@@ -97,6 +99,7 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
       </div>
 
       <%= if @list_auxiliaries != nil, do: live_component(@socket, AccountingSystemWeb.AuxiliariesComponent, id: "auxiliaries", list_auxiliaries: @list_auxiliaries) %>
+      <%= if @error, do: live_component(@socket, AccountingSystemWeb.NotificationComponent, id: "error_comp", message: @error, show: true, notification_type: "error", change: "") %>
     """
   end
 
@@ -135,7 +138,8 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
           list_auxiliaries: result,
           period_selected: period_selected_id,
           account_from_selected: account_from_selected_id,
-          account_to_selected: account_to_selected_id
+          account_to_selected: account_to_selected_id,
+          error: nil
         )}
       else
         result = AccountingSystem.AuxiliaryHandler.get_aux_report(start_date, end_date)
@@ -145,11 +149,22 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
           list_auxiliaries: result,
           period_selected: period_selected_id,
           account_from_selected: account_from_selected_id,
-          account_to_selected: account_to_selected_id
+          account_to_selected: account_to_selected_id,
+          error: nil
         )}
       end
     else
-      {:noreply, socket}
+      Notification.set_timer_notification_error()
+      {:noreply,
+      assign(socket,
+        list_auxiliaries: nil,
+        period_selected: 0,
+        account_from_selected: 0,
+        account_to_selected: 0,
+        start_date: "",
+        end_date: "",
+        error: "Parámetros de búsqueda incorrectos"
+      )}
     end
   end
 
