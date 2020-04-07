@@ -182,6 +182,19 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
      )}
   end
 
+  def handle_event("close", _params, socket) do
+    {:noreply,
+      assign(socket,
+        list_auxiliaries: nil,
+        period_selected: 0,
+        account_from_selected: 0,
+        account_to_selected: 0,
+        start_date: "",
+        end_date: "",
+        error: nil
+      )}
+  end
+
   defp get_periods(), do: Period.list_periods() |> Enum.sort_by(& &1.id)
 
   defp join_none_period(periods) do
