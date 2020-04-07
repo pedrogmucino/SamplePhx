@@ -152,8 +152,8 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
   def handle_event("period_chosen", params, socket) do
     period = String.split(params["value"])
     period_selected_id = Enum.at(period, 0) |> String.to_integer()
-    start_date = Date.from_iso8601!(Enum.at(period, 1))
-    end_date = Date.from_iso8601!(Enum.at(period, 2))
+    start_date = if period_selected_id > 0, do: Date.from_iso8601!(Enum.at(period, 1)), else: ""
+    end_date = if period_selected_id > 0, do: Date.from_iso8601!(Enum.at(period, 2)), else: ""
 
     {:noreply,
      assign(socket,
