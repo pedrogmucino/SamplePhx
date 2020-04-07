@@ -15,7 +15,9 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
        periods: join_none_period(get_periods()),
        period_selected: 0,
        account_from_selected: 0,
-       account_to_selected: 0
+       account_to_selected: 0,
+       start_date: "",
+       end_date: ""
      )}
   end
 
@@ -63,9 +65,9 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
             <p class="ml-2 font-bold text-lg text-black">Periodo</p>
             <div class="m-2 border-solid border-2 border-gray-300 p-4 rounded">
               <label class="block"><b>Fecha Inicio</b></label>
-              <input type="date" name="start_date" value="" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
+              <input type="date" name="start_date" value="<%= @start_date %>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
               <label class="block"><b>Fecha Fin</b></label>
-              <input type="date" name="end_date" value="" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
+              <input type="date" name="end_date" value="<%= @end_date %>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
               <div class="mt-4 mb-4 -ml-4 -mr-4 border-t-2 border-gray-300"></div>
               <label class="block"><b>Periodo</b></label>
               <div class="relative mb-3">
@@ -112,6 +114,7 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
         else: Date.from_iso8601!(params["end_date"])
 
     account_from_selected_id = Enum.at(String.split(params["account_from"]), 0) |> String.to_integer()
+
     account_to_selected_id = Enum.at(String.split(params["account_to"]), 0) |> String.to_integer()
 
     if account_from_selected_id > 0 && account_to_selected_id > 0 do
@@ -147,11 +150,16 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
   end
 
   def handle_event("period_chosen", params, socket) do
-    period_selected_id = Enum.at(String.split(params["value"]), 0) |> String.to_integer()
+    period = String.split(params["value"])
+    period_selected_id = Enum.at(period, 0) |> String.to_integer()
+    start_date = Date.from_iso8601!(Enum.at(period, 1))
+    end_date = Date.from_iso8601!(Enum.at(period, 2))
 
     {:noreply,
      assign(socket,
-       period_selected: period_selected_id
+       period_selected: period_selected_id,
+       start_date: start_date,
+       end_date: end_date
      )}
   end
 
