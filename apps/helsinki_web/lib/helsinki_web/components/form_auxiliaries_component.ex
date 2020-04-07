@@ -132,29 +132,29 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
             account_from,
             account_to
           )
-
+        Notification.set_timer_notification_error()
         {:noreply,
         assign(socket,
-          list_auxiliaries: result,
+          list_auxiliaries: (if result == [], do: nil, else: result),
           period_selected: period_selected_id,
           account_from_selected: account_from_selected_id,
           account_to_selected: account_to_selected_id,
           start_date: start_date,
           end_date: end_date,
-          error: nil
+          error: (if result == [], do: "No existen datos", else: nil)
         )}
       else
         result = AccountingSystem.AuxiliaryHandler.get_aux_report(start_date, end_date)
-
+        Notification.set_timer_notification_error()
         {:noreply,
         assign(socket,
-          list_auxiliaries: result,
+          list_auxiliaries: (if result == [], do: nil, else: result),
           period_selected: period_selected_id,
           account_from_selected: account_from_selected_id,
           account_to_selected: account_to_selected_id,
           start_date: start_date,
           end_date: end_date,
-          error: nil
+          error: (if result == [], do: "No existen datos", else: nil)
         )}
       end
     else
