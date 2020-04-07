@@ -6,6 +6,7 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
   use Phoenix.HTML
   alias AccountingSystem.PeriodHandler, as: Period
   alias AccountingSystem.AccountHandler, as: Account
+  alias AccountingSystemWeb.NotificationComponent, as: Notification
 
   def mount(socket) do
     {:ok,
@@ -15,7 +16,10 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
        periods: join_none_period(get_periods()),
        period_selected: 0,
        account_from_selected: 0,
-       account_to_selected: 0
+       account_to_selected: 0,
+       start_date: "",
+       end_date: "",
+       error: nil
      )}
   end
 
@@ -63,9 +67,9 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
             <p class="ml-2 font-bold text-lg text-black">Periodo</p>
             <div class="m-2 border-solid border-2 border-gray-300 p-4 rounded">
               <label class="block"><b>Fecha Inicio</b></label>
-              <input type="date" name="start_date" value="" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
+              <input type="date" name="start_date" value="<%= @start_date %>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
               <label class="block"><b>Fecha Fin</b></label>
-              <input type="date" name="end_date" value="" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
+              <input type="date" name="end_date" value="<%= @end_date %>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
               <div class="mt-4 mb-4 -ml-4 -mr-4 border-t-2 border-gray-300"></div>
               <label class="block"><b>Periodo</b></label>
               <div class="relative mb-3">
@@ -95,64 +99,108 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
       </div>
 
       <%= if @list_auxiliaries != nil, do: live_component(@socket, AccountingSystemWeb.AuxiliariesComponent, id: "auxiliaries", list_auxiliaries: @list_auxiliaries) %>
+      <%= if @error, do: live_component(@socket, AccountingSystemWeb.NotificationComponent, id: "error_comp", message: @error, show: true, notification_type: "error", change: "") %>
     """
   end
 
   def handle_event("search_auxiliaries", params, socket) do
-    period_selected_id = Enum.at(String.split(params["period"]), 0) |> String.to_integer()
+    if params["start_date"] != "" && params["end_date"] != "" do
+      period_selected_id = Enum.at(String.split(params["period"]), 0) |> String.to_integer()
 
-    start_date =
-      if period_selected_id > 0,
-        do: Date.from_iso8601!(Enum.at(String.split(params["period"]), 1)),
-        else: Date.from_iso8601!(params["start_date"])
+      start_date =
+        if period_selected_id > 0,
+          do: Date.from_iso8601!(Enum.at(String.split(params["period"]), 1)),
+          else: Date.from_iso8601!(params["start_date"])
 
-    end_date =
-      if period_selected_id > 0,
-        do: Date.from_iso8601!(Enum.at(String.split(params["period"]), 2)),
-        else: Date.from_iso8601!(params["end_date"])
+      end_date =
+        if period_selected_id > 0,
+          do: Date.from_iso8601!(Enum.at(String.split(params["period"]), 2)),
+          else: Date.from_iso8601!(params["end_date"])
 
-    account_from_selected_id = Enum.at(String.split(params["account_from"]), 0) |> String.to_integer()
-    account_to_selected_id = Enum.at(String.split(params["account_to"]), 0) |> String.to_integer()
+      account_from_selected_id = Enum.at(String.split(params["account_from"]), 0) |> String.to_integer()
 
-    if account_from_selected_id > 0 && account_to_selected_id > 0 do
-      account_from = Enum.at(String.split(params["account_from"]), 1)
-      account_to = Enum.at(String.split(params["account_to"]), 1)
+      account_to_selected_id = Enum.at(String.split(params["account_to"]), 0) |> String.to_integer()
 
-      result =
-        AccountingSystem.AuxiliaryHandler.get_aux_report(
-          start_date,
-          end_date,
-          account_from,
-          account_to
-        )
+      if account_from_selected_id > 0 && account_to_selected_id > 0 do
+        account_from = Enum.at(String.split(params["account_from"]), 1)
+        account_to = Enum.at(String.split(params["account_to"]), 1)
 
-      {:noreply,
-       assign(socket,
-         list_auxiliaries: result,
-         period_selected: period_selected_id,
-         account_from_selected: account_from_selected_id,
-         account_to_selected: account_to_selected_id
-       )}
+        result =
+          AccountingSystem.AuxiliaryHandler.get_aux_report(
+            start_date,
+            end_date,
+            account_from,
+            account_to
+          )
+        Notification.set_timer_notification_error()
+        {:noreply,
+        assign(socket,
+          list_auxiliaries: (if result == [], do: nil, else: result),
+          period_selected: period_selected_id,
+          account_from_selected: account_from_selected_id,
+          account_to_selected: account_to_selected_id,
+          start_date: start_date,
+          end_date: end_date,
+          error: (if result == [], do: "No se encontraron datos con los parámetros ingresados", else: nil)
+        )}
+      else
+        first_date = ~D[2020-01-01]
+        start_date = (if start_date < first_date, do: first_date, else: start_date)
+        end_date = (if end_date > Date.utc_today(), do: Date.utc_today, else: end_date)
+
+        result = AccountingSystem.AuxiliaryHandler.get_aux_report(start_date, end_date)
+        Notification.set_timer_notification_error()
+        {:noreply,
+        assign(socket,
+          list_auxiliaries: (if result == [], do: nil, else: result),
+          period_selected: period_selected_id,
+          account_from_selected: account_from_selected_id,
+          account_to_selected: account_to_selected_id,
+          start_date: start_date,
+          end_date: end_date,
+          error: (if result == [], do: "No se encontraron datos con los parámetros ingresados", else: nil)
+        )}
+      end
     else
-      result = AccountingSystem.AuxiliaryHandler.get_aux_report(start_date, end_date)
-
+      Notification.set_timer_notification_error()
       {:noreply,
-       assign(socket,
-         list_auxiliaries: result,
-         period_selected: period_selected_id,
-         account_from_selected: account_from_selected_id,
-         account_to_selected: account_to_selected_id
-       )}
+      assign(socket,
+        list_auxiliaries: nil,
+        period_selected: 0,
+        account_from_selected: 0,
+        account_to_selected: 0,
+        start_date: "",
+        end_date: "",
+        error: "Parámetros de búsqueda incorrectos"
+      )}
     end
   end
 
   def handle_event("period_chosen", params, socket) do
-    period_selected_id = Enum.at(String.split(params["value"]), 0) |> String.to_integer()
+    period = String.split(params["value"])
+    period_selected_id = Enum.at(period, 0) |> String.to_integer()
+    start_date = if period_selected_id > 0, do: Date.from_iso8601!(Enum.at(period, 1)), else: ""
+    end_date = if period_selected_id > 0, do: Date.from_iso8601!(Enum.at(period, 2)), else: ""
 
     {:noreply,
      assign(socket,
-       period_selected: period_selected_id
+       period_selected: period_selected_id,
+       start_date: start_date,
+       end_date: end_date
      )}
+  end
+
+  def handle_event("close", _params, socket) do
+    {:noreply,
+      assign(socket,
+        list_auxiliaries: nil,
+        period_selected: 0,
+        account_from_selected: 0,
+        account_to_selected: 0,
+        start_date: "",
+        end_date: "",
+        error: nil
+      )}
   end
 
   defp get_periods(), do: Period.list_periods() |> Enum.sort_by(& &1.id)
