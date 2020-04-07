@@ -139,6 +139,8 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
           period_selected: period_selected_id,
           account_from_selected: account_from_selected_id,
           account_to_selected: account_to_selected_id,
+          start_date: start_date,
+          end_date: end_date,
           error: nil
         )}
       else
@@ -150,6 +152,8 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
           period_selected: period_selected_id,
           account_from_selected: account_from_selected_id,
           account_to_selected: account_to_selected_id,
+          start_date: start_date,
+          end_date: end_date,
           error: nil
         )}
       end
