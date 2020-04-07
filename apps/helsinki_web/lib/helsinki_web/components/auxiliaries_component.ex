@@ -56,9 +56,9 @@ defmodule AccountingSystemWeb.AuxiliariesComponent do
                   </div>
                 <% end %>
                 <div>
-                  <div class="inline-flex w-200 px-4 py-2"></div>
-                  <div class="inline-flex w-40 px-4 py-2 justify-end ml-5 font-semibold" phx-hook="format_number"><%= item.debe %></div>
-                  <div class="inline-flex w-40 px-4 py-2 justify-end font-semibold" phx-hook="format_number"><%= item.haber %></div>
+                  <div class="inline-flex w-200 py-4"></div>
+                  <div class="inline-flex w-40 py-2 px-12 justify-end ml-5 font-semibold" phx-hook="format_number"><%= item.debe %></div>
+                  <div class="inline-flex w-40 px-12 justify-end font-semibold" phx-hook="format_number"><%= item.haber %></div>
                 </div>
               </div>
             </div>
