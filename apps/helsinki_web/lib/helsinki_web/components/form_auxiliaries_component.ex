@@ -247,6 +247,6 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
         do: Date.from_iso8601!(Enum.at(String.split(params["period"]), 2)),
         else: Date.from_iso8601!(params["end_date"])
 
-    if end_date > Date.utc_today(), do: Date.utc_today(), else: end_date
+      if Date.to_string(end_date) > Date.to_string(Date.utc_today()), do: Date.utc_today(), else: end_date
   end
 end
