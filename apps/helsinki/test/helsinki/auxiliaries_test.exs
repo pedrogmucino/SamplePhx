@@ -20,6 +20,7 @@ defmodule AccountingSystem.AuxiliariesTest do
     @update_attrs %{concept: "other concept", mxn_amount: 150, amount: 150, department: 2, xml_id: nil, xml_name: "", xml_b64: nil}
     @invalid_attrs %{policy_number: nil, id_account: nil, concept: nil, debit_credit: nil, mxn_amount: 120.5, amount: 120.5, department: 1, counterpart: "some counterpart", cost_center: 1, group: 1, iduuid: 1, exchange_rate: 1, policy_id: 1, xml_id: nil, xml_name: "", xml_b64: nil}
     @valid_parmas %{"account" => "3-001-000-000", "aux_concept" => "xxx", "credit" => "0", "debit" => "0", "department" => "1", "id_account" => "170", "id_aux" => "", "name" => "Capital Social", "req_xml" => "false", "xml_b64" => "", "xml_id" => "", "xml_name" => "", "xml_name_file" => ""}
+    @valid_params_save %{account: "4-003-001-001", amount: 50.0, aux_concept: "Sueldos y salarios por Pagar", cost_center: nil, counterpart: nil, credit: 0, debit: 50.0, debit_credit: "D", department: 1, exchange_rate: 1.0, group: nil, id: 68, id_account: 182, iduuid: nil, inserted_at: ~N[2020-04-06 23:43:43], mxn_amount: 50.0, number: 2, policy_id: 16, policy_number: 31, req_xml: false, updated_at: ~N[2020-04-06 23:43:43], xml_id: nil, xml_name: nil}
     @valid_year 2020
     @valid_month 4
 
@@ -228,6 +229,14 @@ defmodule AccountingSystem.AuxiliariesTest do
     test "validate_auxiliar/1 validate if tha auxiliary map is complete" do
       {response, _params} = AuxiliaryHandler.validate_auxiliar(@valid_parmas)
       assert response == :ok
+    end
+
+    test "format_to_save/3 modify the map to be saved en db" do
+      params_to_save = AuxiliaryHandler.format_to_save(@valid_params_save, 1, 1)
+      assert params_to_save.account == @valid_params_save.account
+      assert params_to_save.amount == @valid_params_save.amount
+      assert params_to_save.concept == @valid_params_save.aux_concept
+      assert params_to_save.id == @valid_params_save.id
     end
   end
 end
