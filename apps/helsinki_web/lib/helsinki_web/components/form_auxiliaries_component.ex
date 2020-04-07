@@ -29,7 +29,7 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
 
   def render(assigns) do
     ~L"""
-      <div id="formauxiliaries" class="bg-white mt-16 ml-16 w-80 h-hoch-93 rounded border float-left">
+      <div id="formauxiliaries" class="flex-none bg-white mt-16 ml-16 w-80 h-hoch-93 rounded border float-left">
         <div class="w-full py-2 bg-blue-700">
           <p class="ml-2 font-bold text-lg text-white">Auxiliares</p>
         </div>

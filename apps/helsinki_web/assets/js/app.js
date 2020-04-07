@@ -192,7 +192,11 @@ function setFormat(el){
     el.innerHTML = formatNumber(parseFloat(el.textContent).toFixed(2));
 }
 function formatNumber(num) {
-    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+    console.info(num)
+    if (num != "NaN"){
+        return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+    }
+    return "-"
 }
 import {Socket} from "phoenix"
 import LiveSocket from "phoenix_live_view"
