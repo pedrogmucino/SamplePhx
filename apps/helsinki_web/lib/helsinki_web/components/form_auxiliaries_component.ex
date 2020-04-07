@@ -144,6 +144,10 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
           error: (if result == [], do: "No se encontraron datos con los parámetros ingresados", else: nil)
         )}
       else
+        first_date = ~D[2020-01-01]
+        start_date = (if start_date < first_date, do: first_date, else: start_date)
+        end_date = (if end_date > Date.utc_today(), do: Date.utc_today, else: end_date)
+
         result = AccountingSystem.AuxiliaryHandler.get_aux_report(start_date, end_date)
         Notification.set_timer_notification_error()
         {:noreply,
