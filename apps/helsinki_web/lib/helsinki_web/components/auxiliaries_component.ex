@@ -50,15 +50,15 @@ defmodule AccountingSystemWeb.AuxiliariesComponent do
                     <div class="inline-flex w-32 px-2 py-2"><%= item2.number %></div>
                     <div class="inline-flex w-32 px-2 py-2"><%= item2.date %></div>
                     <div class="inline-flex w-80 px-2 py-2"><%= item.code %></div>
-                    <div class="inline-flex w-40 px-2 py-2 justify-end"><%= if item2.auxiliary_type == "D", do: item2.amount %></div>
-                    <div class="inline-flex w-40 px-2 py-2 justify-end"><%= if item2.auxiliary_type == "H", do: item2.amount %></div>
+                    <div class="inline-flex w-40 px-2 py-2 justify-end" phx-hook="format_number"><%= if item2.auxiliary_type == "D", do: item2.amount %></div>
+                    <div class="inline-flex w-40 px-2 py-2 justify-end" phx-hook="format_number"><%= if item2.auxiliary_type == "H", do: item2.amount %></div>
                     <div class="inline-flex w-80 px-2 py-2"><%= item2.concept %></div>
                   </div>
                 <% end %>
                 <div>
                   <div class="inline-flex w-200 px-4 py-2"></div>
-                  <div class="inline-flex w-40 px-4 py-2 justify-end ml-5"><%= item.debe %></div>
-                  <div class="inline-flex w-40 px-4 py-2 justify-end"><%= item.haber %></div>
+                  <div class="inline-flex w-40 px-4 py-2 justify-end ml-5" phx-hook="format_number"><%= item.debe %></div>
+                  <div class="inline-flex w-40 px-4 py-2 justify-end" phx-hook="format_number"><%= item.haber %></div>
                 </div>
               </div>
             </div>
