@@ -17,8 +17,10 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
        period_selected: 0,
        account_from_selected: 0,
        account_from_selected_code: "",
+       account_from_selected_name: "",
        account_to_selected: 0,
        account_to_selected_code: "",
+       account_to_selected_name: "",
        start_date: "",
        end_date: "",
        error: nil
@@ -40,7 +42,7 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
             <p class="ml-2 font-bold text-lg text-black">Cuenta</p>
             <div class="m-2 border-solid border-2 border-gray-300 p-4 rounded">
               <label class="block"><b>Desde</b></label>
-              <div class="relative mb-3">
+              <div class="relative mb-3 tooltip">
                 <select name="account_from" class="focus:outline-none focus:bg-white focus:border-blue-500 block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded leading-tight" id="option-type">
                   <%= for item <- @details_accounts do %>
                     <option phx-target="#formauxiliaries" phx-click="account_from_chosen" value="<%= item.value %> <%= List.first(item.key)%>" <%= if @account_from_selected == item.value, do: 'selected' %> ><%= item.key %></option>
@@ -48,10 +50,12 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                   <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                  <span class='tooltip-text font-light text-xs text-white bg-blue-500 mt-5 -ml-12 rounded'><%= @account_from_selected_name %></span>
+                  <iframe id="invisible" style="display:none;"></iframe>
                 </div>
               </div>
               <label class="block"><b>Hasta</b></label>
-              <div class="relative mb-3">
+              <div class="relative mb-3 tooltip">
                 <select name="account_to" class="focus:outline-none focus:bg-white focus:border-blue-500 block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded leading-tight" id="option-type">
                   <%= for item <- @details_accounts do %>
                     <option phx-target="#formauxiliaries" phx-click="account_to_chosen" value="<%= item.value %> <%= List.first(item.key)%>" <%= if @account_to_selected == item.value, do: 'selected' %> ><%= item.key %></option>
@@ -59,6 +63,8 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                   <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                  <span class='tooltip-text font-light text-xs text-white bg-blue-500 mt-5 -ml-12 rounded'><%= @account_to_selected_name %></span>
+                  <iframe id="invisible" style="display:none;"></iframe>
                 </div>
               </div>
             </div>
@@ -114,10 +120,13 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
     account_from_id_selected = Enum.at(account, 0) |> String.to_integer()
     account_from_selected = Enum.at(account, 1)
 
+    account_from_selected_name = Account.get_account!(account_from_id_selected).name
+
     {:noreply,
      assign(socket,
        account_from_selected: account_from_id_selected,
-       account_from_selected_code: account_from_selected
+       account_from_selected_code: account_from_selected,
+       account_from_selected_name: account_from_selected_name
      )}
   end
 
@@ -126,10 +135,13 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
     account_to_id_selected = Enum.at(account, 0) |> String.to_integer()
     account_to_selected = Enum.at(account, 1)
 
+    account_to_selected_name = Account.get_account!(account_to_id_selected).name
+
     {:noreply,
      assign(socket,
        account_to_selected: account_to_id_selected,
-       account_to_selected_code: account_to_selected
+       account_to_selected_code: account_to_selected,
+       account_to_selected_name: account_to_selected_name
      )}
   end
 
