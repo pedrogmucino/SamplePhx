@@ -137,8 +137,8 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
            period_selected: period_selected_id,
            account_from_selected: account_from_selected_id,
            account_to_selected: account_to_selected_id,
-           start_date: start_date,
-           end_date: end_date,
+           start_date: params["start_date"],
+           end_date: params["end_date"],
            error:
              if(result == [],
                do: "No se encontraron datos con los parámetros ingresados",
@@ -155,8 +155,8 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
            period_selected: period_selected_id,
            account_from_selected: account_from_selected_id,
            account_to_selected: account_to_selected_id,
-           start_date: start_date,
-           end_date: end_date,
+           start_date: params["start_date"],
+           end_date: params["end_date"],
            error:
              if(result == [],
                do: "No se encontraron datos con los parámetros ingresados",
@@ -247,6 +247,6 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
         do: Date.from_iso8601!(Enum.at(String.split(params["period"]), 2)),
         else: Date.from_iso8601!(params["end_date"])
 
-    if end_date > Date.utc_today(), do: Date.utc_today(), else: end_date
+      if Date.to_string(end_date) > Date.to_string(Date.utc_today()), do: Date.utc_today(), else: end_date
   end
 end
