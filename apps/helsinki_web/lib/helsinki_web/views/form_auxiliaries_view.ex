@@ -27,5 +27,17 @@ defmodule AccountingSystemWeb.FormAuxiliariesLiveView do
     {:noreply, socket}
   end
 
+  def handle_event("send_to_view_start", params, socket) do
+    start_date = params["start_date"]
+    send_update(AccountingSystemWeb.FormAuxiliariesComponent, id: "formauxiliaries", start_date: start_date, end_date: "" )
+    {:noreply, socket}
+  end
+
+  def handle_event("send_to_view_end", params, socket) do
+    end_date = params["end_date"]
+    send_update(AccountingSystemWeb.FormAuxiliariesComponent, id: "formauxiliaries", start_date: "", end_date: end_date )
+    {:noreply, socket}
+  end
+
 end
 

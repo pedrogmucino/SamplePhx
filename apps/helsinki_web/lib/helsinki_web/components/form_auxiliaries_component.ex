@@ -23,8 +23,13 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
      )}
   end
 
-  def update(_attrs, socket) do
-    {:ok, socket}
+  def update(attrs, socket) do
+    {:ok,
+     assign(socket,
+       period_selected: if(attrs.start_date != "", do: 0),
+       start_date: if(attrs.start_date != "", do: attrs.start_date),
+       end_date: if(attrs.end_date != "", do: attrs.end_date)
+     )}
   end
 
   def render(assigns) do
@@ -67,9 +72,9 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
             <p class="ml-2 font-bold text-lg text-black">Periodo</p>
             <div class="m-2 border-solid border-2 border-gray-300 p-4 rounded">
               <label class="block"><b>Fecha Inicio</b></label>
-              <input type="date" name="start_date" value="<%= @start_date %>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
+              <input type="date" name="start_date" value="<%= @start_date %>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" phx-target="#formauxiliaries" phx-hook="start_date_chosen">
               <label class="block"><b>Fecha Fin</b></label>
-              <input type="date" name="end_date" value="<%= @end_date %>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
+              <input type="date" name="end_date" value="<%= @end_date %>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" phx-target="#formauxiliaries" phx-hook="end_date_chosen">
               <div class="mt-4 mb-4 -ml-4 -mr-4 border-t-2 border-gray-300"></div>
               <label class="block"><b>Periodo</b></label>
               <div class="relative mb-3">
@@ -247,6 +252,8 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
         do: Date.from_iso8601!(Enum.at(String.split(params["period"]), 2)),
         else: Date.from_iso8601!(params["end_date"])
 
-      if Date.to_string(end_date) > Date.to_string(Date.utc_today()), do: Date.utc_today(), else: end_date
+    if Date.to_string(end_date) > Date.to_string(Date.utc_today()),
+      do: Date.utc_today(),
+      else: end_date
   end
 end

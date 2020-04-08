@@ -163,6 +163,26 @@ Hooks.load_file_xml_js = {
             get_xml_data(toEvent, e);
         })       
     }
+};
+
+Hooks.start_date_chosen = {
+    mounted() {
+        var toEvent = this
+        this.el.addEventListener("input", e => {
+            var start_date = e.srcElement.value
+            toEvent.pushEvent("send_to_view_start", { start_date: start_date });
+        })
+    }
+}
+
+Hooks.end_date_chosen = {
+    mounted() {
+        var toEvent = this
+        this.el.addEventListener("input", e => {
+            var end_date = e.srcElement.value
+            toEvent.pushEvent("send_to_view_end", { end_date: end_date });
+        })
+    }
 }
 
 // let liveSocket = new LiveSocket("/live", Socket, { hooks: hooks })
