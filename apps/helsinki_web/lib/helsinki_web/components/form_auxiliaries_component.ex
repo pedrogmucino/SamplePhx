@@ -137,8 +137,8 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
            period_selected: period_selected_id,
            account_from_selected: account_from_selected_id,
            account_to_selected: account_to_selected_id,
-           start_date: start_date,
-           end_date: end_date,
+           start_date: params["start_date"],
+           end_date: params["end_date"],
            error:
              if(result == [],
                do: "No se encontraron datos con los parámetros ingresados",
@@ -155,8 +155,8 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
            period_selected: period_selected_id,
            account_from_selected: account_from_selected_id,
            account_to_selected: account_to_selected_id,
-           start_date: start_date,
-           end_date: end_date,
+           start_date: params["start_date"],
+           end_date: params["end_date"],
            error:
              if(result == [],
                do: "No se encontraron datos con los parámetros ingresados",
