@@ -12,7 +12,8 @@ defmodule AccountingSystemWeb.BalanceComponent do
   def mount(socket) do
     now = Date.utc_today
     today = "#{now.year}-#{Formatter.add_zero(Integer.to_string(now.month), 2)}-#{Formatter.add_zero(Integer.to_string(now.day), 2)}"
-    {:ok, assign(socket, type: "1", period: 0, start_date: today, end_date: today, change: false, message: "", error: nil, balance: nil, period: AccountingSystem.PeriodHandler.list_periods(), period_id: "1", start_account: "", end_account: "", show_balance: false, accounts: Account.list_accounts())}
+    accounts = Account.list_accounts()
+    {:ok, assign(socket, type: "1", period: 0, start_date: today, end_date: today, change: false, message: "", error: nil, balance: nil, period: AccountingSystem.PeriodHandler.list_periods(), period_id: "1", start_account: List.first(accounts).code, end_account: List.first(accounts).code, show_balance: false, accounts: accounts)}
   end
 
   def handle_event("change_type", %{"type" => "1"}, socket) do
