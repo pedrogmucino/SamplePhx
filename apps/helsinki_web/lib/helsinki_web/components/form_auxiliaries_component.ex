@@ -104,6 +104,7 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
       </div>
 
       <%= if @list_auxiliaries != nil, do: live_component(@socket, AccountingSystemWeb.AuxiliariesComponent, id: "auxiliaries", list_auxiliaries: @list_auxiliaries) %>
+      <%= if @list_auxiliaries != nil, do: live_component(@socket, AccountingSystemWeb.HeaderToAuxiliariesComponent, id: "headertoauxiliaries") %>
       <%= if @error, do: live_component(@socket, AccountingSystemWeb.NotificationComponent, id: "error_comp", message: @error, show: true, notification_type: "error", change: "") %>
     """
   end
