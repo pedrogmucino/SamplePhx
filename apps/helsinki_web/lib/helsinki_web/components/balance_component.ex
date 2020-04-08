@@ -7,18 +7,12 @@ defmodule AccountingSystemWeb.BalanceComponent do
   alias AccountingSystem.AccountHandler, as: Account
   alias AccountingSystem.AuxiliaryHandler, as: Auxiliar
   alias AccountingSystem.CodeFormatter, as: Formatter
-  alias AccountingSystem.GenericFunctions, as: Generic
-  alias AccountingSystem.XlsxFunctions, as: Xlsx
-  alias AccountingSystem.{
-    EctoUtil,
-    PolicyHandler
-  }
   alias AccountingSystemWeb.NotificationComponent
 
   def mount(socket) do
     now = Date.utc_today
     today = "#{now.year}-#{Formatter.add_zero(Integer.to_string(now.month), 2)}-#{Formatter.add_zero(Integer.to_string(now.day), 2)}"
-    {:ok, assign(socket, type: "1", period: 0, start_date: today, end_date: today, change: false, message: "", error: nil, balance: nil, period: AccountingSystem.PeriodHandler.list_periods(), period_id: "1", start_account: "", end_account: "", show_balance: false)}
+    {:ok, assign(socket, type: "1", period: 0, start_date: today, end_date: today, change: false, message: "", error: nil, balance: nil, period: AccountingSystem.PeriodHandler.list_periods(), period_id: "1", start_account: "", end_account: "", show_balance: false, accounts: Account.list_accounts())}
   end
 
   def handle_event("change_type", %{"type" => "1"}, socket) do
@@ -126,7 +120,7 @@ defmodule AccountingSystemWeb.BalanceComponent do
   defp put_values_of(father, nil), do: father |> Map.put(:debit, 0.0) |> Map.put(:credit, 0.0)
   defp put_values_of(father, db_info), do: father |> Map.put(:debit, db_info.debe) |> Map.put(:credit, db_info.haber)
 
-  defp get_account_tree() do
+  defp get_account_tree_range("", "") do
     all_active = Enum.map(Account.get_active_accounts(), fn acc -> tree_map(acc) end)
     all_active
       |> get_root_accounts
@@ -140,6 +134,7 @@ defmodule AccountingSystemWeb.BalanceComponent do
   end
 
   defp get_root_accounts(accounts), do: Enum.filter(accounts, fn acc -> acc.parent_account == -1 end)
+
   defp tree_map(root) do
     Map.new()
       |> Map.put(:id, Enum.at(root, 0))
@@ -147,6 +142,8 @@ defmodule AccountingSystemWeb.BalanceComponent do
       |> Map.put(:description, Enum.at(root, 2))
       |> Map.put(:parent_account, Enum.at(root, 3))
       |> Map.put(:root_account, Enum.at(root, 4))
+      |> Map.put(:type, Enum.at(root, 5))
+      |> Map.put(:level, Enum.at(root, 6))
   end
   defp get_childs(_, []), do: []
   defp get_childs(root, accounts) do
@@ -155,6 +152,12 @@ defmodule AccountingSystemWeb.BalanceComponent do
     root |> Map.put(:childs, Enum.map(childs, fn acc -> get_childs(acc, no_childs) end))
   end
 
+  def get_debit_credit_detail(start_date, end_date, "", "") do
+    Auxiliar.get_aux_report(Date.from_iso8601!(start_date), Date.from_iso8601!(end_date))
+  end
+  def get_debit_credit_detail(start_date, end_date, "", end_account) do
+    Auxiliar.get_aux_report(Date.from_iso8601!(start_date), Date.from_iso8601!(end_date), "0", end_account)
+  end
   def get_debit_credit_detail(start_date, end_date, start_account, end_account) do
     Auxiliar.get_aux_report(Date.from_iso8601!(start_date), Date.from_iso8601!(end_date), start_account, end_account)
   end
@@ -212,7 +215,11 @@ defmodule AccountingSystemWeb.BalanceComponent do
               </div>
 
               <div class="w-full">
-                <input type="text" name="start_account" value="<%= @start_account %>" class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+                <select name="start_account" class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+                  <%= for account <- @accounts do %>
+                    <option id = "<%= account.id %>" value="<%= account.code %>" <%= if @start_account == "#{account.code}", do: 'selected' %> ><%= account.code <> " " <> account.description %> </option>
+                  <% end %>
+                </select>
               </div>
 
               <div class="w-full">
@@ -220,7 +227,11 @@ defmodule AccountingSystemWeb.BalanceComponent do
               </div>
 
               <div class="w-full">
-                <input type="text" name="end_account" value="<%= @end_account %>" class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+                <select name="end_account" class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+                  <%= for account <- @accounts do %>
+                    <option id = "<%= account.id %>" value="<%= account.code %>" <%= if @end_account == "#{account.code}", do: 'selected' %> ><%= account.code <> " " <> account.description %> </option>
+                  <% end %>
+                </select>
               </div>
             </form>
 

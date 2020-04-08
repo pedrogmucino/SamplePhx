@@ -44,10 +44,10 @@ defmodule AccountingSystemWeb.BalanceListComponent do
                 <tr>
                   <th class="w-56 px-4 py-2"><%= acc.account %></th>
                   <th class="w-32 px-4 py-2"><%= acc.description %></th>
-                  <th class="w-32 px-4 py-2">Tipo Cuenta</th>
+                  <th class="w-32 px-4 py-2"><%= acc.type %></th>
                   <th class="w-80 px-4 py-2">0.0</th>
-                  <th class="w-40 px-4 py-2"><%= Float.round(acc.credit, 2) %></th>
-                  <th class="w-40 px-4 py-2"><%= Float.round(acc.debit, 2) %></th>
+                  <th class="w-40 px-4 py-2"><%= acc.credit %></th>
+                  <th class="w-40 px-4 py-2"><%= acc.debit %></th>
                   <th class="w-80 px-4 py-2">0.0</th>
                 </tr>
                 <% end %>
