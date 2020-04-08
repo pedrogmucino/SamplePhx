@@ -27,8 +27,8 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
     {:ok,
      assign(socket,
        period_selected: if(attrs.start_date != "", do: 0),
-       start_date: if(attrs.start_date != "", do: attrs.start_date),
-       end_date: if(attrs.end_date != "", do: attrs.end_date)
+       start_date: if(attrs.start_date != "", do: attrs.start_date, else: socket.assigns.start_date),
+       end_date: if(attrs.end_date != "", do: attrs.end_date, else: socket.assigns.end_date)
      )}
   end
 
