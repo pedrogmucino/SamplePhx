@@ -171,19 +171,13 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
     account_to_selected = socket.assigns.account_to_selected
     period_selected = socket.assigns.period_selected
 
-    if start_date != "" && end_date != "" do
+    if start_date != "" && end_date != "" && start_date < Date.to_string(Date.utc_today())  do
       start_date = Date.from_iso8601!(start_date)
       end_date = Date.from_iso8601!(end_date)
 
       if account_from_code != "" && account_to_code != "" do
-        result =
-          AccountingSystem.AuxiliaryHandler.get_aux_report(
-            start_date,
-            end_date,
-            account_from_code,
-            account_to_code
-          )
 
+        result = get_aux(start_date, end_date, account_from_code, account_to_code)
         result
         |> case do
           [] ->
@@ -216,11 +210,7 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
              )}
         end
       else
-        result =
-          AccountingSystem.AuxiliaryHandler.get_aux_report(
-            start_date,
-            end_date
-          )
+        result = get_aux(start_date, end_date)
 
         result
         |> case do
@@ -283,6 +273,18 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
        end_date: "",
        error: nil
      )}
+  end
+
+  defp get_aux(start_date, end_date, account_from_code, account_to_code) do
+    start_date = if start_date.year < 2020, do: ~D[2020-01-01], else: start_date
+    end_date =  if Date.to_string(end_date) > Date.to_string(Date.utc_today()), do: Date.utc_today(), else: end_date
+    AccountingSystem.AuxiliaryHandler.get_aux_report(start_date, end_date, account_from_code, account_to_code)
+  end
+
+  defp get_aux(start_date, end_date) do
+    start_date = if start_date.year < 2020, do: ~D[2020-01-01], else: start_date
+    end_date =  if Date.to_string(end_date) > Date.to_string(Date.utc_today()), do: Date.utc_today(), else: end_date
+    AccountingSystem.AuxiliaryHandler.get_aux_report(start_date, end_date)
   end
 
   defp get_periods(), do: Period.list_periods() |> Enum.sort_by(& &1.id)
