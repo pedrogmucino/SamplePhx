@@ -30,45 +30,43 @@ defmodule AccountingSystemWeb.BalanceListComponent do
           <table class="table-auto">
             <thead>
               <tr>
-                <th class="w-56 px-4 py-2">Cuenta</th>
-                <th class="w-32 px-4 py-2">Nombre</th>
-                <th class="w-32 px-4 py-2">Tipo Cuenta</th>
-                <th class="w-80 px-4 py-2">Saldo Inicial</th>
-                <th class="w-40 px-4 py-2">Cargo</th>
-                <th class="w-40 px-4 py-2">Abono</th>
-                <th class="w-80 px-4 py-2">Saldo FInal</th>
+                <th class="w-3/12 px-4 py-2">Cuenta</th>
+                <th class="w-4/12 px-4 py-2">Nombre</th>
+                <th class="w-1/12 px-4 py-2">Tipo Cuenta</th>
+                <th class="w-1/12 px-4 py-2">Saldo Inicial</th>
+                <th class="w-1/12 px-4 py-2">Cargo</th>
+                <th class="w-1/12 px-4 py-2">Abono</th>
+                <th class="w-1/12 px-4 py-2">Saldo FInal</th>
               </tr>
               </thead>
               <tbody class="bg-gray-200">
                 <%= for acc <- @balance do %>
                 <tr>
-                  <th class="w-56 px-4 py-2"><%= acc.account %></th>
-                  <th class="w-32 px-4 py-2"><%= acc.description %></th>
-                  <th class="w-32 px-4 py-2">Tipo Cuenta</th>
-                  <th class="w-80 px-4 py-2">0.0</th>
-                  <th class="w-40 px-4 py-2"><%= Float.round(acc.credit, 2) %></th>
-                  <th class="w-40 px-4 py-2"><%= Float.round(acc.debit, 2) %></th>
-                  <th class="w-80 px-4 py-2">0.0</th>
+                  <th class="w-3/12 px-4 py-2"><%= acc.account %></th>
+                  <th class="w-4/12 px-4 py-2"><%= acc.description %></th>
+                  <th class="w-1/12 px-4 py-2"><%= acc.type %></th>
+                  <th class="w-1/12 px-4 py-2">0.0</th>
+                  <th class="w-1/12 px-4 py-2" phx-hook="format_number"><%= acc.credit %></th>
+                  <th class="w-1/12 px-4 py-2" phx-hook="format_number"><%= acc.debit %></th>
+                  <th class="w-1/12 px-4 py-2" phx-hook="format_number"><%= acc.final_balance %></th>
                 </tr>
                 <% end %>
               </tbody>
               <tbody>
                 <tr>
-                  <th class="w-56 px-4 py-2">Cuentas Reportadas</th>
-                  <th class="w-32 px-4 py-2"><%= Enum.count(@balance) %></th>
-                  <th class="w-32 px-4 py-2"></th>
-                  <th class="w-80 px-4 py-2">0.0</th>
-                  <th class="w-40 px-4 py-2"><%= Float.round(
-                                                Enum.filter(@balance, fn acc -> acc.parent_account == -1 end)
+                  <th class="w-3/12 px-4 py-2">Cuentas Reportadas</th>
+                  <th class="w-4/12 px-4 py-2"><%= Enum.count(@balance) %></th>
+                  <th class="w-1/12 px-4 py-2"></th>
+                  <th class="w-1/12 px-4 py-2">0.0</th>
+                  <th class="w-1/12 px-4 py-2" phx-hook="format_number"><%= Enum.filter(@balance, fn acc -> acc.parent_account == -1 end)
                                                   |> Enum.map(fn acc -> acc.credit end)
-                                                  |> Enum.sum(), 2)
+                                                  |> Enum.sum()
                                               %></th>
-                  <th class="w-40 px-4 py-2"><%= Float.round(
-                                                  Enum.filter(@balance, fn acc -> acc.parent_account == -1 end)
+                  <th class="w-1/12 px-4 py-2" phx-hook="format_number"><%= Enum.filter(@balance, fn acc -> acc.parent_account == -1 end)
                                                     |> Enum.map(fn acc -> acc.debit end)
-                                                    |> Enum.sum(), 2)
+                                                    |> Enum.sum()
                                               %></th>
-                  <th class="w-80 px-4 py-2"> <%= Float.round((Enum.filter(@balance, fn acc -> acc.parent_account == -1 end) |> Enum.map(fn acc -> acc.credit end) |> Enum.sum()) - (Enum.filter(@balance, fn acc -> acc.parent_account == -1 end) |> Enum.map(fn acc -> acc.debit end) |> Enum.sum()), 2) %>
+                  <th class="w-1/12 px-4 py-2" phx-hook="format_number"> <%= (Enum.filter(@balance, fn acc -> acc.parent_account == -1 end) |> Enum.map(fn acc -> acc.credit end) |> Enum.sum()) - (Enum.filter(@balance, fn acc -> acc.parent_account == -1 end) |> Enum.map(fn acc -> acc.debit end) |> Enum.sum()) %>
                   </th>
                 </tr>
               </tbody>
