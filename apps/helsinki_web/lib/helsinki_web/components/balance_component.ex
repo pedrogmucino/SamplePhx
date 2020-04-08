@@ -91,14 +91,13 @@ defmodule AccountingSystemWeb.BalanceComponent do
   end
   #**************************************************CALCULATING BALANCE*****************************************************************************
   def do_balance(start_account, end_account, start_date, end_date) do
-    a = get_balance(start_account, end_account, start_date, end_date)
-          |> Enum.map(fn acc -> do_something(acc) end)
-    a
+    get_balance(start_account, end_account, start_date, end_date)
+      |> Enum.map(fn acc -> calculate_all(acc) end)
   end
 
-  defp do_something([]), do: []
-  defp do_something(acc) do
-    new_acc = Map.put(acc, :childs, Enum.map(acc.childs, fn ch -> do_something(ch) end))
+  defp calculate_all([]), do: []
+  defp calculate_all(acc) do
+    new_acc = Map.put(acc, :childs, Enum.map(acc.childs, fn ch -> calculate_all(ch) end))
     new_new_acc = Map.merge(new_acc, sum_debit_credit(new_acc.childs))
     new_new_acc
   end
@@ -106,7 +105,7 @@ defmodule AccountingSystemWeb.BalanceComponent do
   defp sum_debit_credit([]), do: %{}
   defp sum_debit_credit(list), do: Enum.reduce(list, %{}, fn x, acc -> sum_maps(x, acc) end)
   defp sum_maps(%{debit: v1, credit: v2}, %{debit: v3, credit: v4}), do: %{debit: v1 + v3, credit: v2 + v4}
-  defp sum_maps(map, %{}), do: %{debit: map.debit, credit: map.credit}
+  defp sum_maps(map, %{}), do: %{debit: map.debit, credit: map.credit, final_balance: map.credit - map.debit}
 
   defp get_balance(start_account, end_account, start_date, end_date), do: debit_credit_to_tree(get_account_tree_range(start_account, end_account), get_debit_credit_detail(start_date, end_date, start_account, end_account))
 
@@ -117,8 +116,8 @@ defmodule AccountingSystemWeb.BalanceComponent do
   defp simule_map_put(root, detail, next), do: Map.put(root, :childs, simule_enum_map(next, detail, root))
   defp simule_enum_map([], detail, father), do: add_detail([], detail, father)
   defp simule_enum_map(childs, detail, _), do: Enum.map(childs, fn son -> add_detail(son, detail, nil) end )
-  defp put_values_of(father, nil), do: father |> Map.put(:debit, 0.0) |> Map.put(:credit, 0.0)
-  defp put_values_of(father, db_info), do: father |> Map.put(:debit, db_info.debe) |> Map.put(:credit, db_info.haber)
+  defp put_values_of(father, nil), do: father |> Map.put(:debit, 0.0) |> Map.put(:credit, 0.0) |> Map.put(:final_balance, 0.0)
+  defp put_values_of(father, db_info), do: father |> Map.put(:debit, db_info.debe) |> Map.put(:credit, db_info.haber) |> Map.put(:final_balance, db_info.haber - db_info.debe)
 
   defp get_account_tree_range("", "") do
     all_active = Enum.map(Account.get_active_accounts(), fn acc -> tree_map(acc) end)
