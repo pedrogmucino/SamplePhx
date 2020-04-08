@@ -23,13 +23,17 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
      )}
   end
 
-  def update(attrs, socket) do
-    {:ok,
-     assign(socket,
-       period_selected: if(attrs.start_date != "", do: 0),
-       start_date: if(attrs.start_date != "", do: attrs.start_date, else: socket.assigns.start_date),
-       end_date: if(attrs.end_date != "", do: attrs.end_date, else: socket.assigns.end_date)
-     )}
+  def update(_attrs, socket) do
+    # socket.assigns.account_from_selected |> IO.inspect(label: " -------------------------------------> SOCKET ")
+
+    {:ok, socket}
+
+    # {:ok,
+    #  assign(socket,
+    #    period_selected: if(attrs.start_date != "", do: 0),
+    #    start_date: if(attrs.start_date != "", do: attrs.start_date, else: socket.assigns.start_date),
+    #    end_date: if(attrs.end_date != "", do: attrs.end_date, else: socket.assigns.end_date)
+    #  )}
   end
 
   def render(assigns) do
@@ -47,7 +51,7 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
               <div class="relative mb-3">
                 <select name="account_from" class="focus:outline-none focus:bg-white focus:border-blue-500 block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded leading-tight" id="option-type">
                   <%= for item <- @details_accounts do %>
-                    <option <%= if @account_from_selected == item.value, do: 'selected' %> value="<%= item.value %> <%= List.first(item.key)%>"  ><%= item.key %></option>
+                    <option value="<%= item.value %> <%= List.first(item.key)%>" <%= if @account_from_selected == item.value, do: 'selected' %> ><%= item.key %></option>
                   <% end %>
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
@@ -58,7 +62,7 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
               <div class="relative mb-3">
                 <select name="account_to" class="focus:outline-none focus:bg-white focus:border-blue-500 block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded leading-tight" id="option-type">
                   <%= for item <- @details_accounts do %>
-                    <option <%= if @account_to_selected == item.value, do: 'selected' %> value="<%= item.value %> <%= List.first(item.key)%>" ><%= item.key %></option>
+                    <option value="<%= item.value %> <%= List.first(item.key)%>" <%= if @account_to_selected == item.value, do: 'selected' %> ><%= item.key %></option>
                   <% end %>
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
@@ -72,9 +76,9 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
             <p class="ml-2 font-bold text-lg text-black">Periodo</p>
             <div class="m-2 border-solid border-2 border-gray-300 p-4 rounded">
               <label class="block"><b>Fecha Inicio</b></label>
-              <input type="date" name="start_date" value="<%= @start_date %>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" phx-target="#formauxiliaries" phx-hook="start_date_chosen">
+              <input type="date" name="start_date" value="<%= @start_date %>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
               <label class="block"><b>Fecha Fin</b></label>
-              <input type="date" name="end_date" value="<%= @end_date %>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" phx-target="#formauxiliaries" phx-hook="end_date_chosen">
+              <input type="date" name="end_date" value="<%= @end_date %>" class="focus:outline-none focus:bg-white focus:border-blue-500 appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
               <div class="mt-4 mb-4 -ml-4 -mr-4 border-t-2 border-gray-300"></div>
               <label class="block"><b>Periodo</b></label>
               <div class="relative mb-3">
@@ -134,40 +138,65 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
             account_to
           )
 
-        Notification.set_timer_notification_error()
+        result
+        |> case do
+          [] ->
+            Notification.set_timer_notification_error()
 
-        {:noreply,
-         assign(socket,
-           list_auxiliaries: if(result == [], do: nil, else: result),
-           period_selected: period_selected_id,
-           account_from_selected: account_from_selected_id,
-           account_to_selected: account_to_selected_id,
-           start_date: params["start_date"],
-           end_date: params["end_date"],
-           error:
-             if(result == [],
-               do: "No se encontraron datos con los parámetros ingresados",
-               else: nil
-             )
-         )}
+            {:noreply,
+             assign(socket,
+               list_auxiliaries: nil,
+               period_selected: 0,
+               account_from_selected: 0,
+               account_to_selected: 0,
+               start_date: "",
+               end_date: "",
+               error: "No se encontraron datos con los parámetros ingresados"
+             )}
+
+          _ ->
+            {:noreply,
+             assign(socket,
+               list_auxiliaries: result,
+               period_selected: period_selected_id,
+               account_from_selected: account_from_selected_id,
+               account_to_selected: account_to_selected_id,
+               start_date: params["start_date"],
+               end_date: params["end_date"],
+               error: nil
+             )}
+        end
       else
         result = AccountingSystem.AuxiliaryHandler.get_aux_report(start_date, end_date)
-        Notification.set_timer_notification_error()
 
-        {:noreply,
-         assign(socket,
-           list_auxiliaries: if(result == [], do: nil, else: result),
-           period_selected: period_selected_id,
-           account_from_selected: account_from_selected_id,
-           account_to_selected: account_to_selected_id,
-           start_date: params["start_date"],
-           end_date: params["end_date"],
-           error:
-             if(result == [],
-               do: "No se encontraron datos con los parámetros ingresados",
-               else: nil
-             )
-         )}
+        result
+        |> case do
+          [] ->
+            Notification.set_timer_notification_error()
+
+            {:noreply,
+             assign(socket,
+               list_auxiliaries: nil,
+               period_selected: 0,
+               account_from_selected: 0,
+               account_to_selected: 0,
+               start_date: "",
+               end_date: "",
+               error: "No se encontraron datos con los parámetros ingresados"
+             )}
+
+          _ ->
+            {:noreply,
+             assign(socket,
+               list_auxiliaries: result,
+               period_selected: period_selected_id,
+               account_from_selected: account_from_selected_id,
+               account_to_selected: account_to_selected_id,
+               start_date: params["start_date"],
+               end_date: params["end_date"],
+               error: nil
+             )}
+        end
       end
     else
       Notification.set_timer_notification_error()
