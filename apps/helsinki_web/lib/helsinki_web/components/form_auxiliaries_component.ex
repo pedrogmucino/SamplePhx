@@ -124,7 +124,7 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
     account_from_id_selected = Enum.at(account, 0) |> String.to_integer()
     account_from_selected = Enum.at(account, 1)
 
-    account_from_selected_name = Account.get_account!(account_from_id_selected).name
+    account_from_selected_name = if account_from_id_selected > 0, do: Account.get_account!(account_from_id_selected).name, else: ""
 
     {:noreply,
      assign(socket,
@@ -139,7 +139,7 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
     account_to_id_selected = Enum.at(account, 0) |> String.to_integer()
     account_to_selected = Enum.at(account, 1)
 
-    account_to_selected_name = Account.get_account!(account_to_id_selected).name
+    account_to_selected_name = if account_to_id_selected > 0, do: Account.get_account!(account_to_id_selected).name, else: ""
 
     {:noreply,
      assign(socket,
