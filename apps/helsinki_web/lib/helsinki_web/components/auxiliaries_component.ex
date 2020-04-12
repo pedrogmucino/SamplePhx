@@ -29,7 +29,7 @@ defmodule AccountingSystemWeb.AuxiliariesComponent do
                     <div class="inline-flex w-80 px-2 py-2"><%= item.code %></div>
                     <div class="inline-flex w-40 px-2 py-2 justify-end" phx-hook="format_number"><%= if item2.auxiliary_type == "D", do: item2.amount %></div>
                     <div class="inline-flex w-40 px-2 py-2 justify-end" phx-hook="format_number"><%= if item2.auxiliary_type == "H", do: item2.amount %></div>
-                    <div class="inline-flex w-80 px-2 py-2"><%= item2.concept %></div>
+                    <div class="inline-flex w-82 px-2 py-2"><%= item2.concept %></div>
                   </div>
                 <% end %>
                 <div>
