@@ -23,8 +23,8 @@ defmodule AccountingSystemWeb.HeaderToAuxiliariesComponent do
           </svg>
         </button>
       </div>
-      <div class="m-4 mr-4 mt-4 mb-4 border-t-2 border-gray-300"></div>
-        <table class="table-auto">
+      <div class="m-4 w-365 border-t-2 border-gray-300"></div>
+        <table class="ml-4">
           <thead>
             <tr>
               <th class="w-56 px-4 py-2">Tipo Póliza</th>
@@ -33,7 +33,7 @@ defmodule AccountingSystemWeb.HeaderToAuxiliariesComponent do
               <th class="w-80 px-4 py-2">Cuenta Detalle</th>
               <th class="w-40 px-4 py-2">Caja</th>
               <th class="w-40 px-4 py-2">Abono</th>
-              <th class="w-80 px-4 py-2">Concepto</th>
+              <th class="w-82 px-4 py-2">Concepto</th>
             </tr>
           </thead>
         </table>

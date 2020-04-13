@@ -24,8 +24,8 @@ defmodule AccountingSystemWeb.AuxiliariesComponent do
                 <%= for item2 <- item.details do %>
                   <div>
                     <div class="inline-flex w-48 px-2 py-2"><%= item2.policy_type %></div>
-                    <div class="inline-flex w-32 px-2 py-2"><%= item2.number %></div>
-                    <div class="inline-flex w-32 px-2 py-2"><%= item2.date %></div>
+                    <div class="inline-flex w-32 px-2 py-2 justify-center"><%= item2.number %></div>
+                    <div class="inline-flex w-32 px-2 py-2 justify-center"><%= item2.date %></div>
                     <div class="inline-flex w-80 px-2 py-2"><%= item.code %></div>
                     <div class="inline-flex w-40 px-2 py-2 justify-end" phx-hook="format_number"><%= if item2.auxiliary_type == "D", do: item2.amount %></div>
                     <div class="inline-flex w-40 px-2 py-2 justify-end" phx-hook="format_number"><%= if item2.auxiliary_type == "H", do: item2.amount %></div>
