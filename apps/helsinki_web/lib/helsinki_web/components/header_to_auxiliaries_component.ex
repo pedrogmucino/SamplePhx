@@ -27,13 +27,13 @@ defmodule AccountingSystemWeb.HeaderToAuxiliariesComponent do
         <table class="ml-4">
           <thead>
             <tr>
-              <th class="w-56 px-4 py-2">Tipo Póliza</th>
-              <th class="w-32 px-4 py-2">Número Póliza</th>
-              <th class="w-32 px-4 py-2">Fecha</th>
-              <th class="w-80 px-4 py-2">Cuenta Detalle</th>
-              <th class="w-40 px-4 py-2">Caja</th>
-              <th class="w-40 px-4 py-2">Abono</th>
-              <th class="w-82 px-4 py-2">Concepto</th>
+              <th class="w-56 px-4 py-1">Tipo Póliza</th>
+              <th class="w-32 px-4 py-1">Número Póliza</th>
+              <th class="w-32 px-4 py-1">Fecha</th>
+              <th class="w-80 px-4 py-1">Cuenta Detalle</th>
+              <th class="w-40 px-4 py-1">Caja</th>
+              <th class="w-40 px-4 py-1">Abono</th>
+              <th class="w-82 px-4 py-1">Concepto</th>
             </tr>
           </thead>
         </table>
