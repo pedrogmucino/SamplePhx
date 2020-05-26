@@ -36,12 +36,10 @@ defmodule AccountingSystemWeb.BalanceComponent do
   end
 
   def handle_event("save_account", params, socket) do
-    IO.inspect(params, label: "PARAMS SAVE ACCOUNTS---------------------------------------->")
     {:noreply, assign(socket, start_account: params["start_account"], end_account: params["end_account"])}
   end
 
   def handle_event("show_data", _, socket) do
-    IO.inspect(socket.assigns, label: "SOOOOCKEEEET-------------------------------->")
     case socket.assigns.type do
       "1" ->
         by_period(socket)
@@ -105,7 +103,7 @@ defmodule AccountingSystemWeb.BalanceComponent do
 
   defp sum_debit_credit([]), do: %{}
   defp sum_debit_credit(list), do: Enum.reduce(list, %{}, fn x, acc -> sum_maps(x, acc) end)
-  defp sum_maps(%{debit: v1, credit: v2}, %{debit: v3, credit: v4}), do: %{debit: v1 + v3, credit: v2 + v4}
+  defp sum_maps(%{debit: v1, credit: v2}, %{debit: v3, credit: v4}), do: %{debit: v1 + v3, credit: v2 + v4, final_balance: (v2 + v4) - (v1 + v3)}
   defp sum_maps(map, %{}), do: %{debit: map.debit, credit: map.credit, final_balance: map.credit - map.debit}
 
   defp get_balance(start_account, end_account, start_date, end_date), do: debit_credit_to_tree(get_account_tree_range(start_account, end_account), get_debit_credit_detail(start_date, end_date, start_account, end_account))
