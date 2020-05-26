@@ -13,7 +13,8 @@ module.exports = {
             'hoch-75': '75vh',
             'hoch-70': '70vh',
             'hoch-68': '68vh',
-            'hoch-2': '2.4rem'
+            'hoch-2': '2.4rem',
+            'hoch-121': '3.08rem'
         },
         width: {
           '80': '20rem',
@@ -41,6 +42,7 @@ module.exports = {
           'mar-280': '70rem',
           'mar-320': '80rem',
           'mar-360': '90rem',
+          'mar-377': '94rem',
           'mar-380': '95rem',
           'mar-14': '3.5rem'     
         }
