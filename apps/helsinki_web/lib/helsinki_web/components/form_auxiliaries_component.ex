@@ -113,8 +113,12 @@ defmodule AccountingSystemWeb.FormAuxiliariesComponent do
 
       </div>
 
-      <%= if @list_auxiliaries != nil, do: live_component(@socket, AccountingSystemWeb.AuxiliariesComponent, id: "auxiliaries", list_auxiliaries: @list_auxiliaries) %>
-      <%= if @list_auxiliaries != nil, do: live_component(@socket, AccountingSystemWeb.HeaderToAuxiliariesComponent, id: "headertoauxiliaries") %>
+      <%= if @list_auxiliaries != nil do %>
+        <div class="inline-block">
+          <%= live_component(@socket, AccountingSystemWeb.HeaderToAuxiliariesComponent, id: "headertoauxiliaries") %>
+          <%= live_component(@socket, AccountingSystemWeb.AuxiliariesComponent, id: "auxiliaries", list_auxiliaries: @list_auxiliaries) %>
+        </div>
+      <% end %>
       <%= if @error, do: live_component(@socket, AccountingSystemWeb.NotificationComponent, id: "error_comp", message: @error, show: true, notification_type: "error", change: "") %>
     """
   end

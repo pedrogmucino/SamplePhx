@@ -15,7 +15,7 @@ defmodule AccountingSystemWeb.HeaderToAuxiliariesComponent do
 
   def render(assigns) do
     ~L"""
-    <div id="auxiliaries_header" class="fixed ml-mar-95 mt-16 w-full bg-white h-40">
+    <div id="headertoauxiliaries" class="mt-16 w-full bg-white h-40">
       <div class="w-full bg-blue-700 py-2 h-hoch-121">
         <button phx-click="close" phx-target="#auxiliaries_list" class="ml-mar-377 mt-2 text-white font-bold rounded shadow">
           <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="h-5 w-5 ml-auto">

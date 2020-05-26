@@ -15,7 +15,7 @@ defmodule AccountingSystemWeb.AuxiliariesComponent do
 
   def render(assigns) do
     ~L"""
-      <div id="auxiliaries_list" class="mt-56 w-full bg-white h-hoch-76 overflow-y-scroll">
+      <div id="auxiliaries_list" class="w-full bg-white h-hoch-76 overflow-y-scroll">
         <div class="ml-4 mr-4 mb-4 border-solid border-2 border-gray-300 p-4 rounded">
           <%= for item <- @list_auxiliaries do %>
             <div class="py-1">
