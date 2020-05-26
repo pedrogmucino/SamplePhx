@@ -42,6 +42,7 @@ module.exports = {
           'mar-280': '70rem',
           'mar-320': '80rem',
           'mar-360': '90rem',
+          'mar-377': '94rem',
           'mar-380': '95rem',
           'mar-14': '3.5rem'     
         }
