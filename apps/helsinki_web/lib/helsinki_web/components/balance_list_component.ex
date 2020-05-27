@@ -30,43 +30,55 @@ defmodule AccountingSystemWeb.BalanceListComponent do
           <table class="table-auto">
             <thead>
               <tr>
-                <th class="w-3/12 px-4 py-2">Cuenta</th>
-                <th class="w-4/12 px-4 py-2">Nombre</th>
-                <th class="w-1/12 px-4 py-2">Tipo Cuenta</th>
-                <th class="w-1/12 px-4 py-2">Saldo Inicial</th>
-                <th class="w-1/12 px-4 py-2">Cargo</th>
-                <th class="w-1/12 px-4 py-2">Abono</th>
-                <th class="w-1/12 px-4 py-2">Saldo FInal</th>
+                <th class="w-4/12 px-4 py-1">Cuenta</th>
+                <th class="w-3/12 px-4 py-1">Nombre</th>
+                <th class="w-1/12 px-4 py-1">Tipo Cuenta</th>
+                <th class="w-1/12 px-4 py-1">Saldo Inicial</th>
+                <th class="w-1/12 px-4 py-1">Cargo</th>
+                <th class="w-1/12 px-4 py-1">Abono</th>
+                <th class="w-1/12 px-4 py-1">Saldo FInal</th>
               </tr>
               </thead>
               <tbody class="bg-gray-200">
                 <%= for acc <- @balance do %>
-                <tr>
-                  <th class="w-3/12 px-4 py-2"><%= acc.account %></th>
-                  <th class="w-4/12 px-4 py-2"><%= acc.description %></th>
-                  <th class="w-1/12 px-4 py-2"><%= acc.type %></th>
-                  <th class="w-1/12 px-4 py-2">0.0</th>
-                  <th class="w-1/12 px-4 py-2" phx-hook="format_number"><%= acc.credit %></th>
-                  <th class="w-1/12 px-4 py-2" phx-hook="format_number"><%= acc.debit %></th>
-                  <th class="w-1/12 px-4 py-2" phx-hook="format_number"><%= acc.final_balance %></th>
-                </tr>
+                  <%= if acc.level == 0 do %>
+                  <tr>
+                    <th class="w-4/12 px-4 py-1"><%= acc.account %></th>
+                    <th class="w-3/12 px-4 py-1 text-left"><%= acc.description %></th>
+                    <th class="w-1/12 px-4 py-1"><%= acc.type %></th>
+                    <th class="w-1/12 px-4 py-1 text-right">0.0</th>
+                    <th class="w-1/12 px-4 py-1 text-right" phx-hook="format_number"><%= acc.credit %></th>
+                    <th class="w-1/12 px-4 py-1 text-right" phx-hook="format_number"><%= acc.debit %></th>
+                    <th class="w-1/12 px-4 py-1 text-right" phx-hook="format_number"><%= acc.final_balance %></th>
+                  </tr>
+                  <% else %>
+                  <tr>
+                    <th class="w-4/12 px-4 py-1 font-light"><%= acc.account %></th>
+                    <th class="w-3/12 px-4 py-1 font-light text-left"><%= add_spaces(acc.level) <> acc.description %></th>
+                    <th class="w-1/12 px-4 py-1 font-light"><%= acc.type %></th>
+                    <th class="w-1/12 px-4 py-1 font-light text-right">0.0</th>
+                    <th class="w-1/12 px-4 py-1 font-light text-right" phx-hook="format_number"><%= acc.credit %></th>
+                    <th class="w-1/12 px-4 py-1 font-light text-right" phx-hook="format_number"><%= acc.debit %></th>
+                    <th class="w-1/12 px-4 py-1 font-light text-right" phx-hook="format_number"><%= acc.final_balance %></th>
+                  </tr>
+                  <% end %>
                 <% end %>
               </tbody>
               <tbody>
                 <tr>
-                  <th class="w-3/12 px-4 py-2">Cuentas Reportadas</th>
-                  <th class="w-4/12 px-4 py-2"><%= Enum.count(@balance) %></th>
-                  <th class="w-1/12 px-4 py-2"></th>
-                  <th class="w-1/12 px-4 py-2">0.0</th>
-                  <th class="w-1/12 px-4 py-2" phx-hook="format_number"><%= Enum.filter(@balance, fn acc -> acc.parent_account == -1 end)
+                  <th class="w-4/12 px-4 py-1">Cuentas Reportadas</th>
+                  <th class="w-3/12 px-4 py-1"><%= Enum.count(@balance) %></th>
+                  <th class="w-1/12 px-4 py-1"></th>
+                  <th class="w-1/12 px-4 py-1 text-right">0.0</th>
+                  <th class="w-1/12 px-4 py-1 text-right" phx-hook="format_number"><%= Enum.filter(@balance, fn acc -> acc.parent_account == -1 end)
                                                   |> Enum.map(fn acc -> acc.credit end)
                                                   |> Enum.sum()
                                               %></th>
-                  <th class="w-1/12 px-4 py-2" phx-hook="format_number"><%= Enum.filter(@balance, fn acc -> acc.parent_account == -1 end)
+                  <th class="w-1/12 px-4 py-1 text-right" phx-hook="format_number"><%= Enum.filter(@balance, fn acc -> acc.parent_account == -1 end)
                                                     |> Enum.map(fn acc -> acc.debit end)
                                                     |> Enum.sum()
                                               %></th>
-                  <th class="w-1/12 px-4 py-2" phx-hook="format_number"> <%= (Enum.filter(@balance, fn acc -> acc.parent_account == -1 end) |> Enum.map(fn acc -> acc.credit end) |> Enum.sum()) - (Enum.filter(@balance, fn acc -> acc.parent_account == -1 end) |> Enum.map(fn acc -> acc.debit end) |> Enum.sum()) %>
+                  <th class="w-1/12 px-4 py-1 text-right" phx-hook="format_number"> <%= (Enum.filter(@balance, fn acc -> acc.parent_account == -1 end) |> Enum.map(fn acc -> acc.credit end) |> Enum.sum()) - (Enum.filter(@balance, fn acc -> acc.parent_account == -1 end) |> Enum.map(fn acc -> acc.debit end) |> Enum.sum()) %>
                   </th>
                 </tr>
               </tbody>
@@ -75,5 +87,9 @@ defmodule AccountingSystemWeb.BalanceListComponent do
       </div>
 
       """
+  end
+
+  defp add_spaces(size) do
+    String.duplicate("   ", size)
   end
 end
