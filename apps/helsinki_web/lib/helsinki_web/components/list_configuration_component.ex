@@ -42,6 +42,7 @@ defmodule AccountingSystemWeb.ListConfigurationComponent do
   end
 
   def handle_event("open_structure", params, socket) do
+    IO.inspect(socket.assigns, label: "---------------------->ASSIGNS")
     assign(socket, structure: params["id"])
     id =
     params
@@ -155,7 +156,7 @@ defmodule AccountingSystemWeb.ListConfigurationComponent do
       <%= live_component(@socket, AccountingSystemWeb.NotificationComponent, id: "error_comp", message: @error, show: true, notification_type: "error", change: @change) %>
     <% end %>
 
-    <div id="one" class="bg-white h-hoch-93 w-80 mt-16 ml-16 block float-left">
+    <div id="structure_list" class="bg-white h-hoch-93 w-80 mt-16 ml-16 block float-left">
       <div class="w-full py-2 bg-blue-700">
         <p class="ml-2 font-bold text-lg text-white">Configuración</p>
       </div>
@@ -189,11 +190,11 @@ defmodule AccountingSystemWeb.ListConfigurationComponent do
     <div class="h-hoch-75 overflow-y-scroll pb-16 mt-2">
       <%= for item <- @list_configuration do %>
         <div class="w-full px-2 block">
-          <div phx-click="open_structure" phx-value-id="<%= item.id %>" phx-target="#one" class="border cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
+          <button phx-click="open_structure" phx-value-id="<%= item.id %>" phx-target="#structure_list" class="border cursor-pointer w-full block bg-gray-200 p-3 mt-2 rounded relative hover:bg-gray-300">
             <h2 class="text-gray-700 text-xl">Nivel: <%= item.level %></h2>
             <label class="inline-block cursor-pointer text-gray-600 font-bold text-sm">Tamaño: <b><%= item.size %></b></label>
             <label class="ml-10 inline-block cursor-pointer text-gray-600 font-bold text-sm">Máximo actual: <b><%= item.max_current_size %></b></label>
-          </div>
+          </button>
         </div>
 
       <% end %>

@@ -166,7 +166,44 @@ Hooks.load_file_xml_js = {
 };
 
 // let liveSocket = new LiveSocket("/live", Socket, { hooks: hooks })
-let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}, hooks: Hooks})
+let liveSocket = new LiveSocket("/live", Socket, 
+{params: {_csrf_token: csrfToken}, 
+hooks: Hooks, 
+metadata: {
+    click: (e, el) => {
+      return {
+        altKey: e.altKey,
+        shiftKey: e.shiftKey,
+        ctrlKey: e.ctrlKey,
+        metaKey: e.metaKey,
+        x: e.x || e.clientX,
+        y: e.y || e.clientY,
+        pageX: e.pageX,
+        pageY: e.pageY,
+        screenX: e.screenX,
+        screenY: e.screenY,
+        offsetX: e.offsetX,
+        offsetY: e.offsetY,
+        detail: e.detail || 1,
+      }
+    },
+    keydown: (e, el) => {
+        return {
+          altGraphKey: e.altGraphKey,
+          altKey: e.altKey,
+          code: e.code,
+          ctrlKey: e.ctrlKey,
+          key: e.key,
+          keyIdentifier: e.keyIdentifier,
+          keyLocation: e.keyLocation,
+          location: e.location,
+          metaKey: e.metaKey,
+          repeat: e.repeat,
+          shiftKey: e.shiftKey
+        }
+      }
+  }
+})
 liveSocket.connect()
 
 const toBase64 = file => new Promise((resolve, reject) => {

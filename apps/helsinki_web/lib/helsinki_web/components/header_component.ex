@@ -9,7 +9,6 @@ defmodule AccountingSystemWeb.HeaderComponent do
     ~L"""
     <div class="fixed w-full py-2 bg-blue-700 top-0 left-0 z-20 border-b-2 border-blue-100">
       <div class="flex">
-        <img src="https://santiago.mx/assets/images/logo-white.png" class="w-56 ml-6">
 
         <div class="ml-auto block text-right">
           <p class="font-bold text-lg text-white ">Sebastian Stan</p>

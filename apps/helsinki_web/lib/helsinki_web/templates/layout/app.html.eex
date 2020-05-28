@@ -9,7 +9,7 @@
   </head>
   <body class="bg-blue-100 font-chida">
 
-      <%= render @view_module, @view_template, assigns %>
+      <%= @inner_content %>
       <%= csrf_meta_tag() %>
     <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </body>

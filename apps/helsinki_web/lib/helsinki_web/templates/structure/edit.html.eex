@@ -1,5 +1,0 @@
-<h1>Edit Structure</h1>
-
-<%= render "form.html", Map.put(assigns, :action, Routes.structure_path(@conn, :update, @structure)) %>
-
-<span><%= link "Back", to: Routes.structure_path(@conn, :index) %></span>

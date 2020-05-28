@@ -1,5 +1,0 @@
-<h1>Edit Policy type</h1>
-
-<%= render "form.html", Map.put(assigns, :action, Routes.policy_type_path(@conn, :update, @policy_type)) %>
-
-<span><%= link "Back", to: Routes.policy_type_path(@conn, :index) %></span>

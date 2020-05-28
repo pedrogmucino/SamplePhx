@@ -1,5 +1,0 @@
-<h1>New Auxiliary</h1>
-
-<%= render "form.html", Map.put(assigns, :action, Routes.auxiliary_path(@conn, :create)) %>
-
-<span><%= link "Back", to: Routes.auxiliary_path(@conn, :index) %></span>
