@@ -25,7 +25,7 @@ defmodule AccountingSystem.MixProject do
   def application do
     [
       mod: {AccountingSystem.Application, []},
-      extra_applications: [:logger, :runtime_tools, :xlsxir, :timex]
+      extra_applications: [:logger, :runtime_tools]
     ]
   end
 
@@ -41,9 +41,7 @@ defmodule AccountingSystem.MixProject do
       {:ecto_sql, "~> 3.3.4"},
       {:postgrex, ">= 0.0.0"},
       {:jason, "~> 1.0"},
-      {:excoveralls, "~> 0.10", only: :test},
-      {:xlsxir, "~> 1.6.4"},
-      {:elixlsx, "~> 0.4.2"}
+      {:excoveralls, "~> 0.10", only: :test}
     ]
   end
 
